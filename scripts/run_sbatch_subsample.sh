@@ -1,0 +1,2 @@
+sbatch tahoe/sbatch_pseudobulk_tahoe_subsample.slurm
+sbatch sciplex/sbatch_pseudobulk_sciplex_subsample.slurm

@@ -1,0 +1,7 @@
+{"input": "", 
+"output": "",
+"select_cols": ["sample", "cell_name", "bc1_well", "drugname_drugconc", "drug"],
+"min_cells": 0,
+"drug_col": "drug",
+"bulk_fields": ["bc1_well", "cell_name"]
+}

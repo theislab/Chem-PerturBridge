@@ -1,4 +1,6 @@
 import os
+import sys
+import json
 import logging
 import argparse
 import pandas as pd
@@ -8,7 +10,24 @@ import pubchempy as pcp
 from anndata import AnnData
 from typing import Dict, Optional
 
+#Init logger
+fmt = '%(asctime)s | [%(levelname)s] %(message)s'
+datefmt = '%Y-%m-%d %H:%M:%S'
+formatter = logging.Formatter(fmt=fmt, datefmt=datefmt)
+
+h1 = logging.StreamHandler(sys.stdout)
+h1.setLevel(logging.INFO)
+h1.addFilter(lambda log: log.levelno == logging.INFO)
+h1.setFormatter(formatter)
+
+h2 = logging.StreamHandler(sys.stderr)
+h2.setLevel(logging.WARNING)
+h2.setFormatter(formatter)
+
 logger = logging.getLogger(__name__)
+logger.propagate = False
+logger.setLevel(logging.DEBUG)
+logger.handlers = [h1, h2]
 
 class Pseudobulk:
     def __init__(self, file_input: list,
@@ -32,7 +51,7 @@ class Pseudobulk:
         
     def run_pseudobulking(self, ):
         #for plate, file in enumerate(self.files_input):
-        logger.info("Read anndata")
+        logger.info(f"Read anndata from {self.file_input}")
         adata = sc.read_h5ad(self.file_input)
         logger.info("Process anndata")
         adata = self.tiny_preprocessing(adata)
@@ -101,7 +120,6 @@ class Pseudobulk:
         """
         Add a `pubchem_cid` column to adata.obs based on the 'perturbation' field.
         """
-        from tqdm import tqdm
         def get_pubchem_cid(drug_name: str, cache: Dict[str, Optional[int]]) -> Optional[int]:
             """
             Fetch PubChem CID for a given drug name, using cache to skip repeat lookups.
@@ -120,46 +138,61 @@ class Pseudobulk:
                 cid = None
             cache[drug_name] = cid
             return cid
-            
         unique_drugs = self.padata.obs[drug_col].dropna().unique().tolist()
         to_fetch = [d for d in unique_drugs if d not in cache]
         if to_fetch:
             logger.info(f"Looking up {len(to_fetch)} new perturbations on PubChem...")
-            for drug in tqdm(to_fetch, desc="PubChem CIDs"):
+            for drug in to_fetch:
                 get_pubchem_cid(drug, cache)
     
         self.padata.obs['pubchem_cid'] = self.padata.obs[drug_col].map(cache)
 
 
 def main():
+    def merge_args(d_args: dict, config: dict):
+        for key in config.keys():
+            if (not key in d_args.keys()) or (not d_args[key]):
+                d_args[key] = config[key]
+        return d_args.copy()
+
     parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(dest='type')
-    parser_conf = subparsers.add_parser(name='parse_config')
-    parser_conf.add_argument('--config', type=str)
-    parser_arg = subparsers.add_parser(name='parse_args')
-    parser_arg = parser_arg.add_argument_group()
-    parser_arg.add_argument('--input', type=str, required=True)
-    parser_arg.add_argument('--output', type=str, required=True)
-    parser_arg.add_argument('--bulk_fields', nargs='+', required=True)
-    parser_arg.add_argument('--dropna', nargs='+', default=[])
-    parser_arg.add_argument('--drop_cols', nargs='+', default=[])
-    parser_arg.add_argument('--select_cols', nargs='+', default=[])
-    parser_arg.add_argument('--min_cells', type=int, default=0)
-    parser_arg.add_argument('--drug_col', type=str, required=True)
+    parser.add_argument('--config', type=str)
+    parser.add_argument('--input', type=str)
+    parser.add_argument('--output', type=str)
+    parser.add_argument('--bulk_fields', nargs='+')
+    parser.add_argument('--dropna', nargs='+', default=[])
+    parser.add_argument('--drop_cols', nargs='+', default=[])
+    parser.add_argument('--select_cols', nargs='+', default=[])
+    parser.add_argument('--min_cells', type=int, default=0)
+    parser.add_argument('--drug_col', type=str)
     args = parser.parse_args()
-    if args.type == 'parse_args':
-        pseudo = Pseudobulk(file_input = args.input,
-                            file_output = args.output,
-                            bulk_fields = args.bulk_fields,
-                            dropna = args.dropna,
-                            drop_cols = args.drop_cols,
-                            select_cols = args.select_cols,
-                            min_cells = args.min_cells,
-                           )
-        pseudo.run_pseudobulking()
-        pseudo.add_pubchem_cids_to_padata({}, drug_col=args.drug_col)
-        logger.info("Save dataset")
-        pseudo.save()
+    d_args = vars(args).copy()
+    del d_args['config']
+    
+    if not args.config is None:
+        with open(args.config) as f:
+            config = json.load(f)
+        d_args = merge_args(d_args, config)
+    
+    for key in ['input', 'output', 'bulk_fields', 'drug_col']:
+        if not d_args[key]:
+            raise KeyError(f"The argument {key} is not set")
+    
+    pseudo = Pseudobulk(file_input = d_args['input'],
+                        file_output = d_args['output'],
+                        bulk_fields = d_args['bulk_fields'],
+                        dropna = d_args['dropna'],
+                        drop_cols = d_args['drop_cols'],
+                        select_cols = d_args['select_cols'],
+                        min_cells = d_args['min_cells'],
+                        )
+    pseudo.run_pseudobulking()
+    logger.info("Mapping drugs to PubChem idx")
+    pseudo.add_pubchem_cids_to_padata({}, drug_col=d_args['drug_col'])
+    logger.info("Save dataset")
+    pseudo.save()
+    
+    
 
 if __name__ == "__main__":
     main()

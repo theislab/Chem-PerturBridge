@@ -1,0 +1,8 @@
+{"input": "", 
+"output": "",
+"dropna": ["cell_line"], 
+"drop_cols":["cancer", "organism", "tissue_type", "perturbation_type"],
+"min_cells": 0,
+"drug_col": "perturbation",
+"bulk_fields": ["well", "plate", "cell_line", "replicate", "dose_value", "perturbation", "time"]
+}
