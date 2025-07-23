@@ -30,13 +30,54 @@ logger.setLevel(logging.DEBUG)
 logger.handlers = [h1, h2]
 
 class Pseudobulk:
-    def __init__(self, file_input: list,
-                       file_output: str,
-                       bulk_fields: list,
-                       dropna: list = [],
-                       drop_cols: list = [],
-                       select_cols: list = [],
-                       min_cells: int = 0):   
+    def __init__(self, 
+                 file_input: str,
+                 file_output: str,
+                 bulk_fields: list,
+                 dropna: list = [],
+                 drop_cols: list = [],
+                 select_cols: list = [],
+                 min_cells: int = 0):
+        '''
+        A class to process raw scRNA-seq AnnData and
+        aggregate counts to pseudobulk.
+
+        Parameters:
+        -----------
+        file_input : str
+            A path to the input file containing raw data.
+        file_output : str
+            A path to the output file containing pseudobulk data.
+        bulk_fields : list
+            A list of columns to construct sample_id based on them.
+        dropna : list
+            A list of columns containing NaN rows to filter.
+        drop_cols : list
+            A list of columns to drop.
+        select_cols : list
+            A list of columns to select.
+        min_cells : int
+            A threshold to filter samples in the pseudobulk.
+
+        Attributes:
+        -----------
+        file_input : str
+            A path to the input file containing raw data.
+        file_output : str
+            A path to the output file containing pseudobulk data.
+        bulk_fields : list
+            A list of columns to construct sample_id based on them.
+        dropna : list
+            A list of columns containing NaN rows to filter.
+        drop_cols : list
+            A list of columns to drop.
+        select_cols : list
+            A list of columns to select.
+        min_cells : int
+            A threshold to filter samples in the pseudobulk.
+        padata : AnnData
+            A pseudobulk dataset.
+        '''   
         self.file_input = file_input
         dir_output = os.path.dirname(file_output)
         if not os.path.exists(dir_output):
@@ -49,8 +90,10 @@ class Pseudobulk:
         self.min_cells = min_cells
         self.padata = None
         
-    def run_pseudobulking(self, ):
-        #for plate, file in enumerate(self.files_input):
+    def run_pseudobulking(self, ) -> None:
+        '''
+        Run pseudobulking pipeline.
+        '''
         logger.info(f"Read anndata from {self.file_input}")
         adata = sc.read_h5ad(self.file_input)
         logger.info("Process anndata")
@@ -61,17 +104,38 @@ class Pseudobulk:
         self.filter_cols()
         
             
-    def save(self, ):
-            if not self.padata is None:
-                self.padata.write_h5ad(self.file_output, compression="gzip")
+    def save(self, ) -> None:
+        '''
+        Save the pseudobulk dataset.
+        '''
+        if not self.padata is None:
+            self.padata.write_h5ad(self.file_output, compression="gzip")
             
-    def tiny_preprocessing(self, adata: AnnData):
+    def tiny_preprocessing(self, adata: AnnData) -> AnnData:
+        '''
+        Drop rows which have NaN values in the selected columns
+        stored in self.dropna (before pseudobulking).
+
+        Parameters:
+        -----------
+        adata : AnnData
+            An input scRNA-seq dataset.
+        '''
         adata.layers['counts'] = adata.X.copy()
         if len(self.dropna) != 0:
             adata = adata[~adata.obs[self.dropna].isna().all(axis=1)].copy() 
         return adata
     
-    def define_sample_group_cols(self, adata: AnnData):
+    def define_sample_group_cols(self, adata: AnnData) -> None:
+        '''
+        A function to construct 'sample_id' column for pseudobulking 
+        procedure based on the list of chosen columns (self.bulk_fields).
+
+        Parameters:
+        -----------
+        adata : AnnData
+            An input scRNA-seq dataset.
+        '''
         from pandas.api.types import is_float_dtype
         for f in self.bulk_fields:
             if f not in adata.obs:
@@ -85,18 +149,44 @@ class Pseudobulk:
             .apply(lambda row: '_'.join(row.values), axis=1)
         adata.obs['pseudo_group'] = 'all'
 
-    def set_sample_idx(self, padata: AnnData):
-        padata.obs['sample_id'] = padata.obs[self.bulk_fields] \
-            .astype(str) \
-            .apply(lambda row: '_'.join(row.values), axis=1)
+    def set_sample_idx(self, padata: AnnData) -> None:
+        '''
+        A function to set index to 'sample_id'.
+
+        Parameters:
+        -----------
+        padata : AnnData
+            A pseudobulk dataset.
+        '''
+        padata.obs['sample_id'] = padata.obs['sample_id'].astype(str)
         padata.obs.set_index('sample_id', inplace=True)
         padata.obs.drop(columns=['pseudo_group'], inplace=True)
         
-    def filter_cells(self, padata: AnnData):
+    def filter_cells(self, padata: AnnData) -> AnnData:
+        '''
+        A function to filter a psedobulk dataset based on a given
+        threshold (min cell number).
+
+        Parameters:
+        -----------
+        padata : AnnData
+            A pseudobulk dataset.
+        '''
         padata = padata[padata.obs.psbulk_cells >= self.min_cells].copy()
         return padata
         
-    def build_pseudoulk(self, adata: AnnData):
+    def build_pseudoulk(self, adata: AnnData) -> AnnData:
+        '''
+        A function to construct a pseudobulk dataset from
+        scRNA-seq data by applying the Decoupler package; 
+        and to filter samples with low number of cells 
+        from the obtained dataset.
+
+        Parameters:
+        -----------
+        adata : AnnData
+            An input scRNA-seq dataset.
+        '''
         self.define_sample_group_cols(adata)
         
         padata = dc.pp.pseudobulk(adata,
@@ -109,21 +199,41 @@ class Pseudobulk:
         del padata.layers["psbulk_props"]
         return padata
 
-    def filter_cols(self):
+    def filter_cols(self) -> None:
+        '''
+        Drop or select columns in adata.obs.
+        '''
         if len(self.drop_cols) > 0:
             self.padata.obs.drop(columns=self.drop_cols, inplace=True)
         if len(self.select_cols) > 0:
             self.padata.obs = self.padata.obs[self.select_cols + ['psbulk_cells', 'psbulk_counts']]
 
 
-    def add_pubchem_cids_to_padata(self, cache: Dict[str, Optional[int]], drug_col='perturbation') -> None:
-        """
-        Add a `pubchem_cid` column to adata.obs based on the 'perturbation' field.
-        """
-        def get_pubchem_cid(drug_name: str, cache: Dict[str, Optional[int]]) -> Optional[int]:
-            """
+    def add_pubchem_cids_to_padata(self, 
+                                   cache: Dict[str, Optional[int]], 
+                                   drug_col='perturbation') -> None:
+        '''
+        Add a 'pubchem_cid' column to adata.obs based on the drug_col.
+        
+        Parameters:
+        -----------
+        cache : Dict
+            A dictionary storing the mapping of drugs to PubChem CIDs.
+        drug_col : str
+            A name of column containing drug names.
+        '''
+        def get_pubchem_cid(drug_name: str, 
+                            cache: Dict[str, Optional[int]]) -> Optional[int]:
+            '''
             Fetch PubChem CID for a given drug name, using cache to skip repeat lookups.
-            """
+            
+            Parameters:
+            -----------
+            drug_name : str
+                A drug name for mapping to PubChem CID.
+            cache : Dict
+                A dictionary storing the mapping of drugs to PubChem CIDs.      
+            '''
             if pd.isna(drug_name) or not drug_name:
                 return None
         
@@ -149,7 +259,24 @@ class Pseudobulk:
 
 
 def main():
-    def merge_args(d_args: dict, config: dict):
+    '''
+    A function to process the arguments entered in the console/
+    read from the config file and to run the downstream pipeline
+    with the set parameters.
+    '''
+    def merge_args(d_args: Dict[str, Optional[int]], 
+                   config: Dict[str, Optional[int]]) -> Dict[str, Optional[int]]:
+        '''
+        A function to unite the parameters entered as the arguments
+        from the console and the parameters loaded from a config file.
+
+        Parameters:
+        -----------
+        d_args : Dict
+            input arguments represented as a dictionary.
+        config : Dict
+            parameters loaded from a config file.
+        '''
         for key in config.keys():
             if (not key in d_args.keys()) or (not d_args[key]):
                 d_args[key] = config[key]

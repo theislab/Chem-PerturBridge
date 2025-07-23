@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J pseudobulk_tahoe
-#SBATCH -o pseudobulk_tahoe.%j.out
-#SBATCH -e pseudobulk_tahoe.%j.err
+#SBATCH -o ./logs/pseudobulk_tahoe.%j.out
+#SBATCH -e ./logs/pseudobulk_tahoe.%j.err
 #SBATCH -t 1:00:00
 #SBATCH -n 1
 #SBATCH --qos=cpu_short
@@ -20,7 +20,7 @@ echo "> Running pseudobulking"
 for file in $SC_DIR*; do
 	filename=$(basename -- "$file")
 	echo "> Processing $filename"
-	python3 ./utils/pseudobulking.py --input $file --output $BULK_DIR$file --config ./configs/tahoe_pseudobulk.json
+	python3 ./utils/pseudobulking.py --input $file --output $BULK_DIR$filename --config ./configs/tahoe_pseudobulk.json
 done
 echo "> Pseudobulking is done"
 

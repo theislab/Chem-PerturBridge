@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J pseudobulk_sciplex
-#SBATCH -o pseudobulk_sciplex.%j.out
-#SBATCH -e pseudobulk_sciplex.%j.err
+#SBATCH -o ./logs/pseudobulk_sciplex.%j.out
+#SBATCH -e ./logs/pseudobulk_sciplex.%j.err
 #SBATCH -t 1:00:00
 #SBATCH -n 1
 #SBATCH --qos=cpu_normal
