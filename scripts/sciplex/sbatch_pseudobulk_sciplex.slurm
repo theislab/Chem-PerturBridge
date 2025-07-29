@@ -13,8 +13,8 @@ set -e
 
 source /home/icb/olga.novitskaia/.env/bin/activate 
 INPUT="/lustre/groups/ml01/workspace/manuel.gander/sciplex/SrivatsanTrapnell2020_sciplex3.h5ad"
-OUTPUT="/home/icb/olga.novitskaia/data/Sciplex/full/bulk/pseudbulked_sciplex3_script.h5ad"
+OUTPUT="/home/icb/olga.novitskaia/data/Sciplex/full/pseudobulk/sciplex3.h5ad"
 
 echo "> Running pseudobulking"
-python3 ./utils/pseudobulking.py --input $INPUT --output $OUTPUT --min_cells 50 --config ./configs/sciplex_pseudobulk.json
+python3 ./utils/pseudobulking.py --input $INPUT --output $OUTPUT --config ./configs/sciplex_pseudobulk.json
 echo "> Pseudobulking is done"

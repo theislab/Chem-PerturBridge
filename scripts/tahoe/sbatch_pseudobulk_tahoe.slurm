@@ -12,18 +12,18 @@
 set -e
 
 source /home/icb/olga.novitskaia/.env/bin/activate 
-SC_DIR="/home/icb/olga.novitskaia/data/Tahoe/subsamples/filtered/"
-BULK_DIR="/home/icb/olga.novitskaia/data/Tahoe/subsamples/bulk/"
-CL_DIR="/home/icb/olga.novitskaia/data/Tahoe/subsamples/cell_lines/"
+SC_DIR="/home/icb/olga.novitskaia/data/Tahoe/full/filtered/"
+BULK_DIR="/home/icb/olga.novitskaia/data/Tahoe/full/pseudobulk_to_merge/"
+OUTPUT="/home/icb/olga.novitskaia/data/Tahoe/full/pseudobulk/tahoe.h5ad"
 
 echo "> Running pseudobulking"
 for file in $SC_DIR*; do
 	filename=$(basename -- "$file")
 	echo "> Processing $filename"
-	python3 ./utils/pseudobulking.py --input $file --output $BULK_DIR$file --min_cells 50 --config ./configs/subsample/tahoe_pseudobulk_subsample.json
+	python3 ./utils/pseudobulking.py --input $file --output $BULK_DIR$filename --config ./configs/subsample/tahoe_pseudobulk.json
 done
 echo "> Pseudobulking is done"
 
-echo "> Running combining replicates"
-python3 ./utils/combining_replicates.py --input $BULK_DIR --output $CL_DIR --config ./configs/subsample/tahoe_combining_replicates_subsample.json
-echo "> Combining replicates is done"
+echo "> Running combining datasets"
+python3 ./utils/combining_datasets.py --input $BULK_DIR --output $OUTPUT --config ./configs/subsample/tahoe_combining_datasets.json
+echo "> Combining datasets is done"

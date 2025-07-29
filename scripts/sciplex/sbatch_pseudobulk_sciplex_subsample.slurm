@@ -13,7 +13,7 @@ set -e
 
 source /home/icb/olga.novitskaia/.env/bin/activate
 INPUT="/home/icb/olga.novitskaia/data/Sciplex/subsamples/raw/subsample.h5ad"
-OUTPUT="/home/icb/olga.novitskaia/data/Sciplex/subsamples/bulk/subsample.h5ad" 
+OUTPUT="/home/icb/olga.novitskaia/data/Sciplex/subsamples/pseudobulk/subsample.h5ad" 
 
 echo "> Running pseudobulking"
 python3 ./utils/pseudobulking.py --input $INPUT --output $OUTPUT --config ./configs/sciplex_pseudobulk.json
