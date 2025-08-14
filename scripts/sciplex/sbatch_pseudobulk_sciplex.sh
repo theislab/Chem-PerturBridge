@@ -1,0 +1,38 @@
+#!/bin/bash
+#SBATCH -J pseudobulk_sciplex
+#SBATCH -o ./logs/pseudobulk_sciplex.%j.out
+#SBATCH -e ./logs/pseudobulk_sciplex.%j.err
+#SBATCH -t 1:00:00
+#SBATCH -n 1
+#SBATCH --qos=cpu_normal
+#SBATCH --mem=100G
+#SBATCH --partition=cpu_p 
+#SBATCH --cpus-per-task=5
+
+set -e
+
+#source /home/icb/olga.novitskaia/.env/bin/activate
+NAME="srivatsan20_sciplex3"
+SC_DIR="/home/ubuntu/data/Sciplex/raw"
+BULK_DATA="/home/ubuntu/data/Sciplex/pseudobulk/${NAME}"
+
+echo "> Download dataset"
+python3 ./utils/download_datasets.py \
+	--output "path2adata=${SC_DIR}/${NAME}.h5ad" \
+		 "path2obs=${SC_DIR}/${NAME}_obs.parquet" \
+		 "path2var=${SC_DIR}/${NAME}_var.parquet" \
+	--config ./sciplex/configs/sciplex_download.json \
+	--subsampling
+
+echo "> Running pseudobulking"
+python3 ./utils/pseudobulking.py \
+	--dataset sciplex \
+	--input "path2adata=${SC_DIR}/${NAME}_subsample.h5ad" \
+		"path2obs=${SC_DIR}/${NAME}_obs.parquet" \
+		"path2var=${SC_DIR}/${NAME}_var.parquet" \
+	--output "${BULK_DATA}_subsample.h5ad" \
+	--filter_malat1 \
+	--filter_tahoe \
+	--filter_nans \
+	--filter_singlets
+echo "> Pseudobulking is done"

@@ -1,64 +1,25 @@
 import os
-import sys
+#import sys
 import json
-import logging
+#import logging
 import argparse
-from typing import List, Dict, Optional, Sequence, Any
+from IPython import get_ipython
+from typing import List, Dict, Optional, Sequence, Any, Callable
 import pandas as pd
+import numpy as np
 import scanpy as sc
 import decoupler as dc
 import pubchempy as pcp
-from pandas.api.types import is_float_dtype
+from pandas.api.types import is_float_dtype, is_categorical_dtype
 from anndata import AnnData
 
-#Init logger
-FMT = '%(asctime)s | [%(levelname)s] %(message)s'
-DATEFMT = '%Y-%m-%d %H:%M:%S'
-formatter = logging.Formatter(fmt=FMT, datefmt=DATEFMT)
+import anndata2ri
+import rpy2.rinterface_lib.callbacks as rcb
+from rpy2.robjects.conversion import localconverter
+import rpy2.robjects as ro
 
-h1 = logging.StreamHandler(sys.stdout)
-h1.setLevel(logging.INFO)
-h1.addFilter(lambda log: log.levelno == logging.INFO)
-h1.setFormatter(formatter)
-
-h2 = logging.StreamHandler(sys.stderr)
-h2.setLevel(logging.WARNING)
-h2.setFormatter(formatter)
-
-logger = logging.getLogger(__name__)
-logger.propagate = False
-logger.setLevel(logging.DEBUG)
-logger.handlers = [h1, h2]
-
-
-class ParseKW(argparse.Action):
-    '''
-    A class to parse the dictionary-like input args.
-    From https://sumit-ghosh.com/posts/parsing-dictionary-key-value-pairs-kwargs-argparse-python/
-
-    Parameters:
-    -----------
-    parser: argparse.ArgumentParser
-        The parser object. 
-    namespace: argparse.Namespace
-        An object, which holds attributes and returns it.
-    values: List[str]
-        A list of values which follow the argument.
-    option_string: Optional[List[str]] = None
-        The option string that is used to invoke the action.     
-    '''
-    def __call__(self,
-                 parser: argparse.ArgumentParser,
-                 namespace: argparse.Namespace,
-                 values: str | Sequence[Any] | None,
-                 option_string: str | None = None
-                 ):
-
-        setattr(namespace, self.dest, {})
-        if values:
-            for value in values:
-                key, value = value.split('=')
-                getattr(namespace, self.dest)[key] = int(value)
+from helpers import *
+from standartization import *
 
 class Pseudobulk:
     '''
@@ -67,22 +28,16 @@ class Pseudobulk:
 
     Parameters:
     -----------
-    file_input : str
+    files_input : Dict[str, Optional[str]]
         A path to the input file containing raw data.
     file_output : str
         A path to the output file containing pseudobulk data.
-    bulk_fields : List[str]
+    groupby_fields : List[str]
         A list of columns to construct sample_id based on them.
     filter_cells_params : Optional[Dict[str, int]]
         A dictionary containing the params for cell filtering.
     filter_genes_params : Optional[Dict[str, int]]
         A dictionary containing the params for gene filtering.
-    dropna : Optional[List[str]]
-        A list of columns containing NaN rows to filter.
-    drop_cols : Optional[List[str]]
-        A list of columns to drop.
-    select_cols : Optional[List[str]]
-        A list of columns to select.
 
     Attributes:
     -----------
@@ -90,38 +45,41 @@ class Pseudobulk:
         A path to the input file containing raw data.
     file_output : str
         A path to the output file containing pseudobulk data.
-    bulk_fields : List[str]
+    groupby_fields : List[str]
         A list of columns to construct sample_id based on them.
     filter_cells_params : Optional[Dict[str, int]]
         A dictionary containing the params for cell filtering.
     filter_genes_params : Optional[Dict[str, int]]
         A dictionary containing the params for gene filtering.
-    dropna : Optional[List[str]]
-        A list of columns containing NaN rows to filter.
-    drop_cols : Optional[List[str]]
-        A list of columns to drop.
-    select_cols : Optional[List[str]]
-        A list of columns to select.
     padata : AnnData
         A pseudobulk dataset.
     '''
     def __init__(
                  self,
-                 file_input: str,
+                 files_input: Dict[str, Optional[str]],
                  file_output: str,
-                 bulk_fields: List[str],
+                 filter_malat1: bool,
+                 filter_tahoe: bool,
+                 filter_nans: bool,
+                 filter_singlets: bool,
+                 groupby_fields: List[str],
+                 dataset_standardization_: Dict[str, Dict[str, Callable]],
                  filter_cells_params: Optional[Dict[str, int]] = None,
                  filter_genes_params: Optional[Dict[str, int]] = None,
-                 dropna: Optional[List[str]] = None,
-                 drop_cols: Optional[List[str]] = None,
-                 select_cols: Optional[List[str]] = None
+                 nworkers: int = 4,
                  ):
 
-        self.file_input = file_input
+        self.files_input = files_input
+
         dir_output = os.path.dirname(file_output)
         if not os.path.exists(dir_output):
             os.makedirs(dir_output)
         self.file_output = file_output
+
+        self.filter_malat1 = filter_malat1
+        self.filter_tahoe = filter_tahoe
+        self.filter_nans = filter_nans
+        self.filter_singlets = filter_singlets
 
         if filter_cells_params is None:
             self.filter_cells_params = {}
@@ -133,39 +91,96 @@ class Pseudobulk:
         else:
             self.filter_genes_params = filter_genes_params
 
-        self.bulk_fields = bulk_fields
-
-        if dropna is None:
-            self.dropna = []
-        else:
-            self.dropna = dropna
-
-        if drop_cols is None:
-            self.drop_cols = []
-        else:
-            self.drop_cols = drop_cols
-
-        if select_cols is None:
-            self.select_cols = []
-        else:
-            self.select_cols = select_cols
-
+        self.groupby_fields = groupby_fields
+        self.standartize_obs = dataset_standardization_['standardize_obs']
+        self.standartize_var = dataset_standardization_['standardize_var']
+        self.pbulk_columns = ['plate', 'well', 'pert_time', 'cell_type', 'perturbagen', 'pert_type',
+                              'pert_dose', 'tissue_type', 'tissue', 'disease', 'is_control',
+                              'library', 'stimulation', 'guide', 'dataset', 'psbulk_cells',
+                              'psbulk_counts', 'pubchem_cid'
+                              ]
+        self.nworkers = nworkers
         self.padata = None
+        
+    def determine_groupby_fields(self, adata):
+        groupby_fields = np.array(self.groupby_fields)
+        ignore_fields = groupby_fields[adata.obs[groupby_fields].isna().all()]
+        filterd_fields = [item.item() for item in groupby_fields if item not in ignore_fields]
+        self.groupby_fields = filterd_fields
 
     def run_pseudobulking(self, ) -> None:
         '''
         Run pseudobulking pipeline.
         '''
-        logger.info("Read anndata from %s", self.file_input)
-        adata = sc.read_h5ad(self.file_input)
-        logger.info("Process anndata")
-        adata = self.preprocess(adata)
+        adata = self.get_adata()
+        logger.info('Standartize anndata')
+        adata = self.standartize(adata)
+        logger.info('Determine groupby fields')
+        self.determine_groupby_fields(adata)
+        adata = self.prefilter(adata)
         logger.info("Build pseudobulk")
         self.padata = self.build_pseudoulk(adata)
-        logger.info("Filter columns")
-        self.filter_cols()
 
-    def preprocess(self, adata: AnnData) -> AnnData:
+    def get_adata(self, ):
+        logger.info("Read data")
+        adata, obs, var = self.read_data()
+        logger.info("Merge datasets")
+        adata = self.merge_data(adata.copy(), obs, var)
+        return adata
+
+    def read_data(self, ):
+        if self.files_input.get('path2adata'):
+            adata = sc.read_h5ad(self.files_input.get('path2adata'))
+        else:
+            raise Exception('No path to the adata file')
+
+        if self.files_input.get('path2obs'):
+            obs = pd.read_parquet(self.files_input.get('path2obs'))
+        else:
+            obs = None
+
+        if self.files_input.get('path2var'):
+            var = pd.read_parquet(self.files_input.get('path2var'))
+        else:
+            var = None
+
+        return adata, obs, var
+
+    def merge_data(self, adata, obs, var):
+        
+        if (obs is not None) and (not adata.obs.equals(obs)):
+            if adata.obs.index.name is None:
+                adata.obs.index.name = 'index'
+            if obs.index.name is None:
+                obs.index.name = 'index'
+            col_index = adata.obs.index.name
+            if (adata.obs.index.name != obs.index.name):
+                obs.set_index(col_index, inplace=True)
+            if len(adata.obs.index.intersection(obs.index)) == 0:
+                    raise Exception('The indices in andata.obs and obs are different!')
+            adata.obs = adata.obs.merge(obs, how='left', on=col_index, suffixes=('_old', ''))
+    
+        if (var is not None) and (not adata.var.equals(var)):
+            if adata.var.index.name is None:
+                adata.var.index.name = 'index'
+            if var.index.name is None:
+                var.index.name = 'index'
+            col_index = adata.var.index.name
+            if adata.var.index.name != var.index.name:
+                var.set_index(col_index, inplace=True)
+            if len(adata.var.index.intersection(var.index)) == 0:
+                    raise Exception('The indices in andata.var and var are different!')
+            adata.var = adata.var.merge(var, how='left', on=col_index, suffixes=('_old', ''))
+        return adata
+    
+    def standartize(self, adata):
+        adata = self.standartize_obs(adata.copy())
+        adata = self.standartize_var(adata.copy())
+        adata.layers['counts'] = adata.X.copy()
+        return adata
+
+
+    def prefilter(self, adata: AnnData) -> AnnData:
         '''
         A function to preprocess a single cell dataset:
         - remove observations containing nan values in the
@@ -177,12 +192,27 @@ class Pseudobulk:
         adata : AnnData
             An input scRNA-seq dataset.
         '''
-        adata = self.dropna_obs(adata)
+        is_outlier = None
+        if self.filter_tahoe:
+            logger.info('Filter by counts')
+            is_outlier = self.filter_by_counts(adata)
+        if self.filter_nans:
+            logger.info('Filter by nans')
+            is_outlier = is_outlier | self.filter_by_nans(adata)
+        if self.filter_malat1:
+            logger.info('Filter by humanMALAT1')
+            is_outlier = is_outlier | self.filter_by_humanMALAT1(adata)
+        if self.filter_singlets:
+            logger.info('Filter by Singlets')
+            is_outlier = is_outlier | self.filter_by_singlets(adata, nworkers=self.nworkers)
+        if is_outlier is not None:
+            adata = adata[~is_outlier].copy()
         self.filter_cells_(adata)
         self.filter_genes_(adata)
         if adata.obs.empty:
-            logger.warning("The AnnData object is empty after processing!")
+            logger.warning("The AnnData object is empty after pre-filtering!")
         return adata
+
 
     def build_pseudoulk(self, adata: AnnData) -> AnnData:
         '''
@@ -205,36 +235,64 @@ class Pseudobulk:
         del padata.layers["psbulk_props"]
         return padata
 
-
-    def filter_cols(self) -> None:
+    
+    def process_pseudobulk(self) -> None:
         '''
-        Drop or select columns in adata.obs.
+        Select columns in padata.obs.
         '''
         if not self.padata is None:
-            if len(self.drop_cols) > 0:
-                self.padata.obs.drop(columns=self.drop_cols, inplace=True)
-            if len(self.select_cols) > 0:
-                self.padata.obs = self.padata.obs[
-                                self.select_cols + ['psbulk_cells', 'psbulk_counts']
-                                ]
+            if len(self.pbulk_columns) > 0:
+                self.padata.obs = self.padata.obs[self.pbulk_columns].copy()
         else:
-            raise Exception("The pseudobulk dataset is empty")
+            raise Exception("The pseudobulk dataset is None")
 
-    def dropna_obs(self, adata: AnnData) -> AnnData:
-        '''
-        Drop rows (observations) which have NaN values in the selected columns
-        stored in self.dropna (before pseudobulking).
+    
+    def filter_by_nans(self, adata):
+        is_outlier = adata.obs[self.groupby_fields].isna().any(axis=1)
+        return is_outlier
 
-        Parameters:
-        -----------
-        adata : AnnData
-            An input scRNA-seq dataset.
+    def filter_by_counts(self, adata, min_ngenes=250, min_ncounts=700, max_pcnt_mito=0.2):
+        is_outlier = ~((adata.obs['ngenes'] >= min_ngenes)\
+                   & (adata.obs['ncounts'] >= min_ncounts)\
+                   & (adata.obs['pcnt_mito'] <= max_pcnt_mito))
+        return is_outlier
+    
+    def filter_by_humanMALAT1(self, adata, ens_id='ENSG00000251562', scaling=10000, threshold=3.5):
+        is_malat1 = adata.var_names.str.startswith(ens_id)
+        fraction_counts_malat1 = adata[:, is_malat1].X.toarray().sum(1)/adata.obs['ncounts'].values
+        norm_malat1 = np.log1p(fraction_counts_malat1 * scaling)
+        is_outlier = norm_malat1 < threshold
+        return is_outlier
+
+    def filter_by_singlets(self, adata, nworkers=4, seed=42, singlet=1):
+        X = adata.X.T
+        r_script = f'''
+        library(scDblFinder)
+        library(BiocParallel)
+        
+        
+        set.seed({seed})
+        
+        sce = scDblFinder(
+            SingleCellExperiment(
+                list(counts=X),
+            ),
+            BPPARAM = MulticoreParam(workers = {nworkers})
+        )
+        
+        
+        doublet_score = sce$scDblFinder.score
+        doublet_class = sce$scDblFinder.class
         '''
-        # TODO: look at counts field
-        adata.layers['counts'] = adata.X.copy()
-        if len(self.dropna) != 0:
-            adata = adata[~adata.obs[self.dropna].isna().all(axis=1)].copy()
-        return adata
+        with localconverter(ro.default_converter + anndata2ri.converter):
+            X_r = ro.conversion.py2rpy(X)
+        ro.globalenv['X'] = X_r
+        ro.r(r_script)
+
+        with localconverter(ro.default_converter + anndata2ri.converter):
+            doublet_class = ro.conversion.rpy2py(ro.globalenv['doublet_class'])
+        is_outlier = (doublet_class != 'singlet')
+        return is_outlier
 
     def filter_cells_(self, adata: AnnData) -> None:
         '''
@@ -246,6 +304,8 @@ class Pseudobulk:
         adata : AnnData
             An input scRNA-seq dataset.
         '''
+        if len(self.filter_cells_params.keys()) != 0:
+            logger.info('Filter cells')
         for key in self.filter_cells_params.keys():
             kwarg = dict({key: self.filter_cells_params[key]})
             sc.pp.filter_cells(adata, **kwarg, inplace=True)
@@ -260,6 +320,9 @@ class Pseudobulk:
         adata : AnnData
             An input scRNA-seq dataset.
         '''
+        if len(self.filter_genes_params.keys()) != 0:
+            logger.info('Filter genes')
+
         for key in self.filter_genes_params.keys():
             kwarg = dict({key: self.filter_genes_params[key]})
             sc.pp.filter_genes(adata, **kwarg, inplace=True)
@@ -267,20 +330,27 @@ class Pseudobulk:
     def define_sample_group_cols(self, adata: AnnData) -> None:
         '''
         A function to construct 'sample_id' column for pseudobulking 
-        procedure based on the list of chosen columns (self.bulk_fields).
+        procedure based on the list of chosen columns (self.groupby_fields).
 
         Parameters:
         -----------
         adata : AnnData
             An input scRNA-seq dataset.
         '''
-        for f in self.bulk_fields:
+        def f_to_numeric(df_s):
+            try:
+                pd.to_numeric(df_s, downcast='float')
+            except Exception:
+                return df_s
+
+        for f in self.groupby_fields:
             if f not in adata.obs:
                 raise KeyError(f"adata.obs lacks '{f}'")
-            if is_float_dtype(adata.obs[f]) and not (adata.obs[f].isnull().values.any()):
-                adata.obs[f] = adata.obs[f].astype(int)
+            if not (adata.obs[f].isnull().values.any()):
+                if is_float_dtype(f_to_numeric(adata.obs[f])):
+                    adata.obs[f] = adata.obs[f].astype(int)
 
-        adata.obs['sample_id'] = adata.obs[self.bulk_fields]\
+        adata.obs['sample_id'] = adata.obs[self.groupby_fields]\
             .astype(str)\
             .apply(lambda row: '_'.join(row.values), axis=1, result_type='reduce')
         adata.obs['pseudo_group'] = 'all'
@@ -309,7 +379,7 @@ class Pseudobulk:
     def add_pubchem_cids_to_padata(
                                    self,
                                    cache: Dict[str, Optional[int]],
-                                   drug_col: str = 'perturbation'
+                                   drug_col: str = 'perturbagen'
                                    ) -> None:
         '''
         Add a 'pubchem_cid' column to adata.obs based on the drug_col.
@@ -370,37 +440,35 @@ def main():
     read from the config file and to run the downstream pipeline
     with the set parameters.
     '''
-    def merge_args(
-                   d_args: Dict[str, Optional[str | Dict[str, int] | List[str]]],
-                   config: Dict[str, Optional[str  |Dict[str, int] | List[str]]]
-                   ) -> Dict[str, Optional[str | Dict[str, int] | List[str]]]:
-        '''
-        A function to unite the parameters entered as the arguments
-        from the console and the parameters loaded from a config file.
-
-        Parameters:
-        -----------
-        d_args : Dict[str, Optional[str | Dict[str, int] | List[str]]]
-            input arguments represented as a dictionary.
-        config : Dict[str, Optional[str  |Dict[str, int] | List[str]]]
-            parameters loaded from a config file.
-        '''
-        for key in config.keys():
-            if (not key in d_args.keys()) or (not d_args[key]):
-                d_args[key] = config[key]
+    def check_sub_arg_values(d_args, arg_names):
+        for name in arg_names:
+            if d_args.get(name):
+                for par in d_args[name].keys():
+                    try:
+                        d_args[name][par] = int(d_args[name][par])
+                    except:
+                        raise Exception("{par}'s value should be integer")
         return d_args.copy()
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', type=str)
-    parser.add_argument('--input', type=str)
+    parser.add_argument('--dataset_name', type=str)
+    parser.add_argument('--input', nargs='+', action=ParseKW)
     parser.add_argument('--output', type=str)
+    parser.add_argument('--filter_malat1', type=bool, default=False, action=argparse.BooleanOptionalAction)
+    parser.add_argument('--filter_tahoe', type=bool, default=False, action=argparse.BooleanOptionalAction)
+    parser.add_argument('--filter_nans', type=bool, default=False, action=argparse.BooleanOptionalAction)
+    parser.add_argument('--filter_singlets', type=bool, default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument('--filter_cells_params', nargs='+', action=ParseKW)
     parser.add_argument('--filter_genes_params', nargs='+', action=ParseKW)
-    parser.add_argument('--bulk_fields', nargs='+')
-    parser.add_argument('--dropna', nargs='+', default=[])
-    parser.add_argument('--drop_cols', nargs='+', default=[])
-    parser.add_argument('--select_cols', nargs='+', default=[])
-    parser.add_argument('--drug_col', type=str)
+    parser.add_argument('--groupby_fields', nargs='+', default=['plate', 'well', 'perturbagen', 'cell_type', 'guide'])
+    parser.add_argument('--drug_col', type=str, default='perturbagen')
+    parser.add_argument('--nworkers', type=int, default=4)
+    required_args = ['dataset_name', 'input', 'output', 'groupby_fields', 'drug_col']
+    required_sub_args = {'input': ['path2adata', 'path2obs', 'path2var'],
+                         'filter_cells_params': ['min_counts', 'min_genes', 'max_counts', 'max_genes'],
+                         'filter_genes_params': ['min_counts', 'min_cells', 'max_counts', 'max_cells']}
+
     args = parser.parse_args()
     d_args = vars(args).copy()
     del d_args['config']
@@ -410,48 +478,36 @@ def main():
             config = json.load(f)
         d_args = merge_args(d_args, config)
 
-    if 'filter_cells_params' in d_args.keys():
-        if d_args['filter_cells_params']:
-            pars_appr = ['min_counts', 'min_genes', 'max_counts', 'max_genes']
-            for par in d_args['filter_cells_params'].keys():
-                if not par in pars_appr:
-                    raise KeyError(
-                        f"The parameter's name {par} isn't appropriate, "\
-                        f"should be one of {pars_appr}"
-                        )
-
-    if 'filter_genes_params' in d_args.keys():
-        if d_args['filter_genes_params']:
-            pars_appr = ['min_counts', 'min_cells', 'max_counts', 'max_cells']
-            for par in d_args['filter_genes_params'].keys():
-                if not par in pars_appr:
-                    raise KeyError(
-                        f"The parameter's name {par} isn't appropriate, "\
-                        f"should be one of {pars_appr}"
-                        )
-
-
-    for key in ['input', 'output', 'bulk_fields', 'drug_col']:
-        if not d_args[key]:
-            raise KeyError(f"The argument {key} is not set")
-
+    for key in required_args:
+        if not d_args.get(key):
+            if key == 'dataset_name':
+                raise Exception(f"The argument {key} is not set. Chose the dataset name from {dataset_standardization.keys()}")
+            else:
+                raise Exception(f"The argument {key} is not set")
+    
+    check_sub_args(d_args, required_sub_args)
+    check_sub_arg_values(d_args, ['filter_cells_params', 'filter_genes_params'])
 
     pseudo = Pseudobulk(
-                        file_input = d_args['input'],
-                        file_output = d_args['output'],
-                        bulk_fields = d_args['bulk_fields'],
-                        filter_cells_params = d_args['filter_cells_params'],
-                        filter_genes_params = d_args['filter_genes_params'],
-                        dropna = d_args['dropna'],
-                        drop_cols = d_args['drop_cols'],
-                        select_cols = d_args['select_cols'],
+                        files_input=d_args['input'],
+                        file_output=d_args['output'],
+                        filter_malat1=d_args['filter_malat1'],
+                        filter_tahoe=d_args['filter_tahoe'],
+                        filter_nans=d_args['filter_nans'],
+                        filter_singlets=d_args['filter_singlets'],
+                        filter_cells_params=d_args['filter_cells_params'],
+                        filter_genes_params=d_args['filter_genes_params'],
+                        groupby_fields=d_args['groupby_fields'],
+                        dataset_standardization_=dataset_standardization[d_args['dataset_name']],
+                        nworkers=d_args['nworkers']
                         )
     pseudo.run_pseudobulking()
     logger.info("Mapping drugs to PubChem idx")
     pseudo.add_pubchem_cids_to_padata({}, drug_col=d_args['drug_col'])
+    logger.info("Process pseudobulk")
+    pseudo.process_pseudobulk()
     logger.info("Save dataset")
     pseudo.save()
-
 
 
 

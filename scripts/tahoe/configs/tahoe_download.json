@@ -1,0 +1,7 @@
+{"input": {"key_adata": "2025-02-25/h5ad/plate1_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab.h5ad", 
+	   "key_obs": "tahoe100/obs/plate1.parquet",
+	   "key_var": "tahoe100/var.parquet"},
+"output": {"path2adata": "",
+	   "path2obs": "",
+	   "path2var": ""}
+}
