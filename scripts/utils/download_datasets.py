@@ -1,12 +1,12 @@
 import os
 import argparse
 import json
-from typing import Dict, Optional, Sequence, Any, List
+from typing import Dict, Optional
 import numpy as np
 import lamindb as ln
 from helpers import *
 
-def load_save_from_lamindb(key_adata: str = None,
+def download_save_from_lamindb(key_adata: str = None,
                            key_obs: str = None, 
                            key_var: str = None,
                            path2adata: str = None,
@@ -14,11 +14,46 @@ def load_save_from_lamindb(key_adata: str = None,
                            path2var: str = None,
                            subsampling: bool = False,
                            subsample_size: int = 5000,
-                           instance='laminlabs/pertdata') -> None:
+                           instance: str = 'laminlabs/pertdata') -> None:
     
-    def append_subsample_suffix(filename):
+    '''
+    Download datasets from lamindb and save them.
+
+    Parameters:
+    -----------
+    key_adata : str
+        A key of AnnData object stored in lamindb.
+    key_obs : str
+        A key of obs DataFrame stored in lamindb.
+    key_var : str
+        A key of var DataFrame stored in lamindb.
+    path2adata : str = None
+        Path to save AnnData object
+    path2obs : str = None
+        Path to save obs DataFrame
+    path2var : str = None
+        Path to save var DataFrame
+    subsampling : bool = False
+        A flag, True value means to make a subsample
+        from AnnData object. It has no effect on obs 
+        and var datasets.
+    subsample_size : int = 5000
+        The number of observations in the subsample.
+    instance : str
+        Instance in the lamindb. 
+    '''
+
+    def append_subsample_suffix(filename: str):
+        '''
+        Change a file name in case subsampling.
+
+        Parameters:
+        -----------
+        filename : str
+            A path to save AnnData object
+        '''
         name, ext = os.path.splitext(filename)
-        return "{name}_{uid}{ext}".format(name=name, uid='subsample', ext=ext)
+        return f'{name}_subsample{ext}'
     
     ln.connect(instance)
     
@@ -83,8 +118,20 @@ def main():
     read from the config file and to run the downstream pipeline
     with the set parameters.
     '''
-    def check_input_output_sub_args(d_args,
-                                    required_sub_args):
+    def check_input_output_sub_args(d_args: Dict[str, Optional[str]],
+                                    required_sub_args: Dict[str, str]) -> None:
+        '''
+        A function to check if the user provided both input path to the dataset
+        in the lamin database and the path to save the dataset.
+
+        Parameters:
+        -----------
+        d_args : Dict[str, Optional[str]]
+            Input arguments represented as a dictionary.
+        required_sub_args : Dict[str, str]
+            A dictionary of predetermined parameter names which
+            should be used with arguments.
+        '''
         for i, isub_args in enumerate(required_sub_args['input']):
             osub_args = required_sub_args['output'][i]
             if d_args['input'].get(isub_args) and (not d_args['output'].get(osub_args)):
@@ -114,7 +161,7 @@ def main():
 
     check_sub_args(d_args, required_sub_args)
     check_input_output_sub_args(d_args, required_sub_args)
-    load_save_from_lamindb(**{**d_args['input'], **d_args['output']}, subsampling=d_args['subsampling'])
+    download_save_from_lamindb(**{**d_args['input'], **d_args['output']}, subsampling=d_args['subsampling'])
 
 if __name__ == '__main__':
     main()

@@ -1,11 +1,15 @@
 from string import ascii_lowercase
 import re
+from typing import List, Any, Dict, Optional
 import scanpy as sc
+from anndata import AnnData
 from magnitude import mg, new_mag, Magnitude
 
+#Initialize new units: moles per liter)
 new_mag('l', Magnitude(0.001, m=3))
 new_mag('M', mg(1, 'mol/l'))
 
+#Define column names for .obs standardization
 STANDARD_ADATA_OBS_COLS = [
                  'plate', 
                  'well', 
@@ -33,6 +37,7 @@ STANDARD_ADATA_OBS_COLS = [
                  'self_reported_ethnicity',
                  ]
 
+#Define categorical columns
 CAT_COLS = [
                  'plate', 
                  'well', 
@@ -53,10 +58,19 @@ CAT_COLS = [
                  'self_reported_ethnicity'
                  ]
 
-
+#Define column names for .var standardization
 STANDARD_VAR_COLS = ['symbol']
 
-def split_val_units(s):
+def split_val_units(s: str) -> List[Optional[float] | Optional[str]]:
+    '''
+    Split combined value and unit strings to store them separately in columns.
+
+    Parameters:
+    -----------
+    s : str
+        Value-unit string to process.
+    '''
+
     r = "[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?"
     try:
         val = float(re.findall(r, s)[0])
@@ -68,14 +82,37 @@ def split_val_units(s):
         units = None
     return [val, units]
 
-def standardize_doze(value, unit, default_unit='uM'):
+def standardize_dose(value: float, 
+                     unit: str, 
+                     default_unit: str = 'uM') -> List[Optional[float] | Optional[str]]:
+    '''
+    Convert dose values to the standard units (uM)
+
+    Parameters:
+    -----------
+    value : float
+        Dose value
+    unit : str
+        Dose unit
+    default_unit : str
+        Standard unit
+    '''
     try:
         value_ = mg(value, unit).toval(default_unit)     
     except Exception as e:
         value_ = None
     return [value_, default_unit]
 
-def standardize_obs_tahoe(adata):
+def standardize_obs_tahoe(adata: AnnData) -> AnnData:
+    '''
+    Convert observations from AnnData object to the standard format.
+    For Tahoe100 dataset.
+
+    Parameters:
+    -----------
+    adata : AnnData
+       An input scRNA-seq dataset. 
+    '''
     rename_cols = {'gene_count': 'ngenes', 
                    'tscp_count': 'ncounts',
                    'cell_line_ontology_id': 'cell_type',
@@ -84,7 +121,6 @@ def standardize_obs_tahoe(adata):
     categories = {c: 'category' for c in CAT_COLS}
     wellnum2id_mapping = wellnum2id()
     adata.obs['well'] = adata.obs.index.to_series().str.split('_').str[0].astype(int).map(wellnum2id_mapping)
-    #adata.obs['well'] = adata.obs['plate'] + '_' + adata.obs['well']
     adata.obs.rename(columns=rename_cols, inplace=True)
     adata.obs['is_control'] = adata.obs['perturbagen'] == 'DMSO_TF'
     adata.obs['library'] = None
@@ -96,19 +132,48 @@ def standardize_obs_tahoe(adata):
     return adata
 
 
-def standardize_var_tahoe(adata):
+def standardize_var_tahoe(adata: AnnData) -> AnnData:
+    '''
+    Convert variables from AnnData object to the standard format.
+    For Tahoe100 dataset.
+
+    Parameters:
+    -----------
+    adata : AnnData
+       An input scRNA-seq dataset.
+    '''
     rename_cols = {'ensembl_gene_id': 'ensembl_id'}
     adata.var.rename(columns=rename_cols, inplace=True)
     adata.var.set_index('ensembl_id', inplace=True)
     return adata
 
-def wellnum2id(nwells=96, ncols=12):
+def wellnum2id(nwells: int = 96, 
+               ncols: int = 12) -> Dict[int, str]:
+    '''
+    Convert well numeric ids to letter-based ids.
+
+    Parameters:
+    -----------
+    nwells : int
+        Total number of wells on the experimental plate.
+    ncols : int
+        The number of columns on the experimental plate.
+    '''
     mapping = {}
     for i in range(nwells):
         mapping[i + 1] = ascii_lowercase[i // ncols].upper() + str(i % ncols + 1)
     return mapping
 
-def standardize_obs_sciplex(adata):
+def standardize_obs_sciplex(adata: AnnData) -> AnnData:
+    '''
+    Convert observations from AnnData object to the standard format.
+    For Sci-plex3 dataset.
+
+    Parameters:
+    -----------
+    adata : AnnData
+       An input scRNA-seq dataset.
+    '''
     rename_cols = {'n_genes': 'ngenes', 
                    'pct_counts_mt': 'pcnt_mito', 
                    'cell_type': 'cell_type_', 
@@ -140,11 +205,20 @@ def standardize_obs_sciplex(adata):
     adata.obs = adata.obs.astype(categories)
     return adata
 
-def standardize_var_sciplex(adata):
+def standardize_var_sciplex(adata: AnnData) -> AnnData:
+    '''
+    Convert variables from AnnData object to the standard format.
+    For Sci-plex3 dataset.
+
+    Parameters:
+    -----------
+    adata : AnnData
+       An input scRNA-seq dataset.
+    '''
     adata.var = adata.var[STANDARD_VAR_COLS]
     return adata
 
-
+# Define the dictionary with the dataset-specific standardization functions
 dataset_standardization = {'tahoe': {'standardize_obs': standardize_obs_tahoe,
                                      'standardize_var': standardize_var_tahoe},
                            'sciplex': {'standardize_obs': standardize_obs_sciplex,

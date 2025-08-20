@@ -1,7 +1,7 @@
 import argparse
 import sys
 import logging
-from typing import Sequence, Any, Dict, Optional
+from typing import List, Sequence, Any, Dict, Optional
 
 #Init logger
 FMT = '%(asctime)s | [%(levelname)s] %(message)s'
@@ -29,13 +29,13 @@ class ParseKW(argparse.Action):
 
     Parameters:
     -----------
-    parser: argparse.ArgumentParser
+    parser : argparse.ArgumentParser
         The parser object. 
-    namespace: argparse.Namespace
+    namespace : argparse.Namespace
         An object, which holds attributes and returns it.
-    values: List[str]
+    values : str | Sequence[Any] | None
         A list of values which follow the argument.
-    option_string: Optional[List[str]] = None
+    option_string : str | None
         The option string that is used to invoke the action.     
     '''
     def __call__(self,
@@ -69,7 +69,20 @@ def merge_args(d_args: Dict[str, Optional[str]],
             d_args[key] = config[key]
     return d_args.copy()
 
-def check_sub_args(d_args, required_sub_args):
+def check_sub_args(d_args: Dict[str, Optional[str]], 
+                   required_sub_args: Dict[str, str]) -> None:
+    '''
+    A function to check the names of input 
+    argument parameters.
+
+    Parameters:
+    -----------
+    d_args : Dict[str, Optional[str]]
+        Input arguments represented as a dictionary.
+    required_sub_args : Dict[str, str]
+        A dictionary of predetermined parameter names which
+        should be used with arguments.
+    '''
     for key in required_sub_args.keys():
         if d_args.get(key):
             for par in d_args[key].keys():
