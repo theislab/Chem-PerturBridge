@@ -22,14 +22,15 @@ python3 ./utils/download_datasets.py \
 		 "path2obs=${SC_DIR}/${NAME}_obs.parquet" \
 		 "path2var=${SC_DIR}/${NAME}_var.parquet" \
 	--config ./sciplex/configs/sciplex_download.json \
+	--subsampling
 
 echo "> Running pseudobulking"
 python3 ./utils/pseudobulking.py \
 	--dataset sciplex \
-	--input "path2adata=${SC_DIR}/${NAME}.h5ad" \
+	--input "path2adata=${SC_DIR}/${NAME}_subsample.h5ad" \
 		"path2obs=${SC_DIR}/${NAME}_obs.parquet" \
 		"path2var=${SC_DIR}/${NAME}_var.parquet" \
-	--output "${BULK_DATA}.h5ad" \
+	--output "${BULK_DATA}_subsample.h5ad" \
 	--filter_malat1 \
 	--filter_low_counts \
 	--filter_nans

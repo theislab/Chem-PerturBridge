@@ -94,7 +94,7 @@ def main():
     logger.info('Unite datasets from several plates')
 
     adata = unite_adatas(d_args['input'])
-    logger.info('Save the united dataset')
+    logger.info(f'Save the united dataset to {d_args["output"]}')
 
     dir_output = os.path.dirname(d_args['output'])
     if not os.path.exists(dir_output):

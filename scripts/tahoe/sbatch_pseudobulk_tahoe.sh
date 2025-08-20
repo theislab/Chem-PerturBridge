@@ -25,8 +25,7 @@ do
 			"key_var=tahoe100/var.parquet" \
 		--output "path2adata=${SC_DIR}/plate${i}.h5ad" \
                 	 "path2obs=${SC_DIR}/plate${i}_obs.parquet" \
-                 	"path2var=${SC_DIR}/var.parquet" \
-        	--subsampling
+                 	"path2var=${SC_DIR}/var.parquet"
 done
 
 echo "> Running pseudobulking"
@@ -37,10 +36,10 @@ do
 
 	python3 ./utils/pseudobulking.py \
 		--dataset tahoe \
-		--input "path2adata=${SC_DIR}/plate${i}_subsample.h5ad" \
+		--input "path2adata=${SC_DIR}/plate${i}.h5ad" \
                         "path2obs=${SC_DIR}/plate${i}_obs.parquet" \
                         "path2var=${SC_DIR}/var.parquet" \
-		--output "$BULK_DIR/subsample/plate${i}_subsample.h5ad" \
+		--output "$BULK_DIR/full/plate${i}.h5ad" \
 		--filter_malat1 \
         	--filter_low_counts \
         	--filter_nans
@@ -48,5 +47,5 @@ done
 echo "> Pseudobulking is done"
 
 echo "> Running combining datasets"
-python3 ./utils/combining_datasets.py --input "$BULK_DIR/subsample/" --output "$OUTPUT_DIR/subsample/tahoe.h5ad"
+python3 ./utils/combining_datasets.py --input "$BULK_DIR/full/" --output "$OUTPUT_DIR/full/tahoe.h5ad"
 echo "> Combining datasets is done"

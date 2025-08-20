@@ -29,7 +29,7 @@ class Pseudobulk:
     Parameters:
     -----------
     files_input : Dict[str, Optional[str]]
-        A path to the input file containing raw data.
+        A path to the input files containing raw data.
     file_output : str
         A path to the output file containing pseudobulk data.
     groupby_fields : List[str]
@@ -58,14 +58,15 @@ class Pseudobulk:
                  self,
                  files_input: Dict[str, Optional[str]],
                  file_output: str,
-                 filter_malat1: bool,
-                 filter_tahoe: bool,
-                 filter_nans: bool,
-                 filter_singlets: bool,
                  groupby_fields: List[str],
                  dataset_standardization_: Dict[str, Dict[str, Callable]],
+                 filter_malat1: bool = False,
+                 filter_low_counts: bool = False,
+                 filter_nans: bool = False, 
+                 filter_singlets: bool = False,
                  filter_cells_params: Optional[Dict[str, int]] = None,
                  filter_genes_params: Optional[Dict[str, int]] = None,
+                 ignore_cell_lines: List[str] = [],
                  nworkers: int = 4,
                  ):
 
@@ -77,7 +78,7 @@ class Pseudobulk:
         self.file_output = file_output
 
         self.filter_malat1 = filter_malat1
-        self.filter_tahoe = filter_tahoe
+        self.filter_low_counts = filter_low_counts
         self.filter_nans = filter_nans
         self.filter_singlets = filter_singlets
 
@@ -94,11 +95,15 @@ class Pseudobulk:
         self.groupby_fields = groupby_fields
         self.standartize_obs = dataset_standardization_['standardize_obs']
         self.standartize_var = dataset_standardization_['standardize_var']
-        self.pbulk_columns = ['plate', 'well', 'pert_time', 'cell_type', 'perturbagen', 'pert_type',
-                              'pert_dose', 'tissue_type', 'tissue', 'disease', 'is_control',
-                              'library', 'stimulation', 'guide', 'dataset', 'psbulk_cells',
-                              'psbulk_counts', 'pubchem_cid'
-                              ]
+        self.ignore_cell_lines = ignore_cell_lines
+
+        self.pbulk_columns = [
+                'plate', 'well', 'cell_type', 'perturbagen', 
+                'pert_type', 'is_control', 'pert_dose', 'pert_dose_unit', 
+                'pert_time', 'pert_time_unit', 'suspension_type', 'tissue', 
+                'tissue_type', 'disease', 'library', 'stimulation', 'guide', 
+                'dataset', 'assay', 'development_stage', 'organism', 'sex', 
+                'self_reported_ethnicity', 'psbulk_cells', 'psbulk_counts', 'pubchem_cid']
         self.nworkers = nworkers
         self.padata = None
         
@@ -119,13 +124,13 @@ class Pseudobulk:
         self.determine_groupby_fields(adata)
         adata = self.prefilter(adata)
         logger.info("Build pseudobulk")
-        self.padata = self.build_pseudoulk(adata)
+        self.padata = self.build_pseudoulk(adata.copy())
 
     def get_adata(self, ):
         logger.info("Read data")
         adata, obs, var = self.read_data()
         logger.info("Merge datasets")
-        adata = self.merge_data(adata.copy(), obs, var)
+        adata = self.merge_data(adata, obs, var)
         return adata
 
     def read_data(self, ):
@@ -174,9 +179,8 @@ class Pseudobulk:
         return adata
     
     def standartize(self, adata):
-        adata = self.standartize_obs(adata.copy())
-        adata = self.standartize_var(adata.copy())
-        adata.layers['counts'] = adata.X.copy()
+        adata = self.standartize_obs(adata)
+        adata = self.standartize_var(adata)
         return adata
 
 
@@ -192,23 +196,32 @@ class Pseudobulk:
         adata : AnnData
             An input scRNA-seq dataset.
         '''
-        is_outlier = None
-        if self.filter_tahoe:
+        logger.info(f'Initial adata size: {adata.shape}')
+        is_outlier = np.zeros(adata.obs.shape[0], dtype=bool)
+        if self.filter_low_counts:
             logger.info('Filter by counts')
+            n_obs_prev = adata[~is_outlier].shape[0]
             is_outlier = self.filter_by_counts(adata)
+            logger.info(f'n_obs: {n_obs_prev} --> {adata[~is_outlier].shape[0]}')
         if self.filter_nans:
             logger.info('Filter by nans')
+            n_obs_prev = adata[~is_outlier].shape[0]
             is_outlier = is_outlier | self.filter_by_nans(adata)
+            logger.info(f'n_obs: {n_obs_prev} --> {adata[~is_outlier].shape[0]}')
         if self.filter_malat1:
             logger.info('Filter by humanMALAT1')
+            n_obs_prev = adata[~is_outlier].shape[0]
             is_outlier = is_outlier | self.filter_by_humanMALAT1(adata)
-        if self.filter_singlets:
-            logger.info('Filter by Singlets')
-            is_outlier = is_outlier | self.filter_by_singlets(adata, nworkers=self.nworkers)
-        if is_outlier is not None:
-            adata = adata[~is_outlier].copy()
+            logger.info(f'n_obs: {n_obs_prev} --> {adata[~is_outlier].shape[0]}')
+        #if self.filter_singlets:
+        #    logger.info('Filter by Singlets')
+        #    n_obs_prev = adata[~is_outlier].shape[0]
+        #    is_outlier = is_outlier | self.filter_by_singlets(adata, nworkers=self.nworkers)
+        #    logger.info(f'n_obs: {n_obs_prev} --> {adata[~is_outlier].shape[0]}')
+        adata = adata[~is_outlier]
         self.filter_cells_(adata)
         self.filter_genes_(adata)
+        logger.info(f'Final adata size: {adata.shape}')
         if adata.obs.empty:
             logger.warning("The AnnData object is empty after pre-filtering!")
         return adata
@@ -230,7 +243,7 @@ class Pseudobulk:
         padata = dc.pp.pseudobulk(adata,
                                   sample_col='sample_id',
                                   groups_col='pseudo_group',
-                                  layer='counts')
+                                  )
         self.set_sample_idx(padata)
         del padata.layers["psbulk_props"]
         return padata
@@ -240,11 +253,23 @@ class Pseudobulk:
         '''
         Select columns in padata.obs.
         '''
-        if not self.padata is None:
+        if (self.padata is not None) and (self.padata.shape[0] != 0):
+            self.padata.obs[['pert_dose', 'pert_dose_unit']] = self.padata.obs\
+                    .apply(lambda x: split_val_units(x.pert_dose), axis=1, result_type='expand')
+            self.padata.obs[['pert_dose', 'pert_dose_unit']] = self.padata.obs\
+                    .apply(lambda x: standardize_doze(x.pert_dose, x.pert_dose_unit), axis=1, result_type='expand')
+            self.padata.obs[['pert_time', 'pert_time_unit']] = self.padata.obs\
+                    .apply(lambda x: split_val_units(x.pert_time), axis=1, result_type='expand')
+            self.padata.obs[['pert_dose']] = self.padata.obs[['pert_dose']].astype(float)
+            self.padata.obs[['pert_dose_unit']] = self.padata.obs[['pert_dose_unit']].astype('category')
+            self.padata.obs[['pert_time']] = self.padata.obs[['pert_time']].astype(float)
+            self.padata.obs[['pert_time_unit']] = self.padata.obs[['pert_time_unit']].astype('category')
+            self.padata.obs[['psbulk_cells']] = self.padata.obs[['psbulk_cells']].astype(int)
+            self.padata.obs[['psbulk_counts']] = self.padata.obs[['psbulk_counts']].astype(int)
             if len(self.pbulk_columns) > 0:
-                self.padata.obs = self.padata.obs[self.pbulk_columns].copy()
+                self.padata.obs = self.padata.obs[self.pbulk_columns]
         else:
-            raise Exception("The pseudobulk dataset is None")
+            raise Exception('The pseudobulk dataset is None')
 
     
     def filter_by_nans(self, adata):
@@ -261,38 +286,35 @@ class Pseudobulk:
         is_malat1 = adata.var_names.str.startswith(ens_id)
         fraction_counts_malat1 = adata[:, is_malat1].X.toarray().sum(1)/adata.obs['ncounts'].values
         norm_malat1 = np.log1p(fraction_counts_malat1 * scaling)
-        is_outlier = norm_malat1 < threshold
+        is_outlier = (norm_malat1 < threshold) & (~adata.obs['cell_type'].isin(self.ignore_cell_lines))
         return is_outlier
 
-    def filter_by_singlets(self, adata, nworkers=4, seed=42, singlet=1):
-        X = adata.X.T
-        r_script = f'''
-        library(scDblFinder)
-        library(BiocParallel)
-        
-        
-        set.seed({seed})
-        
-        sce = scDblFinder(
-            SingleCellExperiment(
-                list(counts=X),
-            ),
-            BPPARAM = MulticoreParam(workers = {nworkers})
-        )
-        
-        
-        doublet_score = sce$scDblFinder.score
-        doublet_class = sce$scDblFinder.class
-        '''
-        with localconverter(ro.default_converter + anndata2ri.converter):
-            X_r = ro.conversion.py2rpy(X)
-        ro.globalenv['X'] = X_r
-        ro.r(r_script)
-
-        with localconverter(ro.default_converter + anndata2ri.converter):
-            doublet_class = ro.conversion.rpy2py(ro.globalenv['doublet_class'])
-        is_outlier = (doublet_class != 'singlet')
-        return is_outlier
+    #def filter_by_singlets(self, adata, nworkers=4, seed=42, singlet=1):
+    #TODO
+    #    X = adata.X.T
+    #    r_script = f'''
+    #    library(scDblFinder)
+    #    library(BiocParallel)
+    #    set.seed({seed})
+    #    sce = scDblFinder(
+    #        SingleCellExperiment(
+    #            list(counts=X),
+    #        ),
+    #        BPPARAM = MulticoreParam(workers = {nworkers})
+    #    )
+    #    
+    #    doublet_score = sce$scDblFinder.score
+    #    doublet_class = sce$scDblFinder.class
+    #    '''
+    #    with localconverter(ro.default_converter + anndata2ri.converter):
+    #        X_r = ro.conversion.py2rpy(X)
+    #    ro.globalenv['X'] = X_r
+    #    ro.r(r_script)
+    #
+    #    with localconverter(ro.default_converter + anndata2ri.converter):
+    #        doublet_class = ro.conversion.rpy2py(ro.globalenv['doublet_class'])
+    #    is_outlier = (doublet_class != 'singlet')
+    #    return is_outlier
 
     def filter_cells_(self, adata: AnnData) -> None:
         '''
@@ -372,9 +394,10 @@ class Pseudobulk:
         '''
         Save the pseudobulk dataset.
         '''
-        if not self.padata is None:
+        if (not self.padata is None) and (self.padata.shape[0] != 0):
             self.padata.write_h5ad(self.file_output, compression="gzip")
-
+        else:
+            raise Exception("The pseudobulk dataset is None or empty")
 
     def add_pubchem_cids_to_padata(
                                    self,
@@ -456,13 +479,14 @@ def main():
     parser.add_argument('--input', nargs='+', action=ParseKW)
     parser.add_argument('--output', type=str)
     parser.add_argument('--filter_malat1', type=bool, default=False, action=argparse.BooleanOptionalAction)
-    parser.add_argument('--filter_tahoe', type=bool, default=False, action=argparse.BooleanOptionalAction)
+    parser.add_argument('--filter_low_counts', type=bool, default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument('--filter_nans', type=bool, default=False, action=argparse.BooleanOptionalAction)
-    parser.add_argument('--filter_singlets', type=bool, default=False, action=argparse.BooleanOptionalAction)
+    #parser.add_argument('--filter_singlets', type=bool, default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument('--filter_cells_params', nargs='+', action=ParseKW)
     parser.add_argument('--filter_genes_params', nargs='+', action=ParseKW)
     parser.add_argument('--groupby_fields', nargs='+', default=['plate', 'well', 'perturbagen', 'cell_type', 'guide'])
     parser.add_argument('--drug_col', type=str, default='perturbagen')
+    parser.add_argument('--ignore_cell_lines', nargs='+', default=[])
     parser.add_argument('--nworkers', type=int, default=4)
     required_args = ['dataset_name', 'input', 'output', 'groupby_fields', 'drug_col']
     required_sub_args = {'input': ['path2adata', 'path2obs', 'path2var'],
@@ -491,22 +515,23 @@ def main():
     pseudo = Pseudobulk(
                         files_input=d_args['input'],
                         file_output=d_args['output'],
-                        filter_malat1=d_args['filter_malat1'],
-                        filter_tahoe=d_args['filter_tahoe'],
-                        filter_nans=d_args['filter_nans'],
-                        filter_singlets=d_args['filter_singlets'],
-                        filter_cells_params=d_args['filter_cells_params'],
-                        filter_genes_params=d_args['filter_genes_params'],
                         groupby_fields=d_args['groupby_fields'],
                         dataset_standardization_=dataset_standardization[d_args['dataset_name']],
-                        nworkers=d_args['nworkers']
+                        filter_malat1=d_args['filter_malat1'],
+                        filter_low_counts=d_args['filter_low_counts'],
+                        filter_nans=d_args['filter_nans'],
+                        filter_cells_params=d_args['filter_cells_params'],
+                        filter_genes_params=d_args['filter_genes_params'],
+                        ignore_cell_lines=d_args['ignore_cell_lines'],
+                        nworkers=d_args['nworkers'],
+                        #filter_singlets=d_args['filter_singlets'],
                         )
     pseudo.run_pseudobulking()
     logger.info("Mapping drugs to PubChem idx")
     pseudo.add_pubchem_cids_to_padata({}, drug_col=d_args['drug_col'])
     logger.info("Process pseudobulk")
     pseudo.process_pseudobulk()
-    logger.info("Save dataset")
+    logger.info(f"Save dataset to {pseudo.file_output}")
     pseudo.save()
 
 
