@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 
 # Install Jupyter for Python
-RUN pip install --no-cache-dir notebook lamindb scanpy gcsfs rpy2 anndata2ri decoupler pubchempy
+RUN pip install --no-cache-dir notebook lamindb scanpy gcsfs rpy2 anndata2ri decoupler pubchempy magnitude
 
 # Install R's Jupyter kernel
 RUN R -e "install.packages('IRkernel', repos='http://cran.r-project.org')" \
