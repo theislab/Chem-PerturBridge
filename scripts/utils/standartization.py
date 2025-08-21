@@ -71,7 +71,7 @@ def split_val_units(s: str) -> List[Optional[float] | Optional[str]]:
         Value-unit string to process.
     '''
 
-    r = "[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?"
+    r = r'[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?'
     try:
         val = float(re.findall(r, s)[0])
     except Exception as e:

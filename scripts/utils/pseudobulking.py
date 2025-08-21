@@ -704,7 +704,7 @@ def main():
     parser.add_argument('--groupby_fields', nargs='+', default=['plate', 'well', 'perturbagen', 'cell_type', 'guide'])
     parser.add_argument('--drug_col', type=str, default='perturbagen')
     parser.add_argument('--ignore_cell_lines', nargs='+', default=[])
-    parser.add_argument('--nworkers', type=int, default=4)
+    #parser.add_argument('--nworkers', type=int, default=4)
     required_args = ['dataset_name', 'input', 'output', 'groupby_fields', 'drug_col']
     required_sub_args = {'input': ['path2adata', 'path2obs', 'path2var'],
                          'filter_cells_params': ['min_counts', 'min_genes', 'max_counts', 'max_genes'],
@@ -740,7 +740,7 @@ def main():
                         filter_cells_params=d_args['filter_cells_params'],
                         filter_genes_params=d_args['filter_genes_params'],
                         ignore_cell_lines=d_args['ignore_cell_lines'],
-                        nworkers=d_args['nworkers'],
+                        #nworkers=d_args['nworkers'],
                         #filter_singlets=d_args['filter_singlets'],
                         )
     pseudo.run_pseudobulking()
