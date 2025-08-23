@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  pseudobulking:
+    build: .
+    container_name: pseudobulking
+    volumes:
+      - ${HOME}:${HOME}
+    stdin_open: true
+    tty: true

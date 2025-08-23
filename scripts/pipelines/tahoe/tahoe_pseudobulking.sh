@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -J pseudobulk_tahoe
-#SBATCH -t 10:00:00
+#SBATCH -t 30:00:00
 #SBATCH -n 1
 #SBATCH --qos=cpu_normal
 #SBATCH --mem=700G
@@ -19,7 +19,7 @@ for i in $(seq 1 14)
 do
 	echo "> Download plate $i"
 
-	python3 ./utils/download_datasets.py \
+	python3 -m src.downloading.run_downloading_datasets \
 		--input "key_adata=2025-02-25/h5ad/plate${i}_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab.h5ad" \
 			"key_obs=tahoe100/obs/plate${i}.parquet" \
 			"key_var=tahoe100/var.parquet" \
@@ -34,7 +34,7 @@ for i in $(seq 1 14)
 do
 	echo "> Processing plate $i"
 
-	python3 ./utils/pseudobulking.py \
+	python3 -m src.pseudobulking.run_pseudobulking \
 		--dataset tahoe \
 		--input "path2adata=${SC_DIR}/plate${i}.h5ad" \
                         "path2obs=${SC_DIR}/plate${i}_obs.parquet" \
@@ -47,5 +47,5 @@ done
 echo "> Pseudobulking is done"
 
 echo "> Running combining datasets"
-python3 ./utils/combining_datasets.py --input "$BULK_DIR/full/" --output "$OUTPUT_DIR/full/tahoe.h5ad"
+python3 -m src.pseudobulking.run_combining_datasets --input "$BULK_DIR/full/" --output "$OUTPUT_DIR/tahoe.h5ad"
 echo "> Combining datasets is done"

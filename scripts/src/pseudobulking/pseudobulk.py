@@ -1,7 +1,6 @@
 import os
 import json
 import argparse
-from IPython import get_ipython
 from typing import Tuple, List, Dict, Optional, Any, Callable
 import pandas as pd
 import numpy as np
@@ -12,13 +11,8 @@ from pandas.api.types import is_float_dtype, is_categorical_dtype
 from anndata import AnnData
 from pandas import DataFrame, Series
 
-import anndata2ri
-import rpy2.rinterface_lib.callbacks as rcb
-from rpy2.robjects.conversion import localconverter
-import rpy2.robjects as ro
-
-from helpers import *
-from standartization import *
+from src.utils.parsing_utils import *
+from .standardization import *
 
 class Pseudobulk:
     '''
@@ -45,9 +39,6 @@ class Pseudobulk:
     filter_nans : bool
         A flag, True value means to filter observations which have
         missed information
-    filter_singlets : bool
-        A flag, True value means to find doublets in the observations
-        and filter them, (currently is not available)
     filter_cells_params : Optional[Dict[str, int]]
         A dictionary containing the params for cell filtering.
     filter_genes_params : Optional[Dict[str, int]]
@@ -56,8 +47,6 @@ class Pseudobulk:
         A list of cellosaurus ids to ignore during MALAT1
         filtering. (To exclude cells without a nucleus from
         filtration procedure)
-    nworkers : int
-        A number of workers to parallel doublets filtering
 
     Attributes:
     -----------
@@ -68,9 +57,9 @@ class Pseudobulk:
         A path to the output file containing pseudobulk data.
     groupby_fields : List[str]
         A list of column names to construct sample_id based on them.
-    standartize_obs : Callable
+    standardize_obs : Callable
         A dataset-specific function for processing .obs dataframe.
-    standartize_var : Callable
+    standardize_var : Callable
         A dataset-specific function for processing .var dataframe.
     filter_malat1 : bool
         A flag, True value means to filter observations by expression 
@@ -81,9 +70,6 @@ class Pseudobulk:
     filter_nans : bool
         A flag, True value means to filter observations which have
         missed information
-    filter_singlets : bool
-        A flag, True value means to find doublets in the observations
-        and filter them, (currently is not available)
     filter_cells_params : Optional[Dict[str, int]]
         A dictionary containing the params for cell filtering.
     filter_genes_params : Optional[Dict[str, int]]
@@ -95,8 +81,6 @@ class Pseudobulk:
     pbulk_columns : List[str]
         A list of column names which the final pseudobulk dataset
         should contain.
-    nworkers : int
-        A number of workers to parallel doublets filtering
     padata : AnnData
         A pseudobulk dataset.
     '''
@@ -109,11 +93,9 @@ class Pseudobulk:
                  filter_malat1: bool = False,
                  filter_low_counts: bool = False,
                  filter_nans: bool = False, 
-                 filter_singlets: bool = False,
                  filter_cells_params: Optional[Dict[str, int]] = None,
                  filter_genes_params: Optional[Dict[str, int]] = None,
                  ignore_cell_lines: List[str] = [],
-                 nworkers: int = 4,
                  ):
 
         self.files_input = files_input
@@ -124,13 +106,12 @@ class Pseudobulk:
         self.file_output = file_output
 
         self.groupby_fields = groupby_fields
-        self.standartize_obs = dataset_standardization_['standardize_obs']
-        self.standartize_var = dataset_standardization_['standardize_var']
+        self.standardize_obs = dataset_standardization_['standardize_obs']
+        self.standardize_var = dataset_standardization_['standardize_var']
 
         self.filter_malat1 = filter_malat1
         self.filter_low_counts = filter_low_counts
         self.filter_nans = filter_nans
-        self.filter_singlets = filter_singlets
 
         if filter_cells_params is None:
             self.filter_cells_params = {}
@@ -151,7 +132,6 @@ class Pseudobulk:
                 'tissue_type', 'disease', 'library', 'stimulation', 'guide', 
                 'dataset', 'assay', 'development_stage', 'organism', 'sex', 
                 'self_reported_ethnicity', 'psbulk_cells', 'psbulk_counts', 'pubchem_cid']
-        self.nworkers = nworkers
         self.padata = None
         
     def determine_groupby_fields(self, adata: AnnData) -> None:
@@ -174,8 +154,8 @@ class Pseudobulk:
         Run pseudobulking pipeline.
         '''
         adata = self.get_adata()
-        logger.info('Standartize anndata')
-        adata = self.standartize(adata)
+        logger.info('Standardize anndata')
+        adata = self.standardize(adata)
         logger.info('Determine groupby fields')
         self.determine_groupby_fields(adata)
         adata = self.prefilter(adata)
@@ -267,9 +247,9 @@ class Pseudobulk:
             adata.var = adata.var.merge(var, how='left', on=col_index, suffixes=('_old', ''))
         return adata
     
-    def standartize(self, adata: AnnData) -> AnnData:
+    def standardize(self, adata: AnnData) -> AnnData:
         '''
-        Standartize an input AnnData object
+        Standardize an input AnnData object
         to a specified format:
         - run standardization on obs
         - run standardization on var
@@ -279,8 +259,8 @@ class Pseudobulk:
         adata : AnnData
             An input scRNA-seq dataset.
         '''
-        adata = self.standartize_obs(adata)
-        adata = self.standartize_var(adata)
+        adata = self.standardize_obs(adata)
+        adata = self.standardize_var(adata)
         return adata
 
 
@@ -293,8 +273,6 @@ class Pseudobulk:
           containing nan values in the specified columns
         - if filter_malat1 True, remove observations
           which have low counts of MALAT1.
-        - if filter_singlets True, remove observations
-          which are classified as doublets
         - filter cell/gene outliers
         - return the filtered dataset
 
@@ -320,11 +298,6 @@ class Pseudobulk:
             n_obs_prev = adata[~is_outlier].shape[0]
             is_outlier = is_outlier | self.filter_by_humanMALAT1(adata)
             logger.info(f'n_obs: {n_obs_prev} --> {adata[~is_outlier].shape[0]}')
-        #if self.filter_singlets:
-        #    logger.info('Filter by Singlets')
-        #    n_obs_prev = adata[~is_outlier].shape[0]
-        #    is_outlier = is_outlier | self.filter_by_singlets(adata, nworkers=self.nworkers)
-        #    logger.info(f'n_obs: {n_obs_prev} --> {adata[~is_outlier].shape[0]}')
         adata = adata[~is_outlier]
         self.filter_cells_(adata)
         self.filter_genes_(adata)
@@ -456,60 +429,6 @@ class Pseudobulk:
             logger.warning('There is no information about MALAT1. There no filtration occured.')
         return is_outlier
 
-    #def filter_by_singlets(self, 
-    #                       adata: AnnData, 
-    #                       nworkers: int = 4, 
-    #                       seed: int = 42) -> Series:
-    #'''
-    #Find doublets utilizing expression data by 
-    #running R-based script and using the
-    #scDblFinder package and to filter them.
-    #scDblFinder uses default parameters
-    #(such as Expected doublet rate) for datasets 
-    #obtained from 10x Genomics experiments.
-    #
-    #The parameters might vary with the datasets.
-    #The decision for applying filter_by_singlets
-    #should be made after careful consideration
-    #of the experimental methods.
-    #
-    #The example of the usage of scDblFinder is mentioned here:
-    #https://www.sc-best-practices.org/preprocessing_visualization/quality_control.html
-    #
-    #Parameters:
-    #-----------
-    #adata : AnnData
-    #   An input scRNA-seq dataset.
-    #nworkers : int
-    #   The number of worker to parallel
-    #seed : int
-    #   Predefined seed to reproduce calculations
-    #'''
-    #TODO
-    #    X = adata.X.T
-    #    r_script = f'''
-    #    library(scDblFinder)
-    #    library(BiocParallel)
-    #    set.seed({seed})
-    #    sce = scDblFinder(
-    #        SingleCellExperiment(
-    #            list(counts=X),
-    #        ),
-    #        BPPARAM = MulticoreParam(workers = {nworkers})
-    #    )
-    #    
-    #    doublet_score = sce$scDblFinder.score
-    #    doublet_class = sce$scDblFinder.class
-    #    '''
-    #    with localconverter(ro.default_converter + anndata2ri.converter):
-    #        X_r = ro.conversion.py2rpy(X)
-    #    ro.globalenv['X'] = X_r
-    #    ro.r(r_script)
-    #
-    #    with localconverter(ro.default_converter + anndata2ri.converter):
-    #        doublet_class = ro.conversion.rpy2py(ro.globalenv['doublet_class'])
-    #    is_outlier = (doublet_class != 'singlet')
-    #    return is_outlier
 
     def filter_cells_(self, adata: AnnData) -> None:
         '''
@@ -642,7 +561,7 @@ class Pseudobulk:
                 cid = compounds[0].cid if compounds else None
                 logger.debug("CID for '%s': %d", drug_name, cid)
             except Exception as e:
-                logger.warning("PubChem lookup failed for '%s': %d", drug_name, e)
+                logger.warning("PubChem lookup failed for '%s': %s", drug_name, str(e))
                 cid = None
             cache[drug_name] = cid
             return cid
@@ -698,13 +617,11 @@ def main():
     parser.add_argument('--filter_malat1', type=bool, default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument('--filter_low_counts', type=bool, default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument('--filter_nans', type=bool, default=False, action=argparse.BooleanOptionalAction)
-    #parser.add_argument('--filter_singlets', type=bool, default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument('--filter_cells_params', nargs='+', action=ParseKW)
     parser.add_argument('--filter_genes_params', nargs='+', action=ParseKW)
     parser.add_argument('--groupby_fields', nargs='+', default=['plate', 'well', 'perturbagen', 'cell_type', 'guide'])
     parser.add_argument('--drug_col', type=str, default='perturbagen')
     parser.add_argument('--ignore_cell_lines', nargs='+', default=[])
-    #parser.add_argument('--nworkers', type=int, default=4)
     required_args = ['dataset_name', 'input', 'output', 'groupby_fields', 'drug_col']
     required_sub_args = {'input': ['path2adata', 'path2obs', 'path2var'],
                          'filter_cells_params': ['min_counts', 'min_genes', 'max_counts', 'max_genes'],
@@ -740,8 +657,6 @@ def main():
                         filter_cells_params=d_args['filter_cells_params'],
                         filter_genes_params=d_args['filter_genes_params'],
                         ignore_cell_lines=d_args['ignore_cell_lines'],
-                        #nworkers=d_args['nworkers'],
-                        #filter_singlets=d_args['filter_singlets'],
                         )
     pseudo.run_pseudobulking()
     logger.info("Mapping drugs to PubChem idx")

@@ -1,0 +1,8 @@
+anndata==0.12.2
+decoupler==2.1.1
+lamindb==1.10.2
+magnitude==1.1.2
+numpy==2.3.2
+pandas==2.3.2
+pubchempy==1.0.4
+scanpy==1.11.4

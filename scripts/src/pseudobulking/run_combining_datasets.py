@@ -10,7 +10,7 @@ import anndata
 import scanpy as sc
 from anndata import AnnData
 
-from helpers import *
+from src.utils.parsing_utils import *
 
 def get_files(dir_input: str) -> list:
     '''
