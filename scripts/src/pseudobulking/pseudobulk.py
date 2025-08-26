@@ -3,6 +3,7 @@ import json
 import argparse
 from typing import Tuple, List, Dict, Optional, Any, Callable
 import pandas as pd
+import anndata as ad
 import numpy as np
 import scanpy as sc
 import decoupler as dc
@@ -306,7 +307,40 @@ class Pseudobulk:
             logger.warning("The AnnData object is empty after pre-filtering!")
         return adata
 
+    def chunking(self, adata: AnnData, processing: Callable):
+        '''
+        A function to chunk the large AnnData objects to avoid
+        OOM errors.
 
+        Parameters:
+        -----------
+        adata : AnnData
+            An input scRNA-seq dataset.
+        processing : Callable
+            A processing function which might require extra
+            memory.
+        '''
+        n_chunks = 1
+        idx = adata.obs['sample_id'].unique()
+        max_n_chunks = len(idx)
+        n_idx = len(idx)
+        while n_chunks <= max_n_chunks:
+            try:
+                if n_chunks == 1:
+                    return processing(adata)
+                else:
+                    size = math.ceil(n_idx / n_chunks)
+                    results = []
+                    for i in range(0, n_idx, size):
+                        chunk = adata[adata.obs['sample_id'].isin(idx[i:i+size])]
+                        results.append(processing(chunk))
+                    return ad.concat(results)
+            except MemoryError as e:
+                n_chunks *= 2
+
+
+        raise RuntimeError('Processing failed: the maximum chunk size reached')
+    
     def build_pseudoulk(self, adata: AnnData) -> AnnData:
         '''
         A function
@@ -321,12 +355,13 @@ class Pseudobulk:
             An input scRNA-seq dataset.
         '''
         self.define_sample_group_cols(adata)
-        padata = dc.pp.pseudobulk(adata,
+        pseudo = lambda x: dc.pp.pseudobulk(x,
                                   sample_col='sample_id',
                                   groups_col='pseudo_group',
                                   )
+
+        padata = self.chunking(adata, pseudo)
         self.set_sample_idx(padata)
-        del padata.layers["psbulk_props"]
         return padata
 
     

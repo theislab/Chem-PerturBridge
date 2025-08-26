@@ -1,10 +1,36 @@
 import json
 import argparse
+import psutil
+import resource
+import math
 from typing import List, Dict, Optional
 
 from src.utils.parsing_utils import *
 from .standardization import *
 from .pseudobulk import Pseudobulk
+
+MEMORY_RATIO = 0.9
+
+def setMemoryLimit(n_bytes: int):
+    '''
+    Force Python to raise an exception when it uses more than
+    n_bytes bytes of memory.
+    source: https://medium.com/metabob/chasing-memory-spikes-and-leaks-in-python-172ae99290d3
+    
+    Parameters:
+    -----------
+    n_bytes : int
+        Limitations for the memory
+    '''
+    if n_bytes <= 0: return
+    soft, hard = resource.getrlimit(resource.RLIMIT_AS)
+    resource.setrlimit(resource.RLIMIT_AS, (n_bytes, hard))
+    soft, hard = resource.getrlimit(resource.RLIMIT_DATA)
+    if n_bytes < soft*1024:
+        resource.setrlimit(resource.RLIMIT_DATA, (n_bytes, hard))
+
+
+setMemoryLimit(math.ceil(psutil.virtual_memory().total * MEMORY_RATIO))
 
 
 def main():
