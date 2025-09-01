@@ -34,7 +34,15 @@ def setMemoryLimit(n_bytes: int):
 
 setMemoryLimit(math.ceil(psutil.virtual_memory().total * MEMORY_RATIO))
 
-def create_pseudobulk(args):
+def create_pseudobulk(args: Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]) -> None:
+    '''
+    A function to create a pseudobulk
+
+    Parameters:
+    -----------
+    args : Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]
+        A dictionary of arguments for the Pseudobulk class
+    '''
     if not os.path.isfile(args['output']):
         pseudo = Pseudobulk(dataset_name=args['dataset_name'],
                         files_input=args['input'],

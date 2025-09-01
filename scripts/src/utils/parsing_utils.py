@@ -51,17 +51,18 @@ class ParseKW(argparse.Action):
                 key, value = value.split('=')
                 getattr(namespace, self.dest)[key] = value
 
-def merge_args(d_args: Dict[str, Optional[str]],
-               config: Dict[str, Optional[str]]) -> Dict[str, Optional[str]]:
+def merge_args(d_args: Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]],
+               config: Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]) \
+                       -> Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]:
     '''
     A function to unite the parameters entered as the arguments
     from the console and the parameters loaded from a config file.
 
     Parameters:
     -----------
-    d_args : Dict[str, Optional[str]]
+    d_args : Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]
         input arguments represented as a dictionary.
-    config : Dict[str, Optional[str]]
+    config : Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]
         parameters loaded from a config file.
     '''
     for key in config.keys():
