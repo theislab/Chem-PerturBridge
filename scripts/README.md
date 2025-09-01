@@ -1,4 +1,5 @@
 You can run scripts on the HPC cluster with the workload manager (SLURM)
+
 **NB!** Before running some bash scripts, you may need to run `chmod u+x ./path/script.sh` before their execution.
 
 ### 1.1 Set up the SLURM parameters for the pipeline script. 
@@ -11,9 +12,18 @@ cd /op3_v2/scripts
 ./run_pipelines/set_env.sh
 ```
 **1.2.2** To start a SLURM-based pipeline, you need to execute
+**For Sci-plex**
 ```
+mkdir -p ~/logs
 cd /op3_v2/scripts
-sbatch -e ~/logs/pseudobulk_sciplex.%j.err -o ~/logs/pseudobulk_sciplex.%j.out ./pipelines/sciplex/sciplex_pseudobulking_subsample.sh
+sbatch -e ~/logs/pseudobulk_sciplex.%j.err -o ~/logs/pseudobulk_sciplex.%j.out ./pipelines/sciplex/sciplex_pseudobulking.sh
+```
+
+**For Tahoe**
+```
+mkdir -p ~/logs
+cd /op3_v2/scripts
+./pipelines/tahoe/tahoe_pseudobulking_parallel.sh > ~/logs/pseudobulk_tahoe.out 2>~/logs/pseudobulk_tahoe.err &
 ```
 you will execute a pseudobulking procedure for the subsample of the Sci-plex dataset.
 
@@ -26,39 +36,37 @@ cd /op3_v2/scripts
 ## Project structure:
 The structure of the script folder:
 ```
-tree scripts/
-scripts/
-├── docker
-│   ├── Dockerfile
-│   └── docker-compose.yml
+tree .
 ├── pipelines
-│   ├── sciplex
-│   │   ├── configs
-│   │   │   ├── sciplex_downloading.json
-│   │   │   └── sciplex_pseudobulking.json
-│   │   ├── sciplex_pseudobulking.sh
-│   │   └── sciplex_pseudobulking_subsample.sh
-│   └── tahoe
-│       ├── configs
-│       │   ├── tahoe_combining_datasets.json
-│       │   ├── tahoe_downloading.json
-│       │   └── tahoe_pseudobulking.json
-│       ├── tahoe_pseudobulking.sh
-│       └── tahoe_pseudobulking_subsample.sh
+│   ├── sciplex
+│   │   ├── configs
+│   │   │   ├── sciplex_downloading.json
+│   │   │   └── sciplex_pseudobulking.json
+│   │   ├── sciplex_pseudobulking.sh
+│   │   └── sciplex_pseudobulking_subsample.sh
+│   └── tahoe
+│       ├── configs
+│       │   ├── tahoe_combining_datasets.json
+│       │   ├── tahoe_downloading.json
+│       │   └── tahoe_pseudobulking.json
+│       ├── tahoe_pseudobulking_parallel.sh
+│       └── tahoe_pseudobulking_subsample_parallel.sh
+├── README.md
+├── requirements.txt
 ├── run_pipelines
-│   ├── run_inside_docker.sh
-│   ├── run_with_slurm.sh
-│   └── set_env.sh
+│   ├── run_with_slurm.sh
+│   └── set_env.sh
 └── src
     ├── downloading
-    │   └── run_downloading_datasets.py
+    │   └── run_downloading_datasets.py
     ├── pseudobulking
-    │   ├── pseudobulk.py
-    │   ├── run_combining_datasets.py
-    │   ├── run_pseudobulking.py
-    │   └── standartization.py
+    │   ├── pseudobulk.py
+    │   ├── pubchem_imputation.py
+    │   ├── run_combining_datasets.py
+    │   ├── run_pseudobulking.py
+    │   └── standardization.py
     └── utils
-        └── parsing_utils.py
+        ├── parsing_utils.py
 ```
 
 ## Data
@@ -71,8 +79,10 @@ The structure of the data folder:
         ├──dataset_i_obs.parquet
         ├──dataset_i_var.parquet
     ├──pseudobulk
-        ├──dataset_i.h5ad
-        ├──dataset_i_subsample.h5ad
+        ├──full
+            ├──dataset_i.h5ad
+        ├──subsample
+            ├──dataset_i_subsample.h5ad
     ├──pseudobulk_to_merge (optionally for tahoe)
         ├──full
             ├──dataset_i.h5ad
