@@ -5,6 +5,8 @@ import scanpy as sc
 from anndata import AnnData
 from magnitude import mg, new_mag, Magnitude
 
+from src.utils.parsing_utils import *
+
 #Initialize new units: moles per liter)
 new_mag('l', Magnitude(0.001, m=3))
 new_mag('M', mg(1, 'mol/l'))
@@ -61,47 +63,38 @@ CAT_COLS = [
 #Define column names for .var standardization
 STANDARD_VAR_COLS = ['symbol']
 
-def split_val_units(s: str) -> List[Optional[float] | Optional[str]]:
+def standardize_units(s: str, standard_units: str = 'uM') -> Optional[float]:
     '''
     Split combined value and unit strings to store them separately in columns.
+    Convert dose/time values to the standard units (uM/hours)
 
     Parameters:
     -----------
     s : str
         Value-unit string to process.
+    standard_unit : str
+        Standard unit
     '''
 
     r = r'[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?'
     try:
         val = float(re.findall(r, s)[0])
     except Exception as e:
+        logger.warning('%s', str(e))
         val = None
     try:
         units = re.split(r, s)[-1]
     except Exception as e:
+        logger.warning('%s', str(e))
         units = None
-    return [val, units]
-
-def standardize_dose(value: float, 
-                     unit: str, 
-                     default_unit: str = 'uM') -> List[Optional[float] | Optional[str]]:
-    '''
-    Convert dose values to the standard units (uM)
-
-    Parameters:
-    -----------
-    value : float
-        Dose value
-    unit : str
-        Dose unit
-    default_unit : str
-        Standard unit
-    '''
     try:
-        value_ = mg(value, unit).toval(default_unit)     
+        val_ = mg(val, units).toval(standard_units)
     except Exception as e:
-        value_ = None
-    return [value_, default_unit]
+        logger.warning('%s', str(e))
+        val_ = None
+    
+    return val_
+
 
 def standardize_obs_tahoe(adata: AnnData) -> AnnData:
     '''
@@ -143,8 +136,12 @@ def standardize_var_tahoe(adata: AnnData) -> AnnData:
        An input scRNA-seq dataset.
     '''
     rename_cols = {'ensembl_gene_id': 'ensembl_id'}
+    categories = {c: 'category' for c in STANDARD_VAR_COLS}
+    
     adata.var.rename(columns=rename_cols, inplace=True)
     adata.var.set_index('ensembl_id', inplace=True)
+    adata.var = adata.var[STANDARD_VAR_COLS]
+    adata.var = adata.var.astype(categories)
     return adata
 
 def wellnum2id(nwells: int = 96, 
@@ -215,7 +212,9 @@ def standardize_var_sciplex(adata: AnnData) -> AnnData:
     adata : AnnData
        An input scRNA-seq dataset.
     '''
+    categories = {c: 'category' for c in STANDARD_VAR_COLS}
     adata.var = adata.var[STANDARD_VAR_COLS]
+    adata.var = adata.var.astype(categories)
     return adata
 
 # Define the dictionary with the dataset-specific standardization functions

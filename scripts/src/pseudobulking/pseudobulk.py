@@ -1,3 +1,4 @@
+import time
 import os
 import json
 import argparse
@@ -11,9 +12,11 @@ import pubchempy as pcp
 from pandas.api.types import is_float_dtype, is_categorical_dtype
 from anndata import AnnData
 from pandas import DataFrame, Series
+from scipy.sparse import csr_matrix
 
 from src.utils.parsing_utils import *
 from .standardization import *
+from .pubchem_imputation import *
 
 class Pseudobulk:
     '''
@@ -22,6 +25,8 @@ class Pseudobulk:
 
     Parameters:
     -----------
+    dataset_name : str
+        A name of the dataset to process
     files_input : Dict[str, Optional[str]]
         Paths to the input files containing raw data.
     file_output : str
@@ -51,6 +56,8 @@ class Pseudobulk:
 
     Attributes:
     -----------
+    dataset_name : str
+        A name of the dataset to process
     files_input : Dict[str, Optional[str]]
         Paths to the input files containing raw data (AnnData as .h5ad, 
         .obs and .var as .parquet).
@@ -87,28 +94,37 @@ class Pseudobulk:
     '''
     def __init__(
                  self,
+                 dataset_name: str,
                  files_input: Dict[str, Optional[str]],
                  file_output: str,
                  groupby_fields: List[str],
                  dataset_standardization_: Dict[str, Dict[str, Callable]],
+                 sm2pubchem_: Optional[Dict[str, int]] = None,
                  filter_malat1: bool = False,
                  filter_low_counts: bool = False,
                  filter_nans: bool = False, 
                  filter_cells_params: Optional[Dict[str, int]] = None,
                  filter_genes_params: Optional[Dict[str, int]] = None,
                  ignore_cell_lines: List[str] = [],
+                 standard_dose_units = 'uM',
+                 standard_time_units = 'h',
                  ):
 
+        self.dataset_name = dataset_name
         self.files_input = files_input
 
         dir_output = os.path.dirname(file_output)
         if not os.path.exists(dir_output):
-            os.makedirs(dir_output)
+            try:
+                os.makedirs(dir_output)
+            except FileExistsError as e:
+                logger.warning('%s', str(e))
         self.file_output = file_output
 
         self.groupby_fields = groupby_fields
         self.standardize_obs = dataset_standardization_['standardize_obs']
         self.standardize_var = dataset_standardization_['standardize_var']
+        self.sm2pubchem = sm2pubchem_
 
         self.filter_malat1 = filter_malat1
         self.filter_low_counts = filter_low_counts
@@ -125,11 +141,13 @@ class Pseudobulk:
             self.filter_genes_params = filter_genes_params
 
         self.ignore_cell_lines = ignore_cell_lines
+        self.standard_dose_units = standard_dose_units
+        self.standard_time_units = standard_time_units
 
         self.pbulk_columns = [
                 'plate', 'well', 'cell_type', 'perturbagen', 
-                'pert_type', 'is_control', 'pert_dose', 'pert_dose_unit', 
-                'pert_time', 'pert_time_unit', 'suspension_type', 'tissue', 
+                'pert_type', 'is_control', f'pert_dose_{self.standard_dose_units}', 
+                f'pert_time_{self.standard_time_units}', 'suspension_type', 'tissue', 
                 'tissue_type', 'disease', 'library', 'stimulation', 'guide', 
                 'dataset', 'assay', 'development_stage', 'organism', 'sex', 
                 'self_reported_ethnicity', 'psbulk_cells', 'psbulk_counts', 'pubchem_cid']
@@ -173,7 +191,6 @@ class Pseudobulk:
           the updated versions saved externally.
         - return AnnData object.
         '''
-        logger.info("Read data")
         adata, obs, var = self.read_data()
         logger.info("Merge datasets")
         adata = self.merge_data(adata, obs, var)
@@ -189,16 +206,19 @@ class Pseudobulk:
           parquet files.
         '''
         if self.files_input.get('path2adata'):
+            logger.info("Read data from %s", self.files_input.get('path2adata'))
             adata = sc.read_h5ad(self.files_input.get('path2adata'))
         else:
             raise Exception('No path to the adata file')
 
         if self.files_input.get('path2obs'):
+            logger.info("Read data from %s", self.files_input.get('path2obs'))
             obs = pd.read_parquet(self.files_input.get('path2obs'))
         else:
             obs = None
 
         if self.files_input.get('path2var'):
+            logger.info("Read data from %s", self.files_input.get('path2var'))
             var = pd.read_parquet(self.files_input.get('path2var'))
         else:
             var = None
@@ -334,7 +354,7 @@ class Pseudobulk:
                     for i in range(0, n_idx, size):
                         chunk = adata[adata.obs['sample_id'].isin(idx[i:i+size])]
                         results.append(processing(chunk))
-                    return ad.concat(results)
+                    return ad.concat(results, merge='same')
             except MemoryError as e:
                 n_chunks *= 2
 
@@ -375,21 +395,20 @@ class Pseudobulk:
         - to specify the types for columns
         - select the predetermined columns in padata.obs.
         '''
+        logger.info("Process pseudobulk")
         if (self.padata is not None) and (self.padata.shape[0] != 0):
-            self.padata.obs[['pert_dose', 'pert_dose_unit']] = self.padata.obs\
-                    .apply(lambda x: split_val_units(x.pert_dose), axis=1, result_type='expand')
-            self.padata.obs[['pert_dose', 'pert_dose_unit']] = self.padata.obs\
-                    .apply(lambda x: standardize_dose(x.pert_dose, x.pert_dose_unit), axis=1, result_type='expand')
-            self.padata.obs[['pert_time', 'pert_time_unit']] = self.padata.obs\
-                    .apply(lambda x: split_val_units(x.pert_time), axis=1, result_type='expand')
-            self.padata.obs[['pert_dose']] = self.padata.obs[['pert_dose']].astype(float)
-            self.padata.obs[['pert_dose_unit']] = self.padata.obs[['pert_dose_unit']].astype('category')
-            self.padata.obs[['pert_time']] = self.padata.obs[['pert_time']].astype(float)
-            self.padata.obs[['pert_time_unit']] = self.padata.obs[['pert_time_unit']].astype('category')
+            self.padata.obs[f'pert_dose_{self.standard_dose_units}'] = self.padata.obs\
+                    .apply(lambda x: standardize_units(x.pert_dose, self.standard_dose_units), axis=1)
+            self.padata.obs[f'pert_time_{self.standard_time_units}'] = self.padata.obs\
+                    .apply(lambda x: standardize_units(x.pert_time, self.standard_time_units), axis=1)
+            self.padata.obs[[f'pert_dose_{self.standard_dose_units}']] = self.padata.obs[[f'pert_dose_{self.standard_dose_units}']].astype(float)
+            self.padata.obs[[f'pert_time_{self.standard_time_units}']] = self.padata.obs[[f'pert_time_{self.standard_time_units}']].astype(float)
             self.padata.obs[['psbulk_cells']] = self.padata.obs[['psbulk_cells']].astype(int)
             self.padata.obs[['psbulk_counts']] = self.padata.obs[['psbulk_counts']].astype(int)
             if len(self.pbulk_columns) > 0:
                 self.padata.obs = self.padata.obs[self.pbulk_columns]
+            self.padata.X = csr_matrix(self.padata.X.astype(int))
+            self.padata.layers['psbulk_props'] = csr_matrix(self.padata.layers['psbulk_props'])
         else:
             raise Exception('The pseudobulk dataset is None')
 
@@ -553,6 +572,7 @@ class Pseudobulk:
         Save the pseudobulk dataset.
         '''
         if (not self.padata is None) and (self.padata.shape[0] != 0):
+            logger.info("Save data to %s", self.file_output)
             self.padata.write_h5ad(self.file_output, compression="gzip")
         else:
             raise Exception("The pseudobulk dataset is None or empty")
@@ -574,7 +594,8 @@ class Pseudobulk:
         '''
         def get_pubchem_cid(
                             drug_name: str,
-                            cache: Dict[str, Optional[int]]
+                            cache: Dict[str, Optional[int]],
+                            n_retries: int = 5,
                             ) -> Optional[int]:
             '''
             Fetch PubChem CID for a given drug name, using cache to skip repeat lookups.
@@ -584,23 +605,41 @@ class Pseudobulk:
             drug_name : str
                 A drug name for mapping to PubChem CID.
             cache : Dict[str, Optional[int]]
-                A dictionary storing the mapping of drugs to PubChem CIDs.      
+                A dictionary storing the mapping of drugs to PubChem CIDs.
+            n_retries : int
+                The number of retries when connecting to PubChem
+                goes wrong.
             '''
             if pd.isna(drug_name) or not drug_name:
                 return None
 
             if drug_name in cache:
                 return cache[drug_name]
-            try:
-                compounds = pcp.get_compounds(drug_name, 'name')
-                cid = compounds[0].cid if compounds else None
-                logger.debug("CID for '%s': %d", drug_name, cid)
-            except Exception as e:
-                logger.warning("PubChem lookup failed for '%s': %s", drug_name, str(e))
-                cid = None
+            
+            cnt = 0
+            while cnt < n_retries:
+                try:
+                    compounds = pcp.get_compounds(drug_name, 'name')
+                    cid = compounds[0].cid if compounds else None
+                    logger.debug("CID for '%s': %d", drug_name, cid)
+                    break
+                except Exception as e:
+                    if (isinstance(e, pcp.PubChemHTTPError) \
+                            or isinstance(e, pcp.TimeoutError) \
+                            or isinstance(e, pcp.ServerError)) \
+                            and ((e.code == 503) or (e.code == 504)):
+                        logger.warning("PubChem lookup failed for '%s': %s. Retry %d.", drug_name, str(e), cnt)
+                        cnt += 1
+                        time.sleep(5)
+                    else:
+                        logger.warning("PubChem lookup failed for '%s': %s", drug_name, str(e))
+                        cid = None
+                        break
+
             cache[drug_name] = cid
             return cid
 
+        logger.info("Mapping drugs to PubChem idx")
         if not self.padata is None:
             unique_drugs = self.padata.obs[drug_col].dropna().unique().tolist()
             to_fetch = [d for d in unique_drugs if d not in cache]
@@ -610,98 +649,11 @@ class Pseudobulk:
                     get_pubchem_cid(drug, cache)
 
             self.padata.obs['pubchem_cid'] = self.padata.obs[drug_col].map(cache)
+            if self.sm2pubchem:
+                self.padata.obs['pubchem_cid'] = self.padata.obs['pubchem_cid']\
+                                                     .fillna(self.padata.obs[drug_col].map(self.sm2pubchem))
+            self.padata.obs['pubchem_cid'] = self.padata.obs['pubchem_cid'].astype('Int64').astype('category')
         else:
             raise Exception("The pseudobulk dataset is empty")
 
 
-
-def main():
-    '''
-    A function to process the arguments entered in the console/
-    read from the config file and to run the downstream pipeline
-    with the set parameters.
-    '''
-    def check_sub_arg_values(d_args: Dict[str, Optional[str]], 
-                             arg_names: List[str]) -> Dict[str, Optional[str]]:
-        '''
-        A function to set int type to the dictionary values
-        associated with the filtering parameters (e.g. min_counts, 
-        min_genes, etc.)
-
-        Parameters:
-        -----------
-        d_args : Dict[str, Optional[str]]
-            A dictionary containing the information about arguments
-        arg_names : List[str]
-            A list of filtering parameters to check
-        '''
-        for name in arg_names:
-            if d_args.get(name):
-                for par in d_args[name].keys():
-                    try:
-                        d_args[name][par] = int(d_args[name][par])
-                    except:
-                        raise Exception("{par}'s value should be integer")
-        return d_args.copy()
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--config', type=str)
-    parser.add_argument('--dataset_name', type=str)
-    parser.add_argument('--input', nargs='+', action=ParseKW)
-    parser.add_argument('--output', type=str)
-    parser.add_argument('--filter_malat1', type=bool, default=False, action=argparse.BooleanOptionalAction)
-    parser.add_argument('--filter_low_counts', type=bool, default=False, action=argparse.BooleanOptionalAction)
-    parser.add_argument('--filter_nans', type=bool, default=False, action=argparse.BooleanOptionalAction)
-    parser.add_argument('--filter_cells_params', nargs='+', action=ParseKW)
-    parser.add_argument('--filter_genes_params', nargs='+', action=ParseKW)
-    parser.add_argument('--groupby_fields', nargs='+', default=['plate', 'well', 'perturbagen', 'cell_type', 'guide'])
-    parser.add_argument('--drug_col', type=str, default='perturbagen')
-    parser.add_argument('--ignore_cell_lines', nargs='+', default=[])
-    required_args = ['dataset_name', 'input', 'output', 'groupby_fields', 'drug_col']
-    required_sub_args = {'input': ['path2adata', 'path2obs', 'path2var'],
-                         'filter_cells_params': ['min_counts', 'min_genes', 'max_counts', 'max_genes'],
-                         'filter_genes_params': ['min_counts', 'min_cells', 'max_counts', 'max_cells']}
-
-    args = parser.parse_args()
-    d_args = vars(args).copy()
-    del d_args['config']
-
-    if not args.config is None:
-        with open(args.config, 'r', encoding='utf-8') as f:
-            config = json.load(f)
-        d_args = merge_args(d_args, config)
-
-    for key in required_args:
-        if not d_args.get(key):
-            if key == 'dataset_name':
-                raise Exception(f"The argument {key} is not set. Chose the dataset name from {dataset_standardization.keys()}")
-            else:
-                raise Exception(f"The argument {key} is not set")
-    
-    check_sub_args(d_args, required_sub_args)
-    check_sub_arg_values(d_args, ['filter_cells_params', 'filter_genes_params'])
-
-    pseudo = Pseudobulk(
-                        files_input=d_args['input'],
-                        file_output=d_args['output'],
-                        groupby_fields=d_args['groupby_fields'],
-                        dataset_standardization_=dataset_standardization[d_args['dataset_name']],
-                        filter_malat1=d_args['filter_malat1'],
-                        filter_low_counts=d_args['filter_low_counts'],
-                        filter_nans=d_args['filter_nans'],
-                        filter_cells_params=d_args['filter_cells_params'],
-                        filter_genes_params=d_args['filter_genes_params'],
-                        ignore_cell_lines=d_args['ignore_cell_lines'],
-                        )
-    pseudo.run_pseudobulking()
-    logger.info("Mapping drugs to PubChem idx")
-    pseudo.add_pubchem_cids_to_padata({}, drug_col=d_args['drug_col'])
-    logger.info("Process pseudobulk")
-    pseudo.process_pseudobulk()
-    logger.info(f"Save dataset to {pseudo.file_output}")
-    pseudo.save()
-
-
-
-if __name__ == "__main__":
-    main()

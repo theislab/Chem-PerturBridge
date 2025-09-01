@@ -1,10 +1,13 @@
 import os
+import time
 import argparse
 import json
 from typing import Dict, Optional
 import numpy as np
 import lamindb as ln
+from django.db.utils import OperationalError
 from src.utils.parsing_utils import *
+
 
 def download_save_from_lamindb(key_adata: str = None,
                            key_obs: str = None, 
@@ -42,6 +45,20 @@ def download_save_from_lamindb(key_adata: str = None,
     instance : str
         Instance in the lamindb. 
     '''
+    def connect2lamin_with_retry(instance,
+                                 max_retries=10,
+                                 delay=10,
+                                 ):
+        retries = 0
+        while retries < max_retries:
+            try:
+                ln.connect(instance)
+                return None
+            except OperationalError as e:
+                logger.error('Connection failed: %s, retried %d times', str(e), retries)
+                retries += 1
+                time.sleep(delay)
+        raise Exception('Max retries reached. Could not connect to lamindb.')
 
     def append_subsample_suffix(filename: str):
         '''
@@ -55,8 +72,6 @@ def download_save_from_lamindb(key_adata: str = None,
         name, ext = os.path.splitext(filename)
         return f'{name}_subsample{ext}'
     
-    ln.connect(instance)
-    
     if (key_adata) and (path2adata):
         if subsampling:
             path2adata = append_subsample_suffix(path2adata)
@@ -65,10 +80,15 @@ def download_save_from_lamindb(key_adata: str = None,
         if not os.path.isfile(path2adata):
             dir_path = os.path.dirname(path2adata)
             if not os.path.exists(dir_path):
-                os.makedirs(dir_path)
+                try:
+                    os.makedirs(dir_path)
+                except FileExistsError as e:
+                    logger.warning('%s', str(e))
             
-            logger.info('Download and save an anndata file...')
+            logger.info('Download and save an anndata file to %s', path2adata)
+            connect2lamin_with_retry(instance)
             adata = ln.Artifact.get(key=key_adata).load()
+            ln.setup.disconnect()
             if subsampling:
                 idx = np.random.choice(adata.obs.index, replace=False, size=subsample_size)
                 adata = adata[idx].copy()
@@ -84,10 +104,15 @@ def download_save_from_lamindb(key_adata: str = None,
         if not os.path.isfile(path2obs):
             dir_path = os.path.dirname(path2obs)
             if not os.path.exists(dir_path):
-                os.makedirs(dir_path)
+                try:
+                    os.makedirs(dir_path)
+                except FileExistsError as e:
+                    logger.warning('%s', str(e))
             
-            logger.info('Download and save an .obs file...')
+            logger.info('Download and save an .obs file to %s', path2obs)
+            connect2lamin_with_retry(instance)
             ln.Artifact.get(key=key_obs).load().to_parquet(path2obs)
+            ln.setup.disconnect()
         else:
             logger.info('An .obs file already exists')
     else:
@@ -99,10 +124,15 @@ def download_save_from_lamindb(key_adata: str = None,
         if not os.path.isfile(path2var):
             dir_path = os.path.dirname(path2var)
             if not os.path.exists(dir_path):
-                os.makedirs(dir_path)
+                try:
+                    os.makedirs(dir_path)
+                except FileExistsError as e:
+                    logger.warning('%s', str(e))
             
-            logger.info('Download and save a .var file...')
+            logger.info('Download and save a .var file to %s', path2var)
+            connect2lamin_with_retry(instance)
             ln.Artifact.get(key=key_var).load().to_parquet(path2var)
+            ln.setup.disconnect()
         else:
             logger.info('A .var file already exists')
     else:

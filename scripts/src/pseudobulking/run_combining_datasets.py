@@ -57,13 +57,13 @@ def unite_adatas(dir_input: str) -> AnnData:
     dir_input : str
         A path to the directory which contains files.
     '''
+    logger.info('Unite datasets from several plates')
     files = get_files(dir_input)
     adatas = []
     for i, file in enumerate(files):
         adata = sc.read_h5ad(join(dir_input, file))
-        adata.obs['plate'] = i + 1
         adatas.append(adata)
-    return anndata.concat(adatas)
+    return anndata.concat(adatas, merge='same')
 
 
 
@@ -91,14 +91,16 @@ def main():
         if not d_args.get(key):
             raise Exception(f'The argument {key} is not set')
 
-    logger.info('Unite datasets from several plates')
 
     adata = unite_adatas(d_args['input'])
     logger.info(f'Save the united dataset to {d_args["output"]}')
 
     dir_output = os.path.dirname(d_args['output'])
     if not os.path.exists(dir_output):
-        os.makedirs(dir_output)
+        try:
+            os.makedirs(dir_output)
+        except FileExistsError as e:
+            logger.warning('%s', str(e))
 
     adata.write_h5ad(d_args['output'], compression='gzip')
 

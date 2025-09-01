@@ -1,3 +1,4 @@
+import os
 import json
 import argparse
 import psutil
@@ -7,6 +8,7 @@ from typing import List, Dict, Optional
 
 from src.utils.parsing_utils import *
 from .standardization import *
+from .pubchem_imputation import *
 from .pseudobulk import Pseudobulk
 
 MEMORY_RATIO = 0.9
@@ -31,6 +33,28 @@ def setMemoryLimit(n_bytes: int):
 
 
 setMemoryLimit(math.ceil(psutil.virtual_memory().total * MEMORY_RATIO))
+
+def create_pseudobulk(args):
+    if not os.path.isfile(args['output']):
+        pseudo = Pseudobulk(dataset_name=args['dataset_name'],
+                        files_input=args['input'],
+                        file_output=args['output'],
+                        groupby_fields=args['groupby_fields'],
+                        dataset_standardization_=dataset_standardization[args['dataset_name']],
+                        sm2pubchem_=sm2pubchem[args['dataset_name']],
+                        filter_malat1=args['filter_malat1'],
+                        filter_low_counts=args['filter_low_counts'],
+                        filter_nans=args['filter_nans'],
+                        filter_cells_params=args['filter_cells_params'],
+                        filter_genes_params=args['filter_genes_params'],
+                        ignore_cell_lines=args['ignore_cell_lines'],
+                        )
+        pseudo.run_pseudobulking()
+        pseudo.add_pubchem_cids_to_padata({}, drug_col=args['drug_col'])
+        pseudo.process_pseudobulk()
+        pseudo.save()
+    else:
+        logger.info("Pseudobulk %s already exists", args['output'])
 
 
 def main():
@@ -80,6 +104,8 @@ def main():
                          'filter_cells_params': ['min_counts', 'min_genes', 'max_counts', 'max_genes'],
                          'filter_genes_params': ['min_counts', 'min_cells', 'max_counts', 'max_cells']}
 
+    datasets = ['tahoe', 'sciplex']
+
     args = parser.parse_args()
     d_args = vars(args).copy()
     del d_args['config']
@@ -98,27 +124,11 @@ def main():
     
     check_sub_args(d_args, required_sub_args)
     check_sub_arg_values(d_args, ['filter_cells_params', 'filter_genes_params'])
+    
+    if not d_args['dataset_name'] in datasets:
+        raise Exception(f"The dataset with the entered name {d_args['dataset_name']} is not supported")
 
-    pseudo = Pseudobulk(
-                        files_input=d_args['input'],
-                        file_output=d_args['output'],
-                        groupby_fields=d_args['groupby_fields'],
-                        dataset_standardization_=dataset_standardization[d_args['dataset_name']],
-                        filter_malat1=d_args['filter_malat1'],
-                        filter_low_counts=d_args['filter_low_counts'],
-                        filter_nans=d_args['filter_nans'],
-                        filter_cells_params=d_args['filter_cells_params'],
-                        filter_genes_params=d_args['filter_genes_params'],
-                        ignore_cell_lines=d_args['ignore_cell_lines'],
-                        )
-    pseudo.run_pseudobulking()
-    logger.info("Mapping drugs to PubChem idx")
-    pseudo.add_pubchem_cids_to_padata({}, drug_col=d_args['drug_col'])
-    logger.info("Process pseudobulk")
-    pseudo.process_pseudobulk()
-    logger.info(f"Save dataset to {pseudo.file_output}")
-    pseudo.save()
-
+    create_pseudobulk(d_args)
 
 
 if __name__ == "__main__":

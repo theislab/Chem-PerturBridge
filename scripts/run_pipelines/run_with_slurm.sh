@@ -1,13 +1,29 @@
+set -e
+
 #rm -rf ~/logs
 mkdir -p ~/logs
 
-if [ ! -d ~/.venv ]; then
-    echo "create .venv"
-    chmod u+x $SCRIPT_DIR/set_env.sh
-    $SCRIPT_DIR/set_env.sh
-fi
+SCRIPT_DIR="$(dirname "$0")"
 
-sbatch -e ~/logs/pseudobulk_sciplex.%j.err -o ~/logs/pseudobulk_sciplex.%j.out ./pipelines/sciplex/sciplex_pseudobulking_subsample.sh
+#Create environment
+echo "create .venv"
+chmod u+x $SCRIPT_DIR/set_env.sh
+$SCRIPT_DIR/set_env.sh
+
+#-------------------SCIPLEX-------------------
 #sbatch -e ~/logs/pseudobulk_sciplex.%j.err -o ~/logs/pseudobulk_sciplex.%j.out ./pipelines/sciplex/sciplex_pseudobulking.sh
-#sbatch  -e ~/logs/pseudobulk_tahoe.%j.err -o ~/logs/pseudobulk_tahoe.%j.out ./pipelines/tahoe/tahoe_pseudobulking_subsample.sh
+
+#-------------------TAHOE---------------------
 #sbatch  -e ~/logs/pseudobulk_tahoe.%j.err -o ~/logs/pseudobulk_tahoe.%j.out ./pipelines/tahoe/tahoe_pseudobulking.sh
+#./pipelines/tahoe/tahoe_pseudobulking_parallel.sh > ~/logs/pseudobulk_tahoe.out 2>~/logs/pseudobulk_tahoe.err &
+
+
+##################--DEBUGGING--OPTIONS--##################
+
+
+#-------------------SCIPLEX-------------------
+sbatch -e ~/logs/pseudobulk_sciplex.%j.err -o ~/logs/pseudobulk_sciplex.%j.out ./pipelines/sciplex/sciplex_pseudobulking_subsample.sh
+
+#-------------------TAHOE---------------------
+#sbatch  -e ~/logs/pseudobulk_tahoe.%j.err -o ~/logs/pseudobulk_tahoe.%j.out ./pipelines/tahoe/tahoe_pseudobulking_subsample.sh
+./pipelines/tahoe/tahoe_pseudobulking_subsample_parallel.sh > ~/logs/pseudobulk_tahoe.out 2>~/logs/pseudobulk_tahoe.err &

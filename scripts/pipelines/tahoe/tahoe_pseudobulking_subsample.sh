@@ -48,5 +48,5 @@ done
 echo "> Pseudobulking is done"
 
 echo "> Running combining datasets"
-python3 -m src.pseudobulking.run_combining_datasets --input "$BULK_DIR/subsample/" --output "$OUTPUT_DIR/tahoe_subsample.h5ad"
+python3 -m src.pseudobulking.run_combining_datasets --input "$BULK_DIR/subsample/" --output "$OUTPUT_DIR/subsample/tahoe_subsample.h5ad"
 echo "> Combining datasets is done"

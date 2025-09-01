@@ -1,11 +1,11 @@
+set -e
+
 SCRIPT_DIR="$(dirname "$0")"
 
 #Create environment
-if [ ! -d ~/.venv ]; then
-    echo "create .venv"
-    chmod u+x $SCRIPT_DIR/set_env.sh
-    $SCRIPT_DIR/set_env.sh
-fi
+echo "create .venv"
+chmod u+x $SCRIPT_DIR/set_env.sh
+$SCRIPT_DIR/set_env.sh
 
 #./pipelines/sciplex/sciplex_pseudobulking_subsample.sh
 #./pipelines/sciplex/sciplex_pseudobulking.sh
