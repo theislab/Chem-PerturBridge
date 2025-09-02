@@ -27,6 +27,7 @@ cd /op3_v2/scripts
 ./run_pipelines/set_env.sh
 ```
 **1.2.2** To start a SLURM-based pipeline, you need to execute
+
 **For Sci-plex**
 ```
 mkdir -p ~/logs
