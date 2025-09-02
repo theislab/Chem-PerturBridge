@@ -23,8 +23,7 @@ do
 			--cpus-per-task=2 \
 			-e ~/logs/pseudobulk_tahoe_download.%j.err \
 			-o ~/logs/pseudobulk_tahoe_download.%j.out \
-			--wrap="set -e &&\
-				source ~/.venv/bin/activate &&\
+			--wrap="source ~/.venv/bin/activate &&\
 				python3 -m src.downloading.run_downloading_datasets \
 				--input key_adata=2025-02-25/h5ad/plate${i}_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab.h5ad \
 					key_obs=tahoe100/obs/plate${i}.parquet \
@@ -56,8 +55,7 @@ do
                         --cpus-per-task=5 \
 			-e ~/logs/pseudobulk_tahoe_process.%j.err \
                         -o ~/logs/pseudobulk_tahoe_process.%j.out \
-			--wrap="set -e &&\
-				source ~/.venv/bin/activate &&\
+			--wrap="source ~/.venv/bin/activate &&\
 				python3 -m src.pseudobulking.run_pseudobulking \
 				--dataset tahoe \
 				--input path2adata=${SC_DIR}/plate${i}.h5ad \
@@ -87,8 +85,7 @@ sbatch -W -J pseudobulk_tahoe \
                         --cpus-per-task=2 \
 			-e ~/logs/pseudobulk_tahoe_unite.%j.err \
                         -o ~/logs/pseudobulk_tahoe_unite.%j.out \
-			--wrap="set -e &&\
-				source ~/.venv/bin/activate &&\
+			--wrap="source ~/.venv/bin/activate &&\
 				python3 -m src.pseudobulking.run_combining_datasets \
 					--input $BULK_DIR/full/ \
 					--output $OUTPUT_DIR/full/tahoe.h5ad"

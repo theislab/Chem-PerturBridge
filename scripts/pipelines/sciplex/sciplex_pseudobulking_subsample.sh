@@ -12,7 +12,7 @@ set -e
 source ~/.venv/bin/activate
 NAME="srivatsan20_sciplex3"
 SC_DIR=~/data/Sciplex/raw
-BULK_DATA=~/data/Sciplex/pseudobulk/${NAME}
+BULK_DATA=~/data/Sciplex/pseudobulk/subsample/${NAME}
 
 echo "> Download dataset"
 python3 -m src.downloading.run_downloading_datasets \
