@@ -1,16 +1,16 @@
 import re
-import sys
 import os
 import json
 import argparse
 from os import listdir
 from os.path import isfile, join
-from typing import Pattern, Dict, Optional
+from typing import Pattern
 import anndata
 import scanpy as sc
 from anndata import AnnData
 
 from src.utils.parsing_utils import *
+
 
 def get_files(dir_input: str) -> list:
     '''
@@ -44,8 +44,10 @@ def get_files(dir_input: str) -> list:
 
     p = re.compile(r'(\d+)(\.h5ad)')
 
-    files = [file for file in listdir(dir_input) if isfile(join(dir_input, file))]
+    files = [file for file in listdir(
+        dir_input) if isfile(join(dir_input, file))]
     return sorted(files, key=lambda s: extract_num(s, p, float('inf')))
+
 
 def unite_adatas(dir_input: str) -> AnnData:
     '''
@@ -60,11 +62,10 @@ def unite_adatas(dir_input: str) -> AnnData:
     logger.info('Unite datasets from several plates')
     files = get_files(dir_input)
     adatas = []
-    for i, file in enumerate(files):
+    for file in files:
         adata = sc.read_h5ad(join(dir_input, file))
         adatas.append(adata)
     return anndata.concat(adatas, merge='same')
-
 
 
 def main():
@@ -73,7 +74,7 @@ def main():
     read from the config file and to run the downstream pipeline
     with the set parameters.
     '''
-    
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', type=str)
     parser.add_argument('--input', type=str)
@@ -91,9 +92,8 @@ def main():
         if not d_args.get(key):
             raise Exception(f'The argument {key} is not set')
 
-
     adata = unite_adatas(d_args['input'])
-    logger.info(f'Save the united dataset to {d_args["output"]}')
+    logger.info('Save the united dataset to %s', d_args["output"])
 
     dir_output = os.path.dirname(d_args['output'])
     if not os.path.exists(dir_output):

@@ -6,7 +6,7 @@ sm2pubchem = {
         'Anacardic': 167551,
         'Tie2': 23625762,
         'Glesatinib?(MGCD265)': 24901704,
-        },
+    },
     'tahoe': {
         'DMSO_TF': 679,
         '18β-Glycyrrhetinic acid': 10114,
@@ -19,5 +19,5 @@ sm2pubchem = {
         'Osimertinib (mesylate)': 78357807,
         'γ-Oryzanol': 5282164,
         'Filgotinib': 49831257,
-        }
+    }
 }

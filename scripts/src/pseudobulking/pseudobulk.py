@@ -1,23 +1,22 @@
 import time
 import os
-import json
 import math
-import argparse
-from typing import Tuple, List, Dict, Optional, Any, Callable
+from typing import Tuple, List, Dict, Optional, Callable
 import pandas as pd
 import anndata as ad
 import numpy as np
 import scanpy as sc
 import decoupler as dc
 import pubchempy as pcp
-from pandas.api.types import is_float_dtype, is_categorical_dtype
-from anndata import AnnData
+from pandas.api.types import is_float_dtype
 from pandas import DataFrame, Series
+from anndata import AnnData
 from scipy.sparse import csr_matrix
 
 from src.utils.parsing_utils import *
 from .standardization import *
 from .pubchem_imputation import *
+
 
 class Pseudobulk:
     '''
@@ -93,23 +92,24 @@ class Pseudobulk:
     padata : AnnData
         A pseudobulk dataset.
     '''
+
     def __init__(
-                 self,
-                 dataset_name: str,
-                 files_input: Dict[str, Optional[str]],
-                 file_output: str,
-                 groupby_fields: List[str],
-                 dataset_standardization_: Dict[str, Dict[str, Callable]],
-                 sm2pubchem_: Optional[Dict[str, int]] = None,
-                 filter_malat1: bool = False,
-                 filter_low_counts: bool = False,
-                 filter_nans: bool = False, 
-                 filter_cells_params: Optional[Dict[str, int]] = None,
-                 filter_genes_params: Optional[Dict[str, int]] = None,
-                 ignore_cell_lines: List[str] = [],
-                 standard_dose_units = 'uM',
-                 standard_time_units = 'h',
-                 ):
+        self,
+        dataset_name: str,
+        files_input: Dict[str, Optional[str]],
+        file_output: str,
+        groupby_fields: List[str],
+        dataset_standardization_: Dict[str, Dict[str, Callable]],
+        sm2pubchem_: Optional[Dict[str, int]] = None,
+        filter_malat1: bool = False,
+        filter_low_counts: bool = False,
+        filter_nans: bool = False,
+        filter_cells_params: Optional[Dict[str, int]] = None,
+        filter_genes_params: Optional[Dict[str, int]] = None,
+        ignore_cell_lines: List[str] = [],
+        standard_dose_units='uM',
+        standard_time_units='h',
+    ):
 
         self.dataset_name = dataset_name
         self.files_input = files_input
@@ -146,14 +146,14 @@ class Pseudobulk:
         self.standard_time_units = standard_time_units
 
         self.pbulk_columns = [
-                'plate', 'well', 'cell_type', 'perturbagen', 
-                'pert_type', 'is_control', f'pert_dose_{self.standard_dose_units}', 
-                f'pert_time_{self.standard_time_units}', 'suspension_type', 'tissue', 
-                'tissue_type', 'disease', 'library', 'stimulation', 'guide', 
-                'dataset', 'assay', 'development_stage', 'organism', 'sex', 
-                'self_reported_ethnicity', 'psbulk_cells', 'psbulk_counts', 'pubchem_cid']
+            'plate', 'well', 'cell_type', 'perturbagen',
+            'pert_type', 'is_control', f'pert_dose_{self.standard_dose_units}',
+            f'pert_time_{self.standard_time_units}', 'suspension_type', 'tissue',
+            'tissue_type', 'disease', 'library', 'stimulation', 'guide',
+            'dataset', 'assay', 'development_stage', 'organism', 'sex',
+            'self_reported_ethnicity', 'psbulk_cells', 'psbulk_counts', 'pubchem_cid']
         self.padata = None
-        
+
     def determine_groupby_fields(self, adata: AnnData) -> None:
         '''
         A function to determine the groupby column names
@@ -166,7 +166,8 @@ class Pseudobulk:
         '''
         groupby_fields = np.array(self.groupby_fields)
         ignore_fields = groupby_fields[adata.obs[groupby_fields].isna().all()]
-        filterd_fields = [item.item() for item in groupby_fields if item not in ignore_fields]
+        filterd_fields = [item.item()
+                          for item in groupby_fields if item not in ignore_fields]
         self.groupby_fields = filterd_fields
 
     def run_pseudobulking(self, ) -> None:
@@ -179,7 +180,7 @@ class Pseudobulk:
         logger.info('Determine groupby fields')
         self.determine_groupby_fields(adata)
         adata = self.prefilter(adata)
-        logger.info("Build pseudobulk")
+        logger.info('Build pseudobulk')
         self.padata = self.build_pseudoulk(adata.copy())
 
     def get_adata(self, ) -> AnnData:
@@ -193,12 +194,12 @@ class Pseudobulk:
         - return AnnData object.
         '''
         adata, obs, var = self.read_data()
-        logger.info("Merge datasets")
+        logger.info('Merge datasets')
         adata = self.merge_data(adata, obs, var)
         return adata
 
-    def read_data(self, ) -> Tuple[AnnData, 
-                                   DataFrame, 
+    def read_data(self, ) -> Tuple[AnnData,
+                                   DataFrame,
                                    DataFrame]:
         '''
         A function to read datasets:
@@ -207,7 +208,8 @@ class Pseudobulk:
           parquet files.
         '''
         if self.files_input.get('path2adata'):
-            logger.info("Read data from %s", self.files_input.get('path2adata'))
+            logger.info("Read data from %s",
+                        self.files_input.get('path2adata'))
             adata = sc.read_h5ad(self.files_input.get('path2adata'))
         else:
             raise Exception('No path to the adata file')
@@ -226,9 +228,9 @@ class Pseudobulk:
 
         return adata, obs, var
 
-    def merge_data(self, 
-                   adata: AnnData, 
-                   obs: DataFrame, 
+    def merge_data(self,
+                   adata: AnnData,
+                   obs: DataFrame,
                    var: DataFrame):
         '''
         A function to merge AnnData object
@@ -250,12 +252,14 @@ class Pseudobulk:
             if obs.index.name is None:
                 obs.index.name = 'index'
             col_index = adata.obs.index.name
-            if (adata.obs.index.name != obs.index.name):
+            if adata.obs.index.name != obs.index.name:
                 obs.set_index(col_index, inplace=True)
             if len(adata.obs.index.intersection(obs.index)) == 0:
-                    raise Exception('The indices in andata.obs and obs are different!')
-            adata.obs = adata.obs.merge(obs, how='left', on=col_index, suffixes=('_old', ''))
-    
+                raise Exception(
+                    'The indices in andata.obs and obs are different!')
+            adata.obs = adata.obs.merge(
+                obs, how='left', on=col_index, suffixes=('_old', ''))
+
         if (var is not None) and (not adata.var.equals(var)):
             if adata.var.index.name is None:
                 adata.var.index.name = 'index'
@@ -265,10 +269,12 @@ class Pseudobulk:
             if adata.var.index.name != var.index.name:
                 var.set_index(col_index, inplace=True)
             if len(adata.var.index.intersection(var.index)) == 0:
-                    raise Exception('The indices in andata.var and var are different!')
-            adata.var = adata.var.merge(var, how='left', on=col_index, suffixes=('_old', ''))
+                raise Exception(
+                    'The indices in andata.var and var are different!')
+            adata.var = adata.var.merge(
+                var, how='left', on=col_index, suffixes=('_old', ''))
         return adata
-    
+
     def standardize(self, adata: AnnData) -> AnnData:
         '''
         Standardize an input AnnData object
@@ -284,7 +290,6 @@ class Pseudobulk:
         adata = self.standardize_obs(adata)
         adata = self.standardize_var(adata)
         return adata
-
 
     def prefilter(self, adata: AnnData) -> AnnData:
         '''
@@ -303,29 +308,33 @@ class Pseudobulk:
         adata : AnnData
             An input scRNA-seq dataset.
         '''
-        logger.info(f'Initial adata size: {adata.shape}')
-        is_outlier = pd.Series(np.zeros(adata.obs.shape[0], dtype=bool), index=adata.obs.index)
+        logger.info('Initial adata size: %s', str(adata.shape))
+        is_outlier = pd.Series(
+            np.zeros(adata.obs.shape[0], dtype=bool), index=adata.obs.index)
         if self.filter_low_counts:
             logger.info('Filter by counts')
             n_obs_prev = adata[~is_outlier].shape[0]
             is_outlier = self.filter_by_counts(adata)
-            logger.info(f'n_obs: {n_obs_prev} --> {adata[~is_outlier].shape[0]}')
+            logger.info(
+                'n_obs: %d --> %d', n_obs_prev, adata[~is_outlier].shape[0])
         if self.filter_nans:
             logger.info('Filter by nans')
             n_obs_prev = adata[~is_outlier].shape[0]
             is_outlier = is_outlier | self.filter_by_nans(adata)
-            logger.info(f'n_obs: {n_obs_prev} --> {adata[~is_outlier].shape[0]}')
+            logger.info(
+                'n_obs: %d --> %d', n_obs_prev, adata[~is_outlier].shape[0])
         if self.filter_malat1:
             logger.info('Filter by humanMALAT1')
             n_obs_prev = adata[~is_outlier].shape[0]
             is_outlier = is_outlier | self.filter_by_humanMALAT1(adata)
-            logger.info(f'n_obs: {n_obs_prev} --> {adata[~is_outlier].shape[0]}')
+            logger.info(
+                'n_obs: %d --> %d', n_obs_prev, adata[~is_outlier].shape[0])
         adata = adata[~is_outlier]
         self.filter_cells_(adata)
         self.filter_genes_(adata)
-        logger.info(f'Final adata size: {adata.shape}')
+        logger.info('Final adata size: %s', str(adata.shape))
         if adata.obs.empty:
-            logger.warning("The AnnData object is empty after pre-filtering!")
+            logger.warning('The AnnData object is empty after pre-filtering!')
         return adata
 
     def chunking(self, adata: AnnData, processing: Callable):
@@ -353,15 +362,15 @@ class Pseudobulk:
                     size = math.ceil(n_idx / n_chunks)
                     results = []
                     for i in range(0, n_idx, size):
-                        chunk = adata[adata.obs['sample_id'].isin(idx[i:i+size])]
+                        chunk = adata[adata.obs['sample_id'].isin(
+                            idx[i:i + size])]
                         results.append(processing(chunk))
                     return ad.concat(results, merge='same')
             except MemoryError as e:
                 n_chunks *= 2
 
-
         raise RuntimeError('Processing failed: the maximum chunk size reached')
-    
+
     def build_pseudoulk(self, adata: AnnData) -> AnnData:
         '''
         A function
@@ -376,16 +385,16 @@ class Pseudobulk:
             An input scRNA-seq dataset.
         '''
         self.define_sample_group_cols(adata)
-        pseudo = lambda x: dc.pp.pseudobulk(x,
-                                  sample_col='sample_id',
-                                  groups_col='pseudo_group',
-                                  )
+
+        def pseudo(x): return dc.pp.pseudobulk(x,
+                                               sample_col='sample_id',
+                                               groups_col='pseudo_group',
+                                               )
 
         padata = self.chunking(adata, pseudo)
         self.set_sample_idx(padata)
         return padata
 
-    
     def process_pseudobulk(self) -> None:
         '''
         A function to process a pseudobulk dataset:
@@ -399,25 +408,29 @@ class Pseudobulk:
         logger.info("Process pseudobulk")
         if (self.padata is not None) and (self.padata.shape[0] != 0):
             self.padata.obs[f'pert_dose_{self.standard_dose_units}'] = self.padata.obs\
-                    .apply(lambda x: standardize_units(x.pert_dose, self.standard_dose_units), axis=1)
+                .apply(lambda x: standardize_units(x.pert_dose, self.standard_dose_units), axis=1)
             self.padata.obs[f'pert_time_{self.standard_time_units}'] = self.padata.obs\
-                    .apply(lambda x: standardize_units(x.pert_time, self.standard_time_units), axis=1)
-            self.padata.obs[[f'pert_dose_{self.standard_dose_units}']] = self.padata.obs[[f'pert_dose_{self.standard_dose_units}']].astype(float)
-            self.padata.obs[[f'pert_time_{self.standard_time_units}']] = self.padata.obs[[f'pert_time_{self.standard_time_units}']].astype(float)
-            self.padata.obs[['psbulk_cells']] = self.padata.obs[['psbulk_cells']].astype(int)
-            self.padata.obs[['psbulk_counts']] = self.padata.obs[['psbulk_counts']].astype(int)
+                .apply(lambda x: standardize_units(x.pert_time, self.standard_time_units), axis=1)
+            self.padata.obs[[f'pert_dose_{self.standard_dose_units}']] = self.padata.obs[[
+                f'pert_dose_{self.standard_dose_units}']].astype(float)
+            self.padata.obs[[f'pert_time_{self.standard_time_units}']] = self.padata.obs[[
+                f'pert_time_{self.standard_time_units}']].astype(float)
+            self.padata.obs[['psbulk_cells']
+                            ] = self.padata.obs[['psbulk_cells']].astype(int)
+            self.padata.obs[['psbulk_counts']
+                            ] = self.padata.obs[['psbulk_counts']].astype(int)
             if len(self.pbulk_columns) > 0:
                 self.padata.obs = self.padata.obs[self.pbulk_columns]
             self.padata.X = csr_matrix(self.padata.X.astype(int))
-            self.padata.layers['psbulk_props'] = csr_matrix(self.padata.layers['psbulk_props'])
+            self.padata.layers['psbulk_props'] = csr_matrix(
+                self.padata.layers['psbulk_props'])
         else:
             raise Exception('The pseudobulk dataset is None')
 
-    
     def filter_by_nans(self, adata: AnnData) -> Series:
         '''
         Filter observations with missed values in the groupby_fields.
-        
+
         Parameters:
         -----------
         adata : AnnData
@@ -426,16 +439,16 @@ class Pseudobulk:
         is_outlier = adata.obs[self.groupby_fields].isna().any(axis=1)
         return is_outlier
 
-    def filter_by_counts(self, 
-                         adata: AnnData, 
-                         min_ngenes: int = 250, 
-                         min_ncounts: int = 700, 
+    def filter_by_counts(self,
+                         adata: AnnData,
+                         min_ngenes: int = 250,
+                         min_ncounts: int = 700,
                          max_pcnt_mito: float = 0.2) -> Series:
         '''
         Filter observations with low counts and number of genes.
         The filtration parameters are chosen according to the Tahoe's
         paper: https://doi.org/10.1101/2025.02.20.639398
-        
+
         Parameters:
         -----------
         adata : AnnData
@@ -447,15 +460,15 @@ class Pseudobulk:
         max_pcnt_mito : float
             A threshold for the estimated fraction of mitochondrial reads.
         '''
-        is_outlier = ~((adata.obs['ngenes'] >= min_ngenes)\
-                   & (adata.obs['ncounts'] >= min_ncounts)\
-                   & (adata.obs['pcnt_mito'] <= max_pcnt_mito))
+        is_outlier = ~((adata.obs['ngenes'] >= min_ngenes)
+                       & (adata.obs['ncounts'] >= min_ncounts)
+                       & (adata.obs['pcnt_mito'] <= max_pcnt_mito))
         return is_outlier
-    
-    def filter_by_humanMALAT1(self, 
-                              adata: AnnData, 
-                              ens_id: str = 'ENSG00000251562', 
-                              scaling: int = 10000, 
+
+    def filter_by_humanMALAT1(self,
+                              adata: AnnData,
+                              ens_id: str = 'ENSG00000251562',
+                              scaling: int = 10000,
                               threshold: float = 3.5) -> Series:
         '''
         Filter observations with low values in MALAT1 expression.
@@ -476,14 +489,17 @@ class Pseudobulk:
         '''
         if ens_id in adata.var_names:
             is_malat1 = adata.var_names.str.startswith(ens_id)
-            fraction_counts_malat1 = adata[:, is_malat1].X.toarray().sum(1)/adata.obs['ncounts'].values
+            fraction_counts_malat1 = adata[:, is_malat1].X.toarray().sum(
+                1) / adata.obs['ncounts'].values
             norm_malat1 = np.log1p(fraction_counts_malat1 * scaling)
-            is_outlier = (norm_malat1 < threshold) & (~adata.obs['cell_type'].isin(self.ignore_cell_lines))
+            is_outlier = (norm_malat1 < threshold) & (
+                ~adata.obs['cell_type'].isin(self.ignore_cell_lines))
         else:
-            is_outlier = pd.Series(np.zeros(adata.obs.shape[0], dtype=bool), index=adata.obs.index)
-            logger.warning('There is no information about MALAT1. There no filtration occured.')
+            is_outlier = pd.Series(
+                np.zeros(adata.obs.shape[0], dtype=bool), index=adata.obs.index)
+            logger.warning(
+                'There is no information about MALAT1. There no filtration occured.')
         return is_outlier
-
 
     def filter_cells_(self, adata: AnnData) -> None:
         '''
@@ -546,7 +562,7 @@ class Pseudobulk:
         for f in self.groupby_fields:
             if f not in adata.obs:
                 raise KeyError(f"adata.obs lacks '{f}'")
-            if not (adata.obs[f].isnull().values.any()):
+            if not adata.obs[f].isnull().values.any():
                 if is_float_dtype(f_to_numeric(adata.obs[f])):
                     adata.obs[f] = adata.obs[f].astype(int)
 
@@ -573,19 +589,19 @@ class Pseudobulk:
         Save the pseudobulk dataset.
         '''
         if (not self.padata is None) and (self.padata.shape[0] != 0):
-            logger.info("Save data to %s", self.file_output)
+            logger.info('Save data to %s', self.file_output)
             self.padata.write_h5ad(self.file_output, compression="gzip")
         else:
             raise Exception("The pseudobulk dataset is None or empty")
 
     def add_pubchem_cids_to_padata(
-                                   self,
-                                   cache: Dict[str, Optional[int]],
-                                   drug_col: str = 'perturbagen'
-                                   ) -> None:
+        self,
+        cache: Dict[str, Optional[int]],
+        drug_col: str = 'perturbagen'
+    ) -> None:
         '''
         Add a 'pubchem_cid' column to adata.obs based on the drug_col.
-        
+
         Parameters:
         -----------
         cache : Dict[str, Optional[int]]
@@ -594,13 +610,13 @@ class Pseudobulk:
             A name of column containing drug names.
         '''
         def get_pubchem_cid(
-                            drug_name: str,
-                            cache: Dict[str, Optional[int]],
-                            n_retries: int = 5,
-                            ) -> Optional[int]:
+            drug_name: str,
+            cache: Dict[str, Optional[int]],
+            n_retries: int = 5,
+        ) -> Optional[int]:
             '''
             Fetch PubChem CID for a given drug name, using cache to skip repeat lookups.
-            
+
             Parameters:
             -----------
             drug_name : str
@@ -616,7 +632,7 @@ class Pseudobulk:
 
             if drug_name in cache:
                 return cache[drug_name]
-            
+
             cnt = 0
             while cnt < n_retries:
                 try:
@@ -625,15 +641,17 @@ class Pseudobulk:
                     logger.debug("CID for '%s': %d", drug_name, cid)
                     break
                 except Exception as e:
-                    if (isinstance(e, pcp.PubChemHTTPError) \
-                            or isinstance(e, pcp.TimeoutError) \
+                    if (isinstance(e, pcp.PubChemHTTPError)
+                            or isinstance(e, pcp.TimeoutError)
                             or isinstance(e, pcp.ServerError)) \
                             and ((e.code == 503) or (e.code == 504)):
-                        logger.warning("PubChem lookup failed for '%s': %s. Retry %d.", drug_name, str(e), cnt)
+                        logger.warning(
+                            "PubChem lookup failed for '%s': %s. Retry %d.", drug_name, str(e), cnt)
                         cnt += 1
                         time.sleep(5)
                     else:
-                        logger.warning("PubChem lookup failed for '%s': %s", drug_name, str(e))
+                        logger.warning(
+                            "PubChem lookup failed for '%s': %s", drug_name, str(e))
                         cid = None
                         break
 
@@ -645,16 +663,17 @@ class Pseudobulk:
             unique_drugs = self.padata.obs[drug_col].dropna().unique().tolist()
             to_fetch = [d for d in unique_drugs if d not in cache]
             if to_fetch:
-                logger.info("Looking up %d new perturbations on PubChem...", len(to_fetch))
+                logger.info(
+                    "Looking up %d new perturbations on PubChem...", len(to_fetch))
                 for drug in to_fetch:
                     get_pubchem_cid(drug, cache)
 
-            self.padata.obs['pubchem_cid'] = self.padata.obs[drug_col].map(cache)
+            self.padata.obs['pubchem_cid'] = self.padata.obs[drug_col].map(
+                cache)
             if self.sm2pubchem:
                 self.padata.obs['pubchem_cid'] = self.padata.obs['pubchem_cid']\
                                                      .fillna(self.padata.obs[drug_col].map(self.sm2pubchem))
-            self.padata.obs['pubchem_cid'] = self.padata.obs['pubchem_cid'].astype('Int64').astype('category')
+            self.padata.obs['pubchem_cid'] = self.padata.obs['pubchem_cid'].astype(
+                'Int64').astype('category')
         else:
             raise Exception("The pseudobulk dataset is empty")
-
-

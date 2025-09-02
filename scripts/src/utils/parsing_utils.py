@@ -3,7 +3,7 @@ import sys
 import logging
 from typing import List, Sequence, Any, Dict, Optional
 
-#Init logger
+# Init logger
 FMT = '%(asctime)s | [%(levelname)s] %(message)s'
 DATEFMT = '%Y-%m-%d %H:%M:%S'
 formatter = logging.Formatter(fmt=FMT, datefmt=DATEFMT)
@@ -22,6 +22,7 @@ logger.propagate = False
 logger.setLevel(logging.DEBUG)
 logger.handlers = [h1, h2]
 
+
 class ParseKW(argparse.Action):
     '''
     A class to parse the dictionary-like input args.
@@ -38,6 +39,7 @@ class ParseKW(argparse.Action):
     option_string : str | None
         The option string that is used to invoke the action.     
     '''
+
     def __call__(self,
                  parser: argparse.ArgumentParser,
                  namespace: argparse.Namespace,
@@ -51,9 +53,10 @@ class ParseKW(argparse.Action):
                 key, value = value.split('=')
                 getattr(namespace, self.dest)[key] = value
 
+
 def merge_args(d_args: Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]],
                config: Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]) \
-                       -> Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]:
+        -> Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]:
     '''
     A function to unite the parameters entered as the arguments
     from the console and the parameters loaded from a config file.
@@ -70,7 +73,8 @@ def merge_args(d_args: Dict[str, Optional[str | int | bool | List[str] | Dict[st
             d_args[key] = config[key]
     return d_args.copy()
 
-def check_sub_args(d_args: Dict[str, Optional[str]], 
+
+def check_sub_args(d_args: Dict[str, Optional[str]],
                    required_sub_args: Dict[str, str]) -> None:
     '''
     A function to check the names of input 
@@ -89,7 +93,6 @@ def check_sub_args(d_args: Dict[str, Optional[str]],
             for par in d_args[key].keys():
                 if not par in required_sub_args[key]:
                     raise Exception(
-                        f"The parameter's name {par} isn't appropriate, "\
-                        f"should be one of {pars_appr}"
-                        )
-
+                        f"The parameter's name {par} isn't appropriate, "
+                        f"should be one of {required_sub_args[key]}"
+                    )
