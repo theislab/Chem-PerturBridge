@@ -48,7 +48,7 @@ cd /op3_v2
 ```
 
 ## Project structure:
-The structure of the script folder:
+The structure of the repo:
 ```
 tree .
 ├── pipelines
