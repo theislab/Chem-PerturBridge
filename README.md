@@ -23,7 +23,7 @@ as `sbatch` commands are executed on the different nodes for different plates.
 
 **1.2.1** Firstly, you need to create the folder with the Python environment (in case you do not have it) and install the packages by running `set_env.sh`:
 ```
-cd /op3_v2/scripts
+cd /op3_v2
 ./run_pipelines/set_env.sh
 ```
 **1.2.2** To start a SLURM-based pipeline, you need to execute
@@ -31,19 +31,19 @@ cd /op3_v2/scripts
 **For Sci-plex**
 ```
 mkdir -p ~/logs
-cd /op3_v2/scripts
+cd /op3_v2
 sbatch -e ~/logs/pseudobulk_sciplex.%j.err -o ~/logs/pseudobulk_sciplex.%j.out ./pipelines/sciplex/sciplex_pseudobulking.sh
 ```
 
 **For Tahoe**
 ```
 mkdir -p ~/logs
-cd /op3_v2/scripts
+cd /op3_v2
 ./pipelines/tahoe/tahoe_pseudobulking_parallel.sh > ~/logs/pseudobulk_tahoe.out 2>~/logs/pseudobulk_tahoe.err &
 ```
 **1.2.3** The script `run_with_slurm.sh` unites steps from **1.2.1** and **1.2.2** and includes two versions of pipelines for datasets, full and subsample for code debugging. You can edit/comment/uncomment lines to choose the dataset for pseudobulking and execute it as:
 ```
-cd /op3_v2/scripts
+cd /op3_v2
 ./run_pipelines/run_with_slurm.sh
 ```
 
