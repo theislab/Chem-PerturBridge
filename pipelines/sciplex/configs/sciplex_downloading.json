@@ -1,0 +1,7 @@
+{"input": {"key_adata": "scperturb/srivatsan20_sciplex3.h5ad", 
+	   "key_obs": "scperturb/obs/srivatsan20_sciplex3.parquet",
+	   "key_var": "scperturb/var/srivatsan20_sciplex3.parquet"},
+"output": {"path2adata": "",
+	   "path2obs": "",
+	   "path2var": ""}
+}
