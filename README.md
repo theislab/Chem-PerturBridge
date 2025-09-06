@@ -3,18 +3,19 @@ You can run scripts on the HPC cluster with the workload manager (SLURM)
 **NB!** Before running some bash scripts, you may need to run `chmod u+x ./path/script.sh` before their execution.
 
 ### 1.1 Set up the SLURM parameters for the pipeline script. 
-If you want to run the dataset pseudobulking pipeline, e.g. the Sci-plex subsample pseudobulking: `./pipelines/sciplex/sciplex_pseudobulking_subsample.sh`, you need to determine the parameters under the commented lines, for example, by editing `#SBATCH` lines inside the script.
+If you want to run the dataset pseudobulking pipeline, e.g. the Sci-plex subsample pseudobulking: `./pipelines/sciplex/sciplex_pseudobulking.sh`, you need to determine the parameters under the commented lines, for example, by editing `#SBATCH` lines inside the script.
 
-However, for Tahoe you need to change the arguments under `sbatch` command in the script `./pipelines/tahoe/tahoe_pseudobulking_subsample_parallel.sh`:
+However, for Tahoe you need to change the arguments under `sbatch` command in the script `./pipelines/tahoe/tahoe_pseudobulking_parallel.sh`:
 
 ```
 sbatch -W -J pseudobulk_tahoe \
-                        -t 10:00:00 \
-                        -n 1 \
-                        --qos=cpu_normal \
-                        --mem=250G \
-                        --partition=cpu_p \
-                        --cpus-per-task=2 \
+        -t 10:00:00 \
+        -n 1 \
+        --array=1-14 \
+        --qos=cpu_normal \
+        --mem=250G \
+        --partition=cpu_p \
+        --cpus-per-task=2 \
 						...
 ```
 as `sbatch` commands are executed on the different nodes for different plates.
@@ -41,6 +42,11 @@ mkdir -p ~/logs
 cd /op3_v2
 ./pipelines/tahoe/tahoe_pseudobulking_parallel.sh > ~/logs/pseudobulk_tahoe.out 2>~/logs/pseudobulk_tahoe.err &
 ```
+**NB!** If you want to run on the subsample you need to add `subsampling` right after the bash script. For example:
+```
+./pipelines/tahoe/tahoe_pseudobulking_parallel.sh subsampling > ~/logs/pseudobulk_tahoe.out 2>~/logs/pseudobulk_tahoe.err &
+```
+
 **1.2.3** The script `run_with_slurm.sh` unites steps from **1.2.1** and **1.2.2** and includes two versions of pipelines for datasets, full and subsample for code debugging. You can edit/comment/uncomment lines to choose the dataset for pseudobulking and execute it as:
 ```
 cd /op3_v2
@@ -51,34 +57,34 @@ cd /op3_v2
 The structure of the repo:
 ```
 tree .
+.
 ├── pipelines
 │   ├── sciplex
-│   │   ├── configs
-│   │   │   ├── sciplex_downloading.json
-│   │   │   └── sciplex_pseudobulking.json
-│   │   ├── sciplex_pseudobulking.sh
-│   │   └── sciplex_pseudobulking_subsample.sh
+│   │   └── sciplex_pseudobulking.sh
 │   └── tahoe
-│       ├── configs
-│       │   ├── tahoe_combining_datasets.json
-│       │   ├── tahoe_downloading.json
-│       │   └── tahoe_pseudobulking.json
-│       ├── tahoe_pseudobulking_parallel.sh
-│       └── tahoe_pseudobulking_subsample_parallel.sh
+│       └── tahoe_pseudobulking_parallel.sh
 ├── README.md
 ├── requirements.txt
 ├── run_pipelines
 │   ├── run_with_slurm.sh
 │   └── set_env.sh
 └── src
+    ├── configs
+    │   └── datasets.json
     ├── downloading
     │   └── run_downloading_datasets.py
     ├── pseudobulking
-    │   ├── pseudobulk.py
-    │   ├── pubchem_imputation.py
-    │   ├── run_combining_datasets.py
-    │   ├── run_pseudobulking.py
-    │   └── standardization.py
+    │   ├── common
+    │   │   ├── pseudobulk.py
+    │   │   ├── run_combining_datasets.py
+    │   │   └── run_pseudobulking.py
+    │   └── datasets
+    │       ├── sciplex
+    │       │   ├── pubchem_imputation.py
+    │       │   └── standardization.py
+    │       └── tahoe
+    │           ├── pubchem_imputation.py
+    │           └── standardization.py
     └── utils
         ├── parsing_utils.py
 ```
