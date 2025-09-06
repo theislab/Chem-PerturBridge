@@ -1,7 +1,9 @@
 import time
 import os
 import math
+import re
 from typing import Tuple, List, Dict, Optional, Callable
+from string import ascii_lowercase
 import pandas as pd
 import anndata as ad
 import numpy as np
@@ -12,10 +14,67 @@ from pandas.api.types import is_float_dtype
 from pandas import DataFrame, Series
 from anndata import AnnData
 from scipy.sparse import csr_matrix
+from magnitude import mg, new_mag, Magnitude
 
 from src.utils.parsing_utils import *
-from .standardization import *
-from .pubchem_imputation import *
+
+# Initialize new units: moles per liter)
+new_mag('l', Magnitude(0.001, m=3))
+new_mag('M', mg(1, 'mol/l'))
+
+# Define column names for .obs standardization
+STANDARD_ADATA_OBS_COLS = [
+    'plate',
+    'well',
+    'ngenes',
+    'ncounts',
+    'pcnt_mito',
+    'cell_type',
+    'perturbagen',
+    'pert_type',
+    'is_control',
+    'pert_dose',
+    'pert_time',
+    'suspension_type',
+    'tissue',
+    'tissue_type',
+    'disease',
+    'library',
+    'stimulation',
+    'guide',
+    'dataset',
+    'assay',
+    'development_stage',
+    'organism',
+    'sex',
+    'self_reported_ethnicity',
+    'pubchem_cid',
+]
+
+# Define categorical columns
+CAT_COLS = [
+    'plate',
+    'well',
+    'cell_type',
+    'perturbagen',
+    'pert_type',
+    'suspension_type',
+    'tissue',
+    'tissue_type',
+    'disease',
+    'library',
+    'stimulation',
+    'guide',
+    'dataset',
+    'development_stage',
+    'organism',
+    'sex',
+    'self_reported_ethnicity'
+]
+
+# Define column names for .var standardization
+STANDARD_VAR_COLS = ['symbol']
+
 
 
 class Pseudobulk:
@@ -33,9 +92,10 @@ class Pseudobulk:
         A path to the output file containing pseudobulk data.
     groupby_fields : List[str]
         A list of column names to construct sample_id based on them.
-    dataset_standardization_ : Dict[str, Callable]
-        A dictionary containing the dataset-specific functions
-        for its processing/standardization.
+    standardize_dataset : Callable
+        A dataset-specific function for processing AnnData dataframe.
+    sm2pubchem : Dict[str, int]
+        A dictionary for manual mapping of drugs to pubchem cids.
     filter_malat1 : bool
         A flag, True value means to filter observations by expression 
         of MALAT1
@@ -53,6 +113,13 @@ class Pseudobulk:
         A list of cellosaurus ids to ignore during MALAT1
         filtering. (To exclude cells without a nucleus from
         filtration procedure)
+    drug_col : Optional[str]
+        A name of column containing drugs to map them to
+        pubchem cids.
+    standard_dose_units : str
+        Common units of dose concentration.
+    standard_time_units : str
+        Common units for time of perturbations.
 
     Attributes:
     -----------
@@ -65,10 +132,10 @@ class Pseudobulk:
         A path to the output file containing pseudobulk data.
     groupby_fields : List[str]
         A list of column names to construct sample_id based on them.
-    standardize_obs : Callable
-        A dataset-specific function for processing .obs dataframe.
-    standardize_var : Callable
-        A dataset-specific function for processing .var dataframe.
+    standardize_dataset : Callable
+        A dataset-specific function for processing AnnData dataframe.
+    sm2pubchem : Dict[str, int]
+        A dictionary for manual mapping of drugs to pubchem cids.
     filter_malat1 : bool
         A flag, True value means to filter observations by expression 
         of MALAT1
@@ -86,6 +153,13 @@ class Pseudobulk:
         A list of cellosaurus ids to ignore during MALAT1
         filtering. (To exclude cells without a nucleus from
         filtration procedure)
+    drug_col : Optional[str]
+        A name of column containing drugs to map them to
+        pubchem cids.
+    standard_dose_units : str
+        Common units of dose concentration.
+    standard_time_units : str
+        Common units for time of perturbations.
     pbulk_columns : List[str]
         A list of column names which the final pseudobulk dataset
         should contain.
@@ -99,16 +173,17 @@ class Pseudobulk:
         files_input: Dict[str, Optional[str]],
         file_output: str,
         groupby_fields: List[str],
-        dataset_standardization_: Dict[str, Dict[str, Callable]],
-        sm2pubchem_: Optional[Dict[str, int]] = None,
+        standardize_dataset: Dict[str, Callable],
+        sm2pubchem: Optional[Dict[str, int]] = None,
         filter_malat1: bool = False,
         filter_low_counts: bool = False,
         filter_nans: bool = False,
         filter_cells_params: Optional[Dict[str, int]] = None,
         filter_genes_params: Optional[Dict[str, int]] = None,
         ignore_cell_lines: List[str] = [],
-        standard_dose_units='uM',
-        standard_time_units='h',
+        drug_col: Optional[str] = 'perturbagen',
+        standard_dose_units: str = 'uM',
+        standard_time_units: str = 'h',
     ):
 
         self.dataset_name = dataset_name
@@ -123,10 +198,8 @@ class Pseudobulk:
         self.file_output = file_output
 
         self.groupby_fields = groupby_fields
-        self.standardize_obs = dataset_standardization_['standardize_obs']
-        self.standardize_var = dataset_standardization_['standardize_var']
-        self.sm2pubchem = sm2pubchem_
-
+        self.standardize_dataset = standardize_dataset
+        self.sm2pubchem = sm2pubchem
         self.filter_malat1 = filter_malat1
         self.filter_low_counts = filter_low_counts
         self.filter_nans = filter_nans
@@ -142,6 +215,7 @@ class Pseudobulk:
             self.filter_genes_params = filter_genes_params
 
         self.ignore_cell_lines = ignore_cell_lines
+        self.drug_col = drug_col
         self.standard_dose_units = standard_dose_units
         self.standard_time_units = standard_time_units
 
@@ -151,8 +225,9 @@ class Pseudobulk:
             f'pert_time_{self.standard_time_units}', 'suspension_type', 'tissue',
             'tissue_type', 'disease', 'library', 'stimulation', 'guide',
             'dataset', 'assay', 'development_stage', 'organism', 'sex',
-            'self_reported_ethnicity', 'psbulk_cells', 'psbulk_counts', 'pubchem_cid']
+            'self_reported_ethnicity', 'pubchem_cid', 'psbulk_cells', 'psbulk_counts']
         self.padata = None
+
 
     def determine_groupby_fields(self, adata: AnnData) -> None:
         '''
@@ -166,9 +241,9 @@ class Pseudobulk:
         '''
         groupby_fields = np.array(self.groupby_fields)
         ignore_fields = groupby_fields[adata.obs[groupby_fields].isna().all()]
-        filterd_fields = [item.item()
+        filtered_fields = [item.item()
                           for item in groupby_fields if item not in ignore_fields]
-        self.groupby_fields = filterd_fields
+        self.groupby_fields = filtered_fields
 
     def run_pseudobulking(self, ) -> None:
         '''
@@ -287,9 +362,89 @@ class Pseudobulk:
         adata : AnnData
             An input scRNA-seq dataset.
         '''
-        adata = self.standardize_obs(adata)
-        adata = self.standardize_var(adata)
+        adata = self.standardize_dataset(adata)
+        if not self.drug_col is None:
+            adata = self.add_pubchem_cids(adata, 
+                                          cache={}, 
+                                          drug_col=self.drug_col)
+        adata = self.standardize_common(adata)
         return adata
+
+    def standardize_obs_common(self, adata: AnnData):
+        '''
+        Convert obs from AnnData object to the standard format.
+        Select the pre-defined columns.
+    
+        Parameters:
+        -----------
+        adata : AnnData
+            An input scRNA-seq dataset.
+        '''
+        categories = {c: 'category' for c in CAT_COLS}
+        adata.obs = adata.obs[STANDARD_ADATA_OBS_COLS]
+        adata.obs = adata.obs.astype(categories)
+        return adata
+
+    def standardize_var_common(self, adata: AnnData) -> AnnData:
+        '''
+        Convert variables from AnnData object to the standard format.
+        Select the pre-defined columns.
+        
+        Parameters:
+        -----------
+        adata : AnnData
+            An input scRNA-seq dataset.
+        '''
+        categories = {c: 'category' for c in STANDARD_VAR_COLS}
+        adata.var = adata.var[STANDARD_VAR_COLS]
+        adata.var = adata.var.astype(categories)
+        return adata
+
+    def standardize_common(self, adata: AnnData) -> AnnData:
+        '''
+        Convert AnnData object to the standard format.
+        Select the pre-defined columns.
+        
+        Parameters:
+        -----------
+        adata : AnnData
+            An input scRNA-seq dataset.
+        '''
+        adata = self.standardize_obs_common(adata)
+        adata = self.standardize_var_common(adata)
+        return adata
+
+    def standardize_units(self, s: str, standard_units: str = 'uM') -> Optional[float]:
+        '''
+        Split combined value and unit strings to store them separately in columns.
+        Convert dose/time values to the standard units (uM/hours)
+        
+        Parameters:
+        -----------
+        s : str
+            Value-unit string to process.
+        standard_unit : str
+            Standard unit
+        '''
+        
+        r = r'[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?'
+        try:
+            val = float(re.findall(r, s)[0])
+        except Exception as e:
+            logger.warning('%s', str(e))
+            val = None
+        try:
+            units = re.split(r, s)[-1]
+        except Exception as e:
+            logger.warning('%s', str(e))
+            units = None
+        try:
+            val_ = mg(val, units).toval(standard_units)
+        except Exception as e:
+            logger.warning('%s', str(e))
+            val_ = None
+
+        return val_
 
     def prefilter(self, adata: AnnData) -> AnnData:
         '''
@@ -408,9 +563,9 @@ class Pseudobulk:
         logger.info("Process pseudobulk")
         if (self.padata is not None) and (self.padata.shape[0] != 0):
             self.padata.obs[f'pert_dose_{self.standard_dose_units}'] = self.padata.obs\
-                .apply(lambda x: standardize_units(x.pert_dose, self.standard_dose_units), axis=1)
+                .apply(lambda x: self.standardize_units(x.pert_dose, self.standard_dose_units), axis=1)
             self.padata.obs[f'pert_time_{self.standard_time_units}'] = self.padata.obs\
-                .apply(lambda x: standardize_units(x.pert_time, self.standard_time_units), axis=1)
+                .apply(lambda x: self.standardize_units(x.pert_time, self.standard_time_units), axis=1)
             self.padata.obs[[f'pert_dose_{self.standard_dose_units}']] = self.padata.obs[[
                 f'pert_dose_{self.standard_dose_units}']].astype(float)
             self.padata.obs[[f'pert_time_{self.standard_time_units}']] = self.padata.obs[[
@@ -594,8 +749,9 @@ class Pseudobulk:
         else:
             raise Exception("The pseudobulk dataset is None or empty")
 
-    def add_pubchem_cids_to_padata(
+    def add_pubchem_cids(
         self,
+        adata,
         cache: Dict[str, Optional[int]],
         drug_col: str = 'perturbagen'
     ) -> None:
@@ -659,8 +815,8 @@ class Pseudobulk:
             return cid
 
         logger.info("Mapping drugs to PubChem idx")
-        if not self.padata is None:
-            unique_drugs = self.padata.obs[drug_col].dropna().unique().tolist()
+        if not adata is None:
+            unique_drugs = adata.obs[drug_col].dropna().unique().tolist()
             to_fetch = [d for d in unique_drugs if d not in cache]
             if to_fetch:
                 logger.info(
@@ -668,12 +824,13 @@ class Pseudobulk:
                 for drug in to_fetch:
                     get_pubchem_cid(drug, cache)
 
-            self.padata.obs['pubchem_cid'] = self.padata.obs[drug_col].map(
+            adata.obs['pubchem_cid'] = adata.obs[drug_col].map(
                 cache)
             if self.sm2pubchem:
-                self.padata.obs['pubchem_cid'] = self.padata.obs['pubchem_cid']\
-                                                     .fillna(self.padata.obs[drug_col].map(self.sm2pubchem))
-            self.padata.obs['pubchem_cid'] = self.padata.obs['pubchem_cid'].astype(
+                adata.obs['pubchem_cid'] = adata.obs['pubchem_cid']\
+                                                     .fillna(adata.obs[drug_col].map(self.sm2pubchem))
+            adata.obs['pubchem_cid'] = adata.obs['pubchem_cid'].astype(
                 'Int64').astype('category')
+            return adata
         else:
             raise Exception("The pseudobulk dataset is empty")

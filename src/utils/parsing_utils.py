@@ -73,6 +73,21 @@ def merge_args(d_args: Dict[str, Optional[str | int | bool | List[str] | Dict[st
             d_args[key] = config[key]
     return d_args.copy()
 
+def convert_str2none(d_args: Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]) \
+        -> Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]:
+        '''
+        Convert strings with None values to None
+
+        Parameters:
+        -----------
+        d_args : Dict[str, Optional[str | int | bool | List[str] | Dict[str, int]]]
+            input arguments represented as a dictionary.
+        '''
+        for key in d_args.keys():
+            if isinstance(d_args[key], str) and \
+                    (d_args[key].lower() == 'none' or d_args[key].lower() == 'nan'):
+                d_args[key] = None
+        return d_args.copy()
 
 def check_sub_args(d_args: Dict[str, Optional[str]],
                    required_sub_args: Dict[str, str]) -> None:
@@ -96,3 +111,6 @@ def check_sub_args(d_args: Dict[str, Optional[str]],
                         f"The parameter's name {par} isn't appropriate, "
                         f"should be one of {required_sub_args[key]}"
                     )
+
+
+

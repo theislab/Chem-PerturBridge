@@ -2,74 +2,68 @@
 set -e
 
 source ~/.venv/bin/activate 
+
+if [ "$1" = "subsampling" ]; then
+        echo "> Work with a subsample"
+	SUFFIX="_subsample"
+        SUBDIR="subsample"
+	ARG="--subsampling"
+else
+	echo "> Work with a full version"
+        SUFFIX=""
+        SUBDIR="full"
+	ARG=""
+fi
+
 SC_DIR=~/data/Tahoe/raw
-BULK_DIR=~/data/Tahoe/pseudobulk_to_merge
-OUTPUT_DIR=~/data/Tahoe/pseudobulk
-N=14
+BULK_DIR=~/data/Tahoe/pseudobulk_to_merge/${SUBDIR}
+OUTPUT_DIR=~/data/Tahoe/pseudobulk/${SUBDIR}
 
 echo "> Download dataset"
-
-for i in $(seq 1 14)
-do
-	(
-		echo "> Download plate $i"
-
-		sbatch -W -J pseudobulk_tahoe \
-			-t 10:00:00 \
-			-n 1 \
-			--qos=cpu_normal \
-			--mem=250G \
-			--partition=cpu_p \
-			--cpus-per-task=2 \
-			-e ~/logs/pseudobulk_tahoe_download.%j.err \
-			-o ~/logs/pseudobulk_tahoe_download.%j.out \
-			--wrap="source ~/.venv/bin/activate &&\
-				python3 -m src.downloading.run_downloading_datasets \
-				--input key_adata=2025-02-25/h5ad/plate${i}_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab.h5ad \
-					key_obs=tahoe100/obs/plate${i}.parquet \
-					key_var=tahoe100/var.parquet \
-				--output path2adata=${SC_DIR}/plate${i}.h5ad \
-                			 path2obs=${SC_DIR}/plate${i}_obs.parquet \
-			 		 path2var=${SC_DIR}/var.parquet"
-	) &
-    	if [[ $(jobs -r -p | wc -l) -ge $N ]]; then
-        	wait -n
-    	fi
-done
+sbatch -W -J pseudobulk_tahoe \
+	-t 10:00:00 \
+	-n 1 \
+	--array=1-14 \
+	--qos=cpu_normal \
+	--mem=250G \
+	--partition=cpu_p \
+	--cpus-per-task=2 \
+	-e ~/logs/pseudobulk_tahoe_download.%A_%a.err \
+	-o ~/logs/pseudobulk_tahoe_download.%A_%a.out \
+	--wrap="source ~/.venv/bin/activate &&\
+		python3 -m src.downloading.run_downloading_datasets \
+		--input key_adata=2025-02-25/h5ad/plate\${SLURM_ARRAY_TASK_ID}_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab.h5ad \
+			key_obs=tahoe100/obs/plate\${SLURM_ARRAY_TASK_ID}.parquet \
+			key_var=tahoe100/var.parquet \
+		--output path2adata=${SC_DIR}/plate\${SLURM_ARRAY_TASK_ID}.h5ad \
+                	path2obs=${SC_DIR}/plate\${SLURM_ARRAY_TASK_ID}_obs.parquet \
+			path2var=${SC_DIR}/var.parquet ${ARG}"
 
 wait
 
 echo "> Running pseudobulking"
 
-for i in $(seq 1 14)
-do
-	(
-
-		echo "> Processing plate $i"
-		sbatch -W -J pseudobulk_tahoe \
-                        -t 10:00:00 \
-                        -n 1 \
-                        --qos=cpu_normal \
-                        --mem=700G \
-                        --partition=cpu_p \
-                        --cpus-per-task=5 \
-			-e ~/logs/pseudobulk_tahoe_process.%j.err \
-                        -o ~/logs/pseudobulk_tahoe_process.%j.out \
-			--wrap="source ~/.venv/bin/activate &&\
-				python3 -m src.pseudobulking.run_pseudobulking \
-				--dataset tahoe \
-				--input path2adata=${SC_DIR}/plate${i}.h5ad \
-                        		path2obs=${SC_DIR}/plate${i}_obs.parquet \
-                        		path2var=${SC_DIR}/var.parquet \
-				--output $BULK_DIR/full/plate${i}.h5ad \
-				--filter_malat1 \
-        			--filter_low_counts \
-        			--filter_nans"
-	) &
-	if [[ $(jobs -r -p | wc -l) -ge $N ]]; then
-                wait -n
-        fi
-done
+echo "> Processing plate $i"
+sbatch -W -J pseudobulk_tahoe \
+       -t 10:00:00 \
+       -n 1 \
+       --array=1-14 \
+       --qos=cpu_normal \
+       --mem=700G \
+       --partition=cpu_p \
+       --cpus-per-task=2 \
+       -e ~/logs/pseudobulk_tahoe_process.%A_%a.err \
+       -o ~/logs/pseudobulk_tahoe_process.%A_%a.out \
+       --wrap="source ~/.venv/bin/activate &&\
+	       python3 -m src.pseudobulking.common.run_pseudobulking \
+	       --dataset_name tahoe \
+	       --input path2adata=${SC_DIR}/plate\${SLURM_ARRAY_TASK_ID}${SUFFIX}.h5ad \
+               	       path2obs=${SC_DIR}/plate\${SLURM_ARRAY_TASK_ID}_obs.parquet \
+                       path2var=${SC_DIR}/var.parquet \
+		--output $BULK_DIR/plate\${SLURM_ARRAY_TASK_ID}${SUFFIX}.h5ad \
+		--filter_malat1 \
+        	--filter_low_counts \
+        	--filter_nans"
 
 wait
 
@@ -77,7 +71,7 @@ echo "> Pseudobulking is done"
 
 echo "> Running combining datasets"
 sbatch -W -J pseudobulk_tahoe \
-                        -t 5:00:00 \
+                        -t 2:00:00 \
                         -n 1 \
                         --qos=cpu_normal \
                         --mem=250G \
@@ -86,7 +80,7 @@ sbatch -W -J pseudobulk_tahoe \
 			-e ~/logs/pseudobulk_tahoe_unite.%j.err \
                         -o ~/logs/pseudobulk_tahoe_unite.%j.out \
 			--wrap="source ~/.venv/bin/activate &&\
-				python3 -m src.pseudobulking.run_combining_datasets \
-					--input $BULK_DIR/full/ \
-					--output $OUTPUT_DIR/full/tahoe.h5ad"
+				python3 -m src.pseudobulking.common.run_combining_datasets \
+					--input $BULK_DIR/ \
+					--output $OUTPUT_DIR/tahoe${SUFFIX}.h5ad"
 echo "> Combining datasets is done"
