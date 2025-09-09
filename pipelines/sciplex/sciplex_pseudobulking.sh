@@ -4,12 +4,10 @@
 #SBATCH -n 1
 #SBATCH --qos=cpu_normal
 #SBATCH --mem=100G
-#SBATCH --partition=cpu_p 
+#SBATCH --partition=cpu_p
 #SBATCH --cpus-per-task=2
 
 set -e
-
-source ~/.venv/bin/activate
 
 if [ "$1" = "subsampling" ]; then
 	echo "> Work with a subsample"
@@ -25,8 +23,12 @@ else
 fi
 
 NAME="srivatsan20_sciplex3"
-SC_DIR=~/data/Sciplex/raw
-BULK_DATA=~/data/Sciplex/pseudobulk/${SUBDIR}/${NAME}
+SC_DIR=./data/Sciplex/raw
+BULK_DATA=./data/Sciplex/pseudobulk/${SUBDIR}/${NAME}
+ENV_DIR=./venv
+
+eval "$(mamba shell hook --shell bash)"
+mamba activate ${ENV_DIR}
 
 echo "> Download dataset"
 python3 -m src.downloading.run_downloading_datasets \

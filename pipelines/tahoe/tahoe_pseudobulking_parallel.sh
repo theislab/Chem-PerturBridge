@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-source ~/.venv/bin/activate 
-
 if [ "$1" = "subsampling" ]; then
         echo "> Work with a subsample"
 	SUFFIX="_subsample"
@@ -15,22 +13,27 @@ else
 	ARG=""
 fi
 
-SC_DIR=~/data/Tahoe/raw
-BULK_DIR=~/data/Tahoe/pseudobulk_to_merge/${SUBDIR}
-OUTPUT_DIR=~/data/Tahoe/pseudobulk/${SUBDIR}
+SC_DIR=./data/Tahoe/raw
+BULK_DIR=./data/Tahoe/pseudobulk_to_merge/${SUBDIR}
+OUTPUT_DIR=./data/Tahoe/pseudobulk/${SUBDIR}
+LOGS_DIR=./logs
+ENV_DIR=./venv
+QOS=cpu_normal
+PARTITION=cpu_p
 
 echo "> Download dataset"
 sbatch -W -J pseudobulk_tahoe \
 	-t 10:00:00 \
 	-n 1 \
 	--array=1-14 \
-	--qos=cpu_normal \
+	--qos=$QOS \
 	--mem=250G \
-	--partition=cpu_p \
+	--partition=$PARTITION \
 	--cpus-per-task=2 \
-	-e ~/logs/pseudobulk_tahoe_download.%A_%a.err \
-	-o ~/logs/pseudobulk_tahoe_download.%A_%a.out \
-	--wrap="source ~/.venv/bin/activate &&\
+	-e $LOGS_DIR/pseudobulk_tahoe_download.%A_%a.err \
+	-o $LOGS_DIR/pseudobulk_tahoe_download.%A_%a.out \
+	--wrap="eval \"\$(mamba shell hook --shell bash)\" && \
+                mamba activate ${ENV_DIR} && \
 		python3 -m src.downloading.run_downloading_datasets \
 		--input key_adata=2025-02-25/h5ad/plate\${SLURM_ARRAY_TASK_ID}_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab.h5ad \
 			key_obs=tahoe100/obs/plate\${SLURM_ARRAY_TASK_ID}.parquet \
@@ -48,13 +51,14 @@ sbatch -W -J pseudobulk_tahoe \
        -t 10:00:00 \
        -n 1 \
        --array=1-14 \
-       --qos=cpu_normal \
+       --qos=$QOS \
        --mem=700G \
-       --partition=cpu_p \
+       --partition=$PARTITION \
        --cpus-per-task=2 \
-       -e ~/logs/pseudobulk_tahoe_process.%A_%a.err \
-       -o ~/logs/pseudobulk_tahoe_process.%A_%a.out \
-       --wrap="source ~/.venv/bin/activate &&\
+       -e $LOGS_DIR/pseudobulk_tahoe_process.%A_%a.err \
+       -o $LOGS_DIR/pseudobulk_tahoe_process.%A_%a.out \
+       --wrap="eval \"\$(mamba shell hook --shell bash)\" && \
+               mamba activate ${ENV_DIR} && \
 	       python3 -m src.pseudobulking.common.run_pseudobulking \
 	       --dataset_name tahoe \
 	       --input path2adata=${SC_DIR}/plate\${SLURM_ARRAY_TASK_ID}${SUFFIX}.h5ad \
@@ -71,16 +75,18 @@ echo "> Pseudobulking is done"
 
 echo "> Running combining datasets"
 sbatch -W -J pseudobulk_tahoe \
-                        -t 2:00:00 \
-                        -n 1 \
-                        --qos=cpu_normal \
-                        --mem=250G \
-                        --partition=cpu_p \
-                        --cpus-per-task=2 \
-			-e ~/logs/pseudobulk_tahoe_unite.%j.err \
-                        -o ~/logs/pseudobulk_tahoe_unite.%j.out \
-			--wrap="source ~/.venv/bin/activate &&\
-				python3 -m src.pseudobulking.common.run_combining_datasets \
-					--input $BULK_DIR/ \
-					--output $OUTPUT_DIR/tahoe${SUFFIX}.h5ad"
+       -t 2:00:00 \
+       -n 1 \
+       --qos=$QOS \
+       --mem=250G \
+       --partition=$PARTITION \
+       --cpus-per-task=2 \
+       -e $LOGS_DIR/pseudobulk_tahoe_unite.%j.err \
+       -o $LOGS_DIR/pseudobulk_tahoe_unite.%j.out \
+       --wrap="eval \"\$(mamba shell hook --shell bash)\" && \
+               mamba activate ${ENV_DIR} && \
+	       python3 -m src.pseudobulking.common.run_combining_datasets \
+	       --input $BULK_DIR/ \
+	       --output $OUTPUT_DIR/tahoe${SUFFIX}.h5ad"
+
 echo "> Combining datasets is done"
