@@ -39,20 +39,20 @@ fi
 
 **1.2.1** If you need to create the folder with the Python environment (in case you do not have it) and install the packages, please, run:
 ```
-mkdir path_to_env/.venv
+mkdir path_to_env/venv
 cd /op3_v2
-mamba create -f env.yaml -p path_to_env/.venv --yes
+mamba create -f env.yaml -p path_to_env/venv --yes
 ```
 **1.3** **Create symlinks**
 
-In order to organize directories for scripts' outputs, you need to create folders in the desired locations for **logs** and **data**; and then link **logs**, **data** and **.venv** folders to a script. 
+In order to organize directories for scripts' outputs, you need to create folders in the desired locations for **logs** and **data**; and then link **logs**, **data** and **venv** folders to a script. 
 
 To do that, please, execute:
 
 **1.3.1** **For environment**
 ```
 cd /op3_v2
-ln -s path_to_env/.venv .venv
+ln -s path_to_env/venv venv
 ```
 **1.3.2** **For logs**
 ```
@@ -68,7 +68,7 @@ ln -s path_to_data/data data
 ```
 
 ### 2. Set up the SLURM parameters for the pipeline script. 
-If you want to run the dataset pseudobulking pipeline, e.g. the Sci-plex subsample pseudobulking: `./pipelines/sciplex/sciplex_pseudobulking.sh`, you need to determine the parameters such as the number of cpus or the requested memory for the node under the commented lines by editing `#SBATCH` lines inside the script.
+If you want to run the dataset pseudobulking pipeline, e.g. for the Sci-plex dataset: `./pipelines/sciplex/sciplex_pseudobulking.sh`, you need to determine the parameters such as the number of cpus or the requested memory for the node under the commented lines by editing `#SBATCH` lines inside the script.
 
 However, for Tahoe you need to change the arguments under `sbatch` command in the script `./pipelines/tahoe/tahoe_pseudobulking_parallel.sh`:
 
@@ -87,7 +87,7 @@ as `sbatch` commands are executed on the different nodes for different plates.
 
 Currently, scripts have pre-defined parameters.
 
-### 3. Set up a Python environment and run scripts 
+### 3. Run scripts 
 
 **3.1** To start a SLURM-based pipeline, you need to execute
 
@@ -107,17 +107,27 @@ cd /op3_v2
 ./pipelines/tahoe/tahoe_pseudobulking_parallel.sh subsampling > ~/logs/pseudobulk_tahoe.out 2>~/logs/pseudobulk_tahoe.err &
 ```
 
-**3.2** The script `run_with_slurm.sh` includes two versions of pipelines for datasets, full and subsampling for code debugging. You can edit/comment/uncomment lines to choose the dataset for pseudobulking and execute it as:
+**3.2** The script `run_pseudobulking.sh` is a wrapper for the commands from **3.1**, which allow to run dataset-specific pseudobulking pipelines. You can run it with following arguments:
+```
+-s if this flag is included, then the script is executed for subsample of the dataset, default=false
+-h if this flag is included, then the help is printed, default=false
+-d it is a required flag speifying which dataset should be processed: sciplex | tahoe ...
+```
+
+For example, for subsample of Sci-Plex dataset, you need to run:
 ```
 cd /op3_v2
-./run_pipelines/run_with_slurm.sh
+./run_pipelines/run_pseudobulking.sh -s -d sciplex
 ```
 
 ## Project structure:
 The structure of the repo:
 ```
-tree .
+ tree .
 .
+├── data -> /home/icb/olga.novitskaia/data/
+├── env.yaml
+├── logs -> /home/icb/olga.novitskaia/logs/
 ├── pipelines
 │   ├── sciplex
 │   │   └── sciplex_pseudobulking.sh
@@ -126,31 +136,31 @@ tree .
 ├── README.md
 ├── requirements.txt
 ├── run_pipelines
-│   ├── run_with_slurm.sh
-│   └── set_env.sh
-└── src
-    ├── configs
-    │   └── datasets.json
-    ├── downloading
-    │   └── run_downloading_datasets.py
-    ├── pseudobulking
-    │   ├── common
-    │   │   ├── pseudobulk.py
-    │   │   ├── run_combining_datasets.py
-    │   │   └── run_pseudobulking.py
-    │   └── datasets
-    │       ├── sciplex
-    │       │   ├── pubchem_imputation.py
-    │       │   └── standardization.py
-    │       └── tahoe
-    │           ├── pubchem_imputation.py
-    │           └── standardization.py
-    └── utils
-        ├── parsing_utils.py
+│   └── run_pseudobulking.sh
+├── src
+│   ├── configs
+│   │   └── datasets.json
+│   ├── downloading
+│   │   └── run_downloading_datasets.py
+│   ├── pseudobulking
+│   │   ├── common
+│   │   │   ├── pseudobulk.py
+│   │   │   ├── run_combining_datasets.py
+│   │   │   └── run_pseudobulking.py
+│   │   └── datasets
+│   │       ├── sciplex
+│   │       │   ├── pubchem_imputation.py
+│   │       │   └── standardization.py
+│   │       └── tahoe
+│   │           ├── pubchem_imputation.py
+│   │           └── standardization.py
+│   └── utils
+│       ├── parsing_utils.py
+└── venv -> /home/icb/olga.novitskaia/venv
 ```
 
 ## Data
-The structure of the data folder:
+The structure of the `data` folder:
 ```
 ├──dataset_i
     ├──raw
