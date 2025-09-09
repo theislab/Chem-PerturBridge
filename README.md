@@ -43,7 +43,7 @@ mkdir path_to_env/.venv
 cd /op3_v2
 mamba create -f env.yaml -p path_to_env/.venv --yes
 ```
-**1.3** **Create symlincs**
+**1.3** **Create symlinks**
 
 In order to organize directories for scripts' outputs, you need to create folders in the desired locations for **logs** and **data**; and then link **logs**, **data** and **.venv** folders to a script. 
 
