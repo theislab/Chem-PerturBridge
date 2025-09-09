@@ -39,7 +39,6 @@ fi
 
 **1.2.1** If you need to create the folder with the Python environment (in case you do not have it) and install the packages, please, run:
 ```
-mkdir path_to_env/venv
 cd /op3_v2
 mamba create -f env.yaml -p path_to_env/venv --yes
 ```
