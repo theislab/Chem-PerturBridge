@@ -455,18 +455,53 @@ class Pseudobulk:
                         n_perturb: int,
                        ) -> None:
 
-        
+        '''
+        A function to log the statistics on
+        the number of cells (n_obs),
+        the number of genes (n_var), the number of perturbations
+        (n_perturb)
+
+        Parameters:
+        -----------
+        n_obs_prev: int
+            The number of cells before filtering
+        n_var_prev: int
+            The number of genes before filtering
+        n_perturb_prev: int
+            The number of unique perturbations before filtering
+        n_obs: int
+            The number of cells before filtering
+        n_var: int
+            The number of genes before filtering
+        n_perturb: int
+            The number of unique perturbations before filtering
+        '''
         logger.info('    n_obs: %d --> %d', n_obs_prev, n_obs)
         logger.info('    n_var: %d --> %d', n_var_prev, n_var)
         logger.info('    n_perturb: %d --> %d', n_perturb_prev, n_perturb)
 
     def compute_filtering_stats(self,
                         adata: AnnData,
-                        perturbation_cols = [
+                        perturbation_cols: List = [
                                             'cell_type',
                                             'perturbagen'
                                             ]
                                     ) -> None:
+        '''
+        A function to obtain the statistics after each step 
+        of filtering: the number of cells (n_obs), 
+        the number of genes (n_var), the number of perturbations
+        (n_perturb) which is based on cell_type and perturbagen 
+        by default.
+        
+        Parameters:
+        -----------
+        adata : AnnData
+            An input scRNA-seq dataset.
+        perturbation_cols : List
+            Columns to take into account while computing 
+            the number of perturbations.
+        '''
 
         n_obs, n_var = adata.shape
         n_perturb = adata.obs.value_counts(perturbation_cols).shape[0]
@@ -489,17 +524,6 @@ class Pseudobulk:
         adata : AnnData
             An input scRNA-seq dataset.
         '''
-        def compute_filtering_stats(
-                        adata: AnnData,  
-                        perturbation_cols = [
-                                            'cell_type', 
-                                            'perturbagen'
-                                            ]
-                                    ):
-
-            n_obs, n_var = adata.shape
-            n_perturb = adata.obs.value_counts(perturbation_cols).shape[0]
-            return n_obs, n_var, n_perturb
 
         logger.info('Initial adata size: %s', str(adata.shape))
         is_outlier = pd.Series(
