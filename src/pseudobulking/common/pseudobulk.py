@@ -446,6 +446,32 @@ class Pseudobulk:
 
         return val_
 
+    def log_filtering_stats(self,
+                        n_obs_prev: int,
+                        n_var_prev: int,
+                        n_perturb_prev: int,
+                        n_obs: int,
+                        n_var: int,
+                        n_perturb: int,
+                       ) -> None:
+
+        
+        logger.info('    n_obs: %d --> %d', n_obs_prev, n_obs)
+        logger.info('    n_var: %d --> %d', n_var_prev, n_var)
+        logger.info('    n_perturb: %d --> %d', n_perturb_prev, n_perturb)
+
+    def compute_filtering_stats(self,
+                        adata: AnnData,
+                        perturbation_cols = [
+                                            'cell_type',
+                                            'perturbagen'
+                                            ]
+                                    ) -> None:
+
+        n_obs, n_var = adata.shape
+        n_perturb = adata.obs.value_counts(perturbation_cols).shape[0]
+        return n_obs, n_var, n_perturb
+
     def prefilter(self, adata: AnnData) -> AnnData:
         '''
         A function to preprocess a single cell dataset:
@@ -463,27 +489,57 @@ class Pseudobulk:
         adata : AnnData
             An input scRNA-seq dataset.
         '''
+        def compute_filtering_stats(
+                        adata: AnnData,  
+                        perturbation_cols = [
+                                            'cell_type', 
+                                            'perturbagen'
+                                            ]
+                                    ):
+
+            n_obs, n_var = adata.shape
+            n_perturb = adata.obs.value_counts(perturbation_cols).shape[0]
+            return n_obs, n_var, n_perturb
+
         logger.info('Initial adata size: %s', str(adata.shape))
         is_outlier = pd.Series(
             np.zeros(adata.obs.shape[0], dtype=bool), index=adata.obs.index)
         if self.filter_low_counts:
             logger.info('Filter by counts')
-            n_obs_prev = adata[~is_outlier].shape[0]
+            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata[~is_outlier])
             is_outlier = self.filter_by_counts(adata)
-            logger.info(
-                'n_obs: %d --> %d', n_obs_prev, adata[~is_outlier].shape[0])
+            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata[~is_outlier])
+            self.log_filtering_stats(
+                        n_obs_prev, 
+                        n_var_prev,
+                        n_perturb_prev,
+                        n_obs,
+                        n_var,
+                        n_perturb)
         if self.filter_nans:
             logger.info('Filter by nans')
-            n_obs_prev = adata[~is_outlier].shape[0]
+            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata[~is_outlier])
             is_outlier = is_outlier | self.filter_by_nans(adata)
-            logger.info(
-                'n_obs: %d --> %d', n_obs_prev, adata[~is_outlier].shape[0])
+            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata[~is_outlier])
+            self.log_filtering_stats(
+                        n_obs_prev,
+                        n_var_prev,
+                        n_perturb_prev,
+                        n_obs,
+                        n_var,
+                        n_perturb)
         if self.filter_malat1:
             logger.info('Filter by humanMALAT1')
-            n_obs_prev = adata[~is_outlier].shape[0]
+            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata[~is_outlier])
             is_outlier = is_outlier | self.filter_by_humanMALAT1(adata)
-            logger.info(
-                'n_obs: %d --> %d', n_obs_prev, adata[~is_outlier].shape[0])
+            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata[~is_outlier])
+            self.log_filtering_stats(
+                        n_obs_prev,
+                        n_var_prev,
+                        n_perturb_prev,
+                        n_obs,
+                        n_var,
+                        n_perturb)
         adata = adata[~is_outlier]
         self.filter_cells_(adata)
         self.filter_genes_(adata)
@@ -668,9 +724,18 @@ class Pseudobulk:
         '''
         if len(self.filter_cells_params.keys()) != 0:
             logger.info('Filter cells')
-        for key in self.filter_cells_params.keys():
-            kwarg = dict({key: self.filter_cells_params[key]})
-            sc.pp.filter_cells(adata, **kwarg, inplace=True)
+            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata)
+            for key in self.filter_cells_params.keys():
+                kwarg = dict({key: self.filter_cells_params[key]})
+                sc.pp.filter_cells(adata, **kwarg, inplace=True)
+            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata)
+            self.log_filtering_stats(
+                        n_obs_prev, 
+                        n_var_prev,
+                        n_perturb_prev,
+                        n_obs,
+                        n_var,
+                        n_perturb)
 
     def filter_genes_(self, adata: AnnData) -> None:
         '''
@@ -684,10 +749,18 @@ class Pseudobulk:
         '''
         if len(self.filter_genes_params.keys()) != 0:
             logger.info('Filter genes')
-
-        for key in self.filter_genes_params.keys():
-            kwarg = dict({key: self.filter_genes_params[key]})
-            sc.pp.filter_genes(adata, **kwarg, inplace=True)
+            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata)
+            for key in self.filter_genes_params.keys():
+                kwarg = dict({key: self.filter_genes_params[key]})
+                sc.pp.filter_genes(adata, **kwarg, inplace=True)
+            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata)
+            self.log_filtering_stats(
+                        n_obs_prev,
+                        n_var_prev,
+                        n_perturb_prev,
+                        n_obs,
+                        n_var,
+                        n_perturb)
 
     def define_sample_group_cols(self, adata: AnnData) -> None:
         '''
