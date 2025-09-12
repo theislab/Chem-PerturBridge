@@ -44,7 +44,7 @@ mamba create -f env.yaml -p path_to_env/venv --yes
 ```
 **1.3** **Create symlinks**
 
-In order to organize directories for scripts' outputs, you need to create folders in the desired locations for **logs** and **data**; and then link **logs**, **data** and **venv** folders to a script. 
+In order to organize directories for scripts' outputs, you need to create folders in the desired locations for **data**; and then link **data** and **venv** folders to a script. 
 
 To do that, please, execute:
 
@@ -53,13 +53,7 @@ To do that, please, execute:
 cd /op3_v2
 ln -s path_to_env/venv venv
 ```
-**1.3.2** **For logs**
-```
-mkdir path_to_logs/logs
-cd /op3_v2
-ln -s path_to_logs/logs logs
-```
-**1.3.3** **For data**
+**1.3.2** **For data**
 ```
 mkdir path_to_data/data
 cd /op3_v2
@@ -69,7 +63,9 @@ ln -s path_to_data/data data
 ### 2. Set up the SLURM parameters for the pipeline script. 
 If you want to run the dataset pseudobulking pipeline, e.g. for the Sci-plex dataset: `./pipelines/sciplex/sciplex_pseudobulking.sh`, you need to determine the parameters such as the number of cpus or the requested memory for the node under the commented lines by editing `#SBATCH` lines inside the script.
 
-However, for Tahoe you need to change the arguments under `sbatch` command in the script `./pipelines/tahoe/tahoe_pseudobulking_parallel.sh`:
+However, for Tahoe you need to change the arguments under `sbatch` command in the script `./pipelines/tahoe/tahoe_pseudobulking_parallel.sh`. 
+
+For example:
 
 ```
 sbatch -W -J pseudobulk_tahoe \
@@ -126,7 +122,9 @@ The structure of the repo:
 .
 ├── data -> /home/icb/olga.novitskaia/data/
 ├── env.yaml
-├── logs -> /home/icb/olga.novitskaia/logs/
+├── logs
+│   ├── dataset_i
+│   └── ...
 ├── pipelines
 │   ├── sciplex
 │   │   └── sciplex_pseudobulking.sh
@@ -155,7 +153,7 @@ The structure of the repo:
 │   │           └── standardization.py
 │   └── utils
 │       ├── parsing_utils.py
-└── venv -> /home/icb/olga.novitskaia/venv
+└── venv -> /home/icb/olga.novitskaia/venv/
 ```
 
 ## Data
