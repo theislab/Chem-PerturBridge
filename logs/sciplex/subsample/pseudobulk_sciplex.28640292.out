@@ -1,0 +1,39 @@
+> Work with a subsample
+> Download dataset
+2025-09-12 16:34:48 | [INFO] Download and save an anndata file to ./data/sciplex/raw/srivatsan20_sciplex3_subsample.h5ad
+[92m→[0m connected lamindb: laminlabs/pertdata
+2025-09-12 16:47:21 | [INFO] Download and save an .obs file to ./data/sciplex/raw/srivatsan20_sciplex3_obs.parquet
+[92m→[0m connected lamindb: laminlabs/pertdata
+2025-09-12 16:48:11 | [INFO] Download and save a .var file to ./data/sciplex/raw/srivatsan20_sciplex3_var.parquet
+[92m→[0m connected lamindb: laminlabs/pertdata
+2025-09-12 16:48:12 | [INFO] All data is saved
+> Running pseudobulking
+2025-09-12 16:50:02 | [INFO] Read data from ./data/sciplex/raw/srivatsan20_sciplex3_subsample.h5ad
+2025-09-12 16:50:03 | [INFO] Read data from ./data/sciplex/raw/srivatsan20_sciplex3_obs.parquet
+2025-09-12 16:50:04 | [INFO] Read data from ./data/sciplex/raw/srivatsan20_sciplex3_var.parquet
+2025-09-12 16:50:04 | [INFO] Merge datasets
+2025-09-12 16:50:05 | [INFO] Standardize anndata
+2025-09-12 16:50:19 | [INFO] Mapping drugs to PubChem idx
+2025-09-12 16:50:19 | [INFO] Looking up 188 new perturbations on PubChem...
+2025-09-12 16:51:47 | [INFO] Determine groupby fields
+2025-09-12 16:51:47 | [INFO] Initial adata size: (5000, 58302)
+2025-09-12 16:51:47 | [INFO] Filter by counts
+2025-09-12 16:51:47 | [INFO]     n_obs: 5000 --> 2641
+2025-09-12 16:51:47 | [INFO]     n_var: 58302 --> 58302
+2025-09-12 16:51:47 | [INFO]     n_ct: 3 --> 3
+2025-09-12 16:51:47 | [INFO]     n_pa: 188 --> 188
+2025-09-12 16:51:47 | [INFO] Filter by nans
+2025-09-12 16:51:47 | [INFO]     n_obs: 2641 --> 2539
+2025-09-12 16:51:47 | [INFO]     n_var: 58302 --> 58302
+2025-09-12 16:51:47 | [INFO]     n_ct: 3 --> 3
+2025-09-12 16:51:47 | [INFO]     n_pa: 188 --> 188
+2025-09-12 16:51:47 | [INFO] Filter by humanMALAT1
+2025-09-12 16:51:47 | [INFO]     n_obs: 2539 --> 1794
+2025-09-12 16:51:47 | [INFO]     n_var: 58302 --> 58302
+2025-09-12 16:51:47 | [INFO]     n_ct: 3 --> 3
+2025-09-12 16:51:47 | [INFO]     n_pa: 188 --> 188
+2025-09-12 16:51:47 | [INFO] Final adata size: (1794, 58302)
+2025-09-12 16:51:47 | [INFO] Build pseudobulk
+2025-09-12 16:51:54 | [INFO] Process pseudobulk
+2025-09-12 16:51:55 | [INFO] Save data to ./data/sciplex/pseudobulk/subsample/srivatsan20_sciplex3_subsample.h5ad
+> Pseudobulking is done

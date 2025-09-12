@@ -87,7 +87,7 @@ def download_save_from_lamindb(key_adata: str = None,
 
             logger.info('Download and save an anndata file to %s', path2adata)
             connect2lamin_with_retry(instance)
-            adata = ln.Artifact.get(key=key_adata).load()
+            adata = ln.Artifact.get(key=key_adata).load(mute=True)
             ln.setup.disconnect()
             if subsampling:
                 idx = np.random.choice(
@@ -113,7 +113,7 @@ def download_save_from_lamindb(key_adata: str = None,
 
             logger.info('Download and save an .obs file to %s', path2obs)
             connect2lamin_with_retry(instance)
-            ln.Artifact.get(key=key_obs).load().to_parquet(path2obs)
+            ln.Artifact.get(key=key_obs).load(mute=True).to_parquet(path2obs)
             ln.setup.disconnect()
         else:
             logger.info('An .obs file already exists')
@@ -134,7 +134,7 @@ def download_save_from_lamindb(key_adata: str = None,
 
             logger.info('Download and save a .var file to %s', path2var)
             connect2lamin_with_retry(instance)
-            ln.Artifact.get(key=key_var).load().to_parquet(path2var)
+            ln.Artifact.get(key=key_var).load(mute=True).to_parquet(path2var)
             ln.setup.disconnect()
         else:
             logger.info('A .var file already exists')

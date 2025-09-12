@@ -449,10 +449,12 @@ class Pseudobulk:
     def log_filtering_stats(self,
                         n_obs_prev: int,
                         n_var_prev: int,
-                        n_perturb_prev: int,
+                        n_ct_prev: int,
+                        n_pa_prev: int,
                         n_obs: int,
                         n_var: int,
-                        n_perturb: int,
+                        n_ct: int,
+                        n_pa: int
                        ) -> None:
 
         '''
@@ -463,22 +465,27 @@ class Pseudobulk:
 
         Parameters:
         -----------
-        n_obs_prev: int
+        n_obs_prev : int
             The number of cells before filtering
-        n_var_prev: int
+        n_var_prev : int
             The number of genes before filtering
-        n_perturb_prev: int
-            The number of unique perturbations before filtering
+        n_ct_prev : int
+            The number of unique cell types before filtering
+        n_pa_prev : int
+            The number of unique perturbagens before filtering
         n_obs: int
-            The number of cells before filtering
+            The number of cells after filtering
         n_var: int
-            The number of genes before filtering
-        n_perturb: int
-            The number of unique perturbations before filtering
+            The number of genes after filtering
+        n_ct: int
+            The number of unique cell types after filtering
+        n_pa : int
+            The number of unique perturbagens after filtering
         '''
         logger.info('    n_obs: %d --> %d', n_obs_prev, n_obs)
         logger.info('    n_var: %d --> %d', n_var_prev, n_var)
-        logger.info('    n_perturb: %d --> %d', n_perturb_prev, n_perturb)
+        logger.info('    n_ct: %d --> %d', n_ct_prev, n_ct)
+        logger.info('    n_pa: %d --> %d', n_pa_prev, n_pa)
 
     def compute_filtering_stats(self,
                         adata: AnnData,
@@ -490,8 +497,8 @@ class Pseudobulk:
         '''
         A function to obtain the statistics after each step 
         of filtering: the number of cells (n_obs), 
-        the number of genes (n_var), the number of perturbations
-        (n_perturb) which is based on cell_type and perturbagen 
+        the number of genes (n_var), the number of cell types (n_ct), 
+        the number of perturbagens (n_pa) 
         by default.
         
         Parameters:
@@ -500,12 +507,13 @@ class Pseudobulk:
             An input scRNA-seq dataset.
         perturbation_cols : List
             Columns to take into account while computing 
-            the number of perturbations.
+            perturbation statistics.
         '''
 
         n_obs, n_var = adata.shape
-        n_perturb = adata.obs.value_counts(perturbation_cols).shape[0]
-        return n_obs, n_var, n_perturb
+        n_ct = adata.obs.value_counts(perturbation_cols[0]).shape[0]
+        n_pa = adata.obs.value_counts(perturbation_cols[1]).shape[0]
+        return n_obs, n_var, n_ct, n_pa
 
     def prefilter(self, adata: AnnData) -> AnnData:
         '''
@@ -530,40 +538,46 @@ class Pseudobulk:
             np.zeros(adata.obs.shape[0], dtype=bool), index=adata.obs.index)
         if self.filter_low_counts:
             logger.info('Filter by counts')
-            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata[~is_outlier])
+            n_obs_prev, n_var_prev, n_ct_prev, n_pa_prev = self.compute_filtering_stats(adata[~is_outlier])
             is_outlier = self.filter_by_counts(adata)
-            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata[~is_outlier])
+            n_obs, n_var, n_ct, n_pa = self.compute_filtering_stats(adata[~is_outlier])
             self.log_filtering_stats(
                         n_obs_prev, 
                         n_var_prev,
-                        n_perturb_prev,
+                        n_ct_prev,
+                        n_pa_prev,
                         n_obs,
                         n_var,
-                        n_perturb)
+                        n_ct,
+                        n_pa)
         if self.filter_nans:
             logger.info('Filter by nans')
-            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata[~is_outlier])
+            n_obs_prev, n_var_prev, n_ct_prev, n_pa_prev = self.compute_filtering_stats(adata[~is_outlier])
             is_outlier = is_outlier | self.filter_by_nans(adata)
-            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata[~is_outlier])
+            n_obs, n_var, n_ct, n_pa = self.compute_filtering_stats(adata[~is_outlier])
             self.log_filtering_stats(
                         n_obs_prev,
                         n_var_prev,
-                        n_perturb_prev,
+                        n_ct_prev,
+                        n_pa_prev,
                         n_obs,
                         n_var,
-                        n_perturb)
+                        n_ct,
+                        n_pa)
         if self.filter_malat1:
             logger.info('Filter by humanMALAT1')
-            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata[~is_outlier])
+            n_obs_prev, n_var_prev, n_ct_prev, n_pa_prev = self.compute_filtering_stats(adata[~is_outlier])
             is_outlier = is_outlier | self.filter_by_humanMALAT1(adata)
-            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata[~is_outlier])
+            n_obs, n_var, n_ct, n_pa = self.compute_filtering_stats(adata[~is_outlier])
             self.log_filtering_stats(
                         n_obs_prev,
                         n_var_prev,
-                        n_perturb_prev,
+                        n_ct_prev,
+                        n_pa_prev,
                         n_obs,
                         n_var,
-                        n_perturb)
+                        n_ct,
+                        n_pa)
         adata = adata[~is_outlier]
         self.filter_cells_(adata)
         self.filter_genes_(adata)
@@ -748,18 +762,20 @@ class Pseudobulk:
         '''
         if len(self.filter_cells_params.keys()) != 0:
             logger.info('Filter cells')
-            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata)
+            n_obs_prev, n_var_prev, n_ct_prev, n_pa_prev = self.compute_filtering_stats(adata)
             for key in self.filter_cells_params.keys():
                 kwarg = dict({key: self.filter_cells_params[key]})
                 sc.pp.filter_cells(adata, **kwarg, inplace=True)
-            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata)
+            n_obs, n_var, n_ct, n_pa = self.compute_filtering_stats(adata)
             self.log_filtering_stats(
                         n_obs_prev, 
                         n_var_prev,
-                        n_perturb_prev,
+                        n_ct_prev,
+                        n_pa_prev,
                         n_obs,
                         n_var,
-                        n_perturb)
+                        n_ct,
+                        n_pa)
 
     def filter_genes_(self, adata: AnnData) -> None:
         '''
@@ -773,18 +789,20 @@ class Pseudobulk:
         '''
         if len(self.filter_genes_params.keys()) != 0:
             logger.info('Filter genes')
-            n_obs_prev, n_var_prev, n_perturb_prev = self.compute_filtering_stats(adata)
+            n_obs_prev, n_var_prev, n_ct_prev, n_pa_prev = self.compute_filtering_stats(adata)
             for key in self.filter_genes_params.keys():
                 kwarg = dict({key: self.filter_genes_params[key]})
                 sc.pp.filter_genes(adata, **kwarg, inplace=True)
-            n_obs, n_var, n_perturb = self.compute_filtering_stats(adata)
+            n_obs, n_var, n_ct, n_pa = self.compute_filtering_stats(adata)
             self.log_filtering_stats(
                         n_obs_prev,
                         n_var_prev,
-                        n_perturb_prev,
+                        n_ct_prev,
+                        n_pa_prev,
                         n_obs,
                         n_var,
-                        n_perturb)
+                        n_ct,
+                        n_pa)
 
     def define_sample_group_cols(self, adata: AnnData) -> None:
         '''
@@ -807,7 +825,7 @@ class Pseudobulk:
                 An input Series column
             '''
             try:
-                pd.to_numeric(df_s, downcast='float')
+                return pd.to_numeric(df_s, downcast='float')
             except Exception:
                 return df_s
 
@@ -887,6 +905,7 @@ class Pseudobulk:
                 return cache[drug_name]
 
             cnt = 0
+            cid = None
             while cnt < n_retries:
                 try:
                     compounds = pcp.get_compounds(drug_name, 'name')
@@ -896,8 +915,8 @@ class Pseudobulk:
                 except Exception as e:
                     if (isinstance(e, pcp.PubChemHTTPError)
                             or isinstance(e, pcp.TimeoutError)
-                            or isinstance(e, pcp.ServerError)) \
-                            and ((e.code == 503) or (e.code == 504)):
+                            or isinstance(e, pcp.ServerError)
+                            or isinstance(e, pcp.ServerBusyError)):
                         logger.warning(
                             "PubChem lookup failed for '%s': %s. Retry %d.", drug_name, str(e), cnt)
                         cnt += 1
@@ -905,7 +924,6 @@ class Pseudobulk:
                     else:
                         logger.warning(
                             "PubChem lookup failed for '%s': %s", drug_name, str(e))
-                        cid = None
                         break
 
             cache[drug_name] = cid

@@ -10,6 +10,8 @@ VALID_CHOICES=(
         "tahoe"
 )
 
+mkdir -p $LOGS_DIR
+
 while getopts ":sd:h" opt; do
   	case $opt in
 		h)
@@ -33,12 +35,24 @@ if [[ " ${VALID_CHOICES[*]} " != *" $DATASET "* ]]; then
         echo "Error: -d must be set up and one of: ${VALID_CHOICES[*]}"
 fi
 
+if [[ "$ARG" == "subsampling" ]]; then
+	SUBDIR="subsample"
+else
+	SUBDIR="full"
+
+fi
 
 if [[ "$DATASET" == "sciplex" ]]; then
-  	sbatch -e ${LOGS_DIR}/pseudobulk_sciplex.%j.err -o ${LOGS_DIR}/pseudobulk_sciplex.%j.out ./pipelines/sciplex/sciplex_pseudobulking.sh $ARG
+	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+  	sbatch -e ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_sciplex.%j.err \
+		-o ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_sciplex.%j.out \
+		./pipelines/sciplex/sciplex_pseudobulking.sh $ARG
 
 elif [[ "$DATASET" == "tahoe" ]]; then
-    	./pipelines/tahoe/tahoe_pseudobulking_parallel.sh $ARG > ${LOGS_DIR}/pseudobulk_tahoe.out 2>${LOGS_DIR}/pseudobulk_tahoe.err &
+	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+    	./pipelines/tahoe/tahoe_pseudobulking_parallel.sh $ARG \
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_tahoe.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_tahoe.err &
 else
     	echo "Invalid choice"
 fi

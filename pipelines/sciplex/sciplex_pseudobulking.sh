@@ -23,8 +23,8 @@ else
 fi
 
 NAME="srivatsan20_sciplex3"
-SC_DIR=./data/Sciplex/raw
-BULK_DATA=./data/Sciplex/pseudobulk/${SUBDIR}/${NAME}
+SC_DIR=./data/sciplex/raw
+BULK_DATA=./data/sciplex/pseudobulk/${SUBDIR}/${NAME}
 ENV_DIR=./venv
 
 eval "$(mamba shell hook --shell bash)"

@@ -1,0 +1,3 @@
+2025-09-12 22:26:04 | [WARNING] PubChem lookup failed for 'Pravastatin (sodium)': PubChem HTTP Error 503 PUGREST.ServerBusy: Too many requests or server too busy. Retry 0.
+2025-09-12 22:26:09 | [WARNING] PubChem lookup failed for 'Pravastatin (sodium)': PubChem HTTP Error 503 PUGREST.ServerBusy: Too many requests or server too busy. Retry 1.
+2025-09-12 22:26:30 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
