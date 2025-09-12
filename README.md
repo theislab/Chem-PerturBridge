@@ -1,6 +1,7 @@
 You can run scripts on the HPC cluster with the workload manager (SLURM)
 
 **NB!** Before running some bash scripts, you may need to run `chmod u+x ./path/script.sh` before their execution.
+
 **NB!** After the first trial of fetching the dataset from lamindb with the pipeline, the full version of data is downloaded into your ~/.cache directory as well as the version from your request (full/subsample) is downloaded into the specified directory. Then, during the next re-runs the data is retrieved from ~/.cache synchronization to the external database.
 
 ### 1. Set up prerequisites
@@ -86,27 +87,11 @@ Currently, scripts have pre-defined parameters.
 
 ### 3. Run scripts 
 
-**3.1** To start a SLURM-based pipeline, you need to execute
+**3.1** To start a SLURM-based pipeline, you need to execute a wrapper script (`run_pseudobulking.sh`), which allow to run dataset-specific pseudobulking pipelines:
 
-**For Sci-plex**
+You can execute it with following arguments:
 ```
-cd /op3_v2
-sbatch -e ./logs/pseudobulk_sciplex.%j.err -o ./logs/pseudobulk_sciplex.%j.out ./pipelines/sciplex/sciplex_pseudobulking.sh
-```
-
-**For Tahoe**
-```
-cd /op3_v2
-./pipelines/tahoe/tahoe_pseudobulking_parallel.sh > ./logs/pseudobulk_tahoe.out 2>./logs/pseudobulk_tahoe.err &
-```
-**NB!** If you want to run on the subsample you need to add `subsampling` right after the bash script. For example:
-```
-./pipelines/tahoe/tahoe_pseudobulking_parallel.sh subsampling > ~/logs/pseudobulk_tahoe.out 2>~/logs/pseudobulk_tahoe.err &
-```
-
-**3.2** The script `run_pseudobulking.sh` is a wrapper for the commands from **3.1**, which allow to run dataset-specific pseudobulking pipelines. You can run it with following arguments:
-```
--s if this flag is included, then the script is executed for subsample of the dataset, default=false
+-s if this flag is included, then the script is executed for a subsample of a dataset, default=false
 -h if this flag is included, then the help is printed, default=false
 -d it is a required flag speifying which dataset should be processed: sciplex | tahoe ...
 ```
