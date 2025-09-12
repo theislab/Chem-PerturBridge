@@ -1,6 +1,8 @@
 You can run scripts on the HPC cluster with the workload manager (SLURM)
 
 **NB!** Before running some bash scripts, you may need to run `chmod u+x ./path/script.sh` before their execution.
+**NB!** After the first trial of fetching the dataset from lamindb with the pipeline, the full version of data is downloaded into your ~/.cache directory as well as the version from your request (full/subsample) is downloaded into the specified directory. Then, during the next re-runs the data is retrieved from ~/.cache synchronization to the external database.
+
 ### 1. Set up prerequisites
 Before executing scripts we need to install packages into the certain environment. Here we provide the illustrative scripts for using a package manager called **Mamba**. Also you can adapt our scripts to use other managers such as Micromamba or Conda.
 
