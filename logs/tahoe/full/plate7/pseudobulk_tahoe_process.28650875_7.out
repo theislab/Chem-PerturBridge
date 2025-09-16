@@ -1,0 +1,28 @@
+2025-09-15 05:47:34 | [INFO] Read data from ./data/tahoe/raw/plate7.h5ad
+2025-09-15 05:51:51 | [INFO] Read data from ./data/tahoe/raw/plate7_obs.parquet
+2025-09-15 05:52:00 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+2025-09-15 05:52:00 | [INFO] Merge datasets
+2025-09-15 05:52:08 | [INFO] Standardize anndata
+2025-09-15 05:52:16 | [INFO] Mapping drugs to PubChem idx
+2025-09-15 05:52:19 | [INFO] Looking up 94 new perturbations on PubChem...
+2025-09-15 05:53:15 | [INFO] Determine groupby fields
+2025-09-15 05:53:15 | [INFO] Initial adata size: (5692117, 62710)
+2025-09-15 05:53:15 | [INFO] Filter by counts
+2025-09-15 05:53:30 | [INFO]     n_obs: 5692117 --> 5280327
+2025-09-15 05:53:30 | [INFO]     n_var: 62710 --> 62710
+2025-09-15 05:53:30 | [INFO]     n_ct: 50 --> 50
+2025-09-15 05:53:30 | [INFO]     n_pa: 94 --> 94
+2025-09-15 05:53:30 | [INFO] Filter by nans
+2025-09-15 05:53:44 | [INFO]     n_obs: 5280327 --> 5280327
+2025-09-15 05:53:44 | [INFO]     n_var: 62710 --> 62710
+2025-09-15 05:53:44 | [INFO]     n_ct: 50 --> 50
+2025-09-15 05:53:44 | [INFO]     n_pa: 94 --> 94
+2025-09-15 05:53:44 | [INFO] Filter by humanMALAT1
+2025-09-15 05:54:25 | [INFO]     n_obs: 5280327 --> 5274369
+2025-09-15 05:54:25 | [INFO]     n_var: 62710 --> 62710
+2025-09-15 05:54:25 | [INFO]     n_ct: 50 --> 50
+2025-09-15 05:54:25 | [INFO]     n_pa: 94 --> 94
+2025-09-15 05:54:32 | [INFO] Final adata size: (5274369, 62710)
+2025-09-15 05:54:32 | [INFO] Build pseudobulk
+2025-09-15 07:47:55 | [INFO] Process pseudobulk
+2025-09-15 07:48:06 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate7.h5ad

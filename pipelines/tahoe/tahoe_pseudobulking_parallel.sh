@@ -25,7 +25,7 @@ PARTITION=cpu_p
 
 echo "> Download dataset"
 sbatch -W -J pseudobulk_tahoe \
-	-t 10:00:00 \
+	-t 3:00:00 \
 	-n 1 \
 	--array=1-14 \
 	--qos=${QOS} \
@@ -74,7 +74,7 @@ echo "> Pseudobulking is done"
 
 echo "> Running combining datasets"
 sbatch -W -J pseudobulk_tahoe \
-       -t 2:00:00 \
+       -t 3:00:00 \
        -n 1 \
        --qos=${QOS} \
        --mem=250G \

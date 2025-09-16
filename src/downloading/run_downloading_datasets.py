@@ -53,7 +53,7 @@ def download_save_from_lamindb(key_adata: str = None,
             try:
                 ln.connect(instance)
                 return None
-            except OperationalError as e:
+            except Exception as e:
                 logger.error(
                     'Connection failed: %s, retried %d times', str(e), retries)
                 retries += 1

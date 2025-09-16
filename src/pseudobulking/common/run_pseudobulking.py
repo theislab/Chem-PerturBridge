@@ -1,7 +1,6 @@
 import os
 import json
 import argparse
-import psutil
 import resource
 import math
 import importlib
@@ -33,8 +32,7 @@ def setMemoryLimit(n_bytes: int):
         resource.setrlimit(resource.RLIMIT_DATA, (n_bytes, hard))
 
 
-setMemoryLimit(math.ceil(psutil.virtual_memory().total * MEMORY_RATIO))
-
+setMemoryLimit(math.ceil(int(os.environ.get("SLURM_MEM_PER_NODE")) * 1024 * 1024 * MEMORY_RATIO))
 
 def create_pseudobulk(
         args: Dict[str, Optional[str | int |

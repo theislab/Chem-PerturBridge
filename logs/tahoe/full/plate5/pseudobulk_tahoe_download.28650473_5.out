@@ -1,0 +1,8 @@
+2025-09-14 13:19:25 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate5.h5ad
+[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+[92m→[0m connected lamindb: laminlabs/pertdata
+2025-09-14 13:50:30 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate5_obs.parquet
+[92m→[0m connected lamindb: laminlabs/pertdata
+2025-09-14 13:51:51 | [INFO] A .var file already exists
+2025-09-14 13:51:51 | [INFO] All data is saved
