@@ -1,0 +1,10 @@
+{  
+"input": "./data/sciplex/pseudobulk/full/srivatsan20_sciplex3.h5ad",
+"output_dir": "./data/sciplex/deg_data",
+"test_mode":  true,
+"max_cell_types": 3,
+"max_perturbations": 3,
+"max_genes": 1000,           
+"specific_times": 24,
+"specific_perturbagens": null
+}
