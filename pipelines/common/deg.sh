@@ -82,7 +82,6 @@ if ! par_process=$(jq -e ".$DEG_PARAMETERS.par_process" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-echo "$par_process"
 python3 -m src.deg.run_processing_pseudobulk --config <par_process
 
 
@@ -92,6 +91,5 @@ if ! par_deg=$(jq -e ".$DEG_PARAMETERS.par_deg" $CONFIG); then
 fi
 
 echo "$par_deg"
-echo "$FILT $ARG $(jq -e ".$DEG_PARAMETERS.par_deg" $CONFIG)"
 Rscript ./src/deg/run_deg.r --min_cells $FILT $ARG --config <par_deg
 echo "> DEG calculations are completed"
