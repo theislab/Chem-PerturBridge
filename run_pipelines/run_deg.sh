@@ -3,7 +3,8 @@
 set -e
 
 LOGS_DIR=./logs
-ARG=""
+ARG_S=""
+ARG_F=""
 DATASET=""
 PAR=""
 FILT=""
@@ -31,7 +32,7 @@ while getopts ":sd:p:f:h" opt; do
                         exit 0
                         ;;
     		s)
-      			ARG="subsampling"
+      			ARG_S="subsampling"
       			;;
 		p)
 			PAR=$OPTARG
@@ -55,10 +56,15 @@ if [[ " ${DEG_PARAMETERS[*]} " != *" $PAR "* ]]; then
 fi
 
 if ! [[ "$FILT" =~ ^[0-9]+$ ]] && ! [ -z "$FILT" ]; then
-   echo "Error: Not a number" >&2; exit 1
+  	echo "Error: Not a number" >&2; exit 1
+else
+	if [[ "$FILT" =~ ^[0-9]+$ ]]; then
+		ARG_F="-f $FILT"
+	fi
 fi
 
-if [[ "$ARG" == "subsampling" ]]; then
+
+if [[ "$ARG_S" == "subsampling" ]]; then
 	SUBDIR="subsample"
 else
 	SUBDIR="full"
@@ -68,5 +74,4 @@ fi
 mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
 sbatch -e ${LOGS_DIR}/${DATASET}/${SUBDIR}/deg_${DATASET}.%j.err \
 	-o ${LOGS_DIR}/${DATASET}/${SUBDIR}/deg_${DATASET}.%j.out \
-	./pipelines/common/deg.sh $ARG -p $PAR -f $FILT -c ./pipelines/${DATASET}/configs/${DATASET}_deg.json
-
+	./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F -c ./pipelines/${DATASET}/configs/${DATASET}_deg.json

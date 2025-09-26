@@ -77,19 +77,18 @@ eval "$(mamba shell hook --shell bash)"
 mamba activate ${ENV_DIR}
 
 
-echo "> Preprocess pseudobulk"
-if ! par_process=$(jq -e ".$DEG_PARAMETERS.par_process" $CONFIG); then
+echo "> Preprocess pseudobulk with a $PAR parameter"
+if ! par_process=$(jq -e ".$PAR.par_process" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-python3 -m src.deg.run_processing_pseudobulk --config <par_process
+python3 -m src.deg.run_processing_pseudobulk --config <(echo "$par_process" | jq ".")
 
 
-echo "> Run DEG"
-if ! par_deg=$(jq -e ".$DEG_PARAMETERS.par_deg" $CONFIG); then
+echo "> Run DEG with a $PAR parameter"
+if ! par_deg=$(jq -e ".$PAR.par_deg" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-echo "$par_deg"
-Rscript ./src/deg/run_deg.r --min_cells $FILT $ARG --config <par_deg
+#Rscript ./src/deg/run_deg.r --min_cells $FILT $ARG --config <(echo "$par_deg" | jq ".")
 echo "> DEG calculations are completed"
