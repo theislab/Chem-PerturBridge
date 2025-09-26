@@ -3,6 +3,7 @@ import re
 from typing import List, Any, Dict, Optional
 import scanpy as sc
 from anndata import AnnData
+import pandas as pd
 
 def standardize_obs_sciplex(adata: AnnData) -> AnnData:
     '''
@@ -39,6 +40,8 @@ def standardize_obs_sciplex(adata: AnnData) -> AnnData:
                   == 'control', 'perturbagen'] = 'DMSO'
     adata.obs['perturbagen'] = adata.obs['perturbagen'].cat.remove_categories([
                                                                               'control'])
+    adata.obs = adata.obs.drop(columns=['pert_time'])
+    adata.obs['pert_time'] = adata.obs['time'].apply(lambda x: str(x) + 'h' if not pd.isna(x) else x)
     adata.obs['library'] = None
     adata.obs['stimulation'] = None
     adata.obs['guide'] = None
