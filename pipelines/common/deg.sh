@@ -8,26 +8,90 @@
 
 set -e
 
-if [ "$1" = "subsampling" ]; then
+MODE=""
+PAR=""
+FILT=""
+CONFIG=""
+ENV_DIR=./venv
+
+DEG_PARAMETERS=(
+        "group_all_replicates"
+        "separate_replicates"
+)
+
+for item in "$@"; do
+	shift
+	case "$item" in
+		subsampling)   set -- "$@" "-s" ;;
+		*)        set -- "$@" "$item"
+	esac
+done
+
+while getopts ":sp:f:c:h" opt; do
+        case $opt in
+                h)
+                        echo "Run: $0 [-s] [-h] [-f] -p (parameters: ${DEG_PARAMETERS[*]})"
+                        echo "  -s Subsample of a dataset for debugging, default=false"
+                        echo "  -h Help option, default=false"
+                        echo "  -f Min number of cells in pseudobulk to filter samples with the lower number"
+                        echo "  -p Parameter for DEG pipeline, required"
+			echo "  -c Path to the config file"
+                        exit 0
+                        ;;
+                s)
+                        MODE="subsampling"
+                        ;;
+                p)
+                        PAR=$OPTARG
+                        ;;
+                f)
+                        FILT=$OPTARG
+                        ;;
+		c)	CONFIG=$OPTARG
+        esac
+done
+
+if [[ " ${DEG_PARAMETERS[*]} " != *" $PAR "* ]]; then
+        echo "Error: -p must be set up and one of: ${DEG_PARAMETERS[*]}" >&2; exit 1
+fi
+
+if ! [[ "$FILT" =~ ^[0-9]+$ ]] && ! [ -z "$FILT" ]; then
+   echo "Error: Not a number" >&2; exit 1
+fi
+
+
+if [ "$ARG" = "subsampling" ]; then
 	echo "> Work with a subsample"
 	SUFFIX="_subsample"
 	SUBDIR="subsample"
 	ARG="--subsampling"
 
-else	
+else
 	echo "> Work with a full version"
 	SUFFIX=""
 	SUBDIR="full"
 	ARG=""
 fi
 
-ENV_DIR=./venv
-
 eval "$(mamba shell hook --shell bash)"
 mamba activate ${ENV_DIR}
 
+
+echo "> Preprocess pseudobulk"
+if ! par_process=$(jq -e ".$DEG_PARAMETERS.par_process" $CONFIG); then
+  echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
+fi
+
+echo "$par_process"
+python3 -m src.deg.run_processing_pseudobulk --config <par_process
+
+
 echo "> Run DEG"
-Rscript ./src/deg/run_deg.r --config $2 $ARG
+if ! par_deg=$(jq -e ".$DEG_PARAMETERS.par_deg" $CONFIG); then
+  echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
+fi
 
+echo "$par_deg"
+echo "$FILT $ARG $(jq -e ".$DEG_PARAMETERS.par_deg" $CONFIG)"
+Rscript ./src/deg/run_deg.r --min_cells $FILT $ARG --config <par_deg
 echo "> DEG calculations are completed"
-

@@ -33,9 +33,6 @@ def create_dir_if_not_exists(file_output: str) -> None:
         except FileExistsError as e:
             logger.warning('%s', str(e))
 
-def filter_cells(padata: ad.AnnData):
-    pass
-
 def add_perturbation_label_to_padata(file_input: str,
                                      file_output: str,
                                      design_param: str,
