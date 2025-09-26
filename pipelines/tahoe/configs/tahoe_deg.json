@@ -1,10 +1,33 @@
-{  
-"input": "./data/tahoe/pseudobulk/full/tahoe.h5ad",
-"output_dir": "./data/tahoe/deg_data",
-"test_mode":  true,
-"max_cell_types": 3,
-"max_perturbations": 3,
-"max_genes": 1000,           
-"specific_times": 24,
-"specific_perturbagens": null
+{	"process_sep_rep": {
+		"input": "./data/tahoe/pseudobulk/full/tahoe.h5ad",
+		"output": "./data/tahoe/pseudobulk_processed/tahoe_sep_rep.h5ad",
+		"design_param": "separate_replicates"
+		},
+	"process_group_rep": {
+		"input": "./data/tahoe/pseudobulk/full/tahoe.h5ad",
+		"output": "./data/tahoe/pseudobulk_processed/tahoe_group_rep.h5ad",
+		"design_param": "group_replicates"
+		},
+	"deg_sep_rep": {
+		"input": "./data/tahoe/pseudobulk_processed/tahoe_sep_rep.h5ad",
+                "output_dir": "./data/tahoe/deg_data/sep_rep",
+		"design_param": "separate_replicates",
+                "subsampling":  true,
+                "max_cell_types": 3,
+                "max_perturbations": 3,
+                "max_genes": 1000,
+                "specific_times": 24,
+                "specific_perturbagens": null
+		},
+	"deg_group_rep": {
+		"input": "./data/tahoe/pseudobulk_processed/tahoe_group_rep.h5ad",
+		"output_dir": "./data/tahoe/deg_data/group_rep",
+		"design_param": "group_replicates",
+		"subsampling":  true,
+		"max_cell_types": 3,
+		"max_perturbations": 3,
+		"max_genes": 1000,           
+		"specific_times": 24,
+		"specific_perturbagens": null
+		}
 }

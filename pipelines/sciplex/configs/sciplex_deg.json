@@ -1,10 +1,33 @@
-{  
-"input": "./data/sciplex/pseudobulk/full/srivatsan20_sciplex3.h5ad",
-"output_dir": "./data/sciplex/deg_data",
-"test_mode":  true,
-"max_cell_types": 3,
-"max_perturbations": 3,
-"max_genes": 1000,           
-"specific_times": 24,
-"specific_perturbagens": null
+{	"process_sep_rep": {
+		"input": "./data/sciplex/pseudobulk/full/srivatsan20_sciplex3.h5ad",
+		"output": "./data/sciplex/pseudobulk_processed/srivatsan20_sciplex3_sep_rep.h5ad",
+		"design_param": "separate_replicates"
+		},
+	"process_group_rep": {
+		"input": "./data/sciplex/pseudobulk/full/srivatsan20_sciplex3.h5ad",
+		"output": "./data/sciplex/pseudobulk_processed/srivatsan20_sciplex3_group_rep.h5ad",
+		"design_param": "group_replicates"
+		},
+	"deg_sep_rep": {
+		"input": "./data/sciplex/pseudobulk_processed/srivatsan20_sciplex3_sep_rep.h5ad",
+                "output_dir": "./data/sciplex/deg_data/sep_rep",
+		"design_param": "separate_replicates",
+                "subsampling":  true,
+                "max_cell_types": 3,
+                "max_perturbations": 3,
+                "max_genes": 1000,
+                "specific_times": 24,
+                "specific_perturbagens": null
+		},
+	"deg_group_rep": {
+		"input": "./data/sciplex/pseudobulk_processed/srivatsan20_sciplex3_group_rep.h5ad",
+		"output_dir": "./data/sciplex/deg_data/group_rep",
+		"design_param": "group_replicates",
+		"subsampling":  true,
+		"max_cell_types": 3,
+		"max_perturbations": 3,
+		"max_genes": 1000,           
+		"specific_times": 24,
+		"specific_perturbagens": null
+		}
 }
