@@ -2,13 +2,12 @@
 		"par_process": {
 			"input": "./data/sciplex/pseudobulk/full/srivatsan20_sciplex3.h5ad",
                 	"output": "./data/sciplex/pseudobulk_processed/srivatsan20_sciplex3_group_rep.h5ad",
-                	"design_param": "group_replicates"
+                	"design_param": "group_all_replicates"
 			},
 		"par_deg": {
                 	"input": "./data/sciplex/pseudobulk_processed/srivatsan20_sciplex3_group_rep.h5ad",
                 	"output_dir": "./data/sciplex/deg_data/group_rep",
-                	"design_param": "group_replicates",
-                	"subsampling":  true,
+                	"design_param": "group_all_replicates",
                 	"max_cell_types": 3,
                 	"max_perturbations": 3,
                 	"max_genes": 1000,
@@ -29,7 +28,6 @@
                 	"input": "./data/sciplex/pseudobulk_processed/srivatsan20_sciplex3_sep_rep.h5ad",
                 	"output_dir": "./data/sciplex/deg_data/sep_rep",
                 	"design_param": "separate_replicates",
-                	"subsampling":  true,
                 	"max_cell_types": 3,
                 	"max_perturbations": 3,
                 	"max_genes": 1000,

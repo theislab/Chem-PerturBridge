@@ -12,7 +12,9 @@ MODE=""
 PAR=""
 FILT=""
 CONFIG=""
-ENV_DIR=./venv
+ARG_S=""
+ARG_F=""
+ENV_DIR=~/deg_venv
 
 DEG_PARAMETERS=(
         "group_all_replicates"
@@ -57,20 +59,24 @@ fi
 
 if ! [[ "$FILT" =~ ^[0-9]+$ ]] && ! [ -z "$FILT" ]; then
    echo "Error: Not a number" >&2; exit 1
+else
+   if [[ "$FILT" =~ ^[0-9]+$ ]]; then
+   	ARG_F="--min_cells $FILT"
+   fi
 fi
 
 
-if [ "$ARG" = "subsampling" ]; then
+if [ "$MODE" = "subsampling" ]; then
 	echo "> Work with a subsample"
 	SUFFIX="_subsample"
 	SUBDIR="subsample"
-	ARG="--subsampling"
+	ARG_S="--subsampling"
 
 else
 	echo "> Work with a full version"
 	SUFFIX=""
 	SUBDIR="full"
-	ARG=""
+	ARG_S=""
 fi
 
 eval "$(mamba shell hook --shell bash)"
@@ -82,13 +88,13 @@ if ! par_process=$(jq -e ".$PAR.par_process" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-python3 -m src.deg.run_processing_pseudobulk --config <(echo "$par_process" | jq ".")
+#python3 -m src.deg.run_processing_pseudobulk --config <(echo "$par_process" | jq ".")
 
 
-echo "> Run DEG with a $PAR parameter"
+echo "> Run DGE with a $PAR parameter"
 if ! par_deg=$(jq -e ".$PAR.par_deg" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-#Rscript ./src/deg/run_deg.r --min_cells $FILT $ARG --config <(echo "$par_deg" | jq ".")
-echo "> DEG calculations are completed"
+Rscript ./src/deg/run_deg.R $ARG_F $ARG_S --config <(echo "$par_deg" | jq ".")
+echo "> DGE calculations are completed"
