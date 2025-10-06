@@ -13,18 +13,25 @@ def create_perturbation_label(is_control: bool,
                               plate: str,
                               design_param: str) -> str:
     
-    if is_control:
-        if design_param == 'group_all_replicates':
+    if design_param == 'group_all_replicates':
+        if is_control:
             return str(pert) \
                 + '_' + str(time) + 'h'
-        elif design_param == 'separate_replicates':
+        else:
+            return str(pert) \
+                + '_' + str(dose) \
+                + 'uM_' + str(time) + 'h'
+    elif design_param == 'separate_replicates':
+        if is_control:
             return str(pert) \
                 + '_' + str(time) + 'h' \
                 + '_' + str(plate)
-    else:
-        return str(pert) \
-            + '_' + str(dose) \
-            + 'uM_' + str(time) + 'h'
+        else:
+            return str(pert) \
+                + '_' + str(dose) \
+                + 'uM_' + str(time) + 'h' \
+                + '_' + str(plate)
+
 
 def create_dir_if_not_exists(file_output: str) -> None:
     dir_output = os.path.dirname(file_output)
