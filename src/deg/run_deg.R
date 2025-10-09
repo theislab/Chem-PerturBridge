@@ -12,7 +12,7 @@ suppressPackageStartupMessages({
   library(jsonlite)
 })
 
-source("subsampling.R")
+source("/src/deg/subsampling.R")
 # helper to sanitize names for model.matrix/contrasts
 clean <- function(x) gsub("[^[:alnum:]_]", "_", x)
 
@@ -84,24 +84,13 @@ filter_controls <- function(ad,
 }
 
 find_controls <- function(control_obs,
-                          time,
-                          design_param,
-                          plate=NULL) {
+                          time) {
     
-    if (design_param == "group_all_replicates") {
-        select_ctrs <- (control_obs$pert_time_h == time)
-        if (!any(select_ctrs)) {
-            warning("No control found for time ", pert_time_h, "h, skipping ", raw_cond)
-            return(NULL)
-            }
-        
-        }
-    else if (design_param == "separate_replicates") {
-        select_ctrs <- (control_obs$pert_time_h == time) & (control_obs$plate == plate)
-        if (!any(select_ctrs)) {
-            warning("No control found for time ", pert_time_h, "h, and plate ", plate, ", skipping ", raw_cond)
-            return(NULL)
-            }
+    select_ctrs <- (control_obs$pert_time_h == time)
+
+    if (!any(select_ctrs)) {
+        warning("No control found for time ", pert_time_h, "h, skipping ", raw_cond)
+        return(NULL)
         }
     
     raw_controls <- unique(control_obs[select_ctrs, ]$cond)
@@ -154,8 +143,7 @@ derive_top_table <- function(fit,
 
 run_contrasts <- function(fit,
                           control_obs,
-                          treated_obs,
-                          design_param) {
+                          treated_obs) {
     # run one contrast per treated cond vs. the matching control@same time
     n_contrasts <- nrow(treated_obs)
     contrast_num <- 0
@@ -167,9 +155,7 @@ run_contrasts <- function(fit,
       }
 
       raw_controls <- find_controls(control_obs,
-                    pert_time_h,
-                    design_param,
-                    plate)
+                    pert_time_h)
     
       # Check if control exists for this time point
       if (is.null(raw_controls)) {
@@ -196,23 +182,14 @@ run_contrasts <- function(fit,
 }
 
 run_dge <- function(ad,
-                    obs,
-                    design_param) {
+                    obs) {
   # build DGEList + design
   counts <- Matrix::t(ad$X)
   dge    <- DGEList(counts=counts)
-  if (design_param == "group_all_replicates") {
-    design <- model.matrix(
-      ~ 0 + cond + plate,
-      data = obs
-      )
-    }
-  else if (design_param == "separate_replicates") {
-    design <- model.matrix(
-      ~ 0 + cond,
-      data = obs
-      )
-    }
+  design <- model.matrix(
+    ~ 0 + cond + plate,
+    data = obs
+    )
   # filter genes and normalize
   keep <- filterByExpr(dge, design)
   dge  <- dge[keep, , keep.lib.sizes=FALSE] %>% calcNormFactors()
@@ -306,9 +283,6 @@ run_dge_pipeline <- function(par) {
     # subset to this cell_type
     ad  <- adata[adata$obs$cell_type == cl, ]
     ad <- filter_controls(ad, "pert_time_h")
-    if (par$design_param == "separate_replicates") {
-        ad <- filter_controls(ad, "plate")
-    }
     
     obs <- ad$obs %>%
       mutate(
@@ -318,16 +292,11 @@ run_dge_pipeline <- function(par) {
   
     # Check for required controls
     check_for_controls(obs, "pert_time_h")
-    if (par$design_param == "separate_replicates") {
-        check_for_controls(obs, "plate")
-    }
   
     cond <- obs$cond
     fit <- run_dge(ad,
-            obs,
-            par$design_param)
+            obs)
   
-    
     # separate the control and treated conds (we won't DE on control-vs-control)
     control_obs <- obs %>%
         distinct(cond, .keep_all = TRUE) %>%
@@ -339,8 +308,7 @@ run_dge_pipeline <- function(par) {
 
     de_res <- run_contrasts(fit,
                           control_obs,
-                          treated_obs,
-                          par$design_param)
+                          treated_obs)
     
     # Skip if no valid DE results
     if (is.null(de_res) || nrow(de_res) == 0) {
@@ -362,8 +330,10 @@ run_dge_pipeline <- function(par) {
     layers <- get_layers(de_df)
   
     # carry over global uns if you like
+    
     new_uns <- adata$uns
-  
+    print(par$output_dir) 
+    
     # assemble and write
     out_adata <- anndata::AnnData(
       obs    = obs_out,
@@ -416,7 +386,6 @@ main <- function() {
 	parser$add_argument("--specific_times", nargs = "+", type="integer", default=c(24))
 	parser$add_argument("--specific_perturbagens", type="character", default=NULL)
 	parser$add_argument("--min_cells", type="integer", default=0)
-	parser$add_argument("--design_param", type="character")
 	parser$add_argument("--config", default="{}")
 
 	args <- parser$parse_args()

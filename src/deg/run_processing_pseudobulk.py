@@ -10,26 +10,22 @@ def create_perturbation_label(is_control: bool,
                               pert: str, 
                               dose: float, 
                               time: float,
+                              well: str,
                               plate: str,
                               design_param: str) -> str:
-    
-    if design_param == 'group_all_replicates':
-        if is_control:
-            return str(pert) \
+    if is_control:
+        return str(pert) \
                 + '_' + str(time) + 'h'
-        else:
+    else:
+        if design_param == 'group_all_replicates':
             return str(pert) \
                 + '_' + str(dose) \
                 + 'uM_' + str(time) + 'h'
-    elif design_param == 'separate_replicates':
-        if is_control:
-            return str(pert) \
-                + '_' + str(time) + 'h' \
-                + '_' + str(plate)
-        else:
+        elif design_param == 'separate_replicates':
             return str(pert) \
                 + '_' + str(dose) \
                 + 'uM_' + str(time) + 'h' \
+                + '_' + str(well) \
                 + '_' + str(plate)
 
 
