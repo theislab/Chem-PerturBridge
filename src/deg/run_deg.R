@@ -12,7 +12,7 @@ suppressPackageStartupMessages({
   library(jsonlite)
 })
 
-source("/src/deg/subsampling.R")
+source("./src/deg/subsampling.R")
 # helper to sanitize names for model.matrix/contrasts
 clean <- function(x) gsub("[^[:alnum:]_]", "_", x)
 
@@ -103,13 +103,14 @@ derive_top_table <- function(fit,
                              raw_cond,
                              perturbagen,
                              pert_dose_uM,
-                             pert_time_h) {
+                             pert_time_h,
+                             subsampling) {
     contrast <- paste0("cond", clean(raw_cond), " - cond", clean(raw_control))
     tryCatch({
         ctr <- makeContrasts(contrasts = contrast, levels = colnames(coef(fit)))
         
         fit2 <- contrasts.fit(fit, ctr) %>% 
-          eBayes(robust = !isTRUE(par$subsampling))  # Skip robust for speed in subsampling mode
+          eBayes(robust = !isTRUE(subsampling))  # Skip robust for speed in subsampling mode
         
         top_table <- topTable(fit2, number = Inf, sort = "none", adjust.method="BH", confint=TRUE) %>%
           rownames_to_column("gene") %>%
@@ -143,7 +144,8 @@ derive_top_table <- function(fit,
 
 run_contrasts <- function(fit,
                           control_obs,
-                          treated_obs) {
+                          treated_obs,
+                          par) {
     # run one contrast per treated cond vs. the matching control@same time
     n_contrasts <- nrow(treated_obs)
     contrast_num <- 0
@@ -156,7 +158,6 @@ run_contrasts <- function(fit,
 
       raw_controls <- find_controls(control_obs,
                     pert_time_h)
-    
       # Check if control exists for this time point
       if (is.null(raw_controls)) {
         return(NULL)
@@ -171,7 +172,8 @@ run_contrasts <- function(fit,
                                   raw_cond,
                                   perturbagen,
                                   pert_dose_uM,
-                                  pert_time_h)
+                                  pert_time_h,
+                                  par$subsampling)
         }
       return(bind_rows(top_tables))
     })
@@ -243,7 +245,8 @@ get_var <- function(de_df,
   return(var_out)
 }
 
-get_layers <- function(de_df) {
+get_layers <- function(de_df,
+                       obs_out) {
   # Create layers for each DE statistic
   layers <- map(res_cols, function(m) {
     if (!m %in% names(de_df)) {
@@ -289,7 +292,7 @@ run_dge_pipeline <- function(par) {
       raw_cond = perturbation_label,
       cond = factor(clean(perturbation_label)),  # sanitize values here!
       )
-  
+    
     # Check for required controls
     check_for_controls(obs, "pert_time_h")
   
@@ -309,7 +312,7 @@ run_dge_pipeline <- function(par) {
     de_res <- run_contrasts(fit,
                           control_obs,
                           treated_obs)
-    
+
     # Skip if no valid DE results
     if (is.null(de_res) || nrow(de_res) == 0) {
     warning("No valid DE results for cell line ", cl)
@@ -332,7 +335,6 @@ run_dge_pipeline <- function(par) {
     # carry over global uns if you like
     
     new_uns <- adata$uns
-    print(par$output_dir) 
     
     # assemble and write
     out_adata <- anndata::AnnData(
@@ -376,39 +378,44 @@ merge_config <- function(args, config) {
 }
 
 main <- function() {
-	parser <- ArgumentParser()
-	parser$add_argument("--input", type="character")
-	parser$add_argument("--output_dir", type="character")
-	parser$add_argument("--subsampling", action="store_true")
-	parser$add_argument("--max_cell_types", type="integer")
-	parser$add_argument("--max_perturbations", type="integer")
-	parser$add_argument("--max_genes", type="integer")
-	parser$add_argument("--specific_times", nargs = "+", type="integer", default=c(24))
-	parser$add_argument("--specific_perturbagens", type="character", default=NULL)
-	parser$add_argument("--min_cells", type="integer", default=0)
-	parser$add_argument("--config", default="{}")
+  parser <- ArgumentParser()
+  parser$add_argument("--input", type="character")
+  parser$add_argument("--output_dir", type="character")
+  parser$add_argument("--subsampling", action="store_true")
+  parser$add_argument("--max_cell_types", type="integer")
+  parser$add_argument("--max_perturbations", type="integer")
+  parser$add_argument("--max_genes", type="integer")
+  parser$add_argument("--specific_times", nargs = "+", type="integer", default=c(24))
+  parser$add_argument("--specific_perturbagens", type="character", default=NULL)
+  parser$add_argument("--min_cells", type="integer", default=0)
+  parser$add_argument("--config", default="{}")
 
-	args <- parser$parse_args()
-	config <- jsonlite::fromJSON(args$config)
-	args$config = NULL
-	args <- merge_config(args, config)
+  args <- parser$parse_args()
+  config <- jsonlite::fromJSON(args$config)
+  args$config = NULL
+  args <- merge_config(args, config)
+  # Start timer
+  start_time <- Sys.time()
+  message("DE analysis started...")
+	
+  tryCatch({
+    	run_dge_pipeline(args)
+  }, error = function(e) {
+    	warning("Error in running DGE: ", e$message)
+  })
+  
 
-	# Start timer
-	start_time <- Sys.time()
-	message("DE analysis started...")
-	run_dge_pipeline(args)
-
-	message("DE analysis completed!")
+  message("DE analysis completed!")
 
 	# Show runtime
-	end_time <- Sys.time()
-	runtime <- difftime(end_time, start_time, units = "secs")
-	message(sprintf("\nTotal runtime: %.1f seconds", runtime))
+  end_time <- Sys.time()
+  runtime <- difftime(end_time, start_time, units = "secs")
+  message(sprintf("\nTotal runtime: %.1f seconds", runtime))
 
-	if (!is.null(args$subsampling) && args$subsampling) {
-  		message("\n📝 Note: This was a TEST RUN with reduced data.")
-  		message("Set subsampling = FALSE for full analysis.")
-	}
+  if (!is.null(args$subsampling) && args$subsampling) {
+  	message("\n📝 Note: This was a TEST RUN with reduced data.")
+  	message("Set subsampling = FALSE for full analysis.")
+  }
 
 }
 
