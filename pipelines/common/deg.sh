@@ -96,5 +96,12 @@ if ! par_deg=$(jq -e ".$PAR.par_deg" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-Rscript ./src/deg/run_deg.R $ARG_F $ARG_S --config <(echo "$par_deg" | jq ".")
+# Create temporary file instead of using process substitution
+temp_config=$(mktemp)
+echo "$par_deg" | jq "." > "$temp_config"
+
+Rscript ./src/deg/run_deg.R $ARG_F $ARG_S --config "$temp_config"
+
+# Clean up temporary file
+rm "$temp_config"
 echo "> DGE calculations are completed"

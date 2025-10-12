@@ -32,15 +32,28 @@ res_cols <- c("logFC",
 	
 filter_cells <- function(adata,
                          min_cells) {
+  # Parameter validation
+  stopifnot(!missing(adata),
+            !missing(min_cells),
+            is.numeric(min_cells), min_cells >= 0,
+            "psbulk_cells" %in% names(adata$obs))
+  
   n_obs_prev <- adata$n_obs
-  message("Filter samples with the low number of cells")
+  cat("Filter samples with the low number of cells\n")
   adata <- adata[adata$obs$psbulk_cells >= min_cells]
-  message("    n_obs: ", n_obs_prev, "--> ", adata$n_obs)
+  cat("    n_obs: ", n_obs_prev, "--> ", adata$n_obs, "\n")
   return(adata)
 }
 
 check_for_controls <- function(obs, 
                                col) {
+  # Parameter validation
+  stopifnot(!missing(obs),
+            !missing(col),
+            is.character(col),
+            col %in% names(obs),
+            "is_control" %in% names(obs))
+  
   # Check for required controls
   control <- obs %>%
     filter(is_control==TRUE) %>%
@@ -60,8 +73,14 @@ check_for_controls <- function(obs,
 
 filter_controls <- function(ad,
                             col) {
+  # Parameter validation
+  stopifnot(!missing(ad),
+            !missing(col),
+            is.character(col),
+            col %in% names(ad$obs))
+  
   # Filter controls
-  message("Filter controls by ", col, " column")
+  cat("    Filter controls by ", col, " column\n")
   n_obs_prev <- ad$n_obs
     
   control <- ad$obs %>%
@@ -79,12 +98,17 @@ filter_controls <- function(ad,
     ad <- ad[!(ad$obs[, col] %in% redundant_controls)]
   }
   
-  message("    n_obs: ", n_obs_prev, "--> ",ad$n_obs)
+  cat("        n_obs: ", n_obs_prev, "--> ",ad$n_obs, "\n\n")
   return(ad)
 }
 
 find_controls <- function(control_obs,
                           time) {
+  # Parameter validation
+  stopifnot(!missing(control_obs),
+            !missing(time),
+            is.numeric(time),
+            "pert_time_h" %in% names(control_obs))
     
     select_ctrs <- (control_obs$pert_time_h == time)
 
@@ -105,6 +129,14 @@ derive_top_table <- function(fit,
                              pert_dose_uM,
                              pert_time_h,
                              subsampling) {
+  # Parameter validation
+  stopifnot(!missing(fit),
+            !missing(raw_control),
+            !missing(raw_cond),
+            !missing(perturbagen),
+            !missing(pert_dose_uM),
+            !missing(pert_time_h))
+  
     contrast <- paste0("cond", clean(raw_cond), " - cond", clean(raw_control))
     tryCatch({
         ctr <- makeContrasts(contrasts = contrast, levels = colnames(coef(fit)))
@@ -146,14 +178,21 @@ run_contrasts <- function(fit,
                           control_obs,
                           treated_obs,
                           par) {
-    # run one contrast per treated cond vs. the matching control@same time
-    n_contrasts <- nrow(treated_obs)
+  # Parameter validation
+  stopifnot(!missing(fit),
+            !missing(control_obs),
+            !missing(treated_obs),
+            !missing(par),
+            is.list(par))
+  
+  # run one contrast per treated cond vs. the matching control@same time
+  n_contrasts <- nrow(treated_obs)
     contrast_num <- 0
     
     de_res <- pmap_dfr(treated_obs, function(cond, perturbagen, pert_dose_uM, pert_time_h, plate, raw_cond, ...) {
       contrast_num <<- contrast_num + 1
       if (contrast_num %% 5 == 1 || contrast_num == n_contrasts) {
-        message(sprintf("    Running contrast %d/%d", contrast_num, n_contrasts))
+        cat(sprintf("    Running contrast %d/%d\n", contrast_num, n_contrasts))
       }
 
       raw_controls <- find_controls(control_obs,
@@ -185,6 +224,12 @@ run_contrasts <- function(fit,
 
 run_dge <- function(ad,
                     obs) {
+  # Parameter validation
+  stopifnot(!missing(ad),
+            !missing(obs),
+            "cond" %in% names(obs),
+            !is.null(ad$X))
+  
   # build DGEList + design
   counts <- Matrix::t(ad$X)
   dge    <- DGEList(counts=counts)
@@ -204,6 +249,12 @@ run_dge <- function(ad,
 
 get_obs <- function(de_df,
                     treated_obs) {
+  # Parameter validation
+  stopifnot(!missing(de_df),
+            !missing(treated_obs),
+            "control" %in% names(de_df), "cond" %in% names(de_df),
+            "cond" %in% names(treated_obs))
+  
   # FIX 1: Ensure dose_value and time are preserved as actual values, not factors
   de_unique <- de_df %>% distinct(control, cond)
   obs_out <- treated_obs %>%
@@ -224,6 +275,12 @@ get_obs <- function(de_df,
 
 get_var <- function(de_df,
                     ad) {
+  # Parameter validation
+  stopifnot(!missing(de_df),
+            !missing(ad),
+            "gene" %in% names(de_df),
+            !is.null(ad$var), is.data.frame(ad$var))
+  
   genes   <- unique(de_df$gene)
   # FIX 2: Carry over all columns from the original var dataframe
   # Get the original var data for these genes
@@ -247,6 +304,11 @@ get_var <- function(de_df,
 
 get_layers <- function(de_df,
                        obs_out) {
+  # Parameter validation
+  stopifnot(!missing(de_df),
+            !missing(obs_out),
+            "gene" %in% names(de_df), "cond" %in% names(de_df))
+  
   # Create layers for each DE statistic
   layers <- map(res_cols, function(m) {
     if (!m %in% names(de_df)) {
@@ -269,6 +331,19 @@ get_layers <- function(de_df,
 
 
 run_dge_pipeline <- function(par) {
+  # Parameter validation
+  stopifnot(!missing(par),
+            is.list(par),
+            "input" %in% names(par), !is.null(par$input),
+            "output_dir" %in% names(par), !is.null(par$output_dir),
+            is.character(par$input), file.exists(par$input),
+            is.character(par$output_dir))
+  
+  # Set default min_cells if not provided
+  if (is.null(par$min_cells)) {
+    par$min_cells <- 0
+  }
+  stopifnot(is.numeric(par$min_cells), par$min_cells >= 0)
   
   # load the full pseudobulk AnnData
   adata <- anndata::read_h5ad(par$input)
@@ -281,7 +356,7 @@ run_dge_pipeline <- function(par) {
   for (cl in cell_types_to_process) {
     cl_num <- cl_num + 1
     cl_start <- Sys.time()
-    message("\n▶︎ Processing cell_type ", cl_num, "/", n_cell_types, ": ", cl)
+    cat("\n▶︎ Processing cell_type ", cl_num, "/", n_cell_types, ": ", cl, "\n")
   
     # subset to this cell_type
     ad  <- adata[adata$obs$cell_type == cl, ]
@@ -311,7 +386,8 @@ run_dge_pipeline <- function(par) {
 
     de_res <- run_contrasts(fit,
                           control_obs,
-                          treated_obs)
+                          treated_obs,
+                          par)
 
     # Skip if no valid DE results
     if (is.null(de_res) || nrow(de_res) == 0) {
@@ -327,10 +403,8 @@ run_dge_pipeline <- function(par) {
       rename(adj.P.Value.within_one_contrast = adj.P.Val)
   
     obs_out <- get_obs(de_df, treated_obs)
-    
     var_out <- get_var(de_df, ad)
-  
-    layers <- get_layers(de_df)
+    layers <- get_layers(de_df, obs_out)
   
     # carry over global uns if you like
     
@@ -357,17 +431,21 @@ run_dge_pipeline <- function(par) {
     }
   
     outfile <- file.path(output_dir, paste0(cl, "_de.h5ad"))
-      
-    message("  Writing: ", outfile)
+    cat("\n    Writing: ", outfile, "\n")
     out_adata$write_h5ad(outfile, compression = "gzip")
   
     # Show time for this cell line
     cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-    message(sprintf("  ✓ Cell line completed in %.1f seconds", cl_time))
+    cat(sprintf("  ✓ Cell line completed in %.1f seconds\n", cl_time))
   }
 }
 
 merge_config <- function(args, config) {
+  # Parameter validation
+  stopifnot(!missing(args),
+            !missing(config),
+            is.list(args), is.list(config))
+  
   config_merged <- args
   for (name in names(config)) {
     if (is.null(args[[name]])) {
@@ -396,25 +474,26 @@ main <- function() {
   args <- merge_config(args, config)
   # Start timer
   start_time <- Sys.time()
-  message("DE analysis started...")
+  cat("\nDE analysis started...\n")
 	
   tryCatch({
     	run_dge_pipeline(args)
+      cat("DE analysis completed!\n")
   }, error = function(e) {
-    	warning("Error in running DGE: ", e$message)
+    	message("Error in running DGE: ", e$message)
+  	message("Stack trace:")
+	traceback()
+	stop("DGE pipeline failed")
   })
   
-
-  message("DE analysis completed!")
-
 	# Show runtime
   end_time <- Sys.time()
   runtime <- difftime(end_time, start_time, units = "secs")
-  message(sprintf("\nTotal runtime: %.1f seconds", runtime))
+  cat(sprintf("\nTotal runtime: %.1f seconds\n", runtime))
 
   if (!is.null(args$subsampling) && args$subsampling) {
-  	message("\n📝 Note: This was a TEST RUN with reduced data.")
-  	message("Set subsampling = FALSE for full analysis.")
+  	cat("\n📝 Note: This was a TEST RUN with reduced data.\n")
+  	cat("Set subsampling = FALSE for full analysis.\n\n")
   }
 
 }
