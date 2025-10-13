@@ -1,5 +1,7 @@
 import os
 import json
+import time
+import fcntl
 import pandas as pd
 import scanpy as sc
 import anndata as ad
@@ -37,13 +39,29 @@ def create_dir_if_not_exists(file_output: str) -> None:
         except FileExistsError as e:
             logger.warning('%s', str(e))
 
+def save_read(file_input: str, 
+              n_retries: int = 10,
+              delay: float = 5.0):
+
+    for attempt in range(n_retries):
+        try:
+            with open(file_input, 'r') as f:
+                fcntl.flock(f, fcntl.LOCK_SH | fcntl.LOCK_NB)
+                padata = ad.read_h5ad(file_input)
+                fcntl.flock(f, fcntl.LOCK_UN)
+                return padata
+        except BlockingIOError:
+            print(f'Attempt {attempt + 1}: file locked, retrying...')
+            time.sleep(delay)
+    raise RuntimeError(f'Could not read {file_input} after {retries} attempts.')
+
 def add_perturbation_label_to_padata(file_input: str,
                                      file_output: str,
                                      design_param: str,
                                      ) -> None:
     logger.info('Read pseudobulk file')
 
-    padata = ad.read_h5ad(file_input)
+    padata = save_read(file_input)
     obs = padata.obs.copy()
     obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: format(x, ".15g"))
     obs['pert_time_h'] = obs['pert_time_h'].apply(lambda x: format(x, ".15g"))
@@ -53,6 +71,7 @@ def add_perturbation_label_to_padata(file_input: str,
                                                    x.perturbagen,
                                                    x.pert_dose_uM,
                                                    x.pert_time_h,
+                                                   x.well,
                                                    x.plate,
                                                    design_param), axis=1).astype("category")
     

@@ -88,7 +88,7 @@ if ! par_process=$(jq -e ".$PAR.par_process" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-#python3 -m src.deg.run_processing_pseudobulk --config <(echo "$par_process" | jq ".")
+python3 -m src.deg.run_processing_pseudobulk --config <(echo "$par_process" | jq ".")
 
 
 echo "> Run DGE with a $PAR parameter"
@@ -96,12 +96,10 @@ if ! par_deg=$(jq -e ".$PAR.par_deg" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-# Create temporary file instead of using process substitution
 temp_config=$(mktemp)
 echo "$par_deg" | jq "." > "$temp_config"
 
 Rscript ./src/deg/run_deg.R $ARG_F $ARG_S --config "$temp_config"
 
-# Clean up temporary file
 rm "$temp_config"
 echo "> DGE calculations are completed"
