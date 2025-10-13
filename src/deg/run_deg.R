@@ -1,4 +1,10 @@
 #!/usr/bin/env Rscript
+
+# Configure reticulate to use conda Python
+suppressPackageStartupMessages(library(reticulate))
+conda_env <- Sys.getenv("CONDA_PREFIX")
+if (nzchar(conda_env)) use_python(file.path(conda_env, "bin/python"), required = TRUE)
+
 requireNamespace("anndata", quietly=TRUE)
 suppressPackageStartupMessages({
   library(dplyr)

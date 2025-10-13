@@ -14,7 +14,7 @@ FILT=""
 CONFIG=""
 ARG_S=""
 ARG_F=""
-ENV_DIR=~/deg_venv
+ENV_DIR=./venv
 
 DEG_PARAMETERS=(
         "group_all_replicates"
