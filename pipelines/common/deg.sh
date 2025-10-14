@@ -1,47 +1,43 @@
 #!/bin/bash
-#SBATCH -t 5:00:00
-#SBATCH -n 1
-#SBATCH --qos=cpu_normal
-#SBATCH --mem=100G
-#SBATCH --partition=cpu_p
-#SBATCH --cpus-per-task=2
 
 set -e
 
-MODE=""
+MODE_S=False
+MODE_J=False
 PAR=""
 FILT=""
 CONFIG=""
 ARG_S=""
 ARG_F=""
 ENV_DIR=./venv
+LOGS_DIR=./logs
+
+MAX_CONCURRENT=10
+QOS=cpu_normal
+PARTITION=cpu_p
 
 DEG_PARAMETERS=(
         "group_all_replicates"
         "separate_replicates"
 )
 
-for item in "$@"; do
-	shift
-	case "$item" in
-		subsampling)   set -- "$@" "-s" ;;
-		*)        set -- "$@" "$item"
-	esac
-done
-
-while getopts ":sp:f:c:h" opt; do
+while getopts ":sjp:f:c:h" opt; do
         case $opt in
                 h)
-                        echo "Run: $0 [-s] [-h] [-f] -p (parameters: ${DEG_PARAMETERS[*]})"
+                        echo "Run: $0 [-s] [-j] [-h] [-f] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG"
                         echo "  -s Subsample of a dataset for debugging, default=false"
+                        echo "  -j Parallel mode (array jobs per cell type), default=false"
                         echo "  -h Help option, default=false"
                         echo "  -f Min number of cells in pseudobulk to filter samples with the lower number"
                         echo "  -p Parameter for DEG pipeline, required"
-			echo "  -c Path to the config file"
+			echo "  -c Path to the config file, required"
                         exit 0
                         ;;
                 s)
-                        MODE="subsampling"
+                        MODE_S=True
+                        ;;
+                j)
+                        MODE_J=True
                         ;;
                 p)
                         PAR=$OPTARG
@@ -58,20 +54,19 @@ if [[ " ${DEG_PARAMETERS[*]} " != *" $PAR "* ]]; then
 fi
 
 if ! [[ "$FILT" =~ ^[0-9]+$ ]] && ! [ -z "$FILT" ]; then
-   echo "Error: Not a number" >&2; exit 1
+        echo "Error: Not a number" >&2; exit 1
 else
-   if [[ "$FILT" =~ ^[0-9]+$ ]]; then
-   	ARG_F="--min_cells $FILT"
-   fi
+        if [[ "$FILT" =~ ^[0-9]+$ ]]; then
+   	        ARG_F="--min_cells $FILT"
+        fi
 fi
 
 
-if [ "$MODE" = "subsampling" ]; then
-	echo "> Work with a subsample"
-	SUFFIX="_subsample"
-	SUBDIR="subsample"
-	ARG_S="--subsampling"
-
+if [ "$MODE_S" = "True" ]; then
+        echo "> Work with a subsample"
+        SUFFIX="_subsample"
+        SUBDIR="subsample"
+        ARG_S="--subsampling"
 else
 	echo "> Work with a full version"
 	SUFFIX=""
@@ -79,27 +74,132 @@ else
 	ARG_S=""
 fi
 
-eval "$(mamba shell hook --shell bash)"
-mamba activate ${ENV_DIR}
+# Validate CONFIG
+if [ -z "$CONFIG" ]; then
+  echo "Error: Config path must be provided via -c flag" >&2
+  exit 1
+fi
 
+if [ ! -f "$CONFIG" ]; then
+  echo "Error: Config file not found: $CONFIG" >&2
+  exit 1
+fi
+
+echo "> Using config: $CONFIG"
 
 echo "> Preprocess pseudobulk with a $PAR parameter"
 if ! par_process=$(jq -e ".$PAR.par_process" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-python3 -m src.deg.run_processing_pseudobulk --config <(echo "$par_process" | jq ".")
+# Add split_by_celltype flag if parallel mode
+if [ "$MODE_J" = "True" ]; then
+        echo "> Mode: PARALLEL (array jobs per cell type)"
+        ARG_J="--split_by_celltype"
+else
+        echo "> Mode: SEQUENTIAL (single job, all cell types)"
+        ARG_J=""
+fi
+
+
+eval "$(mamba shell hook --shell bash)"
+mamba activate ${ENV_DIR}
+
+# Create tmp directory for configs
+TMP_DIR="./tmp/deg_$$"
+# Clean up if it exists from a previous failed run
+rm -rf "${TMP_DIR}"
+mkdir -p "${TMP_DIR}"
+# Set up automatic cleanup on exit (even if script fails)
+trap "rm -rf ${TMP_DIR}" EXIT
+
+# Create config file in tmp directory
+preprocess_config="${TMP_DIR}/preprocess_config.json"
+echo "$par_process" | jq "." > "$preprocess_config"
+
+sbatch -W -J deg_processing_pseudobulk \
+       --partition=${PARTITION} \
+       --qos=${QOS} \
+       --mem=250G \
+       --time=2:00:00 \
+       --cpus-per-task=2 \
+       -o "${LOGS_DIR}/deg_processing_pseudobulk.out" \
+       -e "${LOGS_DIR}/deg_processing_pseudobulk.err" \
+       --wrap="eval \"\$(mamba shell hook --shell bash)\" && \
+                mamba activate ${ENV_DIR} && \
+                python3 -m src.deg.run_processing_pseudobulk $ARG_J \
+                --config ${preprocess_config}"
+
+# Keep tmp directory for DEG step (cleanup at the end)
 
 
 echo "> Run DGE with a $PAR parameter"
 if ! par_deg=$(jq -e ".$PAR.par_deg" $CONFIG); then
-  echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
+        echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
 
-temp_config=$(mktemp)
-echo "$par_deg" | jq "." > "$temp_config"
+# Get input directory from config
+INPUT_DIR=$(echo "$par_deg" | jq -r '.input_dir')
 
-Rscript ./src/deg/run_deg.R $ARG_F $ARG_S --config "$temp_config"
+# Set mode-specific parameters now that INPUT_DIR is defined
+if [ "$MODE_J" = "True" ]; then
+	JOB_NAME="deg_parallel"
+	LOG_PREFIX="deg_celltype"
+	SEARCH_DIR="${INPUT_DIR}/by_celltype"
+	FILE_PATTERN="*"
+        MEM=150G
+else
+	JOB_NAME="deg_sequential"
+	LOG_PREFIX="deg_sequential"
+	SEARCH_DIR="${INPUT_DIR}"
+	FILE_PATTERN="*.h5ad"
+        MEM=250G
+fi
 
-rm "$temp_config"
+# Check if search directory exists
+if [ ! -d "$SEARCH_DIR" ]; then
+	echo "Error: Directory not found: $SEARCH_DIR" >&2
+	exit 1
+fi
+
+# List files to process
+mapfile -t INPUT_FILES < <(ls "$SEARCH_DIR"/$FILE_PATTERN 2>/dev/null | sort)
+N_FILES=${#INPUT_FILES[@]}
+
+if [ "$N_FILES" -eq 0 ]; then
+	echo "Error: No files found in $SEARCH_DIR" >&2
+	exit 1
+fi
+
+echo "  Found $N_FILES files to process"
+
+# Create file list in tmp directory
+FILE_LIST="${TMP_DIR}/file_list.txt"
+printf '%s\n' "${INPUT_FILES[@]}" > "$FILE_LIST"
+
+# Create DEG config in tmp directory
+deg_config="${TMP_DIR}/deg_config.json"
+echo "$par_deg" | jq "." > "$deg_config"
+
+# Submit array job with inline command
+echo "  Submitting array job (${N_FILES} jobs, max ${MAX_CONCURRENT} concurrent)..."
+sbatch -W \
+	--job-name=${JOB_NAME} \
+	--array=0-$((N_FILES-1))%${MAX_CONCURRENT} \
+	--partition=${PARTITION} \
+	--qos=${QOS} \
+	--mem=${MEM} \
+	--time=5:00:00 \
+	--cpus-per-task=2 \
+	--output="${LOGS_DIR}/${LOG_PREFIX}_%A_%a.out" \
+	--error="${LOGS_DIR}/${LOG_PREFIX}_%A_%a.err" \
+	--wrap="eval \"\$(mamba shell hook --shell bash)\" && \
+		mamba activate ${ENV_DIR} && \
+		INPUT_FILE=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID + 1))p\" ${FILE_LIST}) && \
+		Rscript ./src/deg/run_deg.R \
+			--input \"\$INPUT_FILE\" \
+			--config ${deg_config} \
+			$ARG_F $ARG_S"
+
+
 echo "> DGE calculations are completed"

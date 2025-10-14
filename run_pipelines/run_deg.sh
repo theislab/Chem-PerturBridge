@@ -3,8 +3,11 @@
 set -e
 
 LOGS_DIR=./logs
+MODE_S=False
+MODE_J=False
 ARG_S=""
 ARG_F=""
+ARG_J=""
 DATASET=""
 PAR=""
 FILT=""
@@ -20,20 +23,24 @@ DEG_PARAMETERS=(
 
 mkdir -p $LOGS_DIR
 
-while getopts ":sd:p:f:h" opt; do
+while getopts ":sjd:p:f:h" opt; do
   	case $opt in
 		h)
-			echo "Run: $0 [-s] [-h] [-f] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
+			echo "Run: $0 [-s] [-j] [-h] [-f] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
                         echo "  -s Subsample of a dataset for debugging, default=false"
+                        echo "  -j Parallel mode (array jobs per cell type), default=false"
                         echo "  -h Help option"
 			echo "  -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number"
 			echo "  -d (dataset <str>) Name of dataset to process, required"
 			echo "  -p (parameter <str>) Parameter for DEG pipeline, required"
                         exit 0
                         ;;
-    		s)
-      			ARG_S="subsampling"
-      			;;
+    	s)
+      		MODE_S=True
+      		;;
+		j)
+			MODE_J=True
+			;;
 		p)
 			PAR=$OPTARG
 			;;
@@ -64,14 +71,19 @@ else
 fi
 
 
-if [[ "$ARG_S" == "subsampling" ]]; then
+if [[ "$MODE_S" == "True" ]]; then
 	SUBDIR="subsample"
+	ARG_S="-s"
 else
 	SUBDIR="full"
+fi
 
+if [[ "$MODE_J" == "True" ]]; then
+	ARG_J="-j"
 fi
 
 mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
-sbatch -e ${LOGS_DIR}/${DATASET}/${SUBDIR}/deg_${DATASET}.%j.err \
-	-o ${LOGS_DIR}/${DATASET}/${SUBDIR}/deg_${DATASET}.%j.out \
-	./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F -c ./pipelines/${DATASET}/configs/${DATASET}_deg.json
+./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_J \
+	-c ./pipelines/${DATASET}/configs/deg/config.json \
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/deg_${DATASET}.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/deg_${DATASET}.err &
