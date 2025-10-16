@@ -3,6 +3,7 @@
 set -e
 
 LOGS_DIR=./logs
+PIPELINE_NAME="deg"
 MODE_S=False
 MODE_J=False
 ARG_S=""
@@ -82,8 +83,9 @@ if [[ "$MODE_J" == "True" ]]; then
 	ARG_J="-j"
 fi
 
-mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}
 ./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_J \
 	-c ./pipelines/${DATASET}/configs/deg/config.json \
-		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/deg_${DATASET}.out \
-		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/deg_${DATASET}.err &
+	-d ${DATASET} \
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_${DATASET}.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_${DATASET}.err &

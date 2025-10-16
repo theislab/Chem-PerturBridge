@@ -2,6 +2,7 @@ import os
 import json
 import time
 import fcntl
+import argparse
 import numpy as np
 import pandas as pd
 import scanpy as sc
@@ -16,6 +17,31 @@ def create_perturbation_label(is_control: bool,
                               well: str,
                               plate: str,
                               design_param: str) -> str:
+    '''
+    Create a perturbation label based on design parameters.
+    
+    Parameters:
+    -----------
+    is_control : bool
+        Whether the perturbation is a control condition
+    pert : str
+        Name of the perturbagen
+    dose : float
+        Dose concentration in uM
+    time : float
+        Time point in hours
+    well : str
+        Well identifier
+    plate : str
+        Plate identifier
+    design_param : str
+        Design parameter determining label format ('group_all_replicates' or 'separate_replicates')
+        
+    Returns:
+    --------
+    str
+        Formatted perturbation label
+    '''
     if is_control:
         return str(pert) \
                 + '_' + str(time) + 'h'
@@ -33,12 +59,42 @@ def create_perturbation_label(is_control: bool,
 
 
 def create_dir_if_not_exists(file_output: str) -> None:
+    '''
+    Create directory for output file if it doesn't exist.
+    
+    Parameters:
+    -----------
+    file_output : str
+        Path to the output file
+    '''
     dir_output = os.path.dirname(file_output)
     os.makedirs(dir_output, exist_ok=True)
 
 def save_read(file_input: str, 
               n_retries: int = 10,
               delay: float = 5.0) -> ad.AnnData:
+    '''
+    Read AnnData file with file locking and retry mechanism.
+    
+    Parameters:
+    -----------
+    file_input : str
+        Path to the input h5ad file
+    n_retries : int, default=10
+        Number of retry attempts if file is locked
+    delay : float, default=5.0
+        Delay in seconds between retry attempts
+        
+    Returns:
+    --------
+    ad.AnnData
+        Loaded AnnData object
+        
+    Raises:
+    -------
+    RuntimeError
+        If file cannot be read after all retry attempts
+    '''
 
     for attempt in range(n_retries):
         try:
@@ -54,6 +110,21 @@ def save_read(file_input: str,
 
 def get_output_path_combined(file_input: str,
                         dir_output: str) -> str:
+    '''
+    Generate output path for processed pseudobulk file.
+    
+    Parameters:
+    -----------
+    file_input : str
+        Path to the input file
+    dir_output : str
+        Output directory path
+        
+    Returns:
+    --------
+    str
+        Full path to the output file
+    '''
     dataset_name = os.path.splitext(os.path.basename(file_input))[0]
     return os.path.join(dir_output, f'{dataset_name}_processed.h5ad')
 
@@ -61,6 +132,21 @@ def get_output_path_combined(file_input: str,
 
 def save_by_celltype(padata: ad.AnnData,
                      dir_output: str) -> None:
+    '''
+    Save pseudobulk data split by cell type.
+    
+    Parameters:
+    -----------
+    padata : ad.AnnData
+        Pseudobulk AnnData object
+    dir_output : str
+        Output directory path
+        
+    Raises:
+    -------
+    ValueError
+        If no valid cell types are found for splitting
+    '''
 
     celltype_dir = os.path.join(dir_output, 'by_celltype')
     os.makedirs(celltype_dir, exist_ok=True)
@@ -89,6 +175,20 @@ def add_perturbation_label_to_padata(file_input: str,
                                      design_param: str,
                                      split_by_celltype: bool = False,
                                      ) -> None:
+    '''
+    Add perturbation labels to pseudobulk data and save processed files.
+    
+    Parameters:
+    -----------
+    file_input : str
+        Path to the input pseudobulk h5ad file
+    dir_output : str
+        Output directory path
+    design_param : str
+        Design parameter for perturbation labeling ('group_all_replicates' or 'separate_replicates')
+    split_by_celltype : bool, default=False
+        Whether to split output by cell type
+    '''
     
     logger.info('Read pseudobulk file')
 
@@ -120,10 +220,28 @@ def add_perturbation_label_to_padata(file_input: str,
 
 
 def sanitize_celltype_name(celltype: str) -> str:
-    """Sanitize cell type name for filename"""
+    '''
+    Sanitize cell type name for use in filenames.
+    
+    Parameters:
+    -----------
+    celltype : str
+        Original cell type name
+        
+    Returns:
+    --------
+    str
+        Sanitized cell type name safe for filenames
+    '''
     return celltype.replace(' ', '_').replace('/', '-').replace('(', '').replace(')', '')
 
 def main():
+    '''
+    Main function to process pseudobulk data and add perturbation labels.
+    
+    Processes command line arguments and configuration files to run the
+    pseudobulk processing pipeline with perturbation labeling.
+    '''
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', type=str)

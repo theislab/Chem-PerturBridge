@@ -16,11 +16,50 @@ suppressPackageStartupMessages({
   library(Matrix)
   library(argparse)
   library(jsonlite)
+  library(rhdf5)
 })
 
 source("./src/deg/subsampling.R")
 # helper to sanitize names for model.matrix/contrasts
 clean <- function(x) gsub("[^[:alnum:]_]", "_", x)
+
+#' Rewrite h5ad file by completely removing X matrix
+#' 
+#' Completely removes the X matrix from an h5ad file using direct HDF5 access.
+#' This is equivalent to the Python rewrite_h5ad function and ensures older
+#' Python anndata versions can read the file.
+#' 
+#' @param path2file Path to the h5ad file
+#' @return NULL (modifies file in place)
+rewrite_h5ad <- function(path2file) {
+  # Parameter validation
+  stopifnot(!missing(path2file),
+            is.character(path2file),
+            file.exists(path2file))
+  
+  cat("Rewriting h5ad file:", path2file, "\n")
+  
+  # Check if file is valid HDF5
+  if (!rhdf5::H5Fis_hdf5(path2file)) {
+    stop("File is not a valid HDF5 file")
+  }
+  
+  # Open file in read-write mode
+  fid <- rhdf5::H5Fopen(path2file, "H5F_ACC_RDWR")
+  
+  # Check if X group exists and remove it completely
+  if (rhdf5::H5Lexists(fid, "X")) {
+    rhdf5::H5Ldelete(fid, "X")
+    cat("Removed X matrix\n")
+  } else {
+    cat("X matrix not found or already removed\n")
+  }
+  
+  # Close file
+  rhdf5::H5Fclose(fid)
+  
+  cat("Rewriting h5ad file is done!\n")
+}
 
 # Define which DE results to store in layers
 res_cols <- c("logFC", 
@@ -36,6 +75,11 @@ res_cols <- c("logFC",
               "B"
              )
 	
+#' Filter samples with low cell counts
+#' 
+#' @param adata AnnData object containing pseudobulk data
+#' @param min_cells Minimum number of cells required per sample
+#' @return Filtered AnnData object
 filter_cells <- function(adata,
                          min_cells) {
   # Parameter validation
@@ -51,6 +95,11 @@ filter_cells <- function(adata,
   return(adata)
 }
 
+#' Check for missing controls in dataset
+#' 
+#' @param obs Observation dataframe
+#' @param col Column name to check for controls
+#' @return NULL (prints warnings for missing controls)
 check_for_controls <- function(obs, 
                                col) {
   # Parameter validation
@@ -77,6 +126,11 @@ check_for_controls <- function(obs,
     }
 }
 
+#' Filter redundant controls from dataset
+#' 
+#' @param ad AnnData object
+#' @param col Column name to filter controls by
+#' @return Filtered AnnData object
 filter_controls <- function(ad,
                             col) {
   # Parameter validation
@@ -108,6 +162,11 @@ filter_controls <- function(ad,
   return(ad)
 }
 
+#' Find control conditions for a specific time point
+#' 
+#' @param control_obs Control observations dataframe
+#' @param time Time point in hours
+#' @return Vector of control condition names or NULL if none found
 find_controls <- function(control_obs,
                           time) {
   # Parameter validation
@@ -128,6 +187,16 @@ find_controls <- function(control_obs,
     
 }
 
+#' Derive differential expression results table
+#' 
+#' @param fit Linear model fit object
+#' @param raw_control Control condition name
+#' @param raw_cond Treatment condition name
+#' @param perturbagen Perturbagen name
+#' @param pert_dose_uM Dose concentration
+#' @param pert_time_h Time point
+#' @param subsampling Whether subsampling mode is enabled
+#' @return Dataframe with differential expression results or NULL if error
 derive_top_table <- function(fit,
                              raw_control,
                              raw_cond,
@@ -180,6 +249,13 @@ derive_top_table <- function(fit,
       })
 }
 
+#' Run differential expression contrasts
+#' 
+#' @param fit Linear model fit object
+#' @param control_obs Control observations dataframe
+#' @param treated_obs Treated observations dataframe
+#' @param par Parameters list
+#' @return Dataframe with differential expression results
 run_contrasts <- function(fit,
                           control_obs,
                           treated_obs,
@@ -228,6 +304,11 @@ run_contrasts <- function(fit,
     
 }
 
+#' Run differential gene expression analysis
+#' 
+#' @param ad AnnData object
+#' @param obs Observations dataframe
+#' @return Linear model fit object
 run_dge <- function(ad,
                     obs) {
   # Parameter validation
@@ -253,6 +334,11 @@ run_dge <- function(ad,
   return(fit)
 }
 
+#' Extract observations for differential expression results
+#' 
+#' @param de_df Differential expression results dataframe
+#' @param treated_obs Treated observations dataframe
+#' @return Processed observations dataframe
 get_obs <- function(de_df,
                     treated_obs) {
   # Parameter validation
@@ -279,6 +365,11 @@ get_obs <- function(de_df,
   return(obs_out)
 }
 
+#' Extract gene information for differential expression results
+#' 
+#' @param de_df Differential expression results dataframe
+#' @param ad AnnData object
+#' @return Gene information dataframe
 get_var <- function(de_df,
                     ad) {
   # Parameter validation
@@ -308,6 +399,11 @@ get_var <- function(de_df,
   return(var_out)
 }
 
+#' Create layers for differential expression statistics
+#' 
+#' @param de_df Differential expression results dataframe
+#' @param obs_out Processed observations dataframe
+#' @return List of matrices for each DE statistic
 get_layers <- function(de_df,
                        obs_out) {
   # Parameter validation
@@ -336,6 +432,10 @@ get_layers <- function(de_df,
 
 
 
+#' Main differential gene expression pipeline
+#' 
+#' @param par Parameters list containing input/output paths and analysis settings
+#' @return NULL (saves results to files)
 run_dge_pipeline <- function(par) {
   # Parameter validation
   stopifnot(!missing(par),
@@ -439,6 +539,9 @@ run_dge_pipeline <- function(par) {
     outfile <- file.path(output_dir, paste0(cl, "_de.h5ad"))
     cat("\n    Writing: ", outfile, "\n")
     out_adata$write_h5ad(outfile, compression = "gzip")
+    
+    # Remove X matrix for compatibility with older Python anndata versions
+    rewrite_h5ad(outfile)
   
     # Show time for this cell line
     cl_time <- difftime(Sys.time(), cl_start, units = "secs")
@@ -446,6 +549,11 @@ run_dge_pipeline <- function(par) {
   }
 }
 
+#' Merge command line arguments with configuration
+#' 
+#' @param args Command line arguments list
+#' @param config Configuration list
+#' @return Merged parameters list
 merge_config <- function(args, config) {
   # Parameter validation
   stopifnot(!missing(args),
@@ -461,6 +569,10 @@ merge_config <- function(args, config) {
   return(config_merged)
 }
 
+#' Main function for differential gene expression analysis
+#' 
+#' Processes command line arguments and runs the complete DGE pipeline
+#' @return NULL (saves results to files)
 main <- function() {
   parser <- ArgumentParser()
   parser$add_argument("--input", type="character")

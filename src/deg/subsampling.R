@@ -1,3 +1,11 @@
+#' Apply subsampling for test mode analysis
+#' 
+#' Reduces dataset size for faster testing by subsetting cell types,
+#' time points, perturbations, and genes based on parameters.
+#' 
+#' @param adata AnnData object containing pseudobulk data
+#' @param par Parameters list containing subsampling settings
+#' @return Subsampled AnnData object
 subsampling <- function(adata, par) {
     stopifnot(!missing(adata),
               !missing(par))

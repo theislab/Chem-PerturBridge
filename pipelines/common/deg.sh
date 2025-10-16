@@ -2,11 +2,13 @@
 
 set -e
 
+PIPELINE_NAME="deg"
 MODE_S=False
 MODE_J=False
 PAR=""
 FILT=""
 CONFIG=""
+DATASET=""
 ARG_S=""
 ARG_F=""
 ENV_DIR=./venv
@@ -21,16 +23,17 @@ DEG_PARAMETERS=(
         "separate_replicates"
 )
 
-while getopts ":sjp:f:c:h" opt; do
+while getopts ":sjp:f:c:d:h" opt; do
         case $opt in
                 h)
-                        echo "Run: $0 [-s] [-j] [-h] [-f] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG"
+                        echo "Run: $0 [-s] [-j] [-h] [-f] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
                         echo "  -s Subsample of a dataset for debugging, default=false"
                         echo "  -j Parallel mode (array jobs per cell type), default=false"
                         echo "  -h Help option, default=false"
                         echo "  -f Min number of cells in pseudobulk to filter samples with the lower number"
                         echo "  -p Parameter for DEG pipeline, required"
 			echo "  -c Path to the config file, required"
+			echo "  -d Dataset name, required"
                         exit 0
                         ;;
                 s)
@@ -46,11 +49,20 @@ while getopts ":sjp:f:c:h" opt; do
                         FILT=$OPTARG
                         ;;
 		c)	CONFIG=$OPTARG
+			;;
+		d)	DATASET=$OPTARG
+			;;
         esac
 done
 
 if [[ " ${DEG_PARAMETERS[*]} " != *" $PAR "* ]]; then
         echo "Error: -p must be set up and one of: ${DEG_PARAMETERS[*]}" >&2; exit 1
+fi
+
+# Validate DATASET
+if [ -z "$DATASET" ]; then
+  echo "Error: Dataset name must be provided via -d flag" >&2
+  exit 1
 fi
 
 if ! [[ "$FILT" =~ ^[0-9]+$ ]] && ! [ -z "$FILT" ]; then
@@ -123,8 +135,8 @@ sbatch -W -J deg_processing_pseudobulk \
        --mem=250G \
        --time=2:00:00 \
        --cpus-per-task=2 \
-       -o "${LOGS_DIR}/deg_processing_pseudobulk.out" \
-       -e "${LOGS_DIR}/deg_processing_pseudobulk.err" \
+       -o "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_processing_pseudobulk.%j.out" \
+       -e "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_processing_pseudobulk.%j.err" \
        --wrap="eval \"\$(mamba shell hook --shell bash)\" && \
                 mamba activate ${ENV_DIR} && \
                 python3 -m src.deg.run_processing_pseudobulk $ARG_J \
@@ -143,13 +155,11 @@ INPUT_DIR=$(echo "$par_deg" | jq -r '.input_dir')
 
 # Set mode-specific parameters now that INPUT_DIR is defined
 if [ "$MODE_J" = "True" ]; then
-	JOB_NAME="deg_parallel"
 	LOG_PREFIX="deg_celltype"
 	SEARCH_DIR="${INPUT_DIR}/by_celltype"
 	FILE_PATTERN="*"
         MEM=150G
 else
-	JOB_NAME="deg_sequential"
 	LOG_PREFIX="deg_sequential"
 	SEARCH_DIR="${INPUT_DIR}"
 	FILE_PATTERN="*.h5ad"
@@ -182,17 +192,17 @@ deg_config="${TMP_DIR}/deg_config.json"
 echo "$par_deg" | jq "." > "$deg_config"
 
 # Submit array job with inline command
-echo "  Submitting array job (${N_FILES} jobs, max ${MAX_CONCURRENT} concurrent)..."
+echo "  Submitting array job [${N_FILES} jobs, max ${MAX_CONCURRENT} concurrent]..."
 sbatch -W \
-	--job-name=${JOB_NAME} \
+	-J deg_analysis \
 	--array=0-$((N_FILES-1))%${MAX_CONCURRENT} \
 	--partition=${PARTITION} \
 	--qos=${QOS} \
 	--mem=${MEM} \
-	--time=5:00:00 \
+	--time=6:00:00 \
 	--cpus-per-task=2 \
-	--output="${LOGS_DIR}/${LOG_PREFIX}_%A_%a.out" \
-	--error="${LOGS_DIR}/${LOG_PREFIX}_%A_%a.err" \
+	--output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_analysis_%A_%a.out" \
+	--error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_analysis_%A_%a.err" \
 	--wrap="eval \"\$(mamba shell hook --shell bash)\" && \
 		mamba activate ${ENV_DIR} && \
 		INPUT_FILE=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID + 1))p\" ${FILE_LIST}) && \
@@ -200,6 +210,5 @@ sbatch -W \
 			--input \"\$INPUT_FILE\" \
 			--config ${deg_config} \
 			$ARG_F $ARG_S"
-
-
+rm -rf "${TMP_DIR}"
 echo "> DGE calculations are completed"
