@@ -1,15 +1,18 @@
-## Description
+# Description
 
-### OP3_v2: Single-Cell Perturbation Analysis Pipeline
-OP3_v2 is a set of pipelines for analyzing single-cell RNA sequencing data from perturbation experiments. The current version of OP3_v2 includes the scripts for processing and analyzing Sci-Plex and Tahoe datasets.
+**OP3_v2** is a set of pipelines for analyzing single-cell RNA sequencing data from perturbation experiments. 
+
+The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234) and [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full) datasets.
 
 It consists of the following steps:
 
-**Pseudobulking**: aggregates raw single-cell RNA sequencing data to pseudobulk samples for downstream analysis
+* **Pseudobulking**: 
+Aggregates raw single-cell RNA sequencing data to pseudobulk samples for downstream analysis
 
-**DEG Analysis**: Identifies differentially expressed genes between treatment and control conditions in pseudobulk samples
+* **DEG Analysis**: 
+Identifies differentially expressed genes between treatment and control conditions in pseudobulk samples
 
-## Quick start guide
+# Quick start guide
 You can run scripts on the HPC cluster with the workload manager (SLURM)
 
 **NB!** Before running some bash scripts, you may need to run `chmod u+x ./path/script.sh` before their execution.
@@ -131,7 +134,7 @@ cd /op3_v2
 ./run_pipelines/run_deg.sh -s -j -d sciplex -p group_all_replicates
 ```
 
-## Project structure:
+# Project structure:
 The structure of the repo:
 ```
  tree .
@@ -181,7 +184,7 @@ The structure of the repo:
 └── venv -> /home/icb/olga.novitskaia/venv/
 ```
 
-## Data
+# Data
 The structure of the `data` folder:
 ```
 ├──dataset_i
