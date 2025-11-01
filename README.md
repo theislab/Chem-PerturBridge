@@ -124,7 +124,8 @@ You can execute it with following arguments:
 -s if this flag is included, then the script is executed for a subsample of a dataset, default=false
 -j if this flag is included, then the script is executed in parallel mode (array jobs per cell type), default=false
 -h if this flag is included, then the help is printed, default=false
--f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number
+-f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
+-q if this flag is included, then samples that did not pass quality control are filtered out, default=false
 -d it is a required flag specifying which dataset should be processed: sciplex | tahoe
 -p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
 ```
@@ -142,17 +143,27 @@ The structure of the repo:
 ├── data -> /home/icb/olga.novitskaia/data/
 ├── env.yaml
 ├── logs
-│   ├── dataset_i
-│   └── ...
+│   ├── dataset_i
+│   │   ├── full (or subsample)
+│   │   │   └── deg
+│   │   │       └── parameter_name (group_all_replicates or separate_replicates)
+│   │   │           └── qc_true (or qc_false)
+│   │   │               └── filter_min_cells_f
+│   │   │                   └── deg_*.out, deg_*.err
+│   │   └── ...
 ├── pipelines
 │   ├── common
 │   │   └── deg.sh
-│   ├── sciplex
+│   ├── sciplex
 │   │   ├── configs/
-│   │   └── sciplex_pseudobulking.sh
-│   └── tahoe
+│   │   │   ├── deg/
+│   │   │   │   └── config.json
+│   │   │   └── sciplex_pseudobulking.sh
+│   └── tahoe
 │       ├── configs/
-│       └── tahoe_pseudobulking_parallel.sh
+│       │   ├── deg/
+│       │   │   └── config.json
+│       │   └── tahoe_pseudobulking_parallel.sh
 ├── README.md
 ├── requirements.txt
 ├── run_pipelines
@@ -188,15 +199,26 @@ The structure of the repo:
 The structure of the `data` folder:
 ```
 ├──dataset_i
-│   ├──deg_results
-│   │   ├──full
-│   │   │   ├──celltype1_de.h5ad
-│   │   │   ├──celltype2_de.h5ad
-│   │   │   └──...
-│   │   └──subsample
-│   │       ├──celltype1_de.h5ad
-│   │       ├──celltype2_de.h5ad
-│   │       └──...
+│   ├──deg_data
+│   │   ├──group_rep (or sep_rep)
+│   │   │   ├──full
+│   │   │   │   ├──qc_true
+│   │   │   │   │   ├──filter_min_cells_0
+│   │   │   │   │   │   ├──celltype1_de.h5ad
+│   │   │   │   │   │   ├──celltype2_de.h5ad
+│   │   │   │   │   │   └──...
+│   │   │   │   │   ├──filter_min_cells_50
+│   │   │   │   │   │   └──...
+│   │   │   │   │   └──...
+│   │   │   │   └──qc_false
+│   │   │   │       └──...
+│   │   │   └──subsampling
+│   │   │       ├──qc_true
+│   │   │       │   └──...
+│   │   │       └──qc_false
+│   │   │           └──filter_min_cells_0
+│   │   │               ├──celltype1_de.h5ad
+│   │   │               └──...
 │   ├──raw
 │   │   ├──dataset_i.h5ad
 │   │   ├──dataset_i_subsample.h5ad (optionally)
@@ -213,12 +235,30 @@ The structure of the `data` folder:
 │   │   └──subsample
 │   │       └──dataset_i_subsample.h5ad
 │   └──pseudobulk_processed
-│       ├──dataset_i.h5ad
-│       └──by_celltype
-│           ├──celltype1_processed.h5ad
-│           ├──celltype2_processed.h5ad
-│           └──...
+│       ├──group_rep (or sep_rep)
+│       │   ├──dataset_i_processed.h5ad
+│       │   └──by_celltype
+│       │       ├──celltype1_processed.h5ad
+│       │       ├──celltype2_processed.h5ad
+│       │       └──...
+│       └──...
 └──...        
 
 ```
+
+**Note:** The DEG output directory structure is organized as: `{dataset}/deg_data/{parameter}/{full|subsampling}/{qc_true|qc_false}/filter_min_cells_{f}/`
+
+**Note:** The logs directory structure is: `{dataset}/{full|subsample}/deg/{parameter}/{qc_true|qc_false}/filter_min_cells_{f}/`
+
+The log files include:
+- Main pipeline logs: `deg_{dataset}.out` and `deg_{dataset}.err`
+- Preprocessing job logs: `deg_processing_pseudobulk.{JOBID}.out/.err`
+- Analysis job logs: `deg_analysis_{JOBID}_{TASK_ID}.out/.err` (for each cell type or file processed)
+
+where:
+- `dataset` is the dataset name (e.g., `sciplex`, `tahoe`)
+- `parameter` is the DEG parameter: `group_all_replicates` (stored as `group_rep`) or `separate_replicates` (stored as `sep_rep`)
+- `full` or `subsampling` indicates whether subsampling was used (note: logs use `subsample`, data uses `subsampling`)
+- `qc_true` or `qc_false` indicates whether quality control filtering was applied
+- `filter_min_cells_f` indicates the minimum cell count threshold used for filtering (f=0 means no filtering)
 		
