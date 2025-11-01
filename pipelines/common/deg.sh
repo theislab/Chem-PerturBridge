@@ -5,6 +5,7 @@ set -e
 PIPELINE_NAME="deg"
 MODE_S=False
 MODE_J=False
+MODE_Q=False
 PAR=""
 FILT=""
 CONFIG=""
@@ -23,14 +24,15 @@ DEG_PARAMETERS=(
         "separate_replicates"
 )
 
-while getopts ":sjp:f:c:d:h" opt; do
+while getopts ":sjp:f:q:c:d:h" opt; do
         case $opt in
                 h)
-                        echo "Run: $0 [-s] [-j] [-h] [-f] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
+                        echo "Run: $0 [-s] [-j] [-h] [-f] [-q] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
                         echo "  -s Subsample of a dataset for debugging, default=false"
                         echo "  -j Parallel mode (array jobs per cell type), default=false"
                         echo "  -h Help option, default=false"
                         echo "  -f Min number of cells in pseudobulk to filter samples with the lower number"
+                        echo "  -q Filter samples that did not pass quality control"
                         echo "  -p Parameter for DEG pipeline, required"
 			echo "  -c Path to the config file, required"
 			echo "  -d Dataset name, required"
@@ -48,6 +50,9 @@ while getopts ":sjp:f:c:d:h" opt; do
                 f)
                         FILT=$OPTARG
                         ;;
+		q)
+			MODE_Q=True
+			;;
 		c)	CONFIG=$OPTARG
 			;;
 		d)	DATASET=$OPTARG
@@ -71,6 +76,24 @@ else
         if [[ "$FILT" =~ ^[0-9]+$ ]]; then
    	        ARG_F="--min_cells $FILT"
         fi
+fi
+
+# Determine filter folder name
+if [[ -z "$FILT" ]]; then
+	FILTER_FOLDER="filter_min_cells_0"
+else
+	FILTER_FOLDER="filter_min_cells_${FILT}"
+fi
+
+# Set QC argument if flag is provided
+if [[ "$MODE_Q" == "True" ]]; then
+        echo "> Filter samples that did not pass quality control"
+        QC_FOLDER="qc_true"
+        ARG_Q="--qc"
+else
+        echo "> Do not filter samples that did not pass quality control"
+        QC_FOLDER="qc_false"
+        ARG_Q=""
 fi
 
 
@@ -135,8 +158,8 @@ sbatch -W -J deg_processing_pseudobulk \
        --mem=250G \
        --time=2:00:00 \
        --cpus-per-task=2 \
-       -o "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_processing_pseudobulk.%j.out" \
-       -e "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_processing_pseudobulk.%j.err" \
+       -o "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.out" \
+       -e "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.err" \
        --wrap="eval \"\$(mamba shell hook --shell bash)\" && \
                 mamba activate ${ENV_DIR} && \
                 python3 -m src.deg.run_processing_pseudobulk $ARG_J \
@@ -201,14 +224,14 @@ sbatch -W \
 	--mem=${MEM} \
 	--time=6:00:00 \
 	--cpus-per-task=2 \
-	--output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_analysis_%A_%a.out" \
-	--error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_analysis_%A_%a.err" \
+	--output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_analysis_%A_%a.out" \
+	--error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_analysis_%A_%a.err" \
 	--wrap="eval \"\$(mamba shell hook --shell bash)\" && \
 		mamba activate ${ENV_DIR} && \
 		INPUT_FILE=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID + 1))p\" ${FILE_LIST}) && \
 		Rscript ./src/deg/run_deg.R \
 			--input \"\$INPUT_FILE\" \
 			--config ${deg_config} \
-			$ARG_F $ARG_S"
+			$ARG_F $ARG_S $ARG_Q"
 rm -rf "${TMP_DIR}"
 echo "> DGE calculations are completed"

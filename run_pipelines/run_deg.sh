@@ -6,6 +6,7 @@ LOGS_DIR=./logs
 PIPELINE_NAME="deg"
 MODE_S=False
 MODE_J=False
+MODE_Q=False
 ARG_S=""
 ARG_F=""
 ARG_J=""
@@ -24,14 +25,15 @@ DEG_PARAMETERS=(
 
 mkdir -p $LOGS_DIR
 
-while getopts ":sjd:p:f:h" opt; do
+while getopts ":sjd:p:f:qh" opt; do
   	case $opt in
 		h)
-			echo "Run: $0 [-s] [-j] [-h] [-f] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
+			echo "Run: $0 [-s] [-j] [-h] [-f] [-q] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
                         echo "  -s Subsample of a dataset for debugging, default=false"
                         echo "  -j Parallel mode (array jobs per cell type), default=false"
                         echo "  -h Help option"
 			echo "  -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number"
+			echo "  -q Filter samples that did not pass quality control"
 			echo "  -d (dataset <str>) Name of dataset to process, required"
 			echo "  -p (parameter <str>) Parameter for DEG pipeline, required"
                         exit 0
@@ -47,6 +49,9 @@ while getopts ":sjd:p:f:h" opt; do
 			;;
 		f)
 			FILT=$OPTARG
+			;;
+		q)
+			MODE_Q=True
 			;;
     		d)
         		DATASET=$OPTARG
@@ -83,9 +88,25 @@ if [[ "$MODE_J" == "True" ]]; then
 	ARG_J="-j"
 fi
 
-mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}
-./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_J \
+# Determine filter folder names
+if [[ -z "$FILT" ]]; then
+	FILTER_FOLDER="filter_min_cells_0"
+else
+	FILTER_FOLDER="filter_min_cells_${FILT}"
+fi
+
+# Determine QC folder name
+if [[ "$MODE_Q" == "True" ]]; then
+	QC_FOLDER="qc_true"
+	ARG_Q="-q"
+else
+	QC_FOLDER="qc_false"
+	ARG_Q=""
+fi
+
+mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}
+./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_Q $ARG_J \
 	-c ./pipelines/${DATASET}/configs/deg/config.json \
 	-d ${DATASET} \
-		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_${DATASET}.out \
-		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/deg_${DATASET}.err &
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.err &

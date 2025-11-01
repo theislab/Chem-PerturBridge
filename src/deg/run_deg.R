@@ -90,8 +90,45 @@ filter_cells <- function(adata,
   
   n_obs_prev <- adata$n_obs
   cat("Filter samples with the low number of cells\n")
+  cat("    Filter threshold (min_cells): ", min_cells, "\n")
   adata <- adata[adata$obs$psbulk_cells >= min_cells]
   cat("    n_obs: ", n_obs_prev, "--> ", adata$n_obs, "\n")
+  return(adata)
+}
+
+#' Filter samples based on quality control
+#' 
+#' @param adata AnnData object containing pseudobulk data
+#' @param qc_enabled Whether to filter by quality control
+#' @return Filtered AnnData object (or original if QC column not found)
+filter_qc <- function(adata,
+                      qc_enabled) {
+  # Parameter validation
+  stopifnot(!missing(adata),
+            !missing(qc_enabled),
+            is.logical(qc_enabled))
+  
+  # If QC filtering is not enabled, return original data
+  if (!qc_enabled) {
+    return(adata)
+  }
+  
+  # Check for QC column
+  qc_column <- "qc_pass"
+  
+  if (qc_column %in% names(adata$obs)) {
+    n_obs_prev <- adata$n_obs
+    cat("Filter samples which did not pass qc\n")
+    cat("    QC column: ", qc_column, "\n")
+    # Use [[ to access column by variable name
+    adata <- adata[adata$obs[[qc_column]] == TRUE, ]
+    cat("    n_obs: ", n_obs_prev, "--> ", adata$n_obs, "\n")
+  } else {
+    # If no QC column found, warn and return original data
+    warning("QC filtering requested but no QC column found in data. ",
+            "Checked for: ", qc_column, ". ",
+            "Proceeding without QC filtering.")
+  }
   return(adata)
 }
 
@@ -178,7 +215,7 @@ find_controls <- function(control_obs,
     select_ctrs <- (control_obs$pert_time_h == time)
 
     if (!any(select_ctrs)) {
-        warning("No control found for time ", pert_time_h, "h, skipping ", raw_cond)
+        warning("No control found for time ", time, "h")
         return(NULL)
         }
     
@@ -240,7 +277,6 @@ derive_top_table <- function(fit,
 
         top_table <- left_join(top_table, stdev_unscaled, by = "gene")
         top_table <- left_join(top_table, stdev_scaled, by = "gene")
-        
         return(top_table)
         
       }, error = function(e) {
@@ -296,7 +332,17 @@ run_contrasts <- function(fit,
                                   pert_time_h,
                                   par$subsampling)
         }
-      return(bind_rows(top_tables))
+      top_tables <- compact(top_tables)
+      if (length(top_tables) > 0) {
+        tryCatch({
+          return(bind_rows(top_tables))
+        }, error = function(e) {
+          warning("Error binding top_tables: ", e$message)
+          return(NULL)
+        })
+      } else {
+        return(NULL)
+      }
     })
     
     
@@ -315,6 +361,7 @@ run_dge <- function(ad,
   stopifnot(!missing(ad),
             !missing(obs),
             "cond" %in% names(obs),
+            "plate" %in% names(obs),
             !is.null(ad$X))
   
   # build DGEList + design
@@ -451,9 +498,19 @@ run_dge_pipeline <- function(par) {
   }
   stopifnot(is.numeric(par$min_cells), par$min_cells >= 0)
   
+  # Set default qc_enabled if not provided
+  if (is.null(par$qc)) {
+    par$qc <- FALSE
+  }
+  stopifnot(is.logical(par$qc))
+  
   # load the full pseudobulk AnnData
   adata <- anndata::read_h5ad(par$input)
+  cat("Loaded input file: ", par$input, "\n")
+  cat("Initial dimensions: ", adata$n_obs, " samples × ", adata$n_vars, " genes\n")
+  
   adata <- filter_cells(adata, par$min_cells)
+  adata <- filter_qc(adata, par$qc)
   adata <- subsampling(adata, par)
   cell_types_to_process <- unique(adata$obs$cell_type)
   n_cell_types <- length(cell_types_to_process)
@@ -497,8 +554,8 @@ run_dge_pipeline <- function(par) {
 
     # Skip if no valid DE results
     if (is.null(de_res) || nrow(de_res) == 0) {
-    warning("No valid DE results for cell line ", cl)
-    next
+      warning("No valid DE results for cell line ", cl)
+      next
     }
   
     # adjust p-values globally across all contrasts
@@ -511,10 +568,19 @@ run_dge_pipeline <- function(par) {
     obs_out <- get_obs(de_df, treated_obs)
     var_out <- get_var(de_df, ad)
     layers <- get_layers(de_df, obs_out)
-  
-    # carry over global uns if you like
     
-    new_uns <- adata$uns
+    # Get uns metadata before subsetting to avoid ImplicitModificationWarning
+    # Access uns early while adata is still a proper object (not a view)
+    if (!is.null(adata$uns) && length(adata$uns) > 0) {
+      new_uns <- as.list(adata$uns)  # Create a copy
+    } else {
+      new_uns <- list()
+    }
+  
+    new_uns$threshold_filter_cells <- par$min_cells
+    new_uns$qc_filtering_enabled <- par$qc
+    
+
     
     # assemble and write
     out_adata <- anndata::AnnData(
@@ -531,6 +597,13 @@ run_dge_pipeline <- function(par) {
     else {
       output_dir <- file.path(par$output_dir, "full")
     }
+    # Add QC folder based on whether QC filtering is enabled
+    qc_folder <- if (par$qc) "qc_true" else "qc_false"
+    output_dir <- file.path(output_dir, qc_folder)
+    
+    # Add filter folder based on min_cells threshold
+    filter_folder <- paste0("filter_min_cells_", par$min_cells)
+    output_dir <- file.path(output_dir, filter_folder)
     
     if (!dir.exists(output_dir)) {
       dir.create(output_dir, recursive = TRUE)
@@ -584,12 +657,13 @@ main <- function() {
   parser$add_argument("--specific_times", nargs = "+", type="integer", default=c(24))
   parser$add_argument("--specific_perturbagens", type="character", default=NULL)
   parser$add_argument("--min_cells", type="integer", default=0)
+  parser$add_argument("--qc", action="store_true")
   parser$add_argument("--config", default="{}")
 
   args <- parser$parse_args()
   config <- jsonlite::fromJSON(args$config)
   args$config = NULL
-  args <- merge_config(args, config)
+  args <- merge_config(args, config)  
   # Start timer
   start_time <- Sys.time()
   cat("\nDE analysis started...\n")
