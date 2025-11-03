@@ -140,30 +140,30 @@ The structure of the repo:
 ```
  tree .
 .
-├── data -> /home/icb/olga.novitskaia/data/
+├── data -> /lustre/groups/ml01/workspace/olga.novitskaia/data
 ├── env.yaml
 ├── logs
-│   ├── dataset_i
-│   │   ├── full (or subsample)
-│   │   │   └── deg
-│   │   │       └── parameter_name (group_all_replicates or separate_replicates)
-│   │   │           └── qc_true (or qc_false)
-│   │   │               └── filter_min_cells_f
-│   │   │                   └── deg_*.out, deg_*.err
-│   │   └── ...
+│   └── dataset_i
+│       ├── full (or subsample)
+│       │   └── deg
+│       │       └── parameter_name (group_all_replicates or separate_replicates)
+│       │           └── qc_true (or qc_false)
+│       │               └── filter_min_cells_f
+│       │                   └── deg_*.out, deg_*.err
+│       └── ...
 ├── pipelines
 │   ├── common
 │   │   └── deg.sh
 │   ├── sciplex
-│   │   ├── configs/
-│   │   │   ├── deg/
-│   │   │   │   └── config.json
-│   │   │   └── sciplex_pseudobulking.sh
+│   │   └─── configs/
+│   │       ├── deg/
+│   │       │   └── config.json
+│   │       └── sciplex_pseudobulking.sh
 │   └── tahoe
-│       ├── configs/
-│       │   ├── deg/
-│       │   │   └── config.json
-│       │   └── tahoe_pseudobulking_parallel.sh
+│       └─── configs/
+│           ├── deg/
+│           │   └── config.json
+│           └── tahoe_pseudobulking_parallel.sh
 ├── README.md
 ├── requirements.txt
 ├── run_pipelines
@@ -191,7 +191,7 @@ The structure of the repo:
 │   │           ├── pubchem_imputation.py
 │   │           └── standardization.py
 │   └── utils
-│       ├── parsing_utils.py
+│       └─── parsing_utils.py
 └── venv -> /home/icb/olga.novitskaia/venv/
 ```
 
