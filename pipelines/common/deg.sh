@@ -141,15 +141,17 @@ eval "$(mamba shell hook --shell bash)"
 mamba activate ${ENV_DIR}
 
 # Create tmp directory for configs
-TMP_DIR="./tmp/deg_$$"
+TMP_DIR="./tmp"
+TMP_DIR_DEG="${TMP_DIR}/deg_$$"
 # Clean up if it exists from a previous failed run
 rm -rf "${TMP_DIR}"
 mkdir -p "${TMP_DIR}"
+mkdir -p "${TMP_DIR_DEG}"
 # Set up automatic cleanup on exit (even if script fails)
 trap "rm -rf ${TMP_DIR}" EXIT
 
 # Create config file in tmp directory
-preprocess_config="${TMP_DIR}/preprocess_config.json"
+preprocess_config="${TMP_DIR_DEG}/preprocess_config.json"
 echo "$par_process" | jq "." > "$preprocess_config"
 
 sbatch -W -J deg_processing_pseudobulk \
@@ -207,11 +209,11 @@ fi
 echo "  Found $N_FILES files to process"
 
 # Create file list in tmp directory
-FILE_LIST="${TMP_DIR}/file_list.txt"
+FILE_LIST="${TMP_DIR_DEG}/file_list.txt"
 printf '%s\n' "${INPUT_FILES[@]}" > "$FILE_LIST"
 
 # Create DEG config in tmp directory
-deg_config="${TMP_DIR}/deg_config.json"
+deg_config="${TMP_DIR_DEG}/deg_config.json"
 echo "$par_deg" | jq "." > "$deg_config"
 
 # Submit array job with inline command
