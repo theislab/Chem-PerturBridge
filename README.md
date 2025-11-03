@@ -200,25 +200,25 @@ The structure of the `data` folder:
 ```
 ├──dataset_i
 │   ├──deg_data
-│   │   ├──group_rep (or sep_rep)
-│   │   │   ├──full
-│   │   │   │   ├──qc_true
-│   │   │   │   │   ├──filter_min_cells_0
-│   │   │   │   │   │   ├──celltype1_de.h5ad
-│   │   │   │   │   │   ├──celltype2_de.h5ad
-│   │   │   │   │   │   └──...
-│   │   │   │   │   ├──filter_min_cells_50
-│   │   │   │   │   │   └──...
-│   │   │   │   │   └──...
-│   │   │   │   └──qc_false
-│   │   │   │       └──...
-│   │   │   └──subsampling
-│   │   │       ├──qc_true
-│   │   │       │   └──...
-│   │   │       └──qc_false
-│   │   │           └──filter_min_cells_0
-│   │   │               ├──celltype1_de.h5ad
-│   │   │               └──...
+│   │   └──group_rep (or sep_rep)
+│   │       ├──full
+│   │       │   ├──qc_true
+│   │       │   │   ├──filter_min_cells_0
+│   │       │   │   │   ├──celltype1_de.h5ad
+│   │       │   │   │   ├──celltype2_de.h5ad
+│   │       │   │   │   └──...
+│   │       │   │   ├──filter_min_cells_50
+│   │       │   │   │   └──...
+│   │       │   │   └──...
+│   │       │   └──qc_false
+│   │       │       └──...
+│   │       └──subsampling
+│   │           ├──qc_true
+│   │           │   └──...
+│   │           └──qc_false
+│   │               └──filter_min_cells_0
+│   │                   ├──celltype1_de.h5ad
+│   │                   └──...
 │   ├──raw
 │   │   ├──dataset_i.h5ad
 │   │   ├──dataset_i_subsample.h5ad (optionally)
