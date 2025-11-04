@@ -37,7 +37,7 @@ rewrite_h5ad <- function(path2file) {
             is.character(path2file),
             file.exists(path2file))
   
-  cat("Rewriting h5ad file:", path2file, "\n")
+  cat("\n    Rewriting h5ad file:", path2file, "\n")
   
   # Check if file is valid HDF5
   if (!rhdf5::H5Fis_hdf5(path2file)) {
@@ -50,15 +50,15 @@ rewrite_h5ad <- function(path2file) {
   # Check if X group exists and remove it completely
   if (rhdf5::H5Lexists(fid, "X")) {
     rhdf5::H5Ldelete(fid, "X")
-    cat("Removed X matrix\n")
+    cat("    Removed X matrix\n")
   } else {
-    cat("X matrix not found or already removed\n")
+    cat("    X matrix not found or already removed\n")
   }
   
   # Close file
   rhdf5::H5Fclose(fid)
   
-  cat("Rewriting h5ad file is done!\n")
+  cat("    Rewriting h5ad file is done!\n")
 }
 
 # Define which DE results to store in layers
@@ -618,7 +618,7 @@ run_dge_pipeline <- function(par) {
   
     # Show time for this cell line
     cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-    cat(sprintf("  ✓ Cell line completed in %.1f seconds\n", cl_time))
+    cat(sprintf("✓ Cell line completed in %.1f seconds\n", cl_time))
   }
 }
 
@@ -670,7 +670,7 @@ main <- function() {
 	
   tryCatch({
     	run_dge_pipeline(args)
-      cat("DE analysis completed!\n")
+      cat("\nDE analysis completed!\n")
   }, error = function(e) {
     	message("Error in running DGE: ", e$message)
   	message("Stack trace:")

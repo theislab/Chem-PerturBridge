@@ -24,7 +24,7 @@ DEG_PARAMETERS=(
         "separate_replicates"
 )
 
-while getopts ":sjp:f:q:c:d:h" opt; do
+while getopts ":sjqp:f:c:d:h" opt; do
         case $opt in
                 h)
                         echo "Run: $0 [-s] [-j] [-h] [-f] [-q] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
@@ -109,6 +109,15 @@ else
 	ARG_S=""
 fi
 
+# Add split_by_celltype flag if parallel mode
+if [ "$MODE_J" = "True" ]; then
+        echo "> Mode: PARALLEL (array jobs per cell type)"
+        ARG_J="--split_by_celltype"
+else
+        echo "> Mode: SEQUENTIAL (single job, all cell types)"
+        ARG_J=""
+fi
+
 # Validate CONFIG
 if [ -z "$CONFIG" ]; then
   echo "Error: Config path must be provided via -c flag" >&2
@@ -125,15 +134,6 @@ echo "> Using config: $CONFIG"
 echo "> Preprocess pseudobulk with a $PAR parameter"
 if ! par_process=$(jq -e ".$PAR.par_process" $CONFIG); then
   echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
-fi
-
-# Add split_by_celltype flag if parallel mode
-if [ "$MODE_J" = "True" ]; then
-        echo "> Mode: PARALLEL (array jobs per cell type)"
-        ARG_J="--split_by_celltype"
-else
-        echo "> Mode: SEQUENTIAL (single job, all cell types)"
-        ARG_J=""
 fi
 
 
@@ -154,6 +154,7 @@ trap "rm -rf ${TMP_DIR}" EXIT
 preprocess_config="${TMP_DIR_DEG}/preprocess_config.json"
 echo "$par_process" | jq "." > "$preprocess_config"
 
+echo "> Running preprocessing pseudobulk"
 sbatch -W -J deg_processing_pseudobulk \
        --partition=${PARTITION} \
        --qos=${QOS} \
@@ -167,10 +168,9 @@ sbatch -W -J deg_processing_pseudobulk \
                 python3 -m src.deg.run_processing_pseudobulk $ARG_J \
                 --config ${preprocess_config}"
 
-# Keep tmp directory for DEG step (cleanup at the end)
+echo "> Preprocessing pseudobulk is done"
 
-
-echo "> Run DGE with a $PAR parameter"
+echo "> Starting DGE analysis with a $PAR parameter"
 if ! par_deg=$(jq -e ".$PAR.par_deg" $CONFIG); then
         echo "Error: Failed to extract parameters from $CONFIG" >&2; exit 1
 fi
@@ -217,6 +217,7 @@ deg_config="${TMP_DIR_DEG}/deg_config.json"
 echo "$par_deg" | jq "." > "$deg_config"
 
 # Submit array job with inline command
+
 echo "  Submitting array job [${N_FILES} jobs, max ${MAX_CONCURRENT} concurrent]..."
 sbatch -W \
 	-J deg_analysis \
@@ -235,5 +236,7 @@ sbatch -W \
 			--input \"\$INPUT_FILE\" \
 			--config ${deg_config} \
 			$ARG_F $ARG_S $ARG_Q"
+
+echo "> DGE analysis is done"
 rm -rf "${TMP_DIR}"
-echo "> DGE calculations are completed"
+echo "> DGE pipeline is finished"
