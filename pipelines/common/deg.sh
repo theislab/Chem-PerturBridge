@@ -144,11 +144,10 @@ mamba activate ${ENV_DIR}
 TMP_DIR="./tmp"
 TMP_DIR_DEG="${TMP_DIR}/deg_$$"
 # Clean up if it exists from a previous failed run
-rm -rf "${TMP_DIR}"
 mkdir -p "${TMP_DIR}"
 mkdir -p "${TMP_DIR_DEG}"
 # Set up automatic cleanup on exit (even if script fails)
-trap "rm -rf ${TMP_DIR}" EXIT
+trap "rm -rf ${TMP_DIR_DEG}" EXIT
 
 # Create config file in tmp directory
 preprocess_config="${TMP_DIR_DEG}/preprocess_config.json"
@@ -238,5 +237,5 @@ sbatch -W \
 			$ARG_F $ARG_S $ARG_Q"
 
 echo "> DGE analysis is done"
-rm -rf "${TMP_DIR}"
+rm -rf "${TMP_DIR_DEG}"
 echo "> DGE pipeline is finished"
