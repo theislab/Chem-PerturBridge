@@ -245,20 +245,4 @@ The structure of the `data` folder:
 └──...        
 
 ```
-
-**Note:** The DEG output directory structure is organized as: `{dataset}/deg_data/{parameter}/{full|subsampling}/{qc_true|qc_false}/filter_min_cells_{f}/`
-
-**Note:** The logs directory structure is: `{dataset}/{full|subsample}/deg/{parameter}/{qc_true|qc_false}/filter_min_cells_{f}/`
-
-The log files include:
-- Main pipeline logs: `deg_{dataset}.out` and `deg_{dataset}.err`
-- Preprocessing job logs: `deg_processing_pseudobulk.{JOBID}.out/.err`
-- Analysis job logs: `deg_analysis_{JOBID}_{TASK_ID}.out/.err` (for each cell type or file processed)
-
-where:
-- `dataset` is the dataset name (e.g., `sciplex`, `tahoe`)
-- `parameter` is the DEG parameter: `group_all_replicates` (stored as `group_rep`) or `separate_replicates` (stored as `sep_rep`)
-- `full` or `subsampling` indicates whether subsampling was used (note: logs use `subsample`, data uses `subsampling`)
-- `qc_true` or `qc_false` indicates whether quality control filtering was applied
-- `filter_min_cells_f` indicates the minimum cell count threshold used for filtering (f=0 means no filtering)
 		
