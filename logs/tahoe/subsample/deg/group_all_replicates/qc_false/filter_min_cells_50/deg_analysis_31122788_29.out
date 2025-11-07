@@ -1,0 +1,47 @@
+
+DE analysis started...
+Loaded input file:  ./data/tahoe/pseudobulk_processed/group_rep/by_celltype/CVCL_1125_processed.h5ad 
+Initial dimensions:  1340  samples ×  62710  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  50 
+    n_obs:  1340 -->  1310 
+
+⚡ TEST MODE ENABLED ⚡
+Original dataset dimensions:  1310  samples x  25  genes
+Filtering to time points:  24  hours
+Subsetting to  3  perturbations (+ control):  DMSO_TF, alpelisib, Lapatinib ditosylate, palbociclib 
+Calculating gene variance for subsetting...
+Subset to top  1000  most variable genes
+Test mode dataset:  35  samples x  1000  genes
+
+Conditions to analyze:
+# A tibble: 4 x 4
+  cell_type perturbagen          pert_time_h n_samples
+  <fct>     <fct>                      <dbl>     <int>
+1 CVCL_1125 DMSO_TF                       24        28
+2 CVCL_1125 Lapatinib ditosylate          24         3
+3 CVCL_1125 alpelisib                     24         2
+4 CVCL_1125 palbociclib                   24         2
+
+▶︎ Processing cell_type  1 / 1 :  CVCL_1125 
+    Filter controls by  pert_time_h  column
+        n_obs:  35 -->  35 
+
+    Running contrast 1/7
+    Running contrast 6/7
+    Running contrast 7/7
+
+    Writing:  ./data/tahoe/deg_data/group_rep/subsampling/qc_false/filter_min_cells_50/CVCL_1125_de.h5ad 
+
+    Rewriting h5ad file: ./data/tahoe/deg_data/group_rep/subsampling/qc_false/filter_min_cells_50/CVCL_1125_de.h5ad 
+    Removed X matrix
+    Rewriting h5ad file is done!
+✓ Cell line completed in 2.1 seconds
+
+DE analysis completed!
+
+Total runtime: 20.5 seconds
+
+📝 Note: This was a TEST RUN with reduced data.
+Set subsampling = FALSE for full analysis.
+

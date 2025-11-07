@@ -1,0 +1,41 @@
+
+DE analysis started...
+Loaded input file:  ./data/sciplex/pseudobulk_processed/sep_rep/by_celltype/CVCL_0023_processed.h5ad 
+Initial dimensions:  1910  samples ×  58302  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  50 
+    n_obs:  1910 -->  343 
+
+⚡ TEST MODE ENABLED ⚡
+Original dataset dimensions:  343  samples x  25  genes
+Filtering to time points:  24  hours
+Subsetting to  3  perturbations (+ control):  DMSO, entinostat, pelitinib, Raltitrexed 
+Calculating gene variance for subsetting...
+Subset to top  1000  most variable genes
+Test mode dataset:  6  samples x  1000  genes
+
+Conditions to analyze:
+# A tibble: 4 x 4
+  cell_type perturbagen pert_time_h n_samples
+  <fct>     <fct>             <dbl>     <int>
+1 CVCL_0023 DMSO                 24         1
+2 CVCL_0023 Raltitrexed          24         3
+3 CVCL_0023 entinostat           24         1
+4 CVCL_0023 pelitinib            24         1
+
+▶︎ Processing cell_type  1 / 1 :  CVCL_0023 
+    Filter controls by  pert_time_h  column
+        n_obs:  6 -->  6 
+
+Coefficients not estimable: plateplate37 plateplate40 
+Coefficients not estimable: plateplate37 plateplate40 
+    Running contrast 1/5
+    Running contrast 5/5
+
+DE analysis completed!
+
+Total runtime: 16.8 seconds
+
+📝 Note: This was a TEST RUN with reduced data.
+Set subsampling = FALSE for full analysis.
+

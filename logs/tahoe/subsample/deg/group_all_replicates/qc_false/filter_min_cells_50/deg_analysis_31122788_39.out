@@ -1,0 +1,27 @@
+
+DE analysis started...
+Loaded input file:  ./data/tahoe/pseudobulk_processed/group_rep/by_celltype/CVCL_1571_processed.h5ad 
+Initial dimensions:  1331  samples ×  62710  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  50 
+    n_obs:  1331 -->  0 
+
+⚡ TEST MODE ENABLED ⚡
+Original dataset dimensions:  0  samples x  25  genes
+Filtering to time points:  24  hours
+Calculating gene variance for subsetting...
+Subset to top  1000  most variable genes
+Test mode dataset:  0  samples x  1000  genes
+
+Conditions to analyze:
+# A tibble: 0 × 4
+# ℹ 4 variables: cell_type <fct>, perturbagen <fct>, pert_time_h <dbl>,
+#   n_samples <int>
+
+DE analysis completed!
+
+Total runtime: 9.2 seconds
+
+📝 Note: This was a TEST RUN with reduced data.
+Set subsampling = FALSE for full analysis.
+

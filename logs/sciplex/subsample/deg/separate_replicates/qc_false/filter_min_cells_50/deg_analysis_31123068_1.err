@@ -1,0 +1,25 @@
+During startup - Warning messages:
+1: Setting LC_CTYPE failed, using "C" 
+2: Setting LC_COLLATE failed, using "C" 
+3: Setting LC_TIME failed, using "C" 
+4: Setting LC_MESSAGES failed, using "C" 
+5: Setting LC_MONETARY failed, using "C" 
+6: Setting LC_PAPER failed, using "C" 
+7: Setting LC_MEASUREMENT failed, using "C" 
+
+Warning messages:
+1: Partial NA coefficients for 1000 probe(s) 
+2: In voom(dge, design, plot = FALSE) :
+  The experimental design has no replication. Setting weights to 1.
+3: Partial NA coefficients for 1000 probe(s) 
+4: In value[[3L]](cond) :
+  Error in contrast for entinostat_10uM_24h_plate9_A3_plate15: No residual degrees of freedom in linear model fits
+5: In value[[3L]](cond) :
+  Error in contrast for pelitinib_10uM_24h_plate9_A5_plate15: No residual degrees of freedom in linear model fits
+6: In value[[3L]](cond) :
+  Error in contrast for Raltitrexed_1uM_24h_plate9_D12_plate15: No residual degrees of freedom in linear model fits
+7: In value[[3L]](cond) :
+  Error in contrast for Raltitrexed_10uM_24h_plate9_D6_plate15: No residual degrees of freedom in linear model fits
+8: In value[[3L]](cond) :
+  Error in contrast for Raltitrexed_10uM_24h_plate10_D12_plate40: No residual degrees of freedom in linear model fits
+9: In run_dge_pipeline(args) : No valid DE results for cell line CVCL_0023

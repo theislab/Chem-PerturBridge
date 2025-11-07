@@ -1,0 +1,13 @@
+
+Warning messages:
+1: In check_for_controls(obs, "pert_time_h") :
+  Missing controls for 'pert_time_h' columns: 24
+2: Partial NA coefficients for 748 probe(s) 
+3: In voom(dge, design, plot = FALSE) :
+  The experimental design has no replication. Setting weights to 1.
+4: Partial NA coefficients for 748 probe(s) 
+5: In find_controls(control_obs, pert_time_h) :
+  No control found for time 24h
+6: In find_controls(control_obs, pert_time_h) :
+  No control found for time 24h
+7: In run_dge_pipeline(args) : No valid DE results for cell line CVCL_1531

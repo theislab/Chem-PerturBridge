@@ -1,0 +1,38 @@
+
+DE analysis started...
+Loaded input file:  ./data/tahoe/pseudobulk_processed/group_rep/by_celltype/CVCL_1531_processed.h5ad 
+Initial dimensions:  1331  samples ×  62710  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  50 
+    n_obs:  1331 -->  2 
+
+⚡ TEST MODE ENABLED ⚡
+Original dataset dimensions:  2  samples x  25  genes
+Filtering to time points:  24  hours
+Calculating gene variance for subsetting...
+Subset to top  1000  most variable genes
+Test mode dataset:  2  samples x  1000  genes
+
+Conditions to analyze:
+# A tibble: 2 × 4
+  cell_type perturbagen                      pert_time_h n_samples
+  <fct>     <fct>                                  <dbl>     <int>
+1 CVCL_1531 Sivelestat (sodium tetrahydrate)          24         1
+2 CVCL_1531 fusidic acid                              24         1
+
+▶︎ Processing cell_type  1 / 1 :  CVCL_1531 
+    Filter controls by  pert_time_h  column
+        n_obs:  2 -->  2 
+
+Coefficients not estimable: plateplate9 
+Coefficients not estimable: plateplate9 
+    Running contrast 1/2
+    Running contrast 2/2
+
+DE analysis completed!
+
+Total runtime: 9.6 seconds
+
+📝 Note: This was a TEST RUN with reduced data.
+Set subsampling = FALSE for full analysis.
+
