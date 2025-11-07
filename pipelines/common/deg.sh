@@ -2,6 +2,10 @@
 
 set -e
 
+# Get project root directory (parent of pipelines directory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+
 PIPELINE_NAME="deg"
 MODE_S=False
 MODE_J=False
@@ -118,6 +122,17 @@ else
         ARG_J=""
 fi
 
+eval "$(mamba shell hook --shell bash)"
+mamba activate ${ENV_DIR}
+# Create tmp directory for configs
+TMP_DIR="./tmp"
+TMP_DIR_DEG="${TMP_DIR}/deg_$$"
+# Clean up if it exists from a previous failed run
+mkdir -p "${TMP_DIR}"
+mkdir -p "${TMP_DIR_DEG}"
+# Set up automatic cleanup on exit (even if script fails)
+trap "rm -rf ${TMP_DIR_DEG}" EXIT
+
 # Validate CONFIG
 if [ -z "$CONFIG" ]; then
   echo "Error: Config path must be provided via -c flag" >&2
@@ -137,18 +152,6 @@ if ! par_process=$(jq -e ".$PAR.par_process" $CONFIG); then
 fi
 
 
-eval "$(mamba shell hook --shell bash)"
-mamba activate ${ENV_DIR}
-
-# Create tmp directory for configs
-TMP_DIR="./tmp"
-TMP_DIR_DEG="${TMP_DIR}/deg_$$"
-# Clean up if it exists from a previous failed run
-mkdir -p "${TMP_DIR}"
-mkdir -p "${TMP_DIR_DEG}"
-# Set up automatic cleanup on exit (even if script fails)
-trap "rm -rf ${TMP_DIR_DEG}" EXIT
-
 # Create config file in tmp directory
 preprocess_config="${TMP_DIR_DEG}/preprocess_config.json"
 echo "$par_process" | jq "." > "$preprocess_config"
@@ -162,7 +165,10 @@ sbatch -W -J deg_processing_pseudobulk \
        --cpus-per-task=2 \
        -o "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.out" \
        -e "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.err" \
-       --wrap="eval \"\$(mamba shell hook --shell bash)\" && \
+       --wrap="export TMPDIR=\${HOME}/tmp && \
+                mkdir -p \${TMPDIR} && \
+                cd ${PROJECT_ROOT} && \
+                eval \"\$(mamba shell hook --shell bash)\" && \
                 mamba activate ${ENV_DIR} && \
                 python3 -m src.deg.run_processing_pseudobulk $ARG_J \
                 --config ${preprocess_config}"
@@ -228,7 +234,10 @@ sbatch -W \
 	--cpus-per-task=2 \
 	--output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_analysis_%A_%a.out" \
 	--error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_analysis_%A_%a.err" \
-	--wrap="eval \"\$(mamba shell hook --shell bash)\" && \
+	--wrap="export TMPDIR=\${HOME}/tmp && \
+		mkdir -p \${TMPDIR} && \
+		cd ${PROJECT_ROOT} && \
+		eval \"\$(mamba shell hook --shell bash)\" && \
 		mamba activate ${ENV_DIR} && \
 		INPUT_FILE=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID + 1))p\" ${FILE_LIST}) && \
 		Rscript ./src/deg/run_deg.R \
