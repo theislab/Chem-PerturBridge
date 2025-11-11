@@ -1,0 +1,169 @@
+
+DE analysis started...
+Loaded input file:  ./data/sciplex/pseudobulk_processed/group_rep/by_celltype/CVCL_0031_processed.h5ad 
+Initial dimensions:  1529  samples ×  58302  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  50 
+    n_obs:  1529 -->  1318 
+
+▶︎ Processing cell_type  1 / 1 :  CVCL_0031 
+    Filter controls by  pert_time_h  column
+        n_obs:  1318 -->  1318 
+
+    Running contrast 1/725
+    Running contrast 6/725
+    Running contrast 11/725
+    Running contrast 16/725
+    Running contrast 21/725
+    Running contrast 26/725
+    Running contrast 31/725
+    Running contrast 36/725
+    Running contrast 41/725
+    Running contrast 46/725
+    Running contrast 51/725
+    Running contrast 56/725
+    Running contrast 61/725
+    Running contrast 66/725
+    Running contrast 71/725
+    Running contrast 76/725
+    Running contrast 81/725
+    Running contrast 86/725
+    Running contrast 91/725
+    Running contrast 96/725
+    Running contrast 101/725
+    Running contrast 106/725
+    Running contrast 111/725
+    Running contrast 116/725
+    Running contrast 121/725
+    Running contrast 126/725
+    Running contrast 131/725
+    Running contrast 136/725
+    Running contrast 141/725
+    Running contrast 146/725
+    Running contrast 151/725
+    Running contrast 156/725
+    Running contrast 161/725
+    Running contrast 166/725
+    Running contrast 171/725
+    Running contrast 176/725
+    Running contrast 181/725
+    Running contrast 186/725
+    Running contrast 191/725
+    Running contrast 196/725
+    Running contrast 201/725
+    Running contrast 206/725
+    Running contrast 211/725
+    Running contrast 216/725
+    Running contrast 221/725
+    Running contrast 226/725
+    Running contrast 231/725
+    Running contrast 236/725
+    Running contrast 241/725
+    Running contrast 246/725
+    Running contrast 251/725
+    Running contrast 256/725
+    Running contrast 261/725
+    Running contrast 266/725
+    Running contrast 271/725
+    Running contrast 276/725
+    Running contrast 281/725
+    Running contrast 286/725
+    Running contrast 291/725
+    Running contrast 296/725
+    Running contrast 301/725
+    Running contrast 306/725
+    Running contrast 311/725
+    Running contrast 316/725
+    Running contrast 321/725
+    Running contrast 326/725
+    Running contrast 331/725
+    Running contrast 336/725
+    Running contrast 341/725
+    Running contrast 346/725
+    Running contrast 351/725
+    Running contrast 356/725
+    Running contrast 361/725
+    Running contrast 366/725
+    Running contrast 371/725
+    Running contrast 376/725
+    Running contrast 381/725
+    Running contrast 386/725
+    Running contrast 391/725
+    Running contrast 396/725
+    Running contrast 401/725
+    Running contrast 406/725
+    Running contrast 411/725
+    Running contrast 416/725
+    Running contrast 421/725
+    Running contrast 426/725
+    Running contrast 431/725
+    Running contrast 436/725
+    Running contrast 441/725
+    Running contrast 446/725
+    Running contrast 451/725
+    Running contrast 456/725
+    Running contrast 461/725
+    Running contrast 466/725
+    Running contrast 471/725
+    Running contrast 476/725
+    Running contrast 481/725
+    Running contrast 486/725
+    Running contrast 491/725
+    Running contrast 496/725
+    Running contrast 501/725
+    Running contrast 506/725
+    Running contrast 511/725
+    Running contrast 516/725
+    Running contrast 521/725
+    Running contrast 526/725
+    Running contrast 531/725
+    Running contrast 536/725
+    Running contrast 541/725
+    Running contrast 546/725
+    Running contrast 551/725
+    Running contrast 556/725
+    Running contrast 561/725
+    Running contrast 566/725
+    Running contrast 571/725
+    Running contrast 576/725
+    Running contrast 581/725
+    Running contrast 586/725
+    Running contrast 591/725
+    Running contrast 596/725
+    Running contrast 601/725
+    Running contrast 606/725
+    Running contrast 611/725
+    Running contrast 616/725
+    Running contrast 621/725
+    Running contrast 626/725
+    Running contrast 631/725
+    Running contrast 636/725
+    Running contrast 641/725
+    Running contrast 646/725
+    Running contrast 651/725
+    Running contrast 656/725
+    Running contrast 661/725
+    Running contrast 666/725
+    Running contrast 671/725
+    Running contrast 676/725
+    Running contrast 681/725
+    Running contrast 686/725
+    Running contrast 691/725
+    Running contrast 696/725
+    Running contrast 701/725
+    Running contrast 706/725
+    Running contrast 711/725
+    Running contrast 716/725
+    Running contrast 721/725
+    Running contrast 725/725
+
+    Writing:  ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_50/CVCL_0031_de.h5ad 
+
+    Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_50/CVCL_0031_de.h5ad 
+    Removed X matrix
+    Rewriting h5ad file is done!
+✓ Cell line completed in 2031.9 seconds
+
+DE analysis completed!
+
+Total runtime: 2047.5 seconds

@@ -1,0 +1,93 @@
+
+DE analysis started...
+Loaded input file:  ./data/sciplex/pseudobulk_processed/sep_rep/by_celltype/CVCL_0023_processed.h5ad 
+Initial dimensions:  1910  samples ×  58302  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  50 
+    n_obs:  1910 -->  343 
+
+▶︎ Processing cell_type  1 / 1 :  CVCL_0023 
+    Filter controls by  pert_time_h  column
+        n_obs:  343 -->  343 
+
+Coefficients not estimable: plateplate33 plateplate34 plateplate35 plateplate36 plateplate37 plateplate40 plateplate52 
+Coefficients not estimable: plateplate33 plateplate34 plateplate35 plateplate36 plateplate37 plateplate40 plateplate52 
+    Running contrast 1/334
+    Running contrast 6/334
+    Running contrast 11/334
+    Running contrast 16/334
+    Running contrast 21/334
+    Running contrast 26/334
+    Running contrast 31/334
+    Running contrast 36/334
+    Running contrast 41/334
+    Running contrast 46/334
+    Running contrast 51/334
+    Running contrast 56/334
+    Running contrast 61/334
+    Running contrast 66/334
+    Running contrast 71/334
+    Running contrast 76/334
+    Running contrast 81/334
+    Running contrast 86/334
+    Running contrast 91/334
+    Running contrast 96/334
+    Running contrast 101/334
+    Running contrast 106/334
+    Running contrast 111/334
+    Running contrast 116/334
+    Running contrast 121/334
+    Running contrast 126/334
+    Running contrast 131/334
+    Running contrast 136/334
+    Running contrast 141/334
+    Running contrast 146/334
+    Running contrast 151/334
+    Running contrast 156/334
+    Running contrast 161/334
+    Running contrast 166/334
+    Running contrast 171/334
+    Running contrast 176/334
+    Running contrast 181/334
+    Running contrast 186/334
+    Running contrast 191/334
+    Running contrast 196/334
+    Running contrast 201/334
+    Running contrast 206/334
+    Running contrast 211/334
+    Running contrast 216/334
+    Running contrast 221/334
+    Running contrast 226/334
+    Running contrast 231/334
+    Running contrast 236/334
+    Running contrast 241/334
+    Running contrast 246/334
+    Running contrast 251/334
+    Running contrast 256/334
+    Running contrast 261/334
+    Running contrast 266/334
+    Running contrast 271/334
+    Running contrast 276/334
+    Running contrast 281/334
+    Running contrast 286/334
+    Running contrast 291/334
+    Running contrast 296/334
+    Running contrast 301/334
+    Running contrast 306/334
+    Running contrast 311/334
+    Running contrast 316/334
+    Running contrast 321/334
+    Running contrast 326/334
+    Running contrast 331/334
+    Running contrast 334/334
+
+    Writing:  ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/CVCL_0023_de.h5ad 
+
+    Rewriting h5ad file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/CVCL_0023_de.h5ad 
+    Removed X matrix
+    Rewriting h5ad file is done!
+✓ Cell line completed in 242.4 seconds
+
+DE analysis completed!
+
+Total runtime: 257.6 seconds

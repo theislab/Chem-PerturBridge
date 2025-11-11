@@ -1,0 +1,20 @@
+
+DE analysis started...
+Loaded input file:  ./data/tahoe/pseudobulk_processed/sep_rep/by_celltype/CVCL_1531_processed.h5ad 
+Initial dimensions:  1331  samples ×  62710  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  50 
+    n_obs:  1331 -->  2 
+
+▶︎ Processing cell_type  1 / 1 :  CVCL_1531 
+    Filter controls by  pert_time_h  column
+        n_obs:  2 -->  2 
+
+Coefficients not estimable: plateplate9 
+Coefficients not estimable: plateplate9 
+    Running contrast 1/2
+    Running contrast 2/2
+
+DE analysis completed!
+
+Total runtime: 11.3 seconds

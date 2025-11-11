@@ -1,0 +1,195 @@
+
+DE analysis started...
+Loaded input file:  ./data/tahoe/pseudobulk_processed/group_rep/by_celltype/CVCL_1571_processed.h5ad 
+Initial dimensions:  1331  samples ×  62710  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  10 
+    n_obs:  1331 -->  970 
+
+▶︎ Processing cell_type  1 / 1 :  CVCL_1571 
+    Filter controls by  pert_time_h  column
+        n_obs:  970 -->  970 
+
+    Running contrast 1/856
+    Running contrast 6/856
+    Running contrast 11/856
+    Running contrast 16/856
+    Running contrast 21/856
+    Running contrast 26/856
+    Running contrast 31/856
+    Running contrast 36/856
+    Running contrast 41/856
+    Running contrast 46/856
+    Running contrast 51/856
+    Running contrast 56/856
+    Running contrast 61/856
+    Running contrast 66/856
+    Running contrast 71/856
+    Running contrast 76/856
+    Running contrast 81/856
+    Running contrast 86/856
+    Running contrast 91/856
+    Running contrast 96/856
+    Running contrast 101/856
+    Running contrast 106/856
+    Running contrast 111/856
+    Running contrast 116/856
+    Running contrast 121/856
+    Running contrast 126/856
+    Running contrast 131/856
+    Running contrast 136/856
+    Running contrast 141/856
+    Running contrast 146/856
+    Running contrast 151/856
+    Running contrast 156/856
+    Running contrast 161/856
+    Running contrast 166/856
+    Running contrast 171/856
+    Running contrast 176/856
+    Running contrast 181/856
+    Running contrast 186/856
+    Running contrast 191/856
+    Running contrast 196/856
+    Running contrast 201/856
+    Running contrast 206/856
+    Running contrast 211/856
+    Running contrast 216/856
+    Running contrast 221/856
+    Running contrast 226/856
+    Running contrast 231/856
+    Running contrast 236/856
+    Running contrast 241/856
+    Running contrast 246/856
+    Running contrast 251/856
+    Running contrast 256/856
+    Running contrast 261/856
+    Running contrast 266/856
+    Running contrast 271/856
+    Running contrast 276/856
+    Running contrast 281/856
+    Running contrast 286/856
+    Running contrast 291/856
+    Running contrast 296/856
+    Running contrast 301/856
+    Running contrast 306/856
+    Running contrast 311/856
+    Running contrast 316/856
+    Running contrast 321/856
+    Running contrast 326/856
+    Running contrast 331/856
+    Running contrast 336/856
+    Running contrast 341/856
+    Running contrast 346/856
+    Running contrast 351/856
+    Running contrast 356/856
+    Running contrast 361/856
+    Running contrast 366/856
+    Running contrast 371/856
+    Running contrast 376/856
+    Running contrast 381/856
+    Running contrast 386/856
+    Running contrast 391/856
+    Running contrast 396/856
+    Running contrast 401/856
+    Running contrast 406/856
+    Running contrast 411/856
+    Running contrast 416/856
+    Running contrast 421/856
+    Running contrast 426/856
+    Running contrast 431/856
+    Running contrast 436/856
+    Running contrast 441/856
+    Running contrast 446/856
+    Running contrast 451/856
+    Running contrast 456/856
+    Running contrast 461/856
+    Running contrast 466/856
+    Running contrast 471/856
+    Running contrast 476/856
+    Running contrast 481/856
+    Running contrast 486/856
+    Running contrast 491/856
+    Running contrast 496/856
+    Running contrast 501/856
+    Running contrast 506/856
+    Running contrast 511/856
+    Running contrast 516/856
+    Running contrast 521/856
+    Running contrast 526/856
+    Running contrast 531/856
+    Running contrast 536/856
+    Running contrast 541/856
+    Running contrast 546/856
+    Running contrast 551/856
+    Running contrast 556/856
+    Running contrast 561/856
+    Running contrast 566/856
+    Running contrast 571/856
+    Running contrast 576/856
+    Running contrast 581/856
+    Running contrast 586/856
+    Running contrast 591/856
+    Running contrast 596/856
+    Running contrast 601/856
+    Running contrast 606/856
+    Running contrast 611/856
+    Running contrast 616/856
+    Running contrast 621/856
+    Running contrast 626/856
+    Running contrast 631/856
+    Running contrast 636/856
+    Running contrast 641/856
+    Running contrast 646/856
+    Running contrast 651/856
+    Running contrast 656/856
+    Running contrast 661/856
+    Running contrast 666/856
+    Running contrast 671/856
+    Running contrast 676/856
+    Running contrast 681/856
+    Running contrast 686/856
+    Running contrast 691/856
+    Running contrast 696/856
+    Running contrast 701/856
+    Running contrast 706/856
+    Running contrast 711/856
+    Running contrast 716/856
+    Running contrast 721/856
+    Running contrast 726/856
+    Running contrast 731/856
+    Running contrast 736/856
+    Running contrast 741/856
+    Running contrast 746/856
+    Running contrast 751/856
+    Running contrast 756/856
+    Running contrast 761/856
+    Running contrast 766/856
+    Running contrast 771/856
+    Running contrast 776/856
+    Running contrast 781/856
+    Running contrast 786/856
+    Running contrast 791/856
+    Running contrast 796/856
+    Running contrast 801/856
+    Running contrast 806/856
+    Running contrast 811/856
+    Running contrast 816/856
+    Running contrast 821/856
+    Running contrast 826/856
+    Running contrast 831/856
+    Running contrast 836/856
+    Running contrast 841/856
+    Running contrast 846/856
+    Running contrast 851/856
+    Running contrast 856/856
+
+    Writing:  ./data/tahoe/deg_data/group_rep/full/qc_false/filter_min_cells_10/CVCL_1571_de.h5ad 
+
+    Rewriting h5ad file: ./data/tahoe/deg_data/group_rep/full/qc_false/filter_min_cells_10/CVCL_1571_de.h5ad 
+    Removed X matrix
+    Rewriting h5ad file is done!
+✓ Cell line completed in 384.4 seconds
+
+DE analysis completed!
+
+Total runtime: 395.4 seconds
