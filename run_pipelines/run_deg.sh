@@ -16,6 +16,7 @@ FILT=""
 VALID_CHOICES=(
         "sciplex"
         "tahoe"
+        "l1000"
 )
 
 DEG_PARAMETERS=(
@@ -108,5 +109,5 @@ mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/$
 ./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_Q $ARG_J \
 	-c ./pipelines/${DATASET}/configs/deg/config.json \
 	-d ${DATASET} \
-		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.out \
-		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.err &
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.PID$$.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.PID$$.err &

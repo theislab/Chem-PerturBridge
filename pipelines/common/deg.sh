@@ -156,22 +156,22 @@ fi
 preprocess_config="${TMP_DIR_DEG}/preprocess_config.json"
 echo "$par_process" | jq "." > "$preprocess_config"
 
-echo "> Running preprocessing pseudobulk"
-sbatch -W -J deg_processing_pseudobulk \
-       --partition=${PARTITION} \
-       --qos=${QOS} \
-       --mem=250G \
-       --time=2:00:00 \
-       --cpus-per-task=2 \
-       -o "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.out" \
-       -e "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.err" \
-       --wrap="export TMPDIR=\${HOME}/tmp && \
-                mkdir -p \${TMPDIR} && \
-                cd ${PROJECT_ROOT} && \
-                eval \"\$(mamba shell hook --shell bash)\" && \
-                mamba activate ${ENV_DIR} && \
-                python3 -m src.deg.run_processing_pseudobulk $ARG_J \
-                --config ${preprocess_config}"
+#echo "> Running preprocessing pseudobulk"
+#sbatch -W -J deg_processing_pseudobulk \
+#       --partition=${PARTITION} \
+#       --qos=${QOS} \
+#       --mem=250G \
+#       --time=2:00:00 \
+#       --cpus-per-task=2 \
+#       --output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.out" \
+#       --error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.err" \
+#       --wrap="export TMPDIR=\${HOME}/tmp && \
+#                mkdir -p \${TMPDIR} && \
+#                cd ${PROJECT_ROOT} && \
+#                eval \"\$(mamba shell hook --shell bash)\" && \
+#                mamba activate ${ENV_DIR} && \
+#                python3 -m src.deg.run_processing_pseudobulk $ARG_J \
+#                --config ${preprocess_config}"
 
 echo "> Preprocessing pseudobulk is done"
 
@@ -188,7 +188,7 @@ if [ "$MODE_J" = "True" ]; then
 	LOG_PREFIX="deg_celltype"
 	SEARCH_DIR="${INPUT_DIR}/by_celltype"
 	FILE_PATTERN="*"
-        MEM=150G
+        MEM=500G
 else
 	LOG_PREFIX="deg_sequential"
 	SEARCH_DIR="${INPUT_DIR}"
@@ -204,18 +204,24 @@ fi
 
 # List files to process
 mapfile -t INPUT_FILES < <(ls "$SEARCH_DIR"/$FILE_PATTERN 2>/dev/null | sort)
-N_FILES=${#INPUT_FILES[@]}
+#N_FILES=${#INPUT_FILES[@]}
 
-if [ "$N_FILES" -eq 0 ]; then
-	echo "Error: No files found in $SEARCH_DIR" >&2
-	exit 1
-fi
+#if [ "$N_FILES" -eq 0 ]; then
+#	echo "Error: No files found in $SEARCH_DIR" >&2
+#	exit 1
+#fi
 
-echo "  Found $N_FILES files to process"
+#echo "  Found $N_FILES files to process"
 
 # Create file list in tmp directory
 FILE_LIST="${TMP_DIR_DEG}/file_list.txt"
-printf '%s\n' "${INPUT_FILES[@]}" > "$FILE_LIST"
+#printf '%s\n' "${INPUT_FILES[@]}" > "$FILE_LIST"
+#TEST_FILE="./data/l1000/pseudobulk_processed/group_rep/by_celltype/A375_processed.h5ad"
+TEST_FILE="./data/l1000/pseudobulk_processed/sep_rep/by_celltype/CD34_processed.h5ad"
+#TEST_FILE="./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375_processed.h5ad"
+
+printf '%s\n' "$TEST_FILE" > "$FILE_LIST"
+N_FILES=1
 
 # Create DEG config in tmp directory
 deg_config="${TMP_DIR_DEG}/deg_config.json"
@@ -230,10 +236,10 @@ sbatch -W \
 	--partition=${PARTITION} \
 	--qos=${QOS} \
 	--mem=${MEM} \
-	--time=6:00:00 \
-	--cpus-per-task=2 \
-	--output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_analysis_%A_%a.out" \
-	--error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_analysis_%A_%a.err" \
+	--time=10:00:00 \
+	--cpus-per-task=1 \
+	--output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_analysis.%A_%a.out" \
+	--error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_analysis.%A_%a.err" \
 	--wrap="export TMPDIR=\${HOME}/tmp && \
 		mkdir -p \${TMPDIR} && \
 		cd ${PROJECT_ROOT} && \

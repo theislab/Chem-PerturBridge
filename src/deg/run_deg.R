@@ -5,6 +5,7 @@ suppressPackageStartupMessages(library(reticulate))
 conda_env <- Sys.getenv("CONDA_PREFIX")
 if (nzchar(conda_env)) use_python(file.path(conda_env, "bin/python"), required = TRUE)
 
+
 requireNamespace("anndata", quietly=TRUE)
 suppressPackageStartupMessages({
   library(dplyr)
@@ -91,7 +92,17 @@ filter_cells <- function(adata,
   n_obs_prev <- adata$n_obs
   cat("Filter samples with the low number of cells\n")
   cat("    Filter threshold (min_cells): ", min_cells, "\n")
-  adata <- adata[adata$obs$psbulk_cells >= min_cells]
+  
+  # Handle -666 as a sentinel value meaning "keep this sample regardless of threshold"
+  # Samples with -666 are kept, others are filtered by min_cells threshold
+  keep_mask <- (adata$obs$psbulk_cells == -666) | (adata$obs$psbulk_cells >= min_cells)
+  n_sentinel <- sum(adata$obs$psbulk_cells == -666, na.rm = TRUE)
+  
+  if (n_sentinel > 0) {
+    cat("    Found ", n_sentinel, " samples with sentinel value (-666), keeping all\n")
+  }
+  
+  adata <- adata[keep_mask]
   cat("    n_obs: ", n_obs_prev, "--> ", adata$n_obs, "\n")
   return(adata)
 }
@@ -367,16 +378,21 @@ run_dge <- function(ad,
   # build DGEList + design
   counts <- Matrix::t(ad$X)
   dge    <- DGEList(counts=counts)
+  cat("    Constructing design matrix...\n")
   design <- model.matrix(
     ~ 0 + cond + plate,
     data = obs
     )
+  cat("    Design matrix dimensions:", nrow(design), "samples ×", ncol(design), "coefficients\n")
   # filter genes and normalize
+  cat("    Filtering genes and normalizing counts...\n")
   keep <- filterByExpr(dge, design)
   dge  <- dge[keep, , keep.lib.sizes=FALSE] %>% calcNormFactors()
   
   # voom + lmFit
+  cat("    Running voom...\n")
   v   <- voom(dge, design, plot=FALSE)
+  cat("    Running lmFit...\n")
   fit <- lmFit(v, design)
   return(fit)
 }
@@ -537,7 +553,10 @@ run_dge_pipeline <- function(par) {
     cond <- obs$cond
     fit <- run_dge(ad,
             obs)
-  
+    cl_time <- difftime(Sys.time(), cl_start, units = "secs")
+    cat(sprintf("DGE fit is completed in %.1f seconds\n", cl_time))
+
+    
     # separate the control and treated conds (we won't DE on control-vs-control)
     control_obs <- obs %>%
         distinct(cond, .keep_all = TRUE) %>%
@@ -546,12 +565,32 @@ run_dge_pipeline <- function(par) {
     treated_obs <- obs %>%
         distinct(cond, .keep_all = TRUE) %>%
         filter(is_control!=TRUE)
+    
+    # DEBUG: Save fit object for comparison with deg_split
+    debug_dir <- "./data/intermediate/deg/full/qc_false/filter_min_cells_0"
+    dir.create(debug_dir, recursive = TRUE, showWarnings = FALSE)
+    debug_file <- file.path(debug_dir, paste0(cl, "_intermediate_from_deg_sh.rds"))
+    cat(sprintf("    DEBUG: Saving fit object to: %s\n", debug_file))
+    saveRDS(list(
+      fit = fit,
+      control_obs = control_obs,
+      treated_obs = treated_obs,
+      parameters = list(
+        subsampling = par$subsampling,
+        min_cells = par$min_cells,
+        qc = par$qc
+      )
+    ), debug_file)
+    cat("    DEBUG: Fit object saved\n")
 
+    cat("    Running contrasts...\n")
     de_res <- run_contrasts(fit,
                           control_obs,
                           treated_obs,
                           par)
-
+    
+    cl_time <- difftime(Sys.time(), cl_start, units = "secs")
+    cat(sprintf("Contrasts are completed in %.1f seconds\n", cl_time))
     # Skip if no valid DE results
     if (is.null(de_res) || nrow(de_res) == 0) {
       warning("No valid DE results for cell line ", cl)
@@ -646,7 +685,7 @@ merge_config <- function(args, config) {
 #' 
 #' Processes command line arguments and runs the complete DGE pipeline
 #' @return NULL (saves results to files)
-main <- function() {
+main <- function() {  
   parser <- ArgumentParser()
   parser$add_argument("--input", type="character")
   parser$add_argument("--output_dir", type="character")
@@ -673,8 +712,14 @@ main <- function() {
       cat("\nDE analysis completed!\n")
   }, error = function(e) {
     	message("Error in running DGE: ", e$message)
-  	message("Stack trace:")
-	traceback()
+  	message("\nFull error details:")
+	message("  Class: ", class(e))
+	message("  Call: ", deparse(e$call))
+	message("\nStack trace (sys.calls):")
+	calls <- sys.calls()
+	for (i in seq_along(calls)) {
+	  message(sprintf("  %d: %s", i, deparse(calls[[i]])[1]))
+	}
 	stop("DGE pipeline failed")
   })
   
