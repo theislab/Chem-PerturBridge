@@ -3,18 +3,18 @@ import json
 import time
 import fcntl
 import argparse
-import math
 import numpy as np
 import pandas as pd
 import scanpy as sc
 import anndata as ad
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 from src.utils.parsing_utils import *
 
 #MAX_ELEMENTS 2^31 - 1 from https://svn.r-project.org/R/trunk/src/library/base/R/qr.R
 MAX_ELEMENTS = 2147483647
 RATIO_MAX_ELEMENTS = 0.9
+RATIO_MIN_ELEMENTS = 0.85
 RANDOM_SEED = 0
 
 def create_perturbation_label(is_control: bool, 
@@ -105,15 +105,15 @@ def save_read(file_input: str,
 
     for attempt in range(n_retries):
         try:
-            with open(file_input, 'r') as f:
+            with open(file_input, 'rb') as f:
                 fcntl.flock(f, fcntl.LOCK_SH | fcntl.LOCK_NB)
                 padata = ad.read_h5ad(file_input)
                 fcntl.flock(f, fcntl.LOCK_UN)
                 return padata
         except BlockingIOError:
-            print(f'Attempt {attempt + 1}: file locked, retrying...')
+            logger.warning(f'Attempt {attempt + 1}: file locked, retrying...')
             time.sleep(delay)
-    raise RuntimeError(f'Could not read {file_input} after {retries} attempts.')
+    raise RuntimeError(f'Could not read {file_input} after {n_retries} attempts.')
 
 def get_output_path_combined(file_input: str,
                         dir_output: str) -> str:
@@ -136,6 +136,511 @@ def get_output_path_combined(file_input: str,
     return os.path.join(dir_output, f'{dataset_name}_processed.h5ad')
 
 
+def calculate_perturbagen_info(non_controls: ad.AnnData,
+                               unique_perturbagens: np.ndarray) -> dict:
+    '''
+    Calculate properties for each perturbagen.
+    
+    Parameters:
+    -----------
+    non_controls : ad.AnnData
+        Non-control observations
+    unique_perturbagens : np.ndarray
+        Array of unique perturbagen names
+        
+    Returns:
+    --------
+    dict
+        Dictionary mapping perturbagen names to their properties:
+        - 'n_obs': number of observations
+        - 'n_labels': number of unique perturbation labels
+        - 'data': AnnData subset for this perturbagen
+    '''
+    perturbagen_info = {}
+    for pert in unique_perturbagens:
+        pert_data = non_controls[non_controls.obs['perturbagen'] == pert]
+        perturbagen_info[pert] = {
+            'n_obs': pert_data.n_obs,
+            'n_labels': pert_data.obs['perturbation_label'].nunique(),
+            'data': pert_data
+        }
+    return perturbagen_info
+
+
+def get_control_info(controls: Optional[ad.AnnData]) -> Tuple[int, int]:
+    '''
+    Extract control observation and label counts.
+    
+    Parameters:
+    -----------
+    controls : Optional[ad.AnnData]
+        Control observations
+        
+    Returns:
+    --------
+    Tuple[int, int]
+        (ctl_n_obs, ctl_n_labels)
+    '''
+    if (controls is not None) and (controls.n_obs > 0):
+        return controls.n_obs, controls.obs['perturbation_label'].nunique()
+    return 0, 0
+
+
+def get_target_sizes() -> Tuple[int, int]:
+    '''
+    Calculate target matrix sizes.
+    
+    Returns:
+    --------
+    Tuple[int, int]
+        (target_min, target_max)
+    '''
+    return (round(RATIO_MIN_ELEMENTS * MAX_ELEMENTS),
+            round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS))
+
+
+def calculate_matrix_size(n_obs: int, n_labels: int,
+                         ctl_n_obs: int = 0, ctl_n_labels: int = 0) -> int:
+    '''
+    Calculate matrix size including controls.
+    
+    Parameters:
+    -----------
+    n_obs : int
+        Number of observations (non-controls)
+    n_labels : int
+        Number of unique perturbation labels (non-controls)
+    ctl_n_obs : int
+        Number of control observations
+    ctl_n_labels : int
+        Number of unique control labels
+        
+    Returns:
+    --------
+    int
+        Matrix size: (n_obs + ctl_n_obs) * (n_labels + ctl_n_labels)
+    '''
+    return (n_obs + ctl_n_obs) * (n_labels + ctl_n_labels)
+
+
+def separate_controls(adata: ad.AnnData, ct_clean: str = None) -> Tuple[Optional[ad.AnnData], ad.AnnData]:
+    '''
+    Separate controls and non-controls from AnnData.
+    
+    Parameters:
+    -----------
+    adata : ad.AnnData
+        AnnData object with 'is_control' column in obs
+    ct_clean : str, optional
+        Cell type name for error messages
+        
+    Returns:
+    --------
+    Tuple[Optional[ad.AnnData], ad.AnnData]
+        (controls, non_controls)
+        
+    Raises:
+    -------
+    ValueError
+        If 'is_control' column is not found
+    '''
+    if 'is_control' not in adata.obs.columns:
+        error_msg = f'  No is_control column found'
+        if ct_clean:
+            error_msg += f' for {ct_clean}'
+        raise ValueError(error_msg)
+    
+    controls_mask = adata.obs['is_control'] == True
+    controls = adata[controls_mask].copy() if controls_mask.any() else None
+    non_controls = adata[~controls_mask].copy()
+    return controls, non_controls
+
+
+def get_perturbagen_properties(perturbagen_info: dict, pert: str) -> Tuple[int, int, ad.AnnData]:
+    '''
+    Extract properties for a perturbagen from perturbagen_info.
+    
+    Parameters:
+    -----------
+    perturbagen_info : dict
+        Dictionary mapping perturbagen names to their properties
+    pert : str
+        Perturbagen name
+        
+    Returns:
+    --------
+    Tuple[int, int, ad.AnnData]
+        (pert_n_obs, pert_n_labels, pert_data)
+    '''
+    pert_info = perturbagen_info[pert]
+    return pert_info['n_obs'], pert_info['n_labels'], pert_info['data']
+
+
+def calculate_new_chunk_size(chunk: dict, pert_n_obs: int, pert_n_labels: int,
+                            ctl_n_obs: int, ctl_n_labels: int) -> Tuple[int, int, int]:
+    '''
+    Calculate what the chunk size would be if we add a perturbagen (without modifying chunk).
+    
+    Parameters:
+    -----------
+    chunk : dict
+        Chunk dictionary with 'n_obs' and 'n_labels'
+    pert_n_obs : int
+        Number of observations in the perturbagen
+    pert_n_labels : int
+        Number of unique labels in the perturbagen
+    ctl_n_obs : int
+        Number of control observations
+    ctl_n_labels : int
+        Number of unique control labels
+        
+    Returns:
+    --------
+    Tuple[int, int, int]
+        (new_n_obs, new_n_labels, new_matrix_size)
+    '''
+    new_n_obs = chunk['n_obs'] + pert_n_obs
+    new_n_labels = chunk['n_labels'] + pert_n_labels
+    new_matrix_size = calculate_matrix_size(new_n_obs, 
+                                            new_n_labels, 
+                                            ctl_n_obs=ctl_n_obs, 
+                                            ctl_n_labels=ctl_n_labels)
+    return new_n_obs, new_n_labels, new_matrix_size
+
+
+def add_data_to_chunk(chunk: dict, n_obs: int, n_labels: int, indices: list, pert: Optional[Union[str, set, list]] = None) -> None:
+    '''
+    Add observations to a chunk (modifies chunk in place).
+    
+    Can be used for both perturbagens and controls. If pert is provided,
+    it will be added to chunk['perturbagens'] set. Can be a single name (str)
+    or multiple names (set/list) for controls.
+    
+    Parameters:
+    -----------
+    chunk : dict
+        Chunk dictionary to modify
+    n_obs : int
+        Number of observations to add
+    n_labels : int
+        Number of unique perturbation labels to add
+    indices : list
+        List of observation indices to add to chunk['obs_indices']
+    pert : str, set, or list, optional
+        Perturbagen/control name(s). If provided, adds to chunk['perturbagens'] set.
+        Can be a single string, or a set/list of strings for multiple names.
+        If None, no names are added to chunk['perturbagens'].
+    '''
+    if pert is not None:
+        if isinstance(pert, str):
+            chunk['perturbagens'].add(pert)
+        else:
+            chunk['perturbagens'].update(pert)
+    chunk['obs_indices'].extend(indices)
+    chunk['n_obs'] += n_obs
+    chunk['n_labels'] += n_labels
+
+
+def create_chunks(non_controls: ad.AnnData,
+                    unique_perturbagens: np.ndarray,
+                    controls: Optional[ad.AnnData] = None,
+                    ) -> list:
+    '''
+    Create multiple chunks from perturbagens using Best Fit algorithm.
+    
+    Randomly shuffles perturbagens and assigns them to chunks using Best Fit algorithm,
+    targeting 85-95% of MAX_ELEMENTS per chunk. The algorithm selects the chunk that
+    minimizes waste (gets closest to target_max without exceeding it) for each perturbagen.
+    Controls are considered in matrix size calculations but not added to chunks yet.
+    
+    Parameters:
+    -----------
+    non_controls : ad.AnnData
+        Non-control observations to split
+    unique_perturbagens : np.ndarray
+        Array of unique perturbagen names
+    controls : ad.AnnData, optional
+        Controls to consider in matrix size calculations (not added to chunks here)
+        
+    Returns:
+    --------
+    list
+        List of chunk dictionaries, each containing:
+        - 'perturbagens': set of perturbagen names in the chunk
+        - 'n_obs': number of observations (non-controls only)
+        - 'n_labels': number of unique perturbation labels (non-controls only)
+        - 'obs_indices': list of observation indices from non_controls
+    '''
+    
+    perturbagen_info = calculate_perturbagen_info(non_controls, unique_perturbagens)
+    
+    shuffled_perturbagens = list(unique_perturbagens.copy())
+    np.random.seed(RANDOM_SEED)
+    np.random.shuffle(shuffled_perturbagens)
+    
+    chunks = []
+    target_min, target_max = get_target_sizes()
+    ctl_n_obs, ctl_n_labels = get_control_info(controls)
+    
+    for pert in shuffled_perturbagens:
+        pert_n_obs, pert_n_labels, pert_data = get_perturbagen_properties(perturbagen_info, pert)
+        
+        best_chunk_idx = None
+        best_waste = float('inf')
+        
+        for chunk_idx, chunk in enumerate(chunks):
+            _, _, new_matrix_size = calculate_new_chunk_size(chunk, pert_n_obs, pert_n_labels, ctl_n_obs, ctl_n_labels)
+            
+            if new_matrix_size <= target_max:
+                waste = target_max - new_matrix_size
+                if waste < best_waste:
+                    best_waste = waste
+                    best_chunk_idx = chunk_idx
+        
+        if best_chunk_idx is not None:
+            chunk = chunks[best_chunk_idx]
+            add_data_to_chunk(chunk, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
+        else:
+            new_chunk = {
+                'perturbagens': {pert},
+                'n_obs': pert_n_obs,
+                'n_labels': pert_n_labels,
+                'obs_indices': pert_data.obs.index.tolist()
+            }
+            chunks.append(new_chunk)
+    
+
+    return chunks
+    
+def pad_chunks(chunks: list,
+                non_controls: ad.AnnData,
+                unique_perturbagens: np.ndarray,
+                controls: Optional[ad.AnnData] = None,
+                ) -> list:
+    '''
+    Pad smaller chunks to balance sizes using perturbagens not in current chunk.
+    
+    For chunks with matrix size below target_min, this function iteratively adds
+    perturbagens from other chunks (not already in the current chunk). Perturbagens
+    are shuffled and added one at a time, checking that the matrix size doesn't exceed
+    target_max. The process stops when the chunk reaches target_matrix_size or no more
+    suitable perturbagens are available.
+    
+    Parameters:
+    -----------
+    chunks : list
+        List of chunk dictionaries from create_chunks()
+    non_controls : ad.AnnData
+        Non-control observations (used to get perturbagen data)
+    unique_perturbagens : np.ndarray
+        Array of unique perturbagen names
+    controls : ad.AnnData, optional
+        Controls to consider in matrix size calculations (not added here)
+        
+    Returns:
+    --------
+    list
+        List of chunk dictionaries with updated 'obs_indices', 'n_obs', and 'n_labels'
+    '''
+    
+    perturbagen_info = calculate_perturbagen_info(non_controls, unique_perturbagens)
+    target_min, target_max = get_target_sizes()
+    ctl_n_obs, ctl_n_labels = get_control_info(controls)
+    
+    if len(chunks) > 1:
+        target_matrix_size = target_min
+        
+        for chunk_idx, chunk in enumerate(chunks):
+            matrix_size = calculate_matrix_size(chunk['n_obs'], 
+                                                chunk['n_labels'], 
+                                                ctl_n_obs=ctl_n_obs, 
+                                                ctl_n_labels=ctl_n_labels)
+            if matrix_size < target_matrix_size:
+                current_chunk_perts = chunk['perturbagens']
+                all_perts = set(non_controls.obs['perturbagen'].unique())
+                available_perts = list(all_perts - current_chunk_perts)
+                
+                if len(available_perts) == 0:
+                    continue
+                
+                np.random.seed(RANDOM_SEED)
+                shuffled_perts = available_perts.copy()
+                np.random.shuffle(shuffled_perts)
+                
+                for pert in shuffled_perts:
+                    pert_n_obs, pert_n_labels, pert_data = get_perturbagen_properties(perturbagen_info, pert)
+                    
+                    _, _, new_matrix_size = calculate_new_chunk_size(chunk, pert_n_obs, pert_n_labels, ctl_n_obs, ctl_n_labels)
+                    
+                    if new_matrix_size <= target_max:
+                        add_data_to_chunk(chunk, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
+                        
+                        current_matrix_size = calculate_matrix_size(chunk['n_obs'], 
+                                                                   chunk['n_labels'], 
+                                                                   ctl_n_obs=ctl_n_obs, 
+                                                                   ctl_n_labels=ctl_n_labels)
+                        if current_matrix_size >= target_matrix_size:
+                            break
+    
+    # Log final chunk statistics after padding
+    if len(chunks) > 0:
+        chunk_sizes = [calculate_matrix_size(chunk['n_obs'], 
+                                             chunk['n_labels'], 
+                                             ctl_n_obs=ctl_n_obs, 
+                                             ctl_n_labels=ctl_n_labels) for chunk in chunks]
+        logger.info(f'  After padding: {len(chunks)} chunks, matrix sizes: {[f"{s/1e6:.1f}M" for s in chunk_sizes]}')
+    
+    return chunks
+
+def add_controls_to_chunks(chunks: list,
+                            controls: Optional[ad.AnnData],
+                            ) -> list:
+    '''
+    Add control observations to all chunks.
+    
+    Appends control observation indices to each chunk's obs_indices list and updates
+    the chunk's n_obs and n_labels counts. If controls are None or empty, returns
+    chunks unchanged.
+    
+    Parameters:
+    -----------
+    chunks : list
+        List of chunk dictionaries to add controls to
+    controls : Optional[ad.AnnData]
+        Control observations to add to all chunks. If None or empty, chunks are
+        returned unchanged.
+        
+    Returns:
+    --------
+    list
+        List of chunk dictionaries with controls added to 'obs_indices', 'n_obs', and 'n_labels'
+    '''
+    if controls is None or controls.n_obs == 0:
+        return chunks
+    ctl_n_obs = controls.n_obs
+    ctl_n_labels = controls.obs['perturbation_label'].nunique()
+    ctl_indices = controls.obs.index.tolist()
+    ctl_names = None
+    if 'perturbagen' in controls.obs.columns:
+        ctl_names = set(controls.obs['perturbagen'].unique())
+    for chunk in chunks:
+        add_data_to_chunk(chunk, ctl_n_obs, ctl_n_labels, ctl_indices, pert=ctl_names)
+    return chunks
+
+
+
+
+
+def save_single_file(adata: ad.AnnData, file_output: str) -> None:
+    '''
+    Save AnnData as a single processed h5ad file.
+    
+    Creates the output directory if it doesn't exist.
+    
+    Parameters:
+    -----------
+    adata : ad.AnnData
+        AnnData object to save
+    file_output : str
+        Full path to the output file
+    '''
+    create_dir_if_not_exists(file_output)
+    adata.write_h5ad(file_output, compression='gzip')
+    logger.info(f'  Saved: {file_output} ({adata.n_obs} obs)')
+
+
+def check_and_save_if_small(adata_ct: ad.AnnData, dir_output: str, ct_clean: str) -> bool:
+    '''
+    Check if matrix size is within limits and save as single file if so.
+    
+    Parameters:
+    -----------
+    adata_ct : ad.AnnData
+        AnnData object to check and potentially save
+    dir_output : str
+        Output directory path
+    ct_clean : str
+        Sanitized cell type name for filenames
+        
+    Returns:
+    --------
+    bool
+        True if saved (matrix was small enough), False otherwise
+    '''
+    n_obs = adata_ct.n_obs
+    n_labels = adata_ct.obs['perturbation_label'].nunique()
+    matrix_size = calculate_matrix_size(n_obs, n_labels)
+    
+    if matrix_size <= round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS):
+        file_output = os.path.join(dir_output, f"{ct_clean}_processed.h5ad")
+        save_single_file(adata_ct, file_output)
+        return True
+    return False
+
+
+def get_unique_perturbagens_or_save(non_controls: ad.AnnData, adata_ct: ad.AnnData,
+                                    dir_output: str, ct_clean: str) -> Optional[np.ndarray]:
+    '''
+    Get unique perturbagens from non-controls, or save and return None if none found.
+    
+    Parameters:
+    -----------
+    non_controls : ad.AnnData
+        Non-control observations
+    adata_ct : ad.AnnData
+        Full AnnData object (for saving if no perturbagens)
+    dir_output : str
+        Output directory path
+    ct_clean : str
+        Sanitized cell type name for filenames
+        
+    Returns:
+    --------
+    Optional[np.ndarray]
+        Array of unique perturbagens, or None if none found (and saved)
+    '''
+    unique_perturbagens = non_controls.obs['perturbagen'].unique()
+    
+    if len(unique_perturbagens) < 1:
+        logger.warning(f'  No perturbagens found, saving as is')
+        file_output = os.path.join(dir_output, f"{ct_clean}_processed.h5ad")
+        save_single_file(adata_ct, file_output)
+        return None
+    
+    return unique_perturbagens
+
+
+def save_chunks(chunks: list, adata_ct: ad.AnnData, dir_output: str, ct_clean: str) -> None:
+    '''
+    Save chunks to disk as separate h5ad files.
+    
+    Parameters:
+    -----------
+    chunks : list
+        List of chunk dictionaries with 'obs_indices' keys
+    adata_ct : ad.AnnData
+        Full AnnData object to select observations from
+    dir_output : str
+        Output directory path
+    ct_clean : str
+        Sanitized cell type name for filenames
+        
+    Returns:
+    --------
+    None
+        Saves chunk files to disk
+    '''
+    chunk_counter = 0
+    for chunk_idx, chunk in enumerate(chunks):
+        chunk_counter += 1
+        chunk_data = adata_ct[chunk['obs_indices']].copy()
+        outfile = os.path.join(dir_output, f"{ct_clean}_processed_chunk_{chunk_counter}.h5ad")
+        save_single_file(chunk_data, outfile)
+        logger.info(f'  Saved chunk {chunk_counter}: {outfile} ({chunk_data.n_obs} obs, {chunk_data.obs["perturbation_label"].nunique()} perturbs)')
+    
+    logger.info(f'  Total chunks created for {ct_clean}: {chunk_counter}')
+
+
 def chunk_celltype_by_matrix_size(adata_ct: ad.AnnData,
                                    dir_output: str,
                                    ct_clean: str) -> None:
@@ -143,9 +648,9 @@ def chunk_celltype_by_matrix_size(adata_ct: ad.AnnData,
     Check matrix size and split cell type dataset into chunks if needed.
     
     This function checks if the matrix size (n_obs * n_perturbs) exceeds MAX_ELEMENTS.
-    If it does, the dataset is recursively split into two parts based on unique
-    perturbagens. Controls are excluded from the split and are included in all
-    partitions. The function returns the total number of chunks created.
+    If it does, the dataset is split into multiple chunks using Best Fit algorithm
+    with random shuffling. Controls are excluded from the split and are included in all
+    partitions. Smaller chunks are padded to balance sizes.
     
     Parameters:
     -----------
@@ -160,165 +665,48 @@ def chunk_celltype_by_matrix_size(adata_ct: ad.AnnData,
     --------
     None
     '''
-    import math
-    from collections import deque
+    if check_and_save_if_small(adata_ct, dir_output, ct_clean):
+        return
     
-    # Set random seed for reproducible splitting
-    np.random.seed(RANDOM_SEED)
+    # Log splitting information
+    n_obs = adata_ct.n_obs
+    n_labels = adata_ct.obs['perturbation_label'].nunique()
+    matrix_size = calculate_matrix_size(n_obs, n_labels)
+    logger.info(f'  Splitting {ct_clean}: {n_obs} obs, {n_labels} perturbation labels, {matrix_size/1e6:.1f}M matrix size')
+    logger.warning(f'  Matrix size for {ct_clean} exceeds {round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS)}, creating chunks')
     
-    # Initialize queue with the full dataset
-    # Each element is a tuple: (adata_subset, is_original)
-    queue = deque([(adata_ct, True)])
-    chunk_counter = 0
+    controls, non_controls = separate_controls(adata_ct, ct_clean)
+    
+    unique_perturbagens = get_unique_perturbagens_or_save(non_controls, adata_ct, dir_output, ct_clean)
+    if unique_perturbagens is None:
+        return
+    
+    n_perturbagens = len(unique_perturbagens)
+    n_non_control_obs = non_controls.n_obs
+    n_non_control_labels = non_controls.obs['perturbation_label'].nunique()
+    logger.info(f'  After separation: {n_perturbagens} perturbagens, {n_non_control_obs} non-control obs, {n_non_control_labels} non-control labels')
+    
+    logger.info('Create chunks')
+    chunks = create_chunks(non_controls,
+                          unique_perturbagens,
+                          controls=controls,
+                          )
 
-    # Separate controls and non-controls for this subset
-    if 'is_control' in adata_ct.obs.columns:
-        controls_mask = adata_ct.obs['is_control'] == True
-        controls = adata_ct[controls_mask].copy() if controls_mask.any() else None
-    else:
-        raise ValueError(f'  No is_control column found for {ct_clean}')
+    logger.info('Pad chunks')
+    chunks = pad_chunks(chunks,
+                          non_controls,
+                          unique_perturbagens,
+                          controls=controls,
+                          )
     
-    # Process queue until empty
-    while queue:
-        adata_subset, is_original = queue.popleft()
-        
-        n_obs_subset = adata_subset.n_obs
-        n_perturbs_subset = adata_subset.obs['perturbation_label'].nunique()
-        matrix_elements_subset = n_obs_subset * n_perturbs_subset
-        
-        # If matrix size is within limits, save as single file
-        if matrix_elements_subset <= round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS):
-            if not is_original:
-                chunk_counter += 1
-            save_chunk(adata_subset, dir_output, ct_clean, is_original, chunk_counter, n_obs_subset, n_perturbs_subset)
-            continue
-        
-        # Matrix is too large, need to split into two parts
-        logger.info(f'  Splitting {"original" if is_original else "chunk"}: {n_obs_subset} obs × {n_perturbs_subset} perturbs = {matrix_elements_subset} elements (exceeds {MAX_ELEMENTS})')
-        
-        # Separate controls and non-controls for this subset
-        if 'is_control' in adata_subset.obs.columns:
-            controls_mask_subset = adata_subset.obs['is_control'] == True
-            non_controls_subset = adata_subset[~controls_mask_subset].copy()
-        else:
-            raise ValueError(f'  No is_control column found for {ct_clean}')
-        
-        # Get unique perturbagens from non-controls
-        unique_perturbagens = non_controls_subset.obs['perturbagen'].unique()
-        n_perturbagens = len(unique_perturbagens)
-        
-        if n_perturbagens < 2:
-            # Can't split further by perturbagens, save as is
-            logger.warning(f'  Cannot split further by perturbagens, saving as is')
-            if not is_original:
-                chunk_counter += 1
-            save_chunk(adata_subset, dir_output, ct_clean, is_original, chunk_counter, n_obs_subset, n_perturbs_subset)
-            continue
-        
-        # Split perturbagens into two groups and create two parts
-        part1, part2 = split_by_perturbagens(
-            non_controls_subset,
-            unique_perturbagens,
-            controls=controls,
-        )
-        
-        # Add both parts back to queue for further processing (both are now split parts, not original)
-        queue.append((part1, False))
-        queue.append((part2, False))
+    logger.info('Add controls to chunks')
+    chunks = add_controls_to_chunks(chunks,
+                                      controls,
+                                      )
     
-    total_chunks = chunk_counter if chunk_counter > 0 else 1
-    logger.info(f'  Total chunks created for {ct_clean}: {total_chunks}')
+    logger.info('Save chunks')
+    save_chunks(chunks, adata_ct, dir_output, ct_clean)
     return
-
-def save_chunk(adata_subset: ad.AnnData,
-               dir_output: str,
-               ct_clean: str,
-               is_original: bool,
-               chunk_counter: int,
-               n_obs_subset: int,
-               n_perturbs_subset: int) -> None:
-    '''
-    Save a chunk of the dataset.
-    
-    Parameters:
-    -----------
-    adata_subset : ad.AnnData
-        Subset of the dataset to save
-    dir_output : str
-        Output directory path
-    ct_clean : str
-        Sanitized cell type name for filenames
-    is_original : bool
-        Whether the dataset is the original dataset
-    chunk_counter : int
-        Counter for the chunk
-    n_obs_subset : int
-        Number of observations in the subset
-    n_perturbs_subset : int
-        Number of perturbagens in the subset
-
-    Returns:
-    --------
-    None
-    '''
-    if is_original:
-        outfile = os.path.join(dir_output, f"{ct_clean}_processed.h5ad")
-    else:
-        outfile = os.path.join(dir_output, f"{ct_clean}_processed_chunk_{chunk_counter}.h5ad")
-    adata_subset.write_h5ad(outfile, compression='gzip')
-    logger.info(f'  Saved chunk {chunk_counter if not is_original else 1}: {outfile}\
-     \ ({n_obs_subset} obs, {n_perturbs_subset} perturbs)')
-
-
-    
-def split_by_perturbagens(non_controls: ad.AnnData,
-                          unique_perturbagens: np.ndarray,
-                          controls: Optional[ad.AnnData] = None,
-                          ) -> Tuple[ad.AnnData, ad.AnnData]:
-    '''
-    Split dataset into two parts based on perturbagens.
-    
-    Randomly shuffles perturbagens and divides them into two groups,
-    then creates two subsets of non-controls based on these groups.
-    Adds controls to each part if available.
-    
-    Parameters:
-    -----------
-    non_controls : ad.AnnData
-        Non-control observations to split
-    unique_perturbagens : np.ndarray
-        Array of unique perturbagen names
-    controls : ad.AnnData, optional
-        Original controls to add to each part
-        
-    Returns:
-    --------
-    Tuple[ad.AnnData, ad.AnnData]
-        Two parts of the dataset, each with controls added if available
-    '''
-    
-    # Split perturbagens into two groups
-    shuffled_perturbagens = unique_perturbagens.copy()
-    np.random.seed(RANDOM_SEED)
-    np.random.shuffle(shuffled_perturbagens)
-    
-    mid_point = math.ceil(len(shuffled_perturbagens) / 2)
-    perturbagens_part1 = shuffled_perturbagens[:mid_point]
-    perturbagens_part2 = shuffled_perturbagens[mid_point:]
-    
-    # Create two subsets based on perturbagens
-    part1_non_controls = non_controls[non_controls.obs['perturbagen'].isin(perturbagens_part1)].copy()
-    part2_non_controls = non_controls[non_controls.obs['perturbagen'].isin(perturbagens_part2)].copy()
-    
-    # Add controls to each part
-    if controls is not None and controls.n_obs > 0:
-        part1 = ad.concat([part1_non_controls, controls], merge='same')
-        part2 = ad.concat([part2_non_controls, controls], merge='same')
-    else:
-        part1 = part1_non_controls
-        part2 = part2_non_controls
-    
-    return part1, part2    
 
 
 def save_by_celltype(padata: ad.AnnData,
@@ -326,12 +714,22 @@ def save_by_celltype(padata: ad.AnnData,
     '''
     Save pseudobulk data split by cell type.
     
+    Splits the pseudobulk data by cell type and processes each cell type separately.
+    For each cell type, checks if matrix size exceeds limits and chunks if necessary.
+    Files are saved in dir_output/by_celltype/ directory.
+    
     Parameters:
     -----------
     padata : ad.AnnData
         Pseudobulk AnnData object
     dir_output : str
-        Output directory path
+        Output directory path. Cell type files are saved in dir_output/by_celltype/
+        
+    Returns:
+    --------
+    None
+        Saves processed files to disk. Each cell type is saved as
+        '{celltype_clean}_processed.h5ad' or chunked files if matrix size is too large.
         
     Raises:
     -------
@@ -342,7 +740,6 @@ def save_by_celltype(padata: ad.AnnData,
     celltype_dir = os.path.join(dir_output, 'by_celltype')
     os.makedirs(celltype_dir, exist_ok=True)
     
-    # Get unique cell types and filter out None/NaN
     cell_types = padata.obs['cell_type'].unique()
     cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) or not np.isnan(ct))]
     cell_types = sorted(cell_types)
@@ -376,7 +773,15 @@ def add_perturbation_label_to_padata(file_input: str,
     design_param : str
         Design parameter for perturbation labeling ('group_all_replicates' or 'separate_replicates')
     split_by_celltype : bool, default=False
-        Whether to split output by cell type
+        If True, splits output by cell type and processes each separately.
+        Large cell types are automatically chunked if matrix size exceeds limits.
+        
+    Returns:
+    --------
+    None
+        Saves processed files to disk. Main output file is saved as
+        '{basename}_processed.h5ad' in dir_output. If split_by_celltype is True,
+        additional files are saved in dir_output/by_celltype/.
     '''
     
     logger.info('Read pseudobulk file')
@@ -396,12 +801,9 @@ def add_perturbation_label_to_padata(file_input: str,
                                                 design_param), axis=1).astype("category")
     
     logger.info('Save data')
-    file_output = get_output_path_combined(file_input, 
-                                           dir_output)
-    create_dir_if_not_exists(file_output)
-    padata.write_h5ad(file_output, compression='gzip')
+    file_output = get_output_path_combined(file_input, dir_output)
+    save_single_file(padata, file_output)
     
-    # Optionally split by cell type
     if split_by_celltype:
         save_by_celltype(padata, dir_output)
 
@@ -431,7 +833,30 @@ def main():
     Main function to process pseudobulk data and add perturbation labels.
     
     Processes command line arguments and configuration files to run the
-    pseudobulk processing pipeline with perturbation labeling.
+    pseudobulk processing pipeline with perturbation labeling. Supports both
+    command line arguments and JSON configuration files.
+    
+    Command Line Arguments:
+    -----------------------
+    --config : str, optional
+        Path to JSON configuration file. Arguments in config file are merged
+        with command line arguments (command line takes precedence).
+    --input_file : str, required
+        Path to the input pseudobulk h5ad file
+    --output_dir : str, required
+        Output directory path for processed files
+    --design_param : str, required
+        Design parameter for perturbation labeling. Must be one of:
+        - 'group_all_replicates': Groups all replicates together
+        - 'separate_replicates': Keeps replicates separate with well/plate info
+    --split_by_celltype : bool, optional
+        If True, splits output by cell type and processes each separately.
+        Default: False
+        
+    Raises:
+    -------
+    Exception
+        If required arguments (input_file, output_dir, design_param) are not set
     '''
 
     parser = argparse.ArgumentParser()
