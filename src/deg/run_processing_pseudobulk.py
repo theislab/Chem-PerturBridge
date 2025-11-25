@@ -276,15 +276,15 @@ def get_perturbagen_properties(perturbagen_info: dict, pert: str) -> Tuple[int, 
     return pert_info['n_obs'], pert_info['n_labels'], pert_info['data']
 
 
-def calculate_new_chunk_size(chunk: dict, pert_n_obs: int, pert_n_labels: int,
+def calculate_new_batch_size(batch: dict, pert_n_obs: int, pert_n_labels: int,
                             ctl_n_obs: int, ctl_n_labels: int) -> Tuple[int, int, int]:
     '''
-    Calculate what the chunk size would be if we add a perturbagen (without modifying chunk).
+    Calculate what the batch size would be if we add a perturbagen (without modifying batch).
     
     Parameters:
     -----------
-    chunk : dict
-        Chunk dictionary with 'n_obs' and 'n_labels'
+    batch : dict
+        Batch dictionary with 'n_obs' and 'n_labels'
     pert_n_obs : int
         Number of observations in the perturbagen
     pert_n_labels : int
@@ -299,8 +299,8 @@ def calculate_new_chunk_size(chunk: dict, pert_n_obs: int, pert_n_labels: int,
     Tuple[int, int, int]
         (new_n_obs, new_n_labels, new_matrix_size)
     '''
-    new_n_obs = chunk['n_obs'] + pert_n_obs
-    new_n_labels = chunk['n_labels'] + pert_n_labels
+    new_n_obs = batch['n_obs'] + pert_n_obs
+    new_n_labels = batch['n_labels'] + pert_n_labels
     new_matrix_size = calculate_matrix_size(new_n_obs, 
                                             new_n_labels, 
                                             ctl_n_obs=ctl_n_obs, 
@@ -308,50 +308,50 @@ def calculate_new_chunk_size(chunk: dict, pert_n_obs: int, pert_n_labels: int,
     return new_n_obs, new_n_labels, new_matrix_size
 
 
-def add_data_to_chunk(chunk: dict, n_obs: int, n_labels: int, indices: list, pert: Optional[Union[str, set, list]] = None) -> None:
+def add_data_to_batch(batch: dict, n_obs: int, n_labels: int, indices: list, pert: Optional[Union[str, set, list]] = None) -> None:
     '''
-    Add observations to a chunk (modifies chunk in place).
+    Add observations to a batch (modifies batch in place).
     
     Can be used for both perturbagens and controls. If pert is provided,
-    it will be added to chunk['perturbagens'] set. Can be a single name (str)
+    it will be added to batch['perturbagens'] set. Can be a single name (str)
     or multiple names (set/list) for controls.
     
     Parameters:
     -----------
-    chunk : dict
-        Chunk dictionary to modify
+    batch : dict
+        Batch dictionary to modify
     n_obs : int
         Number of observations to add
     n_labels : int
         Number of unique perturbation labels to add
     indices : list
-        List of observation indices to add to chunk['obs_indices']
+        List of observation indices to add to batch['obs_indices']
     pert : str, set, or list, optional
-        Perturbagen/control name(s). If provided, adds to chunk['perturbagens'] set.
+        Perturbagen/control name(s). If provided, adds to batch['perturbagens'] set.
         Can be a single string, or a set/list of strings for multiple names.
-        If None, no names are added to chunk['perturbagens'].
+        If None, no names are added to batch['perturbagens'].
     '''
     if pert is not None:
         if isinstance(pert, str):
-            chunk['perturbagens'].add(pert)
+            batch['perturbagens'].add(pert)
         else:
-            chunk['perturbagens'].update(pert)
-    chunk['obs_indices'].extend(indices)
-    chunk['n_obs'] += n_obs
-    chunk['n_labels'] += n_labels
+            batch['perturbagens'].update(pert)
+    batch['obs_indices'].extend(indices)
+    batch['n_obs'] += n_obs
+    batch['n_labels'] += n_labels
 
 
-def create_chunks(non_controls: ad.AnnData,
+def create_batches(non_controls: ad.AnnData,
                     unique_perturbagens: np.ndarray,
                     controls: Optional[ad.AnnData] = None,
                     ) -> list:
     '''
-    Create multiple chunks from perturbagens using Best Fit algorithm.
+    Create multiple batches from perturbagens using Best Fit algorithm.
     
-    Randomly shuffles perturbagens and assigns them to chunks using Best Fit algorithm,
-    targeting 85-95% of MAX_ELEMENTS per chunk. The algorithm selects the chunk that
+    Randomly shuffles perturbagens and assigns them to batches using Best Fit algorithm,
+    targeting 85-95% of MAX_ELEMENTS per batch. The algorithm selects the batch that
     minimizes waste (gets closest to target_max without exceeding it) for each perturbagen.
-    Controls are considered in matrix size calculations but not added to chunks yet.
+    Controls are considered in matrix size calculations but not added to batches yet.
     
     Parameters:
     -----------
@@ -360,13 +360,13 @@ def create_chunks(non_controls: ad.AnnData,
     unique_perturbagens : np.ndarray
         Array of unique perturbagen names
     controls : ad.AnnData, optional
-        Controls to consider in matrix size calculations (not added to chunks here)
+        Controls to consider in matrix size calculations (not added to batches here)
         
     Returns:
     --------
     list
-        List of chunk dictionaries, each containing:
-        - 'perturbagens': set of perturbagen names in the chunk
+        List of batch dictionaries, each containing:
+        - 'perturbagens': set of perturbagen names in the batch
         - 'n_obs': number of observations (non-controls only)
         - 'n_labels': number of unique perturbation labels (non-controls only)
         - 'obs_indices': list of observation indices from non_controls
@@ -378,58 +378,58 @@ def create_chunks(non_controls: ad.AnnData,
     np.random.seed(RANDOM_SEED)
     np.random.shuffle(shuffled_perturbagens)
     
-    chunks = []
+    batches = []
     target_min, target_max = get_target_sizes()
     ctl_n_obs, ctl_n_labels = get_control_info(controls)
     
     for pert in shuffled_perturbagens:
         pert_n_obs, pert_n_labels, pert_data = get_perturbagen_properties(perturbagen_info, pert)
         
-        best_chunk_idx = None
+        best_batch_idx = None
         best_waste = float('inf')
         
-        for chunk_idx, chunk in enumerate(chunks):
-            _, _, new_matrix_size = calculate_new_chunk_size(chunk, pert_n_obs, pert_n_labels, ctl_n_obs, ctl_n_labels)
+        for batch_idx, batch in enumerate(batches):
+            _, _, new_matrix_size = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels, ctl_n_obs, ctl_n_labels)
             
             if new_matrix_size <= target_max:
                 waste = target_max - new_matrix_size
                 if waste < best_waste:
                     best_waste = waste
-                    best_chunk_idx = chunk_idx
+                    best_batch_idx = batch_idx
         
-        if best_chunk_idx is not None:
-            chunk = chunks[best_chunk_idx]
-            add_data_to_chunk(chunk, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
+        if best_batch_idx is not None:
+            batch = batches[best_batch_idx]
+            add_data_to_batch(batch, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
         else:
-            new_chunk = {
+            new_batch = {
                 'perturbagens': {pert},
                 'n_obs': pert_n_obs,
                 'n_labels': pert_n_labels,
                 'obs_indices': pert_data.obs.index.tolist()
             }
-            chunks.append(new_chunk)
+            batches.append(new_batch)
     
 
-    return chunks
+    return batches
     
-def pad_chunks(chunks: list,
+def pad_batches(batches: list,
                 non_controls: ad.AnnData,
                 unique_perturbagens: np.ndarray,
                 controls: Optional[ad.AnnData] = None,
                 ) -> list:
     '''
-    Pad smaller chunks to balance sizes using perturbagens not in current chunk.
+    Pad smaller batches to balance sizes using perturbagens not in current batch.
     
-    For chunks with matrix size below target_min, this function iteratively adds
-    perturbagens from other chunks (not already in the current chunk). Perturbagens
+    For batches with matrix size below target_min, this function iteratively adds
+    perturbagens from other batches (not already in the current batch). Perturbagens
     are shuffled and added one at a time, checking that the matrix size doesn't exceed
-    target_max. The process stops when the chunk reaches target_matrix_size or no more
+    target_max. The process stops when the batch reaches target_matrix_size or no more
     suitable perturbagens are available.
     
     Parameters:
     -----------
-    chunks : list
-        List of chunk dictionaries from create_chunks()
+    batches : list
+        List of batch dictionaries from create_batches()
     non_controls : ad.AnnData
         Non-control observations (used to get perturbagen data)
     unique_perturbagens : np.ndarray
@@ -440,25 +440,25 @@ def pad_chunks(chunks: list,
     Returns:
     --------
     list
-        List of chunk dictionaries with updated 'obs_indices', 'n_obs', and 'n_labels'
+        List of batch dictionaries with updated 'obs_indices', 'n_obs', and 'n_labels'
     '''
     
     perturbagen_info = calculate_perturbagen_info(non_controls, unique_perturbagens)
     target_min, target_max = get_target_sizes()
     ctl_n_obs, ctl_n_labels = get_control_info(controls)
     
-    if len(chunks) > 1:
+    if len(batches) > 1:
         target_matrix_size = target_min
         
-        for chunk_idx, chunk in enumerate(chunks):
-            matrix_size = calculate_matrix_size(chunk['n_obs'], 
-                                                chunk['n_labels'], 
+        for batch_idx, batch in enumerate(batches):
+            matrix_size = calculate_matrix_size(batch['n_obs'], 
+                                                batch['n_labels'], 
                                                 ctl_n_obs=ctl_n_obs, 
                                                 ctl_n_labels=ctl_n_labels)
             if matrix_size < target_matrix_size:
-                current_chunk_perts = chunk['perturbagens']
+                current_batch_perts = batch['perturbagens']
                 all_perts = set(non_controls.obs['perturbagen'].unique())
-                available_perts = list(all_perts - current_chunk_perts)
+                available_perts = list(all_perts - current_batch_perts)
                 
                 if len(available_perts) == 0:
                     continue
@@ -470,62 +470,62 @@ def pad_chunks(chunks: list,
                 for pert in shuffled_perts:
                     pert_n_obs, pert_n_labels, pert_data = get_perturbagen_properties(perturbagen_info, pert)
                     
-                    _, _, new_matrix_size = calculate_new_chunk_size(chunk, pert_n_obs, pert_n_labels, ctl_n_obs, ctl_n_labels)
+                    _, _, new_matrix_size = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels, ctl_n_obs, ctl_n_labels)
                     
                     if new_matrix_size <= target_max:
-                        add_data_to_chunk(chunk, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
+                        add_data_to_batch(batch, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
                         
-                        current_matrix_size = calculate_matrix_size(chunk['n_obs'], 
-                                                                   chunk['n_labels'], 
+                        current_matrix_size = calculate_matrix_size(batch['n_obs'], 
+                                                                   batch['n_labels'], 
                                                                    ctl_n_obs=ctl_n_obs, 
                                                                    ctl_n_labels=ctl_n_labels)
                         if current_matrix_size >= target_matrix_size:
                             break
     
-    # Log final chunk statistics after padding
-    if len(chunks) > 0:
-        chunk_sizes = [calculate_matrix_size(chunk['n_obs'], 
-                                             chunk['n_labels'], 
+    # Log final batch statistics after padding
+    if len(batches) > 0:
+        batch_sizes = [calculate_matrix_size(batch['n_obs'], 
+                                             batch['n_labels'], 
                                              ctl_n_obs=ctl_n_obs, 
-                                             ctl_n_labels=ctl_n_labels) for chunk in chunks]
-        logger.info(f'  After padding: {len(chunks)} chunks, matrix sizes: {[f"{s/1e6:.1f}M" for s in chunk_sizes]}')
+                                             ctl_n_labels=ctl_n_labels) for batch in batches]
+        logger.info(f'  After padding: {len(batches)} batches, matrix sizes: {[f"{s/1e6:.1f}M" for s in batch_sizes]}')
     
-    return chunks
+    return batches
 
-def add_controls_to_chunks(chunks: list,
+def add_controls_to_batches(batches: list,
                             controls: Optional[ad.AnnData],
                             ) -> list:
     '''
-    Add control observations to all chunks.
+    Add control observations to all batches.
     
-    Appends control observation indices to each chunk's obs_indices list and updates
-    the chunk's n_obs and n_labels counts. If controls are None or empty, returns
-    chunks unchanged.
+    Appends control observation indices to each batch's obs_indices list and updates
+    the batch's n_obs and n_labels counts. If controls are None or empty, returns
+    batches unchanged.
     
     Parameters:
     -----------
-    chunks : list
-        List of chunk dictionaries to add controls to
+    batches : list
+        List of batch dictionaries to add controls to
     controls : Optional[ad.AnnData]
-        Control observations to add to all chunks. If None or empty, chunks are
+        Control observations to add to all batches. If None or empty, batches are
         returned unchanged.
         
     Returns:
     --------
     list
-        List of chunk dictionaries with controls added to 'obs_indices', 'n_obs', and 'n_labels'
+        List of batch dictionaries with controls added to 'obs_indices', 'n_obs', and 'n_labels'
     '''
     if controls is None or controls.n_obs == 0:
-        return chunks
+        return batches
     ctl_n_obs = controls.n_obs
     ctl_n_labels = controls.obs['perturbation_label'].nunique()
     ctl_indices = controls.obs.index.tolist()
     ctl_names = None
     if 'perturbagen' in controls.obs.columns:
         ctl_names = set(controls.obs['perturbagen'].unique())
-    for chunk in chunks:
-        add_data_to_chunk(chunk, ctl_n_obs, ctl_n_labels, ctl_indices, pert=ctl_names)
-    return chunks
+    for batch in batches:
+        add_data_to_batch(batch, ctl_n_obs, ctl_n_labels, ctl_indices, pert=ctl_names)
+    return batches
 
 
 
@@ -610,14 +610,14 @@ def get_unique_perturbagens_or_save(non_controls: ad.AnnData, adata_ct: ad.AnnDa
     return unique_perturbagens
 
 
-def save_chunks(chunks: list, adata_ct: ad.AnnData, dir_output: str, ct_clean: str) -> None:
+def save_batches(batches: list, adata_ct: ad.AnnData, dir_output: str, ct_clean: str) -> None:
     '''
-    Save chunks to disk as separate h5ad files.
+    Save batches to disk as separate h5ad files.
     
     Parameters:
     -----------
-    chunks : list
-        List of chunk dictionaries with 'obs_indices' keys
+    batches : list
+        List of batch dictionaries with 'obs_indices' keys
     adata_ct : ad.AnnData
         Full AnnData object to select observations from
     dir_output : str
@@ -628,29 +628,29 @@ def save_chunks(chunks: list, adata_ct: ad.AnnData, dir_output: str, ct_clean: s
     Returns:
     --------
     None
-        Saves chunk files to disk
+        Saves batch files to disk
     '''
-    chunk_counter = 0
-    for chunk_idx, chunk in enumerate(chunks):
-        chunk_counter += 1
-        chunk_data = adata_ct[chunk['obs_indices']].copy()
-        outfile = os.path.join(dir_output, f"{ct_clean}_processed_chunk_{chunk_counter}.h5ad")
-        save_single_file(chunk_data, outfile)
-        logger.info(f'  Saved chunk {chunk_counter}: {outfile} ({chunk_data.n_obs} obs, {chunk_data.obs["perturbation_label"].nunique()} perturbs)')
+    batch_counter = 0
+    for batch_idx, batch in enumerate(batches):
+        batch_counter += 1
+        batch_data = adata_ct[batch['obs_indices']].copy()
+        outfile = os.path.join(dir_output, f"{ct_clean}_processed_batch_{batch_counter}.h5ad")
+        save_single_file(batch_data, outfile)
+        logger.info(f'  Saved batch {batch_counter}: {outfile} ({batch_data.n_obs} obs, {batch_data.obs["perturbation_label"].nunique()} perturbs)')
     
-    logger.info(f'  Total chunks created for {ct_clean}: {chunk_counter}')
+    logger.info(f'  Total batches created for {ct_clean}: {batch_counter}')
 
 
-def chunk_celltype_by_matrix_size(adata_ct: ad.AnnData,
+def batch_celltype_by_matrix_size(adata_ct: ad.AnnData,
                                    dir_output: str,
                                    ct_clean: str) -> None:
     '''
-    Check matrix size and split cell type dataset into chunks if needed.
+    Check matrix size and split cell type dataset into batches if needed.
     
     This function checks if the matrix size (n_obs * n_perturbs) exceeds MAX_ELEMENTS.
-    If it does, the dataset is split into multiple chunks using Best Fit algorithm
+    If it does, the dataset is split into multiple batches using Best Fit algorithm
     with random shuffling. Controls are excluded from the split and are included in all
-    partitions. Smaller chunks are padded to balance sizes.
+    partitions. Smaller batches are padded to balance sizes.
     
     Parameters:
     -----------
@@ -673,7 +673,7 @@ def chunk_celltype_by_matrix_size(adata_ct: ad.AnnData,
     n_labels = adata_ct.obs['perturbation_label'].nunique()
     matrix_size = calculate_matrix_size(n_obs, n_labels)
     logger.info(f'  Splitting {ct_clean}: {n_obs} obs, {n_labels} perturbation labels, {matrix_size/1e6:.1f}M matrix size')
-    logger.warning(f'  Matrix size for {ct_clean} exceeds {round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS)}, creating chunks')
+    logger.warning(f'  Matrix size for {ct_clean} exceeds {round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS)}, creating batches')
     
     controls, non_controls = separate_controls(adata_ct, ct_clean)
     
@@ -686,26 +686,26 @@ def chunk_celltype_by_matrix_size(adata_ct: ad.AnnData,
     n_non_control_labels = non_controls.obs['perturbation_label'].nunique()
     logger.info(f'  After separation: {n_perturbagens} perturbagens, {n_non_control_obs} non-control obs, {n_non_control_labels} non-control labels')
     
-    logger.info('Create chunks')
-    chunks = create_chunks(non_controls,
+    logger.info('Create batches')
+    batches = create_batches(non_controls,
                           unique_perturbagens,
                           controls=controls,
                           )
 
-    logger.info('Pad chunks')
-    chunks = pad_chunks(chunks,
+    logger.info('Pad batches')
+    batches = pad_batches(batches,
                           non_controls,
                           unique_perturbagens,
                           controls=controls,
                           )
     
-    logger.info('Add controls to chunks')
-    chunks = add_controls_to_chunks(chunks,
+    logger.info('Add controls to batches')
+    batches = add_controls_to_batches(batches,
                                       controls,
                                       )
     
-    logger.info('Save chunks')
-    save_chunks(chunks, adata_ct, dir_output, ct_clean)
+    logger.info('Save batches')
+    save_batches(batches, adata_ct, dir_output, ct_clean)
     return
 
 
@@ -715,7 +715,7 @@ def save_by_celltype(padata: ad.AnnData,
     Save pseudobulk data split by cell type.
     
     Splits the pseudobulk data by cell type and processes each cell type separately.
-    For each cell type, checks if matrix size exceeds limits and chunks if necessary.
+    For each cell type, checks if matrix size exceeds limits and batches if necessary.
     Files are saved in dir_output/by_celltype/ directory.
     
     Parameters:
@@ -729,7 +729,7 @@ def save_by_celltype(padata: ad.AnnData,
     --------
     None
         Saves processed files to disk. Each cell type is saved as
-        '{celltype_clean}_processed.h5ad' or chunked files if matrix size is too large.
+        '{celltype_clean}_processed.h5ad' or batched files if matrix size is too large.
         
     Raises:
     -------
@@ -752,7 +752,7 @@ def save_by_celltype(padata: ad.AnnData,
     for ct in cell_types:
         ct_clean = sanitize_celltype_name(ct)
         adata_ct = padata[padata.obs['cell_type'] == ct].copy()
-        chunk_celltype_by_matrix_size(adata_ct, celltype_dir, ct_clean)
+        batch_celltype_by_matrix_size(adata_ct, celltype_dir, ct_clean)
 
 
 
@@ -774,7 +774,7 @@ def add_perturbation_label_to_padata(file_input: str,
         Design parameter for perturbation labeling ('group_all_replicates' or 'separate_replicates')
     split_by_celltype : bool, default=False
         If True, splits output by cell type and processes each separately.
-        Large cell types are automatically chunked if matrix size exceeds limits.
+        Large cell types are automatically batched if matrix size exceeds limits.
         
     Returns:
     --------
