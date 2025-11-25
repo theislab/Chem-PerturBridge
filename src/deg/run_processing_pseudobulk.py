@@ -80,9 +80,10 @@ def create_dir_if_not_exists(file_output: str) -> None:
 
 def update_n_obs_json(file_path: str, n_obs: int, json_file: str) -> None:
     '''
-    Update JSON file with file path and n_obs mapping.
+    Update JSON file with file basename and n_obs mapping.
     
     Thread-safe update using file locking. Creates the JSON file if it doesn't exist.
+    Uses basename of the file as the key for portability.
     
     Parameters:
     -----------
@@ -93,8 +94,8 @@ def update_n_obs_json(file_path: str, n_obs: int, json_file: str) -> None:
     json_file : str
         Path to the JSON file to update
     '''
-    # Convert to absolute path for consistency
-    file_path = os.path.abspath(file_path)
+    # Use basename as key for portability
+    file_basename = os.path.basename(file_path)
     
     # Read existing data or initialize empty dict
     n_obs_data = {}
@@ -111,8 +112,8 @@ def update_n_obs_json(file_path: str, n_obs: int, json_file: str) -> None:
             logger.warning(f'Error reading n_obs JSON file {json_file}: {e}, creating new file')
             n_obs_data = {}
     
-    # Update with new entry
-    n_obs_data[file_path] = n_obs
+    # Update with new entry using basename as key
+    n_obs_data[file_basename] = n_obs
     
     # Write back with exclusive lock
     create_dir_if_not_exists(json_file)
@@ -799,7 +800,7 @@ def save_by_celltype(padata: ad.AnnData,
     os.makedirs(celltype_dir, exist_ok=True)
     
     # Create JSON file path for n_obs information
-    n_obs_json_file = os.path.join(celltype_dir, 'n_obs_table.json')
+    n_obs_json_file = os.path.join(dir_output, 'n_obs_table.json')
     
     cell_types = padata.obs['cell_type'].unique()
     cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) or not np.isnan(ct))]
@@ -815,6 +816,50 @@ def save_by_celltype(padata: ad.AnnData,
         adata_ct = padata[padata.obs['cell_type'] == ct].copy()
         batch_celltype_by_matrix_size(adata_ct, celltype_dir, ct_clean, n_obs_json_file)
 
+
+
+def check_output_files_exist(file_input: str,
+                             dir_output: str,
+                             split_by_celltype: bool = False) -> bool:
+    '''
+    Check if output files already exist.
+    
+    Parameters:
+    -----------
+    file_input : str
+        Path to the input pseudobulk h5ad file
+    dir_output : str
+        Output directory path
+    split_by_celltype : bool, default=False
+        Whether output is split by cell type
+        
+    Returns:
+    --------
+    bool
+        True if output files exist, False otherwise
+    '''
+    # Check main output file
+    file_output = get_output_path_combined(file_input, dir_output)
+    if not os.path.exists(file_output):
+        return False
+    
+    # If split_by_celltype, check if by_celltype directory exists and has files
+    if split_by_celltype:
+        celltype_dir = os.path.join(dir_output, 'by_celltype')
+        if not os.path.exists(celltype_dir):
+            return False
+        
+        # Check if there are any .h5ad files in by_celltype directory
+        h5ad_files = [f for f in os.listdir(celltype_dir) if f.endswith('.h5ad')]
+        if len(h5ad_files) == 0:
+            return False
+        
+        # Check if JSON file exists in dir_output (INPUT_DIR)
+        json_file = os.path.join(dir_output, 'n_obs_table.json')
+        if not os.path.exists(json_file):
+            return False
+    
+    return True
 
 
 def add_perturbation_label_to_padata(file_input: str,
@@ -844,6 +889,11 @@ def add_perturbation_label_to_padata(file_input: str,
         '{basename}_processed.h5ad' in dir_output. If split_by_celltype is True,
         additional files are saved in dir_output/by_celltype/.
     '''
+    
+    # Check if output files already exist
+    if check_output_files_exist(file_input, dir_output, split_by_celltype):
+        logger.info('Output files already exist, skipping processing')
+        return
     
     logger.info('Read pseudobulk file')
 

@@ -395,8 +395,8 @@ count_observations() {
     local H5AD_FILE=$1
     local JSON_FILE=$2
     
-    # Convert to absolute path for matching
-    local ABS_FILE=$(cd "$(dirname "$H5AD_FILE")" && pwd)/$(basename "$H5AD_FILE")
+    # Get basename of the file for lookup
+    local FILE_BASENAME=$(basename "$H5AD_FILE")
     
     # Check if JSON file exists
     if [ ! -f "$JSON_FILE" ]; then
@@ -404,13 +404,12 @@ count_observations() {
         return 1
     fi
     
-    # Try to extract n_obs using absolute path first
-    local N_OBS=$(jq -r ".[\"${ABS_FILE}\"] // .[\"${H5AD_FILE}\"] // empty" "$JSON_FILE" 2>/dev/null)
+    # Extract n_obs using basename as key
+    local N_OBS=$(jq -r ".[\"${FILE_BASENAME}\"] // empty" "$JSON_FILE" 2>/dev/null)
     
     # Check if we got a valid number
     if [ -z "$N_OBS" ] || [ "$N_OBS" = "null" ]; then
-        echo "Error: Could not find n_obs for file ${H5AD_FILE} in JSON table" >&2
-        echo "  Tried paths: ${ABS_FILE} and ${H5AD_FILE}" >&2
+        echo "Error: Could not find n_obs for file ${FILE_BASENAME} in JSON table" >&2
         return 1
     fi
     
