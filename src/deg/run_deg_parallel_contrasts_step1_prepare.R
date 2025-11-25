@@ -226,8 +226,7 @@ main <- function() {
 
   parser <- ArgumentParser()
   parser$add_argument("--input", type="character")
-  parser$add_argument("--output_dir", type="character")
-  parser$add_argument("--intermediate_dir", type="character")
+  parser$add_argument("--output_dir", type="character", required=TRUE)
   parser$add_argument("--subsampling", action="store_true")
   parser$add_argument("--max_cell_types", type="integer")
   parser$add_argument("--max_perturbations", type="integer")
@@ -259,6 +258,9 @@ main <- function() {
   start_time <- Sys.time()
   cat("\nDEG Step 1: Prepare - Started...\n")
   
+  # Capture warnings during processing
+  warning_messages <- list()
+  
   # load the full pseudobulk AnnData
   adata <- anndata::read_h5ad(args$input)
   cat("Loaded input file: ", args$input, "\n")
@@ -267,23 +269,27 @@ main <- function() {
   adata <- filter_cells(adata, args$min_cells)
   adata <- filter_qc(adata, args$qc)
   adata <- subsampling(adata, args)
-  cell_types_to_process <- unique(adata$obs$cell_type)
-  n_cell_types <- length(cell_types_to_process)
-  cl_num <- 0
-
-  for (cl in cell_types_to_process) {
-    cl_num <- cl_num + 1
-    cl_start <- Sys.time()
-    cat("\n▶︎ Processing cell_type ", cl_num, "/", n_cell_types, ": ", cl, "\n")
   
-    # subset to this cell_type
-    ad  <- adata[adata$obs$cell_type == cl, ]
-    ad <- filter_controls(ad, "pert_time_h")
+  # Get cell type (should be only one since input files are split by cell type)
+  cell_types <- unique(adata$obs$cell_type)
+  if (length(cell_types) != 1) {
+    stop("Expected exactly one cell type in input file, found: ", paste(cell_types, collapse = ", "))
+  }
+  cl <- cell_types[1]
+  
+  
+  # Process with warning capture
+  withCallingHandlers({
+    cl_start <- Sys.time()
+    cat("\n▶︎ Processing cell_type: ", cl, "\n")
+    
+    # Filter controls
+    ad <- filter_controls(adata, "pert_time_h")
     
     obs <- ad$obs %>%
       mutate(
-      raw_cond = perturbation_label,
-      cond = factor(clean(perturbation_label)),  # sanitize values here!
+        raw_cond = perturbation_label,
+        cond = factor(clean(perturbation_label)),  # sanitize values here!
       )
     
     # Check for required controls
@@ -291,7 +297,7 @@ main <- function() {
   
     cond <- obs$cond
     fit <- run_dge(ad, obs)
-    
+  
     cl_time <- difftime(Sys.time(), cl_start, units = "secs")
     cat(sprintf("DGE fit is completed in %.1f seconds\n", cl_time))
 
@@ -304,8 +310,8 @@ main <- function() {
         distinct(cond, .keep_all = TRUE) %>%
         filter(is_control!=TRUE)
     
-    # Use intermediate directory as provided (already includes full path structure)
-    intermediate_dir <- args$intermediate_dir
+    # Use output_dir as the intermediate directory
+    intermediate_dir <- args$output_dir
     
     # Create intermediate directory if it doesn't exist
     if (!dir.exists(intermediate_dir)) {
@@ -313,7 +319,7 @@ main <- function() {
     }
     
     # Save intermediate data for batch processing
-    intermediate_file <- file.path(intermediate_dir, paste0(cl, "_intermediate.rds"))
+    intermediate_file <- file.path(intermediate_dir, paste0(cl, ".rds"))
     cat("\n    Saving intermediate data: ", intermediate_file, "\n")
     
     # Save fit object and metadata
@@ -337,12 +343,30 @@ main <- function() {
     # Show time for this cell line
     cl_time <- difftime(Sys.time(), cl_start, units = "secs")
     cat(sprintf("✓ Cell line preparation completed in %.1f seconds\n", cl_time))
-  }
+  }, warning = function(w) {
+    warning_messages[[length(warning_messages) + 1]] <<- conditionMessage(w)
+    invokeRestart("muffleWarning")
+  })
   
   # Show runtime
   end_time <- Sys.time()
   runtime <- difftime(end_time, start_time, units = "secs")
   cat(sprintf("\nStep 1 Total runtime: %.1f seconds\n", runtime))
+  
+  # Print any warnings that occurred (to stderr)
+  if (length(warning_messages) > 0) {
+    message(sprintf("\n=== %d Warnings encountered ===\n", length(warning_messages)))
+    # Print first 20 unique warnings
+    unique_warns <- unique(unlist(warning_messages))
+    n_show <- min(20, length(unique_warns))
+    for (i in 1:n_show) {
+      message(sprintf("%d. %s", i, unique_warns[i]))
+    }
+    if (length(unique_warns) > n_show) {
+      message(sprintf("... and %d more unique warning types (total %d warnings)", 
+                  length(unique_warns) - n_show, length(warning_messages)))
+    }
+  }
   
   cat("\nDEG Step 1: Prepare - Completed!\n")
 }

@@ -173,14 +173,12 @@ get_layers <- function(de_df,
 #' @return NULL (saves results to files)
 main <- function() {
   parser <- ArgumentParser()
-  parser$add_argument("--intermediate_file", type="character", required=TRUE,
+  parser$add_argument("--input_file", type="character", required=TRUE,
                      help="Path to intermediate RDS file from step 1")
-  parser$add_argument("--batch_dir", type="character", required=TRUE,
+  parser$add_argument("--input_dir", type="character", required=TRUE,
                      help="Directory containing batch result files")
-  parser$add_argument("--output_dir", type="character", required=TRUE,
-                     help="Directory to save final h5ad file")
-  parser$add_argument("--cell_type", type="character", required=TRUE,
-                     help="Cell type name for output file")
+  parser$add_argument("--output_file", type="character", required=TRUE,
+                     help="Path to output h5ad file")
 
   args <- parser$parse_args()
   
@@ -188,92 +186,117 @@ main <- function() {
   start_time <- Sys.time()
   cat("\nDEG Step 3: Aggregate - Started...\n")
   
-  # Load intermediate data for metadata
-  cat("Loading intermediate data: ", args$intermediate_file, "\n")
-  intermediate_data <- readRDS(args$intermediate_file)
+  # Capture warnings during processing
+  warning_messages <- list()
   
-  treated_obs <- intermediate_data$treated_obs
-  ad_var <- intermediate_data$ad_var
-  ad_uns <- intermediate_data$ad_uns
-  parameters <- intermediate_data$parameters
-  
-  # Find all batch result files
-  batch_files <- list.files(args$batch_dir, pattern = "^batch_[0-9]+\\.rds$", full.names = TRUE)
-  n_batches <- length(batch_files)
-  
-  if (n_batches == 0) {
-    stop("No batch result files found in: ", args$batch_dir)
-  }
-  
-  cat(sprintf("Found %d batch result files\n", n_batches))
-  
-  # Load and combine all batch results
-  cat("Loading and combining batch results...\n")
-  batch_results <- list()
-  
-  for (batch_file in batch_files) {
-    cat("  Loading: ", basename(batch_file), "\n")
-    batch_data <- readRDS(batch_file)
-    if (!is.null(batch_data) && nrow(batch_data) > 0) {
-      batch_results[[length(batch_results) + 1]] <- batch_data
+  # Process with warning capture
+  withCallingHandlers({
+    # Load intermediate data for metadata
+    cat("Loading intermediate data: ", args$input_file, "\n")
+    intermediate_data <- readRDS(args$input_file)
+    
+    treated_obs <- intermediate_data$treated_obs
+    ad_var <- intermediate_data$ad_var
+    ad_uns <- intermediate_data$ad_uns
+    parameters <- intermediate_data$parameters
+    
+    # Find all batch result files
+    batch_files <- list.files(args$input_dir, pattern = "^batch_[0-9]+\\.rds$", full.names = TRUE)
+    n_batches <- length(batch_files)
+    
+    if (n_batches == 0) {
+      stop("No batch result files found in: ", args$input_dir)
     }
-  }
-  
-  if (length(batch_results) == 0) {
-    stop("No valid batch results found")
-  }
-  
-  # Combine all batch results
-  cat("Combining all batches...\n")
-  de_res <- bind_rows(batch_results)
-  
-  cat(sprintf("Combined results: %d rows\n", nrow(de_res)))
-  
-  # Apply global p-value adjustment across all contrasts
-  cat("Applying global p-value adjustment...\n")
-  de_df <- de_res %>%
-    mutate(
-      adj.P.Value.across_all_contrasts = p.adjust(P.Value, method="BH")
-    ) %>%
-    rename(adj.P.Value.within_one_contrast = adj.P.Val)
-  
-  cat(sprintf("Creating output structures...\n"))
-  obs_out <- get_obs(de_df, treated_obs)
-  var_out <- get_var(de_df, ad_var)
-  layers <- get_layers(de_df, obs_out)
-  
-  # Prepare uns metadata
-  new_uns <- ad_uns
-  new_uns$threshold_filter_cells <- parameters$min_cells
-  new_uns$qc_filtering_enabled <- parameters$qc
-  
-  # Assemble and write AnnData
-  cat("Creating AnnData object...\n")
-  out_adata <- anndata::AnnData(
-    obs    = obs_out,
-    var    = var_out,
-    layers = layers,
-    uns    = new_uns
-  )
-  
-  # Create output file path
-  outfile <- file.path(args$output_dir, paste0(args$cell_type, "_de.h5ad"))
-  
-  # Create output directory if it doesn't exist
-  if (!dir.exists(args$output_dir)) {
-    dir.create(args$output_dir, recursive = TRUE)
-  }
-  
-  cat("\n    Writing: ", outfile, "\n")
-  out_adata$write_h5ad(outfile, compression = "gzip")
-  
-  # Remove X matrix for compatibility with older Python anndata versions
-  rewrite_h5ad(outfile)
+    
+    cat(sprintf("Found %d batch result files\n", n_batches))
+    
+    # Load and combine all batch results
+    cat("Loading and combining batch results...\n")
+    batch_results <- list()
+    
+    for (batch_file in batch_files) {
+      cat("  Loading: ", basename(batch_file), "\n")
+      batch_data <- readRDS(batch_file)
+      if (!is.null(batch_data) && nrow(batch_data) > 0) {
+        batch_results[[length(batch_results) + 1]] <- batch_data
+      }
+    }
+    
+    if (length(batch_results) == 0) {
+      stop("No valid batch results found")
+    }
+    
+    # Combine all batch results
+    cat("Combining all batches...\n")
+    de_res <- bind_rows(batch_results)
+    
+    cat(sprintf("Combined results: %d rows\n", nrow(de_res)))
+    
+    # Apply global p-value adjustment across all contrasts
+    cat("Applying global p-value adjustment...\n")
+    de_df <- de_res %>%
+      mutate(
+        adj.P.Value.across_all_contrasts = p.adjust(P.Value, method="BH")
+      ) %>%
+      rename(adj.P.Value.within_one_contrast = adj.P.Val)
+    
+    cat(sprintf("Creating output structures...\n"))
+    obs_out <- get_obs(de_df, treated_obs)
+    var_out <- get_var(de_df, ad_var)
+    layers <- get_layers(de_df, obs_out)
+    
+    # Prepare uns metadata
+    new_uns <- ad_uns
+    new_uns$threshold_filter_cells <- parameters$min_cells
+    new_uns$qc_filtering_enabled <- parameters$qc
+    
+    # Assemble and write AnnData
+    cat("Creating AnnData object...\n")
+    out_adata <- anndata::AnnData(
+      obs    = obs_out,
+      var    = var_out,
+      layers = layers,
+      uns    = new_uns
+    )
+    
+    # Use output_file as provided
+    outfile <- args$output_file
+    
+    # Create output directory if it doesn't exist
+    output_dir <- dirname(outfile)
+    if (!dir.exists(output_dir)) {
+      dir.create(output_dir, recursive = TRUE)
+    }
+    
+    cat("\n    Writing: ", outfile, "\n")
+    out_adata$write_h5ad(outfile, compression = "gzip")
+    
+    # Remove X matrix for compatibility with older Python anndata versions
+    rewrite_h5ad(outfile)
+  }, warning = function(w) {
+    warning_messages[[length(warning_messages) + 1]] <<- conditionMessage(w)
+    invokeRestart("muffleWarning")
+  })
   
   # Show runtime
   end_time <- Sys.time()
   runtime <- difftime(end_time, start_time, units = "secs")
   cat(sprintf("\nStep 3 completed in %.1f seconds\n", runtime))
+  
+  # Print any warnings that occurred (to stderr)
+  if (length(warning_messages) > 0) {
+    message(sprintf("\n=== %d Warnings encountered ===\n", length(warning_messages)))
+    # Print first 20 unique warnings
+    unique_warns <- unique(unlist(warning_messages))
+    n_show <- min(20, length(unique_warns))
+    for (i in 1:n_show) {
+      message(sprintf("%d. %s", i, unique_warns[i]))
+    }
+    if (length(unique_warns) > n_show) {
+      message(sprintf("... and %d more unique warning types (total %d warnings)", 
+                  length(unique_warns) - n_show, length(warning_messages)))
+    }
+  }
   
   cat("\nDEG Step 3: Aggregate - Completed!\n")
 }

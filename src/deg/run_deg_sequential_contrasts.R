@@ -320,7 +320,7 @@ run_contrasts <- function(fit,
     
     de_res <- pmap_dfr(treated_obs, function(cond, perturbagen, pert_dose_uM, pert_time_h, plate, raw_cond, ...) {
       contrast_num <<- contrast_num + 1
-      if (contrast_num %% 5 == 1 || contrast_num == n_contrasts) {
+      if (contrast_num %% 50 == 1 || contrast_num == n_contrasts) {
         cat(sprintf("    Running contrast %d/%d\n", contrast_num, n_contrasts))
       }
 
@@ -503,9 +503,9 @@ run_dge_pipeline <- function(par) {
   # Parameter validation
   stopifnot(!missing(par),
             is.list(par),
-            "input" %in% names(par), !is.null(par$input),
+            "input_file" %in% names(par), !is.null(par$input_file),
             "output_dir" %in% names(par), !is.null(par$output_dir),
-            is.character(par$input), file.exists(par$input),
+            is.character(par$input_file), file.exists(par$input_file),
             is.character(par$output_dir))
   
   # Set default min_cells if not provided
@@ -521,9 +521,12 @@ run_dge_pipeline <- function(par) {
   stopifnot(is.logical(par$qc))
   
   # load the full pseudobulk AnnData
-  adata <- anndata::read_h5ad(par$input)
-  cat("Loaded input file: ", par$input, "\n")
+  adata <- anndata::read_h5ad(par$input_file)
+  cat("Loaded input file: ", par$input_file, "\n")
   cat("Initial dimensions: ", adata$n_obs, " samples × ", adata$n_vars, " genes\n")
+  
+  # Capture warnings during processing
+  warning_messages <- list()
   
   adata <- filter_cells(adata, par$min_cells)
   adata <- filter_qc(adata, par$qc)
@@ -535,129 +538,161 @@ run_dge_pipeline <- function(par) {
   for (cl in cell_types_to_process) {
     cl_num <- cl_num + 1
     cl_start <- Sys.time()
-    cat("\n▶︎ Processing cell_type ", cl_num, "/", n_cell_types, ": ", cl, "\n")
+    if (n_cell_types > 1) {
+      cat("\n▶︎ Processing cell_type ", cl_num, "/", n_cell_types, ": ", cl, "\n")
+    } else {
+      cat("\n▶︎ Processing cell_type: ", cl, "\n")
+    }
   
-    # subset to this cell_type
-    ad  <- adata[adata$obs$cell_type == cl, ]
-    ad <- filter_controls(ad, "pert_time_h")
+    # Process this cell type with warning capture
+    skip_cell_type <- FALSE
+    withCallingHandlers({
+      # subset to this cell_type
+      ad  <- adata[adata$obs$cell_type == cl, ]
+      ad <- filter_controls(ad, "pert_time_h")
+      
+      obs <- ad$obs %>%
+        mutate(
+        raw_cond = perturbation_label,
+        cond = factor(clean(perturbation_label)),  # sanitize values here!
+        )
+      
+      # Check for required controls
+      check_for_controls(obs, "pert_time_h")
     
-    obs <- ad$obs %>%
-      mutate(
-      raw_cond = perturbation_label,
-      cond = factor(clean(perturbation_label)),  # sanitize values here!
+      cond <- obs$cond
+      fit <- run_dge(ad,
+              obs)
+      cl_time <- difftime(Sys.time(), cl_start, units = "secs")
+      cat(sprintf("DGE fit is completed in %.1f seconds\n", cl_time))
+
+      
+      # separate the control and treated conds (we won't DE on control-vs-control)
+      control_obs <- obs %>%
+          distinct(cond, .keep_all = TRUE) %>%
+          filter(is_control==TRUE)
+      
+      treated_obs <- obs %>%
+          distinct(cond, .keep_all = TRUE) %>%
+          filter(is_control!=TRUE)
+      
+      # DEBUG: Save fit object for comparison with deg_split
+      debug_dir <- "./data/intermediate/deg/full/qc_false/filter_min_cells_0"
+      dir.create(debug_dir, recursive = TRUE, showWarnings = FALSE)
+      debug_file <- file.path(debug_dir, paste0(cl, "_intermediate_from_deg_sh.rds"))
+      cat(sprintf("    DEBUG: Saving fit object to: %s\n", debug_file))
+      saveRDS(list(
+        fit = fit,
+        control_obs = control_obs,
+        treated_obs = treated_obs,
+        parameters = list(
+          subsampling = par$subsampling,
+          min_cells = par$min_cells,
+          qc = par$qc
+        )
+      ), debug_file)
+      cat("    DEBUG: Fit object saved\n")
+
+      cat("    Running contrasts...\n")
+      de_res <- run_contrasts(fit,
+                            control_obs,
+                            treated_obs,
+                            par)
+      
+      cl_time <- difftime(Sys.time(), cl_start, units = "secs")
+      cat(sprintf("Contrasts are completed in %.1f seconds\n", cl_time))
+      # Skip if no valid DE results
+      if (is.null(de_res) || nrow(de_res) == 0) {
+        warning("No valid DE results for cell line ", cl)
+        skip_cell_type <<- TRUE
+        return(invisible(NULL))
+      }
+    
+      # adjust p-values globally across all contrasts
+      de_df <- de_res %>%
+        mutate(
+          adj.P.Value.across_all_contrasts = p.adjust(P.Value, method="BH")
+        )  %>%
+        rename(adj.P.Value.within_one_contrast = adj.P.Val)
+    
+      obs_out <- get_obs(de_df, treated_obs)
+      var_out <- get_var(de_df, ad)
+      layers <- get_layers(de_df, obs_out)
+      
+      # Get uns metadata before subsetting to avoid ImplicitModificationWarning
+      # Access uns early while adata is still a proper object (not a view)
+      if (!is.null(adata$uns) && length(adata$uns) > 0) {
+        new_uns <- as.list(adata$uns)  # Create a copy
+      } else {
+        new_uns <- list()
+      }
+    
+      new_uns$threshold_filter_cells <- par$min_cells
+      new_uns$qc_filtering_enabled <- par$qc
+      
+
+      
+      # assemble and write
+      out_adata <- anndata::AnnData(
+        obs    = obs_out,
+        var    = var_out,
+        layers = layers,
+        uns    = new_uns
       )
     
-    # Check for required controls
-    check_for_controls(obs, "pert_time_h")
-  
-    cond <- obs$cond
-    fit <- run_dge(ad,
-            obs)
-    cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-    cat(sprintf("DGE fit is completed in %.1f seconds\n", cl_time))
-
+      # Create output directory if it doesn't exist
+      if (!is.null(par$subsampling) && par$subsampling) {
+        output_dir <- file.path(par$output_dir, "subsampling")
+      }
+      else {
+        output_dir <- file.path(par$output_dir, "full")
+      }
+      # Add QC folder based on whether QC filtering is enabled
+      qc_folder <- if (par$qc) "qc_true" else "qc_false"
+      output_dir <- file.path(output_dir, qc_folder)
+      
+      # Add filter folder based on min_cells threshold
+      filter_folder <- paste0("filter_min_cells_", par$min_cells)
+      output_dir <- file.path(output_dir, filter_folder)
+      
+      if (!dir.exists(output_dir)) {
+        dir.create(output_dir, recursive = TRUE)
+      }
     
-    # separate the control and treated conds (we won't DE on control-vs-control)
-    control_obs <- obs %>%
-        distinct(cond, .keep_all = TRUE) %>%
-        filter(is_control==TRUE)
+      outfile <- file.path(output_dir, paste0(cl, "_de.h5ad"))
+      cat("\n    Writing: ", outfile, "\n")
+      out_adata$write_h5ad(outfile, compression = "gzip")
+      
+      # Remove X matrix for compatibility with older Python anndata versions
+      rewrite_h5ad(outfile)
     
-    treated_obs <- obs %>%
-        distinct(cond, .keep_all = TRUE) %>%
-        filter(is_control!=TRUE)
+      # Show time for this cell line
+      cl_time <- difftime(Sys.time(), cl_start, units = "secs")
+      cat(sprintf("✓ Cell line completed in %.1f seconds\n", cl_time))
+    }, warning = function(w) {
+      warning_messages[[length(warning_messages) + 1]] <<- conditionMessage(w)
+      invokeRestart("muffleWarning")
+    })
     
-    # DEBUG: Save fit object for comparison with deg_split
-    debug_dir <- "./data/intermediate/deg/full/qc_false/filter_min_cells_0"
-    dir.create(debug_dir, recursive = TRUE, showWarnings = FALSE)
-    debug_file <- file.path(debug_dir, paste0(cl, "_intermediate_from_deg_sh.rds"))
-    cat(sprintf("    DEBUG: Saving fit object to: %s\n", debug_file))
-    saveRDS(list(
-      fit = fit,
-      control_obs = control_obs,
-      treated_obs = treated_obs,
-      parameters = list(
-        subsampling = par$subsampling,
-        min_cells = par$min_cells,
-        qc = par$qc
-      )
-    ), debug_file)
-    cat("    DEBUG: Fit object saved\n")
-
-    cat("    Running contrasts...\n")
-    de_res <- run_contrasts(fit,
-                          control_obs,
-                          treated_obs,
-                          par)
-    
-    cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-    cat(sprintf("Contrasts are completed in %.1f seconds\n", cl_time))
-    # Skip if no valid DE results
-    if (is.null(de_res) || nrow(de_res) == 0) {
-      warning("No valid DE results for cell line ", cl)
+    # Skip to next cell type if no valid results
+    if (skip_cell_type) {
       next
     }
+  }
   
-    # adjust p-values globally across all contrasts
-    de_df <- de_res %>%
-      mutate(
-        adj.P.Value.across_all_contrasts = p.adjust(P.Value, method="BH")
-      )  %>%
-      rename(adj.P.Value.within_one_contrast = adj.P.Val)
-  
-    obs_out <- get_obs(de_df, treated_obs)
-    var_out <- get_var(de_df, ad)
-    layers <- get_layers(de_df, obs_out)
-    
-    # Get uns metadata before subsetting to avoid ImplicitModificationWarning
-    # Access uns early while adata is still a proper object (not a view)
-    if (!is.null(adata$uns) && length(adata$uns) > 0) {
-      new_uns <- as.list(adata$uns)  # Create a copy
-    } else {
-      new_uns <- list()
+  # Print any warnings that occurred (to stderr)
+  if (length(warning_messages) > 0) {
+    message(sprintf("\n=== %d Warnings encountered ===\n", length(warning_messages)))
+    # Print first 20 unique warnings
+    unique_warns <- unique(unlist(warning_messages))
+    n_show <- min(20, length(unique_warns))
+    for (i in 1:n_show) {
+      message(sprintf("%d. %s", i, unique_warns[i]))
     }
-  
-    new_uns$threshold_filter_cells <- par$min_cells
-    new_uns$qc_filtering_enabled <- par$qc
-    
-
-    
-    # assemble and write
-    out_adata <- anndata::AnnData(
-      obs    = obs_out,
-      var    = var_out,
-      layers = layers,
-      uns    = new_uns
-    )
-  
-    # Create output directory if it doesn't exist
-    if (!is.null(par$subsampling) && par$subsampling) {
-      output_dir <- file.path(par$output_dir, "subsampling")
+    if (length(unique_warns) > n_show) {
+      message(sprintf("... and %d more unique warning types (total %d warnings)", 
+                  length(unique_warns) - n_show, length(warning_messages)))
     }
-    else {
-      output_dir <- file.path(par$output_dir, "full")
-    }
-    # Add QC folder based on whether QC filtering is enabled
-    qc_folder <- if (par$qc) "qc_true" else "qc_false"
-    output_dir <- file.path(output_dir, qc_folder)
-    
-    # Add filter folder based on min_cells threshold
-    filter_folder <- paste0("filter_min_cells_", par$min_cells)
-    output_dir <- file.path(output_dir, filter_folder)
-    
-    if (!dir.exists(output_dir)) {
-      dir.create(output_dir, recursive = TRUE)
-    }
-  
-    outfile <- file.path(output_dir, paste0(cl, "_de.h5ad"))
-    cat("\n    Writing: ", outfile, "\n")
-    out_adata$write_h5ad(outfile, compression = "gzip")
-    
-    # Remove X matrix for compatibility with older Python anndata versions
-    rewrite_h5ad(outfile)
-  
-    # Show time for this cell line
-    cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-    cat(sprintf("✓ Cell line completed in %.1f seconds\n", cl_time))
   }
 }
 
@@ -687,7 +722,7 @@ merge_config <- function(args, config) {
 #' @return NULL (saves results to files)
 main <- function() {  
   parser <- ArgumentParser()
-  parser$add_argument("--input", type="character")
+  parser$add_argument("--input_file", type="character")
   parser$add_argument("--output_dir", type="character")
   parser$add_argument("--subsampling", action="store_true")
   parser$add_argument("--max_cell_types", type="integer")

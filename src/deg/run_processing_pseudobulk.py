@@ -77,6 +77,52 @@ def create_dir_if_not_exists(file_output: str) -> None:
     dir_output = os.path.dirname(file_output)
     os.makedirs(dir_output, exist_ok=True)
 
+
+def update_n_obs_json(file_path: str, n_obs: int, json_file: str) -> None:
+    '''
+    Update JSON file with file path and n_obs mapping.
+    
+    Thread-safe update using file locking. Creates the JSON file if it doesn't exist.
+    
+    Parameters:
+    -----------
+    file_path : str
+        Full path to the h5ad file
+    n_obs : int
+        Number of observations in the file
+    json_file : str
+        Path to the JSON file to update
+    '''
+    # Convert to absolute path for consistency
+    file_path = os.path.abspath(file_path)
+    
+    # Read existing data or initialize empty dict
+    n_obs_data = {}
+    if os.path.exists(json_file):
+        try:
+            with open(json_file, 'r', encoding='utf-8') as f:
+                # Use file locking for thread safety
+                fcntl.flock(f.fileno(), fcntl.LOCK_SH)  # Shared lock for reading
+                try:
+                    n_obs_data = json.load(f)
+                finally:
+                    fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+        except (json.JSONDecodeError, IOError) as e:
+            logger.warning(f'Error reading n_obs JSON file {json_file}: {e}, creating new file')
+            n_obs_data = {}
+    
+    # Update with new entry
+    n_obs_data[file_path] = n_obs
+    
+    # Write back with exclusive lock
+    create_dir_if_not_exists(json_file)
+    with open(json_file, 'w', encoding='utf-8') as f:
+        fcntl.flock(f.fileno(), fcntl.LOCK_EX)  # Exclusive lock for writing
+        try:
+            json.dump(n_obs_data, f, indent=2, sort_keys=True)
+        finally:
+            fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+
 def save_read(file_input: str, 
               n_retries: int = 10,
               delay: float = 5.0) -> ad.AnnData:
@@ -531,7 +577,7 @@ def add_controls_to_batches(batches: list,
 
 
 
-def save_single_file(adata: ad.AnnData, file_output: str) -> None:
+def save_single_file(adata: ad.AnnData, file_output: str, n_obs_json_file: Optional[str] = None) -> None:
     '''
     Save AnnData as a single processed h5ad file.
     
@@ -543,13 +589,19 @@ def save_single_file(adata: ad.AnnData, file_output: str) -> None:
         AnnData object to save
     file_output : str
         Full path to the output file
+    n_obs_json_file : Optional[str], default=None
+        Path to JSON file to update with n_obs information. If None, no JSON is updated.
     '''
     create_dir_if_not_exists(file_output)
     adata.write_h5ad(file_output, compression='gzip')
-    logger.info(f'  Saved: {file_output} ({adata.n_obs} obs)')
+    logger.info(f'    Saved: {file_output} ({adata.n_obs} obs)')
+    
+    # Update n_obs JSON file if provided
+    if n_obs_json_file is not None:
+        update_n_obs_json(file_output, adata.n_obs, n_obs_json_file)
 
 
-def check_and_save_if_small(adata_ct: ad.AnnData, dir_output: str, ct_clean: str) -> bool:
+def check_and_save_if_small(adata_ct: ad.AnnData, dir_output: str, ct_clean: str, n_obs_json_file: Optional[str] = None) -> bool:
     '''
     Check if matrix size is within limits and save as single file if so.
     
@@ -561,6 +613,8 @@ def check_and_save_if_small(adata_ct: ad.AnnData, dir_output: str, ct_clean: str
         Output directory path
     ct_clean : str
         Sanitized cell type name for filenames
+    n_obs_json_file : Optional[str], default=None
+        Path to JSON file to update with n_obs information
         
     Returns:
     --------
@@ -573,13 +627,13 @@ def check_and_save_if_small(adata_ct: ad.AnnData, dir_output: str, ct_clean: str
     
     if matrix_size <= round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS):
         file_output = os.path.join(dir_output, f"{ct_clean}_processed.h5ad")
-        save_single_file(adata_ct, file_output)
+        save_single_file(adata_ct, file_output, n_obs_json_file)
         return True
     return False
 
 
 def get_unique_perturbagens_or_save(non_controls: ad.AnnData, adata_ct: ad.AnnData,
-                                    dir_output: str, ct_clean: str) -> Optional[np.ndarray]:
+                                    dir_output: str, ct_clean: str, n_obs_json_file: Optional[str] = None) -> Optional[np.ndarray]:
     '''
     Get unique perturbagens from non-controls, or save and return None if none found.
     
@@ -593,7 +647,9 @@ def get_unique_perturbagens_or_save(non_controls: ad.AnnData, adata_ct: ad.AnnDa
         Output directory path
     ct_clean : str
         Sanitized cell type name for filenames
-        
+    n_obs_json_file : Optional[str], default=None
+        Path to JSON file to update with n_obs information
+    
     Returns:
     --------
     Optional[np.ndarray]
@@ -604,13 +660,13 @@ def get_unique_perturbagens_or_save(non_controls: ad.AnnData, adata_ct: ad.AnnDa
     if len(unique_perturbagens) < 1:
         logger.warning(f'  No perturbagens found, saving as is')
         file_output = os.path.join(dir_output, f"{ct_clean}_processed.h5ad")
-        save_single_file(adata_ct, file_output)
+        save_single_file(adata_ct, file_output, n_obs_json_file)
         return None
     
     return unique_perturbagens
 
 
-def save_batches(batches: list, adata_ct: ad.AnnData, dir_output: str, ct_clean: str) -> None:
+def save_batches(batches: list, adata_ct: ad.AnnData, dir_output: str, ct_clean: str, n_obs_json_file: Optional[str] = None) -> None:
     '''
     Save batches to disk as separate h5ad files.
     
@@ -624,6 +680,8 @@ def save_batches(batches: list, adata_ct: ad.AnnData, dir_output: str, ct_clean:
         Output directory path
     ct_clean : str
         Sanitized cell type name for filenames
+    n_obs_json_file : Optional[str], default=None
+        Path to JSON file to update with n_obs information
         
     Returns:
     --------
@@ -635,15 +693,14 @@ def save_batches(batches: list, adata_ct: ad.AnnData, dir_output: str, ct_clean:
         batch_counter += 1
         batch_data = adata_ct[batch['obs_indices']].copy()
         outfile = os.path.join(dir_output, f"{ct_clean}_processed_batch_{batch_counter}.h5ad")
-        save_single_file(batch_data, outfile)
-        logger.info(f'  Saved batch {batch_counter}: {outfile} ({batch_data.n_obs} obs, {batch_data.obs["perturbation_label"].nunique()} perturbs)')
+        save_single_file(batch_data, outfile, n_obs_json_file)
     
-    logger.info(f'  Total batches created for {ct_clean}: {batch_counter}')
 
 
 def batch_celltype_by_matrix_size(adata_ct: ad.AnnData,
                                    dir_output: str,
-                                   ct_clean: str) -> None:
+                                   ct_clean: str,
+                                   n_obs_json_file: Optional[str] = None) -> None:
     '''
     Check matrix size and split cell type dataset into batches if needed.
     
@@ -665,19 +722,19 @@ def batch_celltype_by_matrix_size(adata_ct: ad.AnnData,
     --------
     None
     '''
-    if check_and_save_if_small(adata_ct, dir_output, ct_clean):
+    if check_and_save_if_small(adata_ct, dir_output, ct_clean, n_obs_json_file):
         return
     
     # Log splitting information
     n_obs = adata_ct.n_obs
     n_labels = adata_ct.obs['perturbation_label'].nunique()
     matrix_size = calculate_matrix_size(n_obs, n_labels)
-    logger.info(f'  Splitting {ct_clean}: {n_obs} obs, {n_labels} perturbation labels, {matrix_size/1e6:.1f}M matrix size')
+    logger.info(f'Splitting {ct_clean}: {n_obs} obs, {n_labels} perturbation labels, {matrix_size/1e6:.1f}M matrix size')
     logger.warning(f'  Matrix size for {ct_clean} exceeds {round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS)}, creating batches')
     
     controls, non_controls = separate_controls(adata_ct, ct_clean)
     
-    unique_perturbagens = get_unique_perturbagens_or_save(non_controls, adata_ct, dir_output, ct_clean)
+    unique_perturbagens = get_unique_perturbagens_or_save(non_controls, adata_ct, dir_output, ct_clean, n_obs_json_file)
     if unique_perturbagens is None:
         return
     
@@ -686,26 +743,27 @@ def batch_celltype_by_matrix_size(adata_ct: ad.AnnData,
     n_non_control_labels = non_controls.obs['perturbation_label'].nunique()
     logger.info(f'  After separation: {n_perturbagens} perturbagens, {n_non_control_obs} non-control obs, {n_non_control_labels} non-control labels')
     
-    logger.info('Create batches')
+    logger.info('  Create batches')
     batches = create_batches(non_controls,
                           unique_perturbagens,
                           controls=controls,
                           )
 
-    logger.info('Pad batches')
+    logger.info('  Pad batches')
     batches = pad_batches(batches,
                           non_controls,
                           unique_perturbagens,
                           controls=controls,
                           )
     
-    logger.info('Add controls to batches')
+    logger.info('  Add controls to batches')
     batches = add_controls_to_batches(batches,
                                       controls,
                                       )
     
-    logger.info('Save batches')
-    save_batches(batches, adata_ct, dir_output, ct_clean)
+    logger.info('  Save batches:')
+    save_batches(batches, adata_ct, dir_output, ct_clean, n_obs_json_file)
+    logger.info(f'Splitting {ct_clean} is done')
     return
 
 
@@ -740,6 +798,9 @@ def save_by_celltype(padata: ad.AnnData,
     celltype_dir = os.path.join(dir_output, 'by_celltype')
     os.makedirs(celltype_dir, exist_ok=True)
     
+    # Create JSON file path for n_obs information
+    n_obs_json_file = os.path.join(celltype_dir, 'n_obs_table.json')
+    
     cell_types = padata.obs['cell_type'].unique()
     cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) or not np.isnan(ct))]
     cell_types = sorted(cell_types)
@@ -752,7 +813,7 @@ def save_by_celltype(padata: ad.AnnData,
     for ct in cell_types:
         ct_clean = sanitize_celltype_name(ct)
         adata_ct = padata[padata.obs['cell_type'] == ct].copy()
-        batch_celltype_by_matrix_size(adata_ct, celltype_dir, ct_clean)
+        batch_celltype_by_matrix_size(adata_ct, celltype_dir, ct_clean, n_obs_json_file)
 
 
 

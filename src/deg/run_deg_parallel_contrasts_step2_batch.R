@@ -200,7 +200,7 @@ process_batch <- function(fit,
 #' @return NULL (saves results to files)
 main <- function() {
   parser <- ArgumentParser()
-  parser$add_argument("--intermediate_file", type="character", required=TRUE,
+  parser$add_argument("--input_file", type="character", required=TRUE,
                      help="Path to intermediate RDS file from step 1")
   parser$add_argument("--output_dir", type="character", required=TRUE,
                      help="Directory to save batch results")
@@ -216,8 +216,8 @@ main <- function() {
   cat(sprintf("\nDEG Step 2: Batch %d/%d - Started...\n", args$batch_id + 1, args$n_batches))
   
   # Load intermediate data
-  cat("Loading intermediate data: ", args$intermediate_file, "\n")
-  intermediate_data <- readRDS(args$intermediate_file)
+  cat("Loading intermediate data: ", args$input_file, "\n")
+  intermediate_data <- readRDS(args$input_file)
   
   fit <- intermediate_data$fit
   control_obs <- intermediate_data$control_obs
@@ -279,17 +279,17 @@ main <- function() {
   runtime <- difftime(end_time, start_time, units = "secs")
   cat(sprintf("\nBatch %d completed in %.1f seconds\n", args$batch_id, runtime))
   
-  # Print any warnings that occurred
+  # Print any warnings that occurred (to stderr)
   if (length(warning_messages) > 0) {
-    cat(sprintf("\n=== %d Warnings encountered ===\n", length(warning_messages)))
+    message(sprintf("\n=== %d Warnings encountered ===\n", length(warning_messages)))
     # Print first 20 unique warnings
     unique_warns <- unique(unlist(warning_messages))
     n_show <- min(20, length(unique_warns))
     for (i in 1:n_show) {
-      cat(sprintf("%d. %s\n", i, unique_warns[i]))
+      message(sprintf("%d. %s", i, unique_warns[i]))
     }
     if (length(unique_warns) > n_show) {
-      cat(sprintf("... and %d more unique warning types (total %d warnings)\n", 
+      message(sprintf("... and %d more unique warning types (total %d warnings)", 
                   length(unique_warns) - n_show, length(warning_messages)))
     }
   }
