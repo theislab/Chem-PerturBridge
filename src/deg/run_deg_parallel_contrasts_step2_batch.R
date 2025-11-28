@@ -212,7 +212,7 @@ main <- function() {
   args <- parser$parse_args()
   
   # Start timer
-  start_time <- Sys.time()
+  deg_start <- Sys.time()
   cat(sprintf("\nDEG Step 2: Batch %d/%d - Started...\n", args$batch_id + 1, args$n_batches))
   
   # Load intermediate data
@@ -249,6 +249,8 @@ main <- function() {
   warning_messages <- list()
   
   # Process this batch with warning capture
+  cat("    Running contrasts...\n")
+  start_time <- Sys.time()
   de_res <- withCallingHandlers(
     process_batch(
       fit = fit,
@@ -262,6 +264,8 @@ main <- function() {
       invokeRestart("muffleWarning")
     }
   )
+  delta_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("Contrasts are completed in %.1f seconds\n", delta_time))
   
   # Save batch results
   output_file <- file.path(args$output_dir, sprintf("batch_%04d.rds", args$batch_id))
@@ -275,9 +279,8 @@ main <- function() {
   saveRDS(de_res, output_file, compress = "xz")
   
   # Show runtime
-  end_time <- Sys.time()
-  runtime <- difftime(end_time, start_time, units = "secs")
-  cat(sprintf("\nBatch %d completed in %.1f seconds\n", args$batch_id, runtime))
+  deg_time <- difftime(Sys.time(), deg_start, units = "secs")
+  cat(sprintf("\nBatch %d completed in %.1f seconds\n", args$batch_id, deg_time))
   
   # Print any warnings that occurred (to stderr)
   if (length(warning_messages) > 0) {

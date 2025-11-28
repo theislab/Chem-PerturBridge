@@ -378,22 +378,38 @@ run_dge <- function(ad,
   # build DGEList + design
   counts <- Matrix::t(ad$X)
   dge    <- DGEList(counts=counts)
+
   cat("    Constructing design matrix...\n")
+  start_time <- Sys.time()
   design <- model.matrix(
     ~ 0 + cond + plate,
     data = obs
     )
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("    Design matrix is constructed in %.1f seconds\n", diff_time))
   cat("    Design matrix dimensions:", nrow(design), "samples ×", ncol(design), "coefficients\n")
+
   # filter genes and normalize
   cat("    Filtering genes and normalizing counts...\n")
+  start_time <- Sys.time()
   keep <- filterByExpr(dge, design)
   dge  <- dge[keep, , keep.lib.sizes=FALSE] %>% calcNormFactors()
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("    Genes are filtered and normalized in %.1f seconds\n", diff_time))
+  
   
   # voom + lmFit
   cat("    Running voom...\n")
+  start_time <- Sys.time()
   v   <- voom(dge, design, plot=FALSE)
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("    Voom is completed in %.1f seconds\n", diff_time))
+
   cat("    Running lmFit...\n")
+  start_time <- Sys.time()
   fit <- lmFit(v, design)
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("    LmFit is completed in %.1f seconds\n", diff_time))
   return(fit)
 }
 
@@ -561,10 +577,11 @@ run_dge_pipeline <- function(par) {
       check_for_controls(obs, "pert_time_h")
     
       cond <- obs$cond
+      start_time <- Sys.time()
       fit <- run_dge(ad,
               obs)
-      cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-      cat(sprintf("DGE fit is completed in %.1f seconds\n", cl_time))
+      delta_time <- difftime(Sys.time(), start_time, units = "secs")
+      cat(sprintf("DGE fit is completed in %.1f seconds\n", delta_time))
 
       
       # separate the control and treated conds (we won't DE on control-vs-control)
@@ -576,31 +593,34 @@ run_dge_pipeline <- function(par) {
           distinct(cond, .keep_all = TRUE) %>%
           filter(is_control!=TRUE)
       
-      # DEBUG: Save fit object for comparison with deg_split
-      debug_dir <- "./data/intermediate/deg/full/qc_false/filter_min_cells_0"
-      dir.create(debug_dir, recursive = TRUE, showWarnings = FALSE)
-      debug_file <- file.path(debug_dir, paste0(cl, "_intermediate_from_deg_sh.rds"))
-      cat(sprintf("    DEBUG: Saving fit object to: %s\n", debug_file))
-      saveRDS(list(
-        fit = fit,
-        control_obs = control_obs,
-        treated_obs = treated_obs,
-        parameters = list(
-          subsampling = par$subsampling,
-          min_cells = par$min_cells,
-          qc = par$qc
-        )
-      ), debug_file)
-      cat("    DEBUG: Fit object saved\n")
+      # # DEBUG: Save fit object for comparison with deg_split
+      #parent_dir <- dirname(par$output_dir)
+      #debug_dir <- file.path(parent_dir, "intermediate", "step1_results")
+      # debug_dir <- "./data/intermediate/deg/full/qc_false/filter_min_cells_0"
+      # dir.create(debug_dir, recursive = TRUE, showWarnings = FALSE)
+      # debug_file <- file.path(debug_dir, paste0(cl, ".rds"))
+      # cat(sprintf("    DEBUG: Saving fit object to: %s\n", debug_file))
+      # saveRDS(list(
+      #   fit = fit,
+      #   control_obs = control_obs,
+      #   treated_obs = treated_obs,
+      #   parameters = list(
+      #     subsampling = par$subsampling,
+      #     min_cells = par$min_cells,
+      #     qc = par$qc
+      #   )
+      # ), debug_file)
+      # cat("    DEBUG: Fit object saved\n")
 
       cat("    Running contrasts...\n")
+      start_time <- Sys.time()
       de_res <- run_contrasts(fit,
                             control_obs,
                             treated_obs,
                             par)
       
-      cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-      cat(sprintf("Contrasts are completed in %.1f seconds\n", cl_time))
+      delta_time <- difftime(Sys.time(), start_time, units = "secs")
+      cat(sprintf("Contrasts are completed in %.1f seconds\n", delta_time))
       # Skip if no valid DE results
       if (is.null(de_res) || nrow(de_res) == 0) {
         warning("No valid DE results for cell line ", cl)
@@ -639,21 +659,6 @@ run_dge_pipeline <- function(par) {
         layers = layers,
         uns    = new_uns
       )
-    
-      # Create output directory if it doesn't exist
-      if (!is.null(par$subsampling) && par$subsampling) {
-        output_dir <- file.path(par$output_dir, "subsampling")
-      }
-      else {
-        output_dir <- file.path(par$output_dir, "full")
-      }
-      # Add QC folder based on whether QC filtering is enabled
-      qc_folder <- if (par$qc) "qc_true" else "qc_false"
-      output_dir <- file.path(output_dir, qc_folder)
-      
-      # Add filter folder based on min_cells threshold
-      filter_folder <- paste0("filter_min_cells_", par$min_cells)
-      output_dir <- file.path(output_dir, filter_folder)
       
       if (!dir.exists(output_dir)) {
         dir.create(output_dir, recursive = TRUE)
@@ -739,7 +744,7 @@ main <- function() {
   args$config = NULL
   args <- merge_config(args, config)  
   # Start timer
-  start_time <- Sys.time()
+  deg_start <- Sys.time()
   cat("\nDE analysis started...\n")
 	
   tryCatch({
@@ -759,9 +764,8 @@ main <- function() {
   })
   
 	# Show runtime
-  end_time <- Sys.time()
-  runtime <- difftime(end_time, start_time, units = "secs")
-  cat(sprintf("\nTotal runtime: %.1f seconds\n", runtime))
+  deg_time <- difftime(Sys.time(), deg_start, units = "secs")
+  cat(sprintf("\nTotal runtime: %.1f seconds\n", deg_time))
 
   if (!is.null(args$subsampling) && args$subsampling) {
   	cat("\n📝 Note: This was a TEST RUN with reduced data.\n")

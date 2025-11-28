@@ -298,7 +298,7 @@ run_parallel_deg() {
         --array=0-$((N_BATCHES-1))%${MAX_CONCURRENT} \
         --partition=${PARTITION} \
         --qos=${QOS} \
-        --mem=250G \
+        --mem=350G \
         --time=24:00:00 \
         --cpus-per-task=4 \
         --output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/step2_${CELL_TYPE}.%A_%a.out" \
@@ -380,7 +380,7 @@ run_sequential_deg() {
                 INPUT_FILE=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID + 1))p\" ${SEQ_FILE_LIST}) && \
                 Rscript ./src/deg/run_deg_sequential_contrasts.R \
                     --input_file \"\$INPUT_FILE\" \
-                    --output_dir \"${OUTPUT_DIR}\" \
+                    --output_dir \"${FULL_OUTPUT_DIR}\" \
                     --config \"${deg_config}\" \
                     ${ARG_F} ${ARG_S} ${ARG_Q}"
     

@@ -183,7 +183,7 @@ main <- function() {
   args <- parser$parse_args()
   
   # Start timer
-  start_time <- Sys.time()
+  deg_start <- Sys.time()
   cat("\nDEG Step 3: Aggregate - Started...\n")
   
   # Capture warnings during processing
@@ -212,6 +212,7 @@ main <- function() {
     
     # Load and combine all batch results
     cat("Loading and combining batch results...\n")
+    start_time <- Sys.time()
     batch_results <- list()
     
     for (batch_file in batch_files) {
@@ -229,21 +230,28 @@ main <- function() {
     # Combine all batch results
     cat("Combining all batches...\n")
     de_res <- bind_rows(batch_results)
-    
+    delta_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("Loading and combining batches completed in %.1f seconds\n", delta_time))
     cat(sprintf("Combined results: %d rows\n", nrow(de_res)))
     
     # Apply global p-value adjustment across all contrasts
     cat("Applying global p-value adjustment...\n")
+    start_time <- Sys.time()
     de_df <- de_res %>%
       mutate(
         adj.P.Value.across_all_contrasts = p.adjust(P.Value, method="BH")
       ) %>%
       rename(adj.P.Value.within_one_contrast = adj.P.Val)
+    delta_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("P-value adjustment completed in %.1f seconds\n", delta_time))
     
     cat(sprintf("Creating output structures...\n"))
+    start_time <- Sys.time()
     obs_out <- get_obs(de_df, treated_obs)
     var_out <- get_var(de_df, ad_var)
     layers <- get_layers(de_df, obs_out)
+    delta_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("Output structures created in %.1f seconds\n", delta_time))
     
     # Prepare uns metadata
     new_uns <- ad_uns
@@ -279,9 +287,9 @@ main <- function() {
   })
   
   # Show runtime
-  end_time <- Sys.time()
-  runtime <- difftime(end_time, start_time, units = "secs")
-  cat(sprintf("\nStep 3 completed in %.1f seconds\n", runtime))
+
+  deg_time <- difftime(Sys.time(), deg_start, units = "secs")
+  cat(sprintf("\nStep 3 completed in %.1f seconds\n", deg_time))
   
   # Print any warnings that occurred (to stderr)
   if (length(warning_messages) > 0) {

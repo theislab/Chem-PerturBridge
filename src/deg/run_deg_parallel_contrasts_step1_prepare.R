@@ -178,22 +178,38 @@ run_dge <- function(ad,
   # build DGEList + design
   counts <- Matrix::t(ad$X)
   dge    <- DGEList(counts=counts)
+
   cat("    Constructing design matrix...\n")
+  start_time <- Sys.time()
   design <- model.matrix(
     ~ 0 + cond + plate,
     data = obs
     )
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("    Design matrix is constructed in %.1f seconds\n", diff_time))
   cat("    Design matrix dimensions:", nrow(design), "samples ×", ncol(design), "coefficients\n")
+
   # filter genes and normalize
   cat("    Filtering genes and normalizing counts...\n")
+  start_time <- Sys.time()
   keep <- filterByExpr(dge, design)
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
   dge  <- dge[keep, , keep.lib.sizes=FALSE] %>% calcNormFactors()
+  cat(sprintf("    Genes are filtered and normalized in %.1f seconds\n", diff_time))
+  
   
   # voom + lmFit
   cat("    Running voom...\n")
+  start_time <- Sys.time()
   v   <- voom(dge, design, plot=FALSE)
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("    Voom is completed in %.1f seconds\n", diff_time))
+
   cat("    Running lmFit...\n")
+  start_time <- Sys.time()
   fit <- lmFit(v, design)
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("    LmFit is completed in %.1f seconds\n", diff_time))
   return(fit)
 }
 
@@ -255,11 +271,17 @@ main <- function() {
   stopifnot(is.logical(args$qc))
   
   # Start timer
-  start_time <- Sys.time()
+  deg_start <- Sys.time()
   cat("\nDEG Step 1: Prepare - Started...\n")
   
   # Capture warnings during processing
   warning_messages <- list()
+  
+  # Get basename of input file (without extension) for intermediate file naming
+  # Remove "_processed" from the basename if present (handles both "_processed" at end or followed by underscore)
+  input_basename <- tools::file_path_sans_ext(basename(args$input))
+  input_basename <- gsub("_processed_", "_", input_basename)  # Replace "_processed_" with "_"
+  input_basename <- gsub("_processed$", "", input_basename)    # Remove "_processed" at the end
   
   # load the full pseudobulk AnnData
   adata <- anndata::read_h5ad(args$input)
@@ -271,7 +293,7 @@ main <- function() {
   adata <- subsampling(adata, args)
   
   # Get cell type (should be only one since input files are split by cell type)
-  cell_types <- unique(adata$obs$cell_type)
+  cell_types <- unique(as.character(adata$obs$cell_type))
   if (length(cell_types) != 1) {
     stop("Expected exactly one cell type in input file, found: ", paste(cell_types, collapse = ", "))
   }
@@ -280,7 +302,6 @@ main <- function() {
   
   # Process with warning capture
   withCallingHandlers({
-    cl_start <- Sys.time()
     cat("\n▶︎ Processing cell_type: ", cl, "\n")
     
     # Filter controls
@@ -296,10 +317,10 @@ main <- function() {
     check_for_controls(obs, "pert_time_h")
   
     cond <- obs$cond
+    start_time <- Sys.time()
     fit <- run_dge(ad, obs)
-  
-    cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-    cat(sprintf("DGE fit is completed in %.1f seconds\n", cl_time))
+    delta_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("DGE fit is completed in %.1f seconds\n", delta_time))
 
     # separate the control and treated conds (we won't DE on control-vs-control)
     control_obs <- obs %>%
@@ -318,8 +339,8 @@ main <- function() {
       dir.create(intermediate_dir, recursive = TRUE)
     }
     
-    # Save intermediate data for batch processing
-    intermediate_file <- file.path(intermediate_dir, paste0(cl, ".rds"))
+    # Save intermediate data for batch processing (use basename of input file)
+    intermediate_file <- file.path(intermediate_dir, paste0(input_basename, ".rds"))
     cat("\n    Saving intermediate data: ", intermediate_file, "\n")
     
     # Save fit object and metadata
@@ -340,18 +361,14 @@ main <- function() {
     
     saveRDS(intermediate_data, intermediate_file, compress = "xz")
     
-    # Show time for this cell line
-    cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-    cat(sprintf("✓ Cell line preparation completed in %.1f seconds\n", cl_time))
   }, warning = function(w) {
     warning_messages[[length(warning_messages) + 1]] <<- conditionMessage(w)
     invokeRestart("muffleWarning")
   })
   
   # Show runtime
-  end_time <- Sys.time()
-  runtime <- difftime(end_time, start_time, units = "secs")
-  cat(sprintf("\nStep 1 Total runtime: %.1f seconds\n", runtime))
+  deg_time <- difftime(Sys.time(), deg_start, units = "secs")
+  cat(sprintf("\nStep 1 Total runtime: %.1f seconds\n", deg_time))
   
   # Print any warnings that occurred (to stderr)
   if (length(warning_messages) > 0) {
