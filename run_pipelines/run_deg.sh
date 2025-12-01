@@ -83,10 +83,13 @@ if [[ "$MODE_S" == "True" ]]; then
 	ARG_S="-s"
 else
 	SUBDIR="full"
+	ARG_S=""
 fi
 
 if [[ "$MODE_J" == "True" ]]; then
 	ARG_J="-j"
+else
+	ARG_J=""
 fi
 
 # Determine filter folder names

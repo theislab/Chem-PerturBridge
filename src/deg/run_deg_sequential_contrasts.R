@@ -593,9 +593,9 @@ run_dge_pipeline <- function(par) {
           distinct(cond, .keep_all = TRUE) %>%
           filter(is_control!=TRUE)
       
-      # # DEBUG: Save fit object for comparison with deg_split
+      # # DEBUG: Save fit object for comparison with parallel pipeline
       #parent_dir <- dirname(par$output_dir)
-      #debug_dir <- file.path(parent_dir, "intermediate", "step1_results")
+      #debug_dir <- file.path(parent_dir, "intermediate", "step3_results")
       # debug_dir <- "./data/intermediate/deg/full/qc_false/filter_min_cells_0"
       # dir.create(debug_dir, recursive = TRUE, showWarnings = FALSE)
       # debug_file <- file.path(debug_dir, paste0(cl, ".rds"))
@@ -660,11 +660,15 @@ run_dge_pipeline <- function(par) {
         uns    = new_uns
       )
       
+      # Create output file path
+      outfile <- file.path(par$output_dir, paste0(cl, "_de.h5ad"))
+      
+      # Create output directory if it doesn't exist
+      output_dir <- dirname(outfile)
       if (!dir.exists(output_dir)) {
         dir.create(output_dir, recursive = TRUE)
       }
     
-      outfile <- file.path(output_dir, paste0(cl, "_de.h5ad"))
       cat("\n    Writing: ", outfile, "\n")
       out_adata$write_h5ad(outfile, compression = "gzip")
       

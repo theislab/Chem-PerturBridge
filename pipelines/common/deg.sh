@@ -24,7 +24,7 @@ N_OBS_JSON_FILE_NAME="n_obs_table.json"
 N_OBS_THRESHOLD=5000
 
 MAX_CONCURRENT=10
-QOS=cpu_normal
+QOS=cpu_preemptible
 PARTITION=cpu_p
 
 # Number of batches for step 2 (parallel processing) - hardcoded
@@ -134,7 +134,7 @@ eval "$(mamba shell hook --shell bash)"
 mamba activate ${ENV_DIR}
 
 # Create tmp directory for configs
-TMP_DIR="./tmp"
+TMP_DIR="${PROJECT_ROOT}/tmp"
 TMP_DIR_DEG="${TMP_DIR}/deg_$$"
 # Clean up if it exists from a previous failed run
 mkdir -p "${TMP_DIR}"
@@ -155,6 +155,10 @@ fi
 
 echo "> Using config: $CONFIG"
 
+# Create log base directory (needed for preprocessing logs)
+LOGS_BASE_DIR="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}"
+mkdir -p "${LOGS_BASE_DIR}/preprocessing"
+
 # ============================================================================
 # STEP 1: PREPROCESS PSEUDOBULK
 # ============================================================================
@@ -172,11 +176,11 @@ echo "> Running preprocessing pseudobulk"
 sbatch -W -J deg_processing_pseudobulk \
        --partition=${PARTITION} \
        --qos=${QOS} \
-       --mem=250G \
+       --mem=50G \
        --time=2:00:00 \
        --cpus-per-task=2 \
-       --output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.out" \
-       --error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_processing_pseudobulk.%j.err" \
+       --output="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.out" \
+       --error="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.err" \
        --wrap="export TMPDIR=\${HOME}/tmp && \
                 mkdir -p \${TMPDIR} && \
                 cd ${PROJECT_ROOT} && \
@@ -205,12 +209,12 @@ if [ "$MODE_J" = "True" ]; then
 	LOG_PREFIX="deg_celltype"
 	SEARCH_DIR="${INPUT_DIR}/by_celltype"
 	FILE_PATTERN="*.h5ad"
-        MEM=500G
+        MEM=50G
 else
 	LOG_PREFIX="deg_sequential"
 	SEARCH_DIR="${INPUT_DIR}"
 	FILE_PATTERN="*.h5ad"
-        MEM=250G
+        MEM=100G
 fi
 
 # Check if search directory exists
@@ -243,101 +247,225 @@ FULL_OUTPUT_DIR="${OUTPUT_DIR}/${SUBDIR}/${QC_FOLDER}/${FILTER_FOLDER}/results"
 # Intermediate directory is now a subdirectory of output_dir
 FULL_INTERMEDIATE_DIR="${OUTPUT_DIR}/${SUBDIR}/${QC_FOLDER}/${FILTER_FOLDER}/intermediate"
 
-# Create log directories
-mkdir -p "${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}"
+# Create log directories for each step (additional directories for DEG steps)
+mkdir -p "${LOGS_BASE_DIR}/step1_filter"
+mkdir -p "${LOGS_BASE_DIR}/step2_voom"
+mkdir -p "${LOGS_BASE_DIR}/step3_lmfit"
+mkdir -p "${LOGS_BASE_DIR}/step4_batch"
+mkdir -p "${LOGS_BASE_DIR}/step5_aggregate"
+mkdir -p "${LOGS_BASE_DIR}/deg_sequential"
 
 # ============================================================================
-# Function: Run Parallel DEG (Step 1, 2, 3)
+# Function: Run Parallel DEG (Step 1, 2, 3, 4, 5)
+# Steps 1-3: Array jobs across all cell lines (parallel)
+# Step 4: Sequential per cell line (with internal batch parallelization)
+# Step 5: Sequential per cell line
 # ============================================================================
 
 run_parallel_deg() {
-    local INPUT_FILE=$1
-    # Extract basename without extension and remove _processed if present
-    # e.g., "A375_processed.h5ad" -> "A375", "A375_processed_batch_1.h5ad" -> "A375_batch_1"
-    local CELL_TYPE=$(basename "$INPUT_FILE" .h5ad | sed 's/_processed//')
+    local FILES_ARRAY_NAME=$1
+    local N_FILES=$2
+    
+    # Get the array by name
+    local -n FILES_ARRAY=$FILES_ARRAY_NAME
     
     echo ""
     echo "============================================"
-    echo "PARALLEL BY CONTRASTS (Step 1, 2, 3): ${CELL_TYPE}"
+    echo "PARALLEL BY CONTRASTS (Step 1, 2, 3, 4, 5)"
     echo "============================================"
-
-    STEP1_OUTPUT_DIR="${FULL_INTERMEDIATE_DIR}/step1_results"
-    mkdir -p "${STEP1_OUTPUT_DIR}"
-    STEP2_OUTPUT_DIR="${FULL_INTERMEDIATE_DIR}/step2_results/${CELL_TYPE}"
-    mkdir -p "${STEP2_OUTPUT_DIR}"
-    STEP3_OUTPUT_DIR="${FULL_OUTPUT_DIR}"
+    echo "  Processing ${N_FILES} cell line(s)"
     
-    # STEP 1: PREPARE
-    echo "  STEP 1: PREPARE (voom + lmFit)"
-    JOB_ID_STEP1=$(sbatch -W --parsable \
-        -J deg_step1_${CELL_TYPE} \
+    # Create directories
+    STEP1_OUTPUT_DIR="${FULL_INTERMEDIATE_DIR}/step1_filter"
+    mkdir -p "${STEP1_OUTPUT_DIR}"
+    STEP2_OUTPUT_DIR="${FULL_INTERMEDIATE_DIR}/step2_voom"
+    mkdir -p "${STEP2_OUTPUT_DIR}"
+    STEP3_OUTPUT_DIR="${FULL_INTERMEDIATE_DIR}/step3_lmfit"
+    mkdir -p "${STEP3_OUTPUT_DIR}"
+    STEP5_OUTPUT_DIR="${FULL_OUTPUT_DIR}"
+    
+    # Create file lists for array jobs
+    STEP1_FILE_LIST="${TMP_DIR_DEG}/step1_file_list.txt"
+    printf '%s\n' "${FILES_ARRAY[@]}" > "$STEP1_FILE_LIST"
+    
+    # ============================================================================
+    # STEP 1: FILTER - Array job across all cell lines (parallel)
+    # ============================================================================
+    echo ""
+    echo "  STEP 1: FILTER (filterByExpr + calcNormFactors) - Array job [${N_FILES} cell lines]"
+    STEP1_ARRAY_JOB_ID=$(sbatch -W --parsable \
+        -J deg_step1_all \
+        --array=0-$((N_FILES-1))%${MAX_CONCURRENT} \
         --partition=${PARTITION} \
         --qos=${QOS} \
-        --mem=500G \
+        --mem=50G \
         --time=24:00:00 \
         --cpus-per-task=4 \
-        --output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/step1_${CELL_TYPE}.%j.out" \
-        --error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/step1_${CELL_TYPE}.%j.err" \
+        --output="${LOGS_BASE_DIR}/step1_filter/step1.%A_%a.out" \
+        --error="${LOGS_BASE_DIR}/step1_filter/step1.%A_%a.err" \
         --wrap="export TMPDIR=\${HOME}/tmp && \
                 mkdir -p \${TMPDIR} && \
                 cd ${PROJECT_ROOT} && \
                 eval \"\$(mamba shell hook --shell bash)\" && \
                 mamba activate ${ENV_DIR} && \
-                Rscript ./src/deg/run_deg_parallel_contrasts_step1_prepare.R \
-                    --input \"${INPUT_FILE}\" \
+                INPUT_FILE=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID + 1))p\" ${STEP1_FILE_LIST}) && \
+                INPUT_BASENAME=\$(basename \"\$INPUT_FILE\" .h5ad | sed 's/_processed//') && \
+                Rscript ./src/deg/run_deg_parallel_contrasts_step1_filter.R \
+                    --input \"\$INPUT_FILE\" \
                     --output_dir \"${STEP1_OUTPUT_DIR}\" \
                     --config \"${deg_config}\" \
                     $ARG_F $ARG_S $ARG_Q")
     
+    # ============================================================================
+    # STEP 2: VOOM - Array job across all cell lines (parallel, depends on step1)
+    # ============================================================================
+    echo ""
+    echo "  STEP 2: VOOM (voom transformation) - Array job [${N_FILES} cell lines]"
+    STEP2_FILE_LIST="${TMP_DIR_DEG}/step2_file_list.txt"
+    # Create list of filtered file paths
+    for INPUT_FILE in "${FILES_ARRAY[@]}"; do
+        INPUT_BASENAME=$(basename "$INPUT_FILE" .h5ad | sed 's/_processed//')
+        echo "${STEP1_OUTPUT_DIR}/${INPUT_BASENAME}_filtered.rds" >> "$STEP2_FILE_LIST"
+    done
     
-    # STEP 2: BATCH PROCESSING
-    echo "  STEP 2: BATCH PROCESSING (${N_BATCHES} batches)"
-    JOB_ID_STEP2=$(sbatch -W --parsable \
-        -J deg_step2_${CELL_TYPE} \
-        --dependency=afterok:${JOB_ID_STEP1} \
-        --array=0-$((N_BATCHES-1))%${MAX_CONCURRENT} \
+    STEP2_ARRAY_JOB_ID=$(sbatch -W --parsable \
+        -J deg_step2_all \
+        --array=0-$((N_FILES-1))%${MAX_CONCURRENT} \
         --partition=${PARTITION} \
         --qos=${QOS} \
-        --mem=350G \
+        --mem=50G \
         --time=24:00:00 \
         --cpus-per-task=4 \
-        --output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/step2_${CELL_TYPE}.%A_%a.out" \
-        --error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/step2_${CELL_TYPE}.%A_%a.err" \
+        --output="${LOGS_BASE_DIR}/step2_voom/step2.%A_%a.out" \
+        --error="${LOGS_BASE_DIR}/step2_voom/step2.%A_%a.err" \
         --wrap="export TMPDIR=\${HOME}/tmp && \
                 mkdir -p \${TMPDIR} && \
                 cd ${PROJECT_ROOT} && \
                 eval \"\$(mamba shell hook --shell bash)\" && \
                 mamba activate ${ENV_DIR} && \
-                Rscript ./src/deg/run_deg_parallel_contrasts_step2_batch.R \
-                    --input_file \"${STEP1_OUTPUT_DIR}/${CELL_TYPE}.rds\" \
-                    --output_dir \"${STEP2_OUTPUT_DIR}\" \
-                    --batch_id \${SLURM_ARRAY_TASK_ID} \
-                    --n_batches ${N_BATCHES}")
+                INPUT_FILE=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID + 1))p\" ${STEP2_FILE_LIST}) && \
+                INPUT_BASENAME=\$(basename \"\$INPUT_FILE\" _filtered.rds) && \
+                Rscript ./src/deg/run_deg_parallel_contrasts_step2_voom.R \
+                    --input_file \"\$INPUT_FILE\" \
+                    --output_dir \"${STEP2_OUTPUT_DIR}\"")
     
-    # STEP 3: AGGREGATE
-    echo "  STEP 3: AGGREGATE (combine results)"
-
-    sbatch -W \
-        -J deg_step3_${CELL_TYPE} \
-        --dependency=afterok:${JOB_ID_STEP2} \
+    # ============================================================================
+    # STEP 3: LMFIT - Array job across all cell lines (parallel, depends on step2)
+    # ============================================================================
+    echo ""
+    echo "  STEP 3: LMFIT (linear model fitting) - Array job [${N_FILES} cell lines]"
+    STEP3_FILE_LIST="${TMP_DIR_DEG}/step3_file_list.txt"
+    # Create list of voom file paths
+    for INPUT_FILE in "${FILES_ARRAY[@]}"; do
+        INPUT_BASENAME=$(basename "$INPUT_FILE" .h5ad | sed 's/_processed//')
+        echo "${STEP2_OUTPUT_DIR}/${INPUT_BASENAME}_voom.rds" >> "$STEP3_FILE_LIST"
+    done
+    
+    STEP3_ARRAY_JOB_ID=$(sbatch -W --parsable \
+        -J deg_step3_all \
+        --array=0-$((N_FILES-1))%${MAX_CONCURRENT} \
         --partition=${PARTITION} \
         --qos=${QOS} \
-        --mem=500G \
-        --time=10:00:00 \
-        --cpus-per-task=2 \
-        --output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/step3_${CELL_TYPE}.%j.out" \
-        --error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/step3_${CELL_TYPE}.%j.err" \
+        --mem=50G \
+        --time=24:00:00 \
+        --cpus-per-task=4 \
+        --output="${LOGS_BASE_DIR}/step3_lmfit/step3.%A_%a.out" \
+        --error="${LOGS_BASE_DIR}/step3_lmfit/step3.%A_%a.err" \
         --wrap="export TMPDIR=\${HOME}/tmp && \
                 mkdir -p \${TMPDIR} && \
                 cd ${PROJECT_ROOT} && \
                 eval \"\$(mamba shell hook --shell bash)\" && \
                 mamba activate ${ENV_DIR} && \
-                Rscript ./src/deg/run_deg_parallel_contrasts_step3_aggregate.R \
-                    --input_file \"${STEP1_OUTPUT_DIR}/${CELL_TYPE}.rds\" \
-                    --input_dir \"${STEP2_OUTPUT_DIR}\" \
-                    --output_file \"${STEP3_OUTPUT_DIR}/${CELL_TYPE}_de.h5ad\""
+                INPUT_FILE=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID + 1))p\" ${STEP3_FILE_LIST}) && \
+                INPUT_BASENAME=\$(basename \"\$INPUT_FILE\" _voom.rds) && \
+                Rscript ./src/deg/run_deg_parallel_contrasts_step3_lmfit.R \
+                    --input_file \"\$INPUT_FILE\" \
+                    --output_dir \"${STEP3_OUTPUT_DIR}\"")
     
-    echo "  ✓ Parallel DEG completed for ${CELL_TYPE}"
+    # ============================================================================
+    # STEP 4: BATCH PROCESSING - Sequential per cell line (with internal parallelization)
+    # ============================================================================
+    echo ""
+    echo "  STEP 4: BATCH PROCESSING - Sequential per cell line [${N_BATCHES} batches per cell line]"
+    echo "  Step 3 completed, starting Step 4 sequentially..."
+    
+    for i in "${!FILES_ARRAY[@]}"; do
+        INPUT_FILE="${FILES_ARRAY[$i]}"
+        CELL_TYPE=$(basename "$INPUT_FILE" .h5ad | sed 's/_processed//')
+        INPUT_BASENAME=$(basename "$INPUT_FILE" .h5ad | sed 's/_processed//')
+        STEP4_OUTPUT_DIR="${FULL_INTERMEDIATE_DIR}/step4_batch/${CELL_TYPE}"
+        mkdir -p "${STEP4_OUTPUT_DIR}"
+        mkdir -p "${LOGS_BASE_DIR}/step4_batch/${CELL_TYPE}"
+        
+        echo "    [$((i+1))/${N_FILES}] Processing ${CELL_TYPE}..."
+        
+        STEP4_JOB_ID=$(sbatch -W --parsable \
+            -J deg_step4_${CELL_TYPE} \
+            --array=0-$((N_BATCHES-1))%${MAX_CONCURRENT} \
+            --partition=${PARTITION} \
+            --qos=${QOS} \
+            --mem=50G \
+            --time=24:00:00 \
+            --cpus-per-task=4 \
+            --output="${LOGS_BASE_DIR}/step4_batch/${CELL_TYPE}/step4_${CELL_TYPE}.%A_%a.out" \
+            --error="${LOGS_BASE_DIR}/step4_batch/${CELL_TYPE}/step4_${CELL_TYPE}.%A_%a.err" \
+            --wrap="export TMPDIR=\${HOME}/tmp && \
+                    mkdir -p \${TMPDIR} && \
+                    cd ${PROJECT_ROOT} && \
+                    eval \"\$(mamba shell hook --shell bash)\" && \
+                    mamba activate ${ENV_DIR} && \
+                    Rscript ./src/deg/run_deg_parallel_contrasts_step4_batch.R \
+                        --input_file \"${STEP3_OUTPUT_DIR}/${INPUT_BASENAME}.rds\" \
+                        --output_dir \"${STEP4_OUTPUT_DIR}\" \
+                        --batch_id \${SLURM_ARRAY_TASK_ID} \
+                        --n_batches ${N_BATCHES}")
+    done
+    
+    # ============================================================================
+    # STEP 5: AGGREGATE - Array job across all cell lines (parallel)
+    # ============================================================================
+    echo ""
+    echo "  STEP 5: AGGREGATE - Array job [${N_FILES} cell lines]"
+    echo "  All Step 4 jobs completed, starting Step 5..."
+    
+    # Create file list for step 5 array job
+    # Format: CELL_TYPE|INPUT_BASENAME
+    STEP5_FILE_LIST="${TMP_DIR_DEG}/step5_file_list.txt"
+    for i in "${!FILES_ARRAY[@]}"; do
+        INPUT_FILE="${FILES_ARRAY[$i]}"
+        CELL_TYPE=$(basename "$INPUT_FILE" .h5ad | sed 's/_processed//')
+        INPUT_BASENAME=$(basename "$INPUT_FILE" .h5ad | sed 's/_processed//')
+        echo "${CELL_TYPE}|${INPUT_BASENAME}" >> "$STEP5_FILE_LIST"
+    done
+    
+    STEP5_ARRAY_JOB_ID=$(sbatch -W --parsable \
+        -J deg_step5_all \
+        --array=0-$((N_FILES-1))%${MAX_CONCURRENT} \
+        --partition=${PARTITION} \
+        --qos=${QOS} \
+        --mem=50G \
+        --time=10:00:00 \
+        --cpus-per-task=2 \
+        --output="${LOGS_BASE_DIR}/step5_aggregate/step5.%A_%a.out" \
+        --error="${LOGS_BASE_DIR}/step5_aggregate/step5.%A_%a.err" \
+        --wrap="export TMPDIR=\${HOME}/tmp && \
+                mkdir -p \${TMPDIR} && \
+                cd ${PROJECT_ROOT} && \
+                eval \"\$(mamba shell hook --shell bash)\" && \
+                mamba activate ${ENV_DIR} && \
+                LINE=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID + 1))p\" ${STEP5_FILE_LIST}) && \
+                CELL_TYPE=\$(echo \"\$LINE\" | cut -d'|' -f1) && \
+                INPUT_BASENAME=\$(echo \"\$LINE\" | cut -d'|' -f2) && \
+                STEP4_OUTPUT_DIR=\"${FULL_INTERMEDIATE_DIR}/step4_batch/\${CELL_TYPE}\" && \
+                Rscript ./src/deg/run_deg_parallel_contrasts_step5_aggregate.R \
+                    --input_file \"${STEP3_OUTPUT_DIR}/\${INPUT_BASENAME}.rds\" \
+                    --input_dir \"\${STEP4_OUTPUT_DIR}\" \
+                    --output_file \"${STEP5_OUTPUT_DIR}/\${CELL_TYPE}_de.h5ad\"")
+    
+    echo "  Step 5 Array Job ID: ${STEP5_ARRAY_JOB_ID}"
+    
+    echo ""
+    echo "  ✓ Parallel DEG pipeline completed for all ${N_FILES} cell line(s)"
 }
 
 # ============================================================================
@@ -370,8 +498,8 @@ run_sequential_deg() {
         --mem=${MEM} \
         --time=10:00:00 \
         --cpus-per-task=2 \
-        --output="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_sequential.%A_%a.out" \
-        --error="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_sequential.%A_%a.err" \
+        --output="${LOGS_BASE_DIR}/deg_sequential/deg_sequential.%A_%a.out" \
+        --error="${LOGS_BASE_DIR}/deg_sequential/deg_sequential.%A_%a.err" \
         --wrap="export TMPDIR=\${HOME}/tmp && \
                 mkdir -p \${TMPDIR} && \
                 cd ${PROJECT_ROOT} && \
@@ -470,18 +598,18 @@ if [ "$MODE_J" = "True" ]; then
         fi
     done
 
-    # Process parallel DEG files (they submit their own jobs)
-    for INPUT_FILE in "${PARALLEL_FILES[@]}"; do
-        run_parallel_deg "${INPUT_FILE}"
-    done
+    # Process parallel DEG files with array jobs (steps 1-3 parallel, step 4 sequential per cell line)
+    if [ ${#PARALLEL_FILES[@]} -gt 0 ]; then
+        run_parallel_deg PARALLEL_FILES "${#PARALLEL_FILES[@]}"
+    fi
 
     # Process sequential DEG files with array job
     if [ ${#SEQUENTIAL_FILES[@]} -gt 0 ]; then
-        run_sequential_deg SEQUENTIAL_FILES ${#SEQUENTIAL_FILES[@]}
+        run_sequential_deg SEQUENTIAL_FILES "${#SEQUENTIAL_FILES[@]}"
     fi
 else
     # MODE_J=False: Process all files with array job (no classification)
-    run_sequential_deg INPUT_FILES ${N_FILES}
+    run_sequential_deg INPUT_FILES "${N_FILES}"
 fi
 
 echo ""
@@ -490,7 +618,8 @@ echo "DGE PIPELINE COMPLETED"
 echo "============================================"
 echo "  Results saved to: ${FULL_OUTPUT_DIR}"
 echo ""
-
+echo "> DGE pipeline completed successfully!"
+echo "> Cleaning up temporary files..."
 rm -rf "${TMP_DIR_DEG}"
-echo "> DGE pipeline is finished"
+echo "> Cleanup complete"
 

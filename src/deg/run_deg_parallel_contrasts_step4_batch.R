@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-# Step 2: Batch - Process contrasts in parallel batches on SLURM
+# Step 4: Batch - Process contrasts in parallel batches on SLURM
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -194,14 +194,14 @@ process_batch <- function(fit,
   }
 }
 
-#' Main function for Step 2: Process a single batch of contrasts
+#' Main function for Step 4: Process a single batch of contrasts
 #' 
 #' Loads intermediate data, processes assigned batch, and saves results
 #' @return NULL (saves results to files)
 main <- function() {
   parser <- ArgumentParser()
   parser$add_argument("--input_file", type="character", required=TRUE,
-                     help="Path to intermediate RDS file from step 1")
+                     help="Path to intermediate RDS file from step 3")
   parser$add_argument("--output_dir", type="character", required=TRUE,
                      help="Directory to save batch results")
   parser$add_argument("--batch_id", type="integer", required=TRUE,
@@ -213,7 +213,7 @@ main <- function() {
   
   # Start timer
   deg_start <- Sys.time()
-  cat(sprintf("\nDEG Step 2: Batch %d/%d - Started...\n", args$batch_id + 1, args$n_batches))
+  cat(sprintf("\nDEG Step 4: Batch %d/%d - Started...\n", args$batch_id + 1, args$n_batches))
   
   # Load intermediate data
   cat("Loading intermediate data: ", args$input_file, "\n")
@@ -297,7 +297,7 @@ main <- function() {
     }
   }
   
-  cat(sprintf("\nDEG Step 2: Batch %d/%d - Completed!\n", args$batch_id + 1, args$n_batches))
+  cat(sprintf("\nDEG Step 4: Batch %d/%d - Completed!\n", args$batch_id + 1, args$n_batches))
 }
 
 main()

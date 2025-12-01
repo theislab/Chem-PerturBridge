@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-# Step 3: Aggregate - Combine batch results and create final h5ad output
+# Step 5: Aggregate - Combine batch results and create final h5ad output
 
 # Configure reticulate to use conda Python
 suppressPackageStartupMessages(library(reticulate))
@@ -167,14 +167,14 @@ get_layers <- function(de_df,
   return(layers)
 }
 
-#' Main function for Step 3: Aggregate batch results
+#' Main function for Step 5: Aggregate batch results
 #' 
 #' Combines all batch results, applies global p-value adjustment, and creates final h5ad
 #' @return NULL (saves results to files)
 main <- function() {
   parser <- ArgumentParser()
   parser$add_argument("--input_file", type="character", required=TRUE,
-                     help="Path to intermediate RDS file from step 1")
+                     help="Path to intermediate RDS file from step 3")
   parser$add_argument("--input_dir", type="character", required=TRUE,
                      help="Directory containing batch result files")
   parser$add_argument("--output_file", type="character", required=TRUE,
@@ -184,7 +184,7 @@ main <- function() {
   
   # Start timer
   deg_start <- Sys.time()
-  cat("\nDEG Step 3: Aggregate - Started...\n")
+  cat("\nDEG Step 5: Aggregate - Started...\n")
   
   # Capture warnings during processing
   warning_messages <- list()
@@ -289,7 +289,7 @@ main <- function() {
   # Show runtime
 
   deg_time <- difftime(Sys.time(), deg_start, units = "secs")
-  cat(sprintf("\nStep 3 completed in %.1f seconds\n", deg_time))
+  cat(sprintf("\nStep 5 completed in %.1f seconds\n", deg_time))
   
   # Print any warnings that occurred (to stderr)
   if (length(warning_messages) > 0) {
@@ -306,7 +306,7 @@ main <- function() {
     }
   }
   
-  cat("\nDEG Step 3: Aggregate - Completed!\n")
+  cat("\nDEG Step 5: Aggregate - Completed!\n")
 }
 
 main()
