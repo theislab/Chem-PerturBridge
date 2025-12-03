@@ -5,7 +5,6 @@ suppressPackageStartupMessages(library(reticulate))
 conda_env <- Sys.getenv("CONDA_PREFIX")
 if (nzchar(conda_env)) use_python(file.path(conda_env, "bin/python"), required = TRUE)
 
-
 requireNamespace("anndata", quietly=TRUE)
 suppressPackageStartupMessages({
   library(dplyr)
@@ -365,15 +364,19 @@ run_contrasts <- function(fit,
 #' 
 #' @param ad AnnData object
 #' @param obs Observations dataframe
+#' @param par Parameters list
 #' @return Linear model fit object
 run_dge <- function(ad,
-                    obs) {
+                    obs,
+                    par) {
   # Parameter validation
   stopifnot(!missing(ad),
             !missing(obs),
+            !missing(par),
             "cond" %in% names(obs),
             "plate" %in% names(obs),
-            !is.null(ad$X))
+            !is.null(ad$X),
+            is.list(par))
   
   # build DGEList + design
   counts <- Matrix::t(ad$X)
@@ -389,21 +392,31 @@ run_dge <- function(ad,
   cat(sprintf("    Design matrix is constructed in %.1f seconds\n", diff_time))
   cat("    Design matrix dimensions:", nrow(design), "samples ×", ncol(design), "coefficients\n")
 
-  # filter genes and normalize
-  cat("    Filtering genes and normalizing counts...\n")
-  start_time <- Sys.time()
-  keep <- filterByExpr(dge, design)
-  dge  <- dge[keep, , keep.lib.sizes=FALSE] %>% calcNormFactors()
-  diff_time <- difftime(Sys.time(), start_time, units = "secs")
-  cat(sprintf("    Genes are filtered and normalized in %.1f seconds\n", diff_time))
+  # filter genes and normalize (skip if already normalized)
+  if (is.null(par$normalized) || !par$normalized) {
+    cat("    Filtering genes and normalizing counts...\n")
+    start_time <- Sys.time()
+    keep <- filterByExpr(dge, design)
+    dge  <- dge[keep, , keep.lib.sizes=FALSE] %>% calcNormFactors()
+    diff_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("    Genes are filtered and normalized in %.1f seconds\n", diff_time))
+    cat("    Running voom...\n")
+    start_time <- Sys.time()
+    v   <- voom(dge, design, plot=FALSE)
+    diff_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("    Voom is completed in %.1f seconds\n", diff_time))
+  } else {
+    cat("    Skipping filtering and normalization (dataset is already normalized)\n")
+    cat("    Skipping voom transformation (dataset is already normalized)\n")
+    cat("    Using as.matrix() directly for lmFit (data assumed to be normalized and log-transformed)...\n")
+    start_time <- Sys.time()
+    # lmFit can work with as.matrix() directly via getEAWP() -> as.matrix(dge)
+    # This extracts dge$counts which should contain normalized log-transformed values
+    v <- as.matrix(dge$counts)
+    diff_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("    as.matrix() prepared in %.1f seconds\n", diff_time))
+  }
   
-  
-  # voom + lmFit
-  cat("    Running voom...\n")
-  start_time <- Sys.time()
-  v   <- voom(dge, design, plot=FALSE)
-  diff_time <- difftime(Sys.time(), start_time, units = "secs")
-  cat(sprintf("    Voom is completed in %.1f seconds\n", diff_time))
 
   cat("    Running lmFit...\n")
   start_time <- Sys.time()
@@ -536,6 +549,7 @@ run_dge_pipeline <- function(par) {
   }
   stopifnot(is.logical(par$qc))
   
+
   # load the full pseudobulk AnnData
   adata <- anndata::read_h5ad(par$input_file)
   cat("Loaded input file: ", par$input_file, "\n")
@@ -556,8 +570,14 @@ run_dge_pipeline <- function(par) {
     cl_start <- Sys.time()
     if (n_cell_types > 1) {
       cat("\n▶︎ Processing cell_type ", cl_num, "/", n_cell_types, ": ", cl, "\n")
+      cl_basename <- cl
     } else {
       cat("\n▶︎ Processing cell_type: ", cl, "\n")
+      # Get basename of input file (without extension) for intermediate file naming
+      # Remove "_processed" from the basename if present (handles both "_processed" at end or followed by underscore)
+      cl_basename <- tools::file_path_sans_ext(basename(par$input_file))
+      cl_basename <- gsub("_processed_", "_", cl_basename)  # Replace "_processed_" with "_"
+      cl_basename <- gsub("_processed$", "", cl_basename)   # Remove "_processed" at the end
     }
   
     # Process this cell type with warning capture
@@ -579,7 +599,8 @@ run_dge_pipeline <- function(par) {
       cond <- obs$cond
       start_time <- Sys.time()
       fit <- run_dge(ad,
-              obs)
+              obs,
+              par)
       delta_time <- difftime(Sys.time(), start_time, units = "secs")
       cat(sprintf("DGE fit is completed in %.1f seconds\n", delta_time))
 
@@ -593,24 +614,6 @@ run_dge_pipeline <- function(par) {
           distinct(cond, .keep_all = TRUE) %>%
           filter(is_control!=TRUE)
       
-      # # DEBUG: Save fit object for comparison with parallel pipeline
-      #parent_dir <- dirname(par$output_dir)
-      #debug_dir <- file.path(parent_dir, "intermediate", "step3_results")
-      # debug_dir <- "./data/intermediate/deg/full/qc_false/filter_min_cells_0"
-      # dir.create(debug_dir, recursive = TRUE, showWarnings = FALSE)
-      # debug_file <- file.path(debug_dir, paste0(cl, ".rds"))
-      # cat(sprintf("    DEBUG: Saving fit object to: %s\n", debug_file))
-      # saveRDS(list(
-      #   fit = fit,
-      #   control_obs = control_obs,
-      #   treated_obs = treated_obs,
-      #   parameters = list(
-      #     subsampling = par$subsampling,
-      #     min_cells = par$min_cells,
-      #     qc = par$qc
-      #   )
-      # ), debug_file)
-      # cat("    DEBUG: Fit object saved\n")
 
       cat("    Running contrasts...\n")
       start_time <- Sys.time()
@@ -661,17 +664,18 @@ run_dge_pipeline <- function(par) {
       )
       
       # Create output file path
-      outfile <- file.path(par$output_dir, paste0(cl, "_de.h5ad"))
-      
+      outfile <- file.path(par$output_dir, paste0(cl_basename, "_de.h5ad"))
+    
       # Create output directory if it doesn't exist
       output_dir <- dirname(outfile)
       if (!dir.exists(output_dir)) {
         dir.create(output_dir, recursive = TRUE)
       }
     
+      # Write output file
       cat("\n    Writing: ", outfile, "\n")
       out_adata$write_h5ad(outfile, compression = "gzip")
-      
+
       # Remove X matrix for compatibility with older Python anndata versions
       rewrite_h5ad(outfile)
     
@@ -741,6 +745,7 @@ main <- function() {
   parser$add_argument("--specific_perturbagens", type="character", default=NULL)
   parser$add_argument("--min_cells", type="integer", default=0)
   parser$add_argument("--qc", action="store_true")
+  parser$add_argument("--normalized", action="store_true")
   parser$add_argument("--config", default="{}")
 
   args <- parser$parse_args()

@@ -11,10 +11,12 @@ from typing import Optional, Tuple, Union
 
 from src.utils.parsing_utils import *
 
-#MAX_ELEMENTS 2^31 - 1 from https://svn.r-project.org/R/trunk/src/library/base/R/qr.R
-MAX_ELEMENTS = 2147483647
-RATIO_MAX_ELEMENTS = 0.9
-RATIO_MIN_ELEMENTS = 0.85
+RATIO_MAX = 1.1
+RATIO_MIN = 0.9
+#MAX_N_NON_CONTROL_OBS = 2500
+MAX_N_NON_CONTROL_OBS = 1000
+
+MIN_N_PERTURBAGENS = 500
 RANDOM_SEED = 0
 
 def create_perturbation_label(is_control: bool, 
@@ -77,52 +79,6 @@ def create_dir_if_not_exists(file_output: str) -> None:
     dir_output = os.path.dirname(file_output)
     os.makedirs(dir_output, exist_ok=True)
 
-
-def update_n_obs_json(file_path: str, n_obs: int, json_file: str) -> None:
-    '''
-    Update JSON file with file basename and n_obs mapping.
-    
-    Thread-safe update using file locking. Creates the JSON file if it doesn't exist.
-    Uses basename of the file as the key for portability.
-    
-    Parameters:
-    -----------
-    file_path : str
-        Full path to the h5ad file
-    n_obs : int
-        Number of observations in the file
-    json_file : str
-        Path to the JSON file to update
-    '''
-    # Use basename as key for portability
-    file_basename = os.path.basename(file_path)
-    
-    # Read existing data or initialize empty dict
-    n_obs_data = {}
-    if os.path.exists(json_file):
-        try:
-            with open(json_file, 'r', encoding='utf-8') as f:
-                # Use file locking for thread safety
-                fcntl.flock(f.fileno(), fcntl.LOCK_SH)  # Shared lock for reading
-                try:
-                    n_obs_data = json.load(f)
-                finally:
-                    fcntl.flock(f.fileno(), fcntl.LOCK_UN)
-        except (json.JSONDecodeError, IOError) as e:
-            logger.warning(f'Error reading n_obs JSON file {json_file}: {e}, creating new file')
-            n_obs_data = {}
-    
-    # Update with new entry using basename as key
-    n_obs_data[file_basename] = n_obs
-    
-    # Write back with exclusive lock
-    create_dir_if_not_exists(json_file)
-    with open(json_file, 'w', encoding='utf-8') as f:
-        fcntl.flock(f.fileno(), fcntl.LOCK_EX)  # Exclusive lock for writing
-        try:
-            json.dump(n_obs_data, f, indent=2, sort_keys=True)
-        finally:
-            fcntl.flock(f.fileno(), fcntl.LOCK_UN)
 
 def save_read(file_input: str, 
               n_retries: int = 10,
@@ -235,39 +191,17 @@ def get_control_info(controls: Optional[ad.AnnData]) -> Tuple[int, int]:
 
 def get_target_sizes() -> Tuple[int, int]:
     '''
-    Calculate target matrix sizes.
+    Calculate target n_obs sizes for non-control observations.
     
     Returns:
     --------
     Tuple[int, int]
-        (target_min, target_max)
+        (target_min, target_max) - thresholds for non-control observations only
     '''
-    return (round(RATIO_MIN_ELEMENTS * MAX_ELEMENTS),
-            round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS))
+    return (round(RATIO_MIN * MAX_N_NON_CONTROL_OBS),
+            round(RATIO_MAX * MAX_N_NON_CONTROL_OBS))
 
 
-def calculate_matrix_size(n_obs: int, n_labels: int,
-                         ctl_n_obs: int = 0, ctl_n_labels: int = 0) -> int:
-    '''
-    Calculate matrix size including controls.
-    
-    Parameters:
-    -----------
-    n_obs : int
-        Number of observations (non-controls)
-    n_labels : int
-        Number of unique perturbation labels (non-controls)
-    ctl_n_obs : int
-        Number of control observations
-    ctl_n_labels : int
-        Number of unique control labels
-        
-    Returns:
-    --------
-    int
-        Matrix size: (n_obs + ctl_n_obs) * (n_labels + ctl_n_labels)
-    '''
-    return (n_obs + ctl_n_obs) * (n_labels + ctl_n_labels)
 
 
 def separate_controls(adata: ad.AnnData, ct_clean: str = None) -> Tuple[Optional[ad.AnnData], ad.AnnData]:
@@ -323,8 +257,7 @@ def get_perturbagen_properties(perturbagen_info: dict, pert: str) -> Tuple[int, 
     return pert_info['n_obs'], pert_info['n_labels'], pert_info['data']
 
 
-def calculate_new_batch_size(batch: dict, pert_n_obs: int, pert_n_labels: int,
-                            ctl_n_obs: int, ctl_n_labels: int) -> Tuple[int, int, int]:
+def calculate_new_batch_size(batch: dict, pert_n_obs: int, pert_n_labels: int) -> Tuple[int, int, int]:
     '''
     Calculate what the batch size would be if we add a perturbagen (without modifying batch).
     
@@ -336,23 +269,16 @@ def calculate_new_batch_size(batch: dict, pert_n_obs: int, pert_n_labels: int,
         Number of observations in the perturbagen
     pert_n_labels : int
         Number of unique labels in the perturbagen
-    ctl_n_obs : int
-        Number of control observations
-    ctl_n_labels : int
-        Number of unique control labels
         
     Returns:
     --------
     Tuple[int, int, int]
-        (new_n_obs, new_n_labels, new_matrix_size)
+        (new_n_obs, new_n_labels, new_n_perturbagens)
     '''
     new_n_obs = batch['n_obs'] + pert_n_obs
     new_n_labels = batch['n_labels'] + pert_n_labels
-    new_matrix_size = calculate_matrix_size(new_n_obs, 
-                                            new_n_labels, 
-                                            ctl_n_obs=ctl_n_obs, 
-                                            ctl_n_labels=ctl_n_labels)
-    return new_n_obs, new_n_labels, new_matrix_size
+    new_n_perturbagens = len(batch['perturbagens']) + 1
+    return new_n_obs, new_n_labels, new_n_perturbagens
 
 
 def add_data_to_batch(batch: dict, n_obs: int, n_labels: int, indices: list, pert: Optional[Union[str, set, list]] = None) -> None:
@@ -379,14 +305,23 @@ def add_data_to_batch(batch: dict, n_obs: int, n_labels: int, indices: list, per
         If None, no names are added to batch['perturbagens'].
     '''
     if pert is not None:
+        # Count how many new perturbagens are being added
+        n_new_perts = 0
         if isinstance(pert, str):
-            batch['perturbagens'].add(pert)
+            if pert not in batch['perturbagens']:
+                batch['perturbagens'].add(pert)
+                n_new_perts = 1
         else:
+            # For set/list, count how many are new
+            before_count = len(batch['perturbagens'])
             batch['perturbagens'].update(pert)
+            n_new_perts = len(batch['perturbagens']) - before_count
+        batch['n_perturbagens'] += n_new_perts
+    # Note: If pert is None, we don't increment n_perturbagens (shouldn't happen in normal usage)
+    
     batch['obs_indices'].extend(indices)
     batch['n_obs'] += n_obs
     batch['n_labels'] += n_labels
-
 
 def create_batches(non_controls: ad.AnnData,
                     unique_perturbagens: np.ndarray,
@@ -396,9 +331,9 @@ def create_batches(non_controls: ad.AnnData,
     Create multiple batches from perturbagens using Best Fit algorithm.
     
     Randomly shuffles perturbagens and assigns them to batches using Best Fit algorithm,
-    targeting 85-95% of MAX_ELEMENTS per batch. The algorithm selects the batch that
-    minimizes waste (gets closest to target_max without exceeding it) for each perturbagen.
-    Controls are considered in matrix size calculations but not added to batches yet.
+    targeting non-control n_obs within target_min and target_max. The algorithm selects 
+    the batch that minimizes waste (gets closest to target_max without exceeding it) for 
+    each perturbagen. Thresholds are based on non-control observations only.
     
     Parameters:
     -----------
@@ -407,7 +342,7 @@ def create_batches(non_controls: ad.AnnData,
     unique_perturbagens : np.ndarray
         Array of unique perturbagen names
     controls : ad.AnnData, optional
-        Controls to consider in matrix size calculations (not added to batches here)
+        Controls (not used in threshold calculations, added later)
         
     Returns:
     --------
@@ -427,7 +362,6 @@ def create_batches(non_controls: ad.AnnData,
     
     batches = []
     target_min, target_max = get_target_sizes()
-    ctl_n_obs, ctl_n_labels = get_control_info(controls)
     
     for pert in shuffled_perturbagens:
         pert_n_obs, pert_n_labels, pert_data = get_perturbagen_properties(perturbagen_info, pert)
@@ -436,10 +370,10 @@ def create_batches(non_controls: ad.AnnData,
         best_waste = float('inf')
         
         for batch_idx, batch in enumerate(batches):
-            _, _, new_matrix_size = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels, ctl_n_obs, ctl_n_labels)
+            new_n_obs, _, _ = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels)
             
-            if new_matrix_size <= target_max:
-                waste = target_max - new_matrix_size
+            if new_n_obs <= target_max:
+                waste = target_max - new_n_obs
                 if waste < best_waste:
                     best_waste = waste
                     best_batch_idx = batch_idx
@@ -452,6 +386,7 @@ def create_batches(non_controls: ad.AnnData,
                 'perturbagens': {pert},
                 'n_obs': pert_n_obs,
                 'n_labels': pert_n_labels,
+                'n_perturbagens': 1,
                 'obs_indices': pert_data.obs.index.tolist()
             }
             batches.append(new_batch)
@@ -467,11 +402,11 @@ def pad_batches(batches: list,
     '''
     Pad smaller batches to balance sizes using perturbagens not in current batch.
     
-    For batches with matrix size below target_min, this function iteratively adds
+    For batches with non-control n_obs below target_min, this function iteratively adds
     perturbagens from other batches (not already in the current batch). Perturbagens
-    are shuffled and added one at a time, checking that the matrix size doesn't exceed
-    target_max. The process stops when the batch reaches target_matrix_size or no more
-    suitable perturbagens are available.
+    are shuffled and added one at a time, checking that non-control n_obs doesn't exceed
+    target_max. The process stops when the batch reaches target_min or no more
+    suitable perturbagens are available. Thresholds are based on non-control observations only.
     
     Parameters:
     -----------
@@ -482,7 +417,7 @@ def pad_batches(batches: list,
     unique_perturbagens : np.ndarray
         Array of unique perturbagen names
     controls : ad.AnnData, optional
-        Controls to consider in matrix size calculations (not added here)
+        Controls (not used in threshold calculations, added later)
         
     Returns:
     --------
@@ -495,14 +430,15 @@ def pad_batches(batches: list,
     ctl_n_obs, ctl_n_labels = get_control_info(controls)
     
     if len(batches) > 1:
-        target_matrix_size = target_min
-        
+        cnt = 0
+        for batch in batches:
+            if batch['n_obs'] < target_min:
+                cnt += 1
+        logger.info(f'  {cnt} batches need to be padded')
+
         for batch_idx, batch in enumerate(batches):
-            matrix_size = calculate_matrix_size(batch['n_obs'], 
-                                                batch['n_labels'], 
-                                                ctl_n_obs=ctl_n_obs, 
-                                                ctl_n_labels=ctl_n_labels)
-            if matrix_size < target_matrix_size:
+
+            if batch['n_obs'] < target_min:
                 current_batch_perts = batch['perturbagens']
                 all_perts = set(non_controls.obs['perturbagen'].unique())
                 available_perts = list(all_perts - current_batch_perts)
@@ -517,25 +453,18 @@ def pad_batches(batches: list,
                 for pert in shuffled_perts:
                     pert_n_obs, pert_n_labels, pert_data = get_perturbagen_properties(perturbagen_info, pert)
                     
-                    _, _, new_matrix_size = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels, ctl_n_obs, ctl_n_labels)
-                    
-                    if new_matrix_size <= target_max:
+                    new_n_obs, _, _ = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels)
+                    if new_n_obs <= target_max:
                         add_data_to_batch(batch, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
                         
-                        current_matrix_size = calculate_matrix_size(batch['n_obs'], 
-                                                                   batch['n_labels'], 
-                                                                   ctl_n_obs=ctl_n_obs, 
-                                                                   ctl_n_labels=ctl_n_labels)
-                        if current_matrix_size >= target_matrix_size:
+                        if batch['n_obs'] >= target_min:
                             break
     
     # Log final batch statistics after padding
     if len(batches) > 0:
-        batch_sizes = [calculate_matrix_size(batch['n_obs'], 
-                                             batch['n_labels'], 
-                                             ctl_n_obs=ctl_n_obs, 
-                                             ctl_n_labels=ctl_n_labels) for batch in batches]
-        logger.info(f'  After padding: {len(batches)} batches, matrix sizes: {[f"{s/1e6:.1f}M" for s in batch_sizes]}')
+        batch_sizes = [(batch['n_obs'], batch['n_labels']) for batch in batches]
+        batch_sizes_str = [f'{n_obs} x {n_labels}' for n_obs, n_labels in batch_sizes]
+        logger.info(f'  After padding before adding controls: {len(batches)} batches, batch sizes: {batch_sizes_str}')
     
     return batches
 
@@ -578,7 +507,7 @@ def add_controls_to_batches(batches: list,
 
 
 
-def save_single_file(adata: ad.AnnData, file_output: str, n_obs_json_file: Optional[str] = None) -> None:
+def save_single_file(adata: ad.AnnData, file_output: str) -> None:
     '''
     Save AnnData as a single processed h5ad file.
     
@@ -590,21 +519,19 @@ def save_single_file(adata: ad.AnnData, file_output: str, n_obs_json_file: Optio
         AnnData object to save
     file_output : str
         Full path to the output file
-    n_obs_json_file : Optional[str], default=None
-        Path to JSON file to update with n_obs information. If None, no JSON is updated.
     '''
+    n_perturbagens = adata.obs['perturbagen'].nunique()
     create_dir_if_not_exists(file_output)
     adata.write_h5ad(file_output, compression='gzip')
-    logger.info(f'    Saved: {file_output} ({adata.n_obs} obs)')
-    
-    # Update n_obs JSON file if provided
-    if n_obs_json_file is not None:
-        update_n_obs_json(file_output, adata.n_obs, n_obs_json_file)
+    logger.info(f'    Saved: {file_output} ({adata.n_obs} obs, {n_perturbagens} perturbagens)')
 
 
-def check_and_save_if_small(adata_ct: ad.AnnData, dir_output: str, ct_clean: str, n_obs_json_file: Optional[str] = None) -> bool:
+def check_and_save_if_small(adata_ct: ad.AnnData, 
+                            dir_output: str, 
+                            ct_clean: str,
+                            non_controls: ad.AnnData) -> bool:
     '''
-    Check if matrix size is within limits and save as single file if so.
+    Check if non-control n_obs is within limits and save as single file if so.
     
     Parameters:
     -----------
@@ -614,27 +541,25 @@ def check_and_save_if_small(adata_ct: ad.AnnData, dir_output: str, ct_clean: str
         Output directory path
     ct_clean : str
         Sanitized cell type name for filenames
-    n_obs_json_file : Optional[str], default=None
-        Path to JSON file to update with n_obs information
-        
+    non_controls : ad.AnnData
+        Non-control observations to check threshold
+    
     Returns:
     --------
     bool
-        True if saved (matrix was small enough), False otherwise
+        True if saved (non-control n_obs was small enough), False otherwise
     '''
-    n_obs = adata_ct.n_obs
-    n_labels = adata_ct.obs['perturbation_label'].nunique()
-    matrix_size = calculate_matrix_size(n_obs, n_labels)
+    n_obs_non_controls = non_controls.n_obs
     
-    if matrix_size <= round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS):
+    if n_obs_non_controls <= round(RATIO_MAX * MAX_N_NON_CONTROL_OBS):
         file_output = os.path.join(dir_output, f"{ct_clean}_processed.h5ad")
-        save_single_file(adata_ct, file_output, n_obs_json_file)
+        save_single_file(adata_ct, file_output)
         return True
     return False
 
 
 def get_unique_perturbagens_or_save(non_controls: ad.AnnData, adata_ct: ad.AnnData,
-                                    dir_output: str, ct_clean: str, n_obs_json_file: Optional[str] = None) -> Optional[np.ndarray]:
+                                    dir_output: str, ct_clean: str) -> Optional[np.ndarray]:
     '''
     Get unique perturbagens from non-controls, or save and return None if none found.
     
@@ -648,8 +573,6 @@ def get_unique_perturbagens_or_save(non_controls: ad.AnnData, adata_ct: ad.AnnDa
         Output directory path
     ct_clean : str
         Sanitized cell type name for filenames
-    n_obs_json_file : Optional[str], default=None
-        Path to JSON file to update with n_obs information
     
     Returns:
     --------
@@ -658,16 +581,41 @@ def get_unique_perturbagens_or_save(non_controls: ad.AnnData, adata_ct: ad.AnnDa
     '''
     unique_perturbagens = non_controls.obs['perturbagen'].unique()
     
-    if len(unique_perturbagens) < 1:
-        logger.warning(f'  No perturbagens found, saving as is')
+    if len(unique_perturbagens) <= 1:
+        if len(unique_perturbagens) == 0:
+            logger.warning(f'  No perturbagens found, saving as is')
+        else:
+            logger.warning(f'  Only 1 perturbagen found, saving as is (no batching needed)')
         file_output = os.path.join(dir_output, f"{ct_clean}_processed.h5ad")
-        save_single_file(adata_ct, file_output, n_obs_json_file)
+        save_single_file(adata_ct, file_output)
         return None
     
     return unique_perturbagens
 
 
-def save_batches(batches: list, adata_ct: ad.AnnData, dir_output: str, ct_clean: str, n_obs_json_file: Optional[str] = None) -> None:
+def check_n_perturbagens(batches: list) -> None:
+    '''
+    Check that each batch has at least MIN_N_PERTURBAGENS perturbagens.
+    
+    Logs a warning for each batch that doesn't meet the minimum requirement.
+    
+    Parameters:
+    -----------
+    batches : list
+        List of batch dictionaries with 'perturbagens' or 'n_perturbagens' keys
+        
+    Returns:
+    --------
+    None
+        Logs warnings if batches don't meet minimum requirement
+    '''
+    for batch_idx, batch in enumerate(batches):
+        n_perturbagens = batch.get('n_perturbagens', len(batch.get('perturbagens', set())))
+        if n_perturbagens < MIN_N_PERTURBAGENS:
+            logger.warning(f'  Batch {batch_idx + 1} has only {n_perturbagens} perturbagens, which is below the minimum of {MIN_N_PERTURBAGENS}')
+
+
+def save_batches(batches: list, adata_ct: ad.AnnData, dir_output: str, ct_clean: str) -> None:
     '''
     Save batches to disk as separate h5ad files.
     
@@ -681,8 +629,6 @@ def save_batches(batches: list, adata_ct: ad.AnnData, dir_output: str, ct_clean:
         Output directory path
     ct_clean : str
         Sanitized cell type name for filenames
-    n_obs_json_file : Optional[str], default=None
-        Path to JSON file to update with n_obs information
         
     Returns:
     --------
@@ -694,18 +640,17 @@ def save_batches(batches: list, adata_ct: ad.AnnData, dir_output: str, ct_clean:
         batch_counter += 1
         batch_data = adata_ct[batch['obs_indices']].copy()
         outfile = os.path.join(dir_output, f"{ct_clean}_processed_batch_{batch_counter}.h5ad")
-        save_single_file(batch_data, outfile, n_obs_json_file)
+        save_single_file(batch_data, outfile)
     
 
 
-def batch_celltype_by_matrix_size(adata_ct: ad.AnnData,
+def batch_celltype(adata_ct: ad.AnnData,
                                    dir_output: str,
-                                   ct_clean: str,
-                                   n_obs_json_file: Optional[str] = None) -> None:
+                                   ct_clean: str) -> None:
     '''
-    Check matrix size and split cell type dataset into batches if needed.
+    Check n_obs and split cell type dataset into batches if needed.
     
-    This function checks if the matrix size (n_obs * n_perturbs) exceeds MAX_ELEMENTS.
+    This function checks if n_obs exceeds the threshold.
     If it does, the dataset is split into multiple batches using Best Fit algorithm
     with random shuffling. Controls are excluded from the split and are included in all
     partitions. Smaller batches are padded to balance sizes.
@@ -723,24 +668,24 @@ def batch_celltype_by_matrix_size(adata_ct: ad.AnnData,
     --------
     None
     '''
-    if check_and_save_if_small(adata_ct, dir_output, ct_clean, n_obs_json_file):
+    controls, non_controls = separate_controls(adata_ct, ct_clean)
+
+    if check_and_save_if_small(adata_ct, dir_output, ct_clean, non_controls):
         return
     
     # Log splitting information
     n_obs = adata_ct.n_obs
+    n_non_control_obs = non_controls.n_obs
     n_labels = adata_ct.obs['perturbation_label'].nunique()
-    matrix_size = calculate_matrix_size(n_obs, n_labels)
-    logger.info(f'Splitting {ct_clean}: {n_obs} obs, {n_labels} perturbation labels, {matrix_size/1e6:.1f}M matrix size')
-    logger.warning(f'  Matrix size for {ct_clean} exceeds {round(RATIO_MAX_ELEMENTS * MAX_ELEMENTS)}, creating batches')
+    logger.info(f'Splitting {ct_clean}: {n_obs} obs, {n_labels} perturbation labels')
+    logger.warning(f'  Non-control n_obs ({n_non_control_obs}) exceeds {round(RATIO_MAX * MAX_N_NON_CONTROL_OBS)}, creating batches')
     
-    controls, non_controls = separate_controls(adata_ct, ct_clean)
     
-    unique_perturbagens = get_unique_perturbagens_or_save(non_controls, adata_ct, dir_output, ct_clean, n_obs_json_file)
+    unique_perturbagens = get_unique_perturbagens_or_save(non_controls, adata_ct, dir_output, ct_clean)
     if unique_perturbagens is None:
         return
     
     n_perturbagens = len(unique_perturbagens)
-    n_non_control_obs = non_controls.n_obs
     n_non_control_labels = non_controls.obs['perturbation_label'].nunique()
     logger.info(f'  After separation: {n_perturbagens} perturbagens, {n_non_control_obs} non-control obs, {n_non_control_labels} non-control labels')
     
@@ -762,8 +707,10 @@ def batch_celltype_by_matrix_size(adata_ct: ad.AnnData,
                                       controls,
                                       )
     
+    check_n_perturbagens(batches)
+    
     logger.info('  Save batches:')
-    save_batches(batches, adata_ct, dir_output, ct_clean, n_obs_json_file)
+    save_batches(batches, adata_ct, dir_output, ct_clean)
     logger.info(f'Splitting {ct_clean} is done')
     return
 
@@ -788,7 +735,7 @@ def save_by_celltype(padata: ad.AnnData,
     --------
     None
         Saves processed files to disk. Each cell type is saved as
-        '{celltype_clean}_processed.h5ad' or batched files if matrix size is too large.
+        '{celltype_clean}_processed.h5ad' or batched files if n_obs is too large.
         
     Raises:
     -------
@@ -799,9 +746,6 @@ def save_by_celltype(padata: ad.AnnData,
     celltype_dir = os.path.join(dir_output, 'by_celltype')
     os.makedirs(celltype_dir, exist_ok=True)
     
-    # Create JSON file path for n_obs information
-    n_obs_json_file = os.path.join(dir_output, 'n_obs_table.json')
-    
     cell_types = padata.obs['cell_type'].unique()
     cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) or not np.isnan(ct))]
     cell_types = sorted(cell_types)
@@ -810,11 +754,16 @@ def save_by_celltype(padata: ad.AnnData,
         raise ValueError('No valid cell types found for splitting')
     
     logger.info(f'Splitting into {len(cell_types)} cell types')
-    
+
+    cell_types = ['A375', 'ASC', 'A673', 'SKLU1']
     for ct in cell_types:
         ct_clean = sanitize_celltype_name(ct)
+        ct_dir = os.path.join(celltype_dir, ct_clean)
+        os.makedirs(ct_dir, exist_ok=True)
         adata_ct = padata[padata.obs['cell_type'] == ct].copy()
-        batch_celltype_by_matrix_size(adata_ct, celltype_dir, ct_clean, n_obs_json_file)
+        batch_celltype(adata_ct, ct_dir, ct_clean)
+        #TODO
+        #break
 
 
 
@@ -849,15 +798,15 @@ def check_output_files_exist(file_input: str,
         if not os.path.exists(celltype_dir):
             return False
         
-        # Check if there are any .h5ad files in by_celltype directory
-        h5ad_files = [f for f in os.listdir(celltype_dir) if f.endswith('.h5ad')]
+        # Check if there are any .h5ad files in by_celltype subdirectories
+        h5ad_files = []
+        for item in os.listdir(celltype_dir):
+            item_path = os.path.join(celltype_dir, item)
+            if os.path.isdir(item_path):
+                h5ad_files.extend([f for f in os.listdir(item_path) if f.endswith('.h5ad')])
         if len(h5ad_files) == 0:
             return False
         
-        # Check if JSON file exists in dir_output (INPUT_DIR)
-        json_file = os.path.join(dir_output, 'n_obs_table.json')
-        if not os.path.exists(json_file):
-            return False
     
     return True
 

@@ -7,9 +7,11 @@ PIPELINE_NAME="deg"
 MODE_S=False
 MODE_J=False
 MODE_Q=False
+MODE_N=False
 ARG_S=""
 ARG_F=""
 ARG_J=""
+ARG_N=""
 DATASET=""
 PAR=""
 FILT=""
@@ -26,15 +28,16 @@ DEG_PARAMETERS=(
 
 mkdir -p $LOGS_DIR
 
-while getopts ":sjd:p:f:qh" opt; do
+while getopts ":sjd:p:f:qnh" opt; do
   	case $opt in
 		h)
-			echo "Run: $0 [-s] [-j] [-h] [-f] [-q] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
+			echo "Run: $0 [-s] [-j] [-h] [-f] [-q] [-n] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
                         echo "  -s Subsample of a dataset for debugging, default=false"
                         echo "  -j Parallel mode (array jobs per cell type), default=false"
                         echo "  -h Help option"
 			echo "  -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number"
 			echo "  -q Filter samples that did not pass quality control"
+			echo "  -n Dataset is already normalized, skip normalization steps, default=false"
 			echo "  -d (dataset <str>) Name of dataset to process, required"
 			echo "  -p (parameter <str>) Parameter for DEG pipeline, required"
                         exit 0
@@ -56,6 +59,9 @@ while getopts ":sjd:p:f:qh" opt; do
 			;;
     		d)
         		DATASET=$OPTARG
+      			;;
+		n)
+			MODE_N=True
       			;;
   	esac
 done
@@ -92,6 +98,12 @@ else
 	ARG_J=""
 fi
 
+if [[ "$MODE_N" == "True" ]]; then
+	ARG_N="-n"
+else
+	ARG_N=""
+fi
+
 # Determine filter folder names
 if [[ -z "$FILT" ]]; then
 	FILTER_FOLDER="filter_min_cells_0"
@@ -109,7 +121,7 @@ else
 fi
 
 mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}
-./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_Q $ARG_J \
+./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_Q $ARG_J $ARG_N \
 	-c ./pipelines/${DATASET}/configs/deg/config.json \
 	-d ${DATASET} \
 		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.PID$$.out \
