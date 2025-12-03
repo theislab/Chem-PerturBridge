@@ -220,7 +220,7 @@ echo "$par_process" | jq "." > "$preprocess_config"
 LOGS_BASE_DIR="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}"
 mkdir -p "${LOGS_BASE_DIR}/preprocessing"
 
-#TODO
+
 echo "> Running preprocessing pseudobulk"
 sbatch -W -J deg_processing_pseudobulk \
     --partition=${PARTITION} \
@@ -374,7 +374,6 @@ echo "============================================"
 echo "  Processing ${N_FILES} file(s)..."
 echo ""
 
-#TODO
 run_deg INPUT_FILES "${N_FILES}"
 
 # ============================================================================

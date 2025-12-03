@@ -13,8 +13,8 @@ from src.utils.parsing_utils import *
 
 RATIO_MAX = 1.1
 RATIO_MIN = 0.9
-#MAX_N_NON_CONTROL_OBS = 2500
-MAX_N_NON_CONTROL_OBS = 1000
+MAX_N_NON_CONTROL_OBS = 2500
+#MAX_N_NON_CONTROL_OBS = 1000
 
 MIN_N_PERTURBAGENS = 500
 RANDOM_SEED = 0
@@ -755,15 +755,13 @@ def save_by_celltype(padata: ad.AnnData,
     
     logger.info(f'Splitting into {len(cell_types)} cell types')
 
-    cell_types = ['A375', 'ASC', 'A673', 'SKLU1']
     for ct in cell_types:
         ct_clean = sanitize_celltype_name(ct)
         ct_dir = os.path.join(celltype_dir, ct_clean)
         os.makedirs(ct_dir, exist_ok=True)
         adata_ct = padata[padata.obs['cell_type'] == ct].copy()
         batch_celltype(adata_ct, ct_dir, ct_clean)
-        #TODO
-        #break
+        
 
 
 
