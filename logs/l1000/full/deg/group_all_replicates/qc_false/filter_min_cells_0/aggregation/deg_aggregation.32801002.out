@@ -1,0 +1,29 @@
+2025-12-04 14:08:59 | [INFO] Found 1 cell type(s) to aggregate
+2025-12-04 14:08:59 | [INFO] Aggregating 20 batch files for A375
+2025-12-04 14:08:59 | [INFO]   Reading: A375_batch_1_de.h5ad
+2025-12-04 14:08:59 | [INFO]   Reading: A375_batch_2_de.h5ad
+2025-12-04 14:09:00 | [INFO]   Reading: A375_batch_3_de.h5ad
+2025-12-04 14:09:00 | [INFO]   Reading: A375_batch_4_de.h5ad
+2025-12-04 14:09:01 | [INFO]   Reading: A375_batch_5_de.h5ad
+2025-12-04 14:09:01 | [INFO]   Reading: A375_batch_6_de.h5ad
+2025-12-04 14:09:02 | [INFO]   Reading: A375_batch_7_de.h5ad
+2025-12-04 14:09:02 | [INFO]   Reading: A375_batch_8_de.h5ad
+2025-12-04 14:09:03 | [INFO]   Reading: A375_batch_9_de.h5ad
+2025-12-04 14:09:04 | [INFO]   Reading: A375_batch_10_de.h5ad
+2025-12-04 14:09:05 | [INFO]   Reading: A375_batch_11_de.h5ad
+2025-12-04 14:09:05 | [INFO]   Reading: A375_batch_12_de.h5ad
+2025-12-04 14:09:06 | [INFO]   Reading: A375_batch_13_de.h5ad
+2025-12-04 14:09:06 | [INFO]   Reading: A375_batch_14_de.h5ad
+2025-12-04 14:09:07 | [INFO]   Reading: A375_batch_15_de.h5ad
+2025-12-04 14:09:08 | [INFO]   Reading: A375_batch_16_de.h5ad
+2025-12-04 14:09:08 | [INFO]   Reading: A375_batch_17_de.h5ad
+2025-12-04 14:09:09 | [INFO]   Reading: A375_batch_18_de.h5ad
+2025-12-04 14:09:09 | [INFO]   Reading: A375_batch_19_de.h5ad
+2025-12-04 14:09:10 | [INFO]   Reading: A375_batch_20_de.h5ad
+2025-12-04 14:09:10 | [INFO]   Concatenating 20 batches...
+2025-12-04 14:09:11 | [INFO]   Batch column added with 20
+2025-12-04 14:09:40 | [INFO]     Rewriting h5ad file: ./data/l1000/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/A375_de.h5ad
+2025-12-04 14:09:40 | [INFO]     Removed X matrix
+2025-12-04 14:09:40 | [INFO]     Rewriting h5ad file is done!
+2025-12-04 14:09:40 | [INFO]   Saved aggregated file: ./data/l1000/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/A375_de.h5ad (14384 obs, 978 vars)
+2025-12-04 14:09:40 | [INFO] Aggregation completed

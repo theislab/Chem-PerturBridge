@@ -1,0 +1,52 @@
+
+DE analysis started...
+Loaded input file:  ./data/l1000/pseudobulk_processed/group_rep/by_celltype/A375/A375_processed_batch_12.h5ad 
+Initial dimensions:  4946  samples ×  978  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  0 
+    Found  4946  samples with sentinel value (-666), keeping all
+    n_obs:  4946 -->  4946 
+
+▶︎ Processing cell_type:  A375 
+    Filter controls by  pert_time_h  column
+        n_obs:  4946 -->  4946 
+
+    Constructing design matrix...
+    Design matrix is constructed in 0.0 seconds
+    Design matrix dimensions: 4946 samples × 845 coefficients
+    Skipping filtering and normalization (dataset is already normalized)
+    Skipping voom transformation (dataset is already normalized)
+    Using as.matrix() directly for lmFit (data assumed to be normalized and log-transformed)...
+    as.matrix() prepared in 0.0 seconds
+    Running lmFit...
+Coefficients not estimable: platePRISM001_A375_6H_X1_B7_DUO52HI53LO 
+    LmFit is completed in 8.5 seconds
+DGE fit is completed in 9.6 seconds
+    Running contrasts...
+    Running contrast 1/688
+    Running contrast 51/688
+    Running contrast 101/688
+    Running contrast 151/688
+    Running contrast 201/688
+    Running contrast 251/688
+    Running contrast 301/688
+    Running contrast 351/688
+    Running contrast 401/688
+    Running contrast 451/688
+    Running contrast 501/688
+    Running contrast 551/688
+    Running contrast 601/688
+    Running contrast 651/688
+    Running contrast 688/688
+Contrasts are completed in 162.5 seconds
+
+    Writing:  ./data/l1000/deg_data/group_rep/full/qc_false/filter_min_cells_0/intermediate/A375/A375_batch_12_de.h5ad 
+
+    Rewriting h5ad file: ./data/l1000/deg_data/group_rep/full/qc_false/filter_min_cells_0/intermediate/A375/A375_batch_12_de.h5ad 
+    Removed X matrix
+    Rewriting h5ad file is done!
+✓ Cell line completed in 174.7 seconds
+
+DE analysis completed!
+
+Total runtime: 287.4 seconds
