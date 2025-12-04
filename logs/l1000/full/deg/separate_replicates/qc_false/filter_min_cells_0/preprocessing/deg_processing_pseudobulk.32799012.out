@@ -1,0 +1,34 @@
+2025-12-04 04:45:19 | [INFO] Read pseudobulk file
+2025-12-04 04:45:42 | [INFO] Add perturbation label
+2025-12-04 04:45:56 | [INFO] Save data
+2025-12-04 04:47:56 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/l1000_level3_deg_ready_landmark_processed.h5ad (699298 obs, 19813 perturbagens)
+2025-12-04 04:47:56 | [INFO] Splitting into 71 cell types
+2025-12-04 04:47:57 | [INFO] Splitting A375: 54903 obs, 52709 perturbation labels
+2025-12-04 04:47:57 | [INFO]   After separation: 11031 perturbagens, 52707 non-control obs, 52707 non-control labels
+2025-12-04 04:47:57 | [INFO]   Create batches
+2025-12-04 04:49:24 | [INFO]   Pad batches
+2025-12-04 04:50:51 | [INFO]   1 batches need to be padded
+2025-12-04 04:50:51 | [INFO]   After padding before adding controls: 20 batches, batch sizes: ['2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2750 x 2750', '2260 x 2260']
+2025-12-04 04:50:51 | [INFO]   Add controls to batches
+2025-12-04 04:50:51 | [INFO]   Save batches:
+2025-12-04 04:50:56 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_1.h5ad (4946 obs, 598 perturbagens)
+2025-12-04 04:50:58 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_2.h5ad (4946 obs, 665 perturbagens)
+2025-12-04 04:51:00 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_3.h5ad (4946 obs, 513 perturbagens)
+2025-12-04 04:51:01 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_4.h5ad (4946 obs, 606 perturbagens)
+2025-12-04 04:51:03 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_5.h5ad (4946 obs, 609 perturbagens)
+2025-12-04 04:51:04 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_6.h5ad (4946 obs, 493 perturbagens)
+2025-12-04 04:51:06 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_7.h5ad (4946 obs, 546 perturbagens)
+2025-12-04 04:51:07 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_8.h5ad (4946 obs, 550 perturbagens)
+2025-12-04 04:51:09 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_9.h5ad (4946 obs, 542 perturbagens)
+2025-12-04 04:51:11 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_10.h5ad (4946 obs, 569 perturbagens)
+2025-12-04 04:51:12 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_11.h5ad (4946 obs, 587 perturbagens)
+2025-12-04 04:51:14 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_12.h5ad (4946 obs, 545 perturbagens)
+2025-12-04 04:51:15 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_13.h5ad (4946 obs, 643 perturbagens)
+2025-12-04 04:51:16 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_14.h5ad (4946 obs, 616 perturbagens)
+2025-12-04 04:51:18 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_15.h5ad (4946 obs, 575 perturbagens)
+2025-12-04 04:51:19 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_16.h5ad (4946 obs, 570 perturbagens)
+2025-12-04 04:51:21 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_17.h5ad (4946 obs, 551 perturbagens)
+2025-12-04 04:51:23 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_18.h5ad (4946 obs, 555 perturbagens)
+2025-12-04 04:51:24 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_19.h5ad (4946 obs, 610 perturbagens)
+2025-12-04 04:51:25 | [INFO]     Saved: ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_20.h5ad (4456 obs, 527 perturbagens)
+2025-12-04 04:51:25 | [INFO] Splitting A375 is done

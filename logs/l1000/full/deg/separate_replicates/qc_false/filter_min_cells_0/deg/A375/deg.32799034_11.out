@@ -1,0 +1,84 @@
+
+DE analysis started...
+Loaded input file:  ./data/l1000/pseudobulk_processed/sep_rep/by_celltype/A375/A375_processed_batch_20.h5ad 
+Initial dimensions:  4456  samples ×  978  genes
+Filter samples with the low number of cells
+    Filter threshold (min_cells):  0 
+    Found  4456  samples with sentinel value (-666), keeping all
+    n_obs:  4456 -->  4456 
+
+▶︎ Processing cell_type:  A375 
+    Filter controls by  pert_time_h  column
+        n_obs:  4456 -->  4456 
+
+    Constructing design matrix...
+    Design matrix is constructed in 0.5 seconds
+    Design matrix dimensions: 4456 samples × 2417 coefficients
+    Skipping filtering and normalization (dataset is already normalized)
+    Skipping voom transformation (dataset is already normalized)
+    Using as.matrix() directly for lmFit (data assumed to be normalized and log-transformed)...
+    as.matrix() prepared in 0.0 seconds
+    Running lmFit...
+Coefficients not estimable: platePRISM001_A375_6H_X1_B7_DUO52HI53LO 
+    LmFit is completed in 79.6 seconds
+DGE fit is completed in 81.5 seconds
+    Running contrasts...
+    Running contrast 1/2260
+    Running contrast 51/2260
+    Running contrast 101/2260
+    Running contrast 151/2260
+    Running contrast 201/2260
+    Running contrast 251/2260
+    Running contrast 301/2260
+    Running contrast 351/2260
+    Running contrast 401/2260
+    Running contrast 451/2260
+    Running contrast 501/2260
+    Running contrast 551/2260
+    Running contrast 601/2260
+    Running contrast 651/2260
+    Running contrast 701/2260
+    Running contrast 751/2260
+    Running contrast 801/2260
+    Running contrast 851/2260
+    Running contrast 901/2260
+    Running contrast 951/2260
+    Running contrast 1001/2260
+    Running contrast 1051/2260
+    Running contrast 1101/2260
+    Running contrast 1151/2260
+    Running contrast 1201/2260
+    Running contrast 1251/2260
+    Running contrast 1301/2260
+    Running contrast 1351/2260
+    Running contrast 1401/2260
+    Running contrast 1451/2260
+    Running contrast 1501/2260
+    Running contrast 1551/2260
+    Running contrast 1601/2260
+    Running contrast 1651/2260
+    Running contrast 1701/2260
+    Running contrast 1751/2260
+    Running contrast 1801/2260
+    Running contrast 1851/2260
+    Running contrast 1901/2260
+    Running contrast 1951/2260
+    Running contrast 2001/2260
+    Running contrast 2051/2260
+    Running contrast 2101/2260
+    Running contrast 2151/2260
+    Running contrast 2201/2260
+    Running contrast 2251/2260
+    Running contrast 2260/2260
+Contrasts are completed in 13552.2 seconds
+
+    Writing:  ./data/l1000/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/A375/A375_batch_20_de.h5ad 
+
+    Rewriting h5ad file: ./data/l1000/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/A375/A375_batch_20_de.h5ad 
+    Removed X matrix
+    Rewriting h5ad file is done!
+✓ Cell line completed in 13655.2 seconds
+
+DE analysis completed!
+
+Total runtime: 13763.2 seconds
