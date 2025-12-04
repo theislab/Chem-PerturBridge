@@ -119,6 +119,11 @@ cd /op3_v2
 
 **3.2** To start a SLURM-based DGE (Differential Gene Expression) pipeline, you need to execute a wrapper script (`./run_pipelines/run_deg.sh`), which allows to run dataset-specific DGE pipelines:
 
+The DEG pipeline consists of three main steps:
+1. **Preprocessing**: Processes pseudobulk data and adds perturbation labels (`run_processing_pseudobulk.py`)
+2. **DGE Analysis**: Performs differential gene expression analysis using limma/edgeR (`run_deg.R`)
+3. **Aggregation**: Aggregates batched results into final output files (`aggregating.py`)
+
 You can execute it with following arguments:
 ```
 -s if this flag is included, then the script is executed for a subsample of a dataset, default=false
@@ -126,13 +131,21 @@ You can execute it with following arguments:
 -h if this flag is included, then the help is printed, default=false
 -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
 -q if this flag is included, then samples that did not pass quality control are filtered out, default=false
--d it is a required flag specifying which dataset should be processed: sciplex | tahoe
+-n if this flag is included, then the dataset is already normalized and normalization steps are skipped, default=false
+-d it is a required flag specifying which dataset should be processed: sciplex | tahoe | l1000
 -p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
 ```
+
 For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode you need to run:
 ```
 cd /op3_v2
 ./run_pipelines/run_deg.sh -s -j -d sciplex -p group_all_replicates
+```
+
+For a normalized dataset (e.g., L1000) with separate_replicates parameter:
+```
+cd /op3_v2
+./run_pipelines/run_deg.sh -d l1000 -p separate_replicates -j -n
 ```
 
 # Project structure:
@@ -149,7 +162,16 @@ The structure of the repo:
 │       │       └── parameter_name (group_all_replicates or separate_replicates)
 │       │           └── qc_true (or qc_false)
 │       │               └── filter_min_cells_f
-│       │                   └── deg_*.out, deg_*.err
+│       │                   ├── preprocessing/
+│       │                   │   └── deg_processing_pseudobulk.*.out, *.err
+│       │                   ├── deg/
+│       │                   │   ├── celltype1/
+│       │                   │   │   └── deg.*.out, *.err
+│       │                   │   ├── celltype2/
+│       │                   │   │   └── deg.*.out, *.err
+│       │                   │   └── ...
+│       │                   └── aggregation/
+│       │                       └── deg_aggregation.*.out, *.err
 │       └── ...
 ├── pipelines
 │   ├── common
@@ -175,6 +197,7 @@ The structure of the repo:
 │   ├── deg
 │   │   ├── run_deg.R
 │   │   ├── run_processing_pseudobulk.py
+│   │   ├── aggregating.py
 │   │   └── subsampling.R
 │   ├── downloading
 │   │   └── run_downloading_datasets.py
@@ -204,9 +227,18 @@ The structure of the `data` folder:
 │   │       ├──full
 │   │       │   ├──qc_true
 │   │       │   │   ├──filter_min_cells_0
-│   │       │   │   │   ├──celltype1_de.h5ad
-│   │       │   │   │   ├──celltype2_de.h5ad
-│   │       │   │   │   └──...
+│   │       │   │   │   ├──intermediate/
+│   │       │   │   │   │   ├──celltype1/
+│   │       │   │   │   │   │   ├──batch_1.h5ad
+│   │       │   │   │   │   │   ├──batch_2.h5ad
+│   │       │   │   │   │   │   └──...
+│   │       │   │   │   │   ├──celltype2/
+│   │       │   │   │   │   │   └──...
+│   │       │   │   │   │   └──...
+│   │       │   │   │   └──results/
+│   │       │   │   │       ├──celltype1_de.h5ad
+│   │       │   │   │       ├──celltype2_de.h5ad
+│   │       │   │   │       └──...
 │   │       │   │   ├──filter_min_cells_50
 │   │       │   │   │   └──...
 │   │       │   │   └──...
@@ -217,8 +249,11 @@ The structure of the `data` folder:
 │   │           │   └──...
 │   │           └──qc_false
 │   │               └──filter_min_cells_0
-│   │                   ├──celltype1_de.h5ad
-│   │                   └──...
+│   │                   ├──intermediate/
+│   │                   │   └──...
+│   │                   └──results/
+│   │                       ├──celltype1_de.h5ad
+│   │                       └──...
 │   ├──raw
 │   │   ├──dataset_i.h5ad
 │   │   ├──dataset_i_subsample.h5ad (optionally)
