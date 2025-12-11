@@ -1,0 +1,45 @@
+pseudobulk_sciplex.28976923.out:> Work with a full version
+pseudobulk_sciplex.28976923.out:> Download dataset
+pseudobulk_sciplex.28976923.out:2025-09-26 16:16:38 | [INFO] Download and save an anndata file to ./data/sciplex/raw/srivatsan20_sciplex3.h5ad
+pseudobulk_sciplex.28976923.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+pseudobulk_sciplex.28976923.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+pseudobulk_sciplex.28976923.out:[92m→[0m connected lamindb: laminlabs/pertdata
+pseudobulk_sciplex.28976923.out:2025-09-26 16:21:58 | [INFO] An .obs file already exists
+pseudobulk_sciplex.28976923.out:2025-09-26 16:22:00 | [INFO] A .var file already exists
+pseudobulk_sciplex.28976923.out:2025-09-26 16:22:00 | [INFO] All data is saved
+pseudobulk_sciplex.28976923.out:> Running pseudobulking
+pseudobulk_sciplex.28976923.out:2025-09-26 16:25:27 | [INFO] Read data from ./data/sciplex/raw/srivatsan20_sciplex3.h5ad
+pseudobulk_sciplex.28976923.out:2025-09-26 16:26:10 | [INFO] Read data from ./data/sciplex/raw/srivatsan20_sciplex3_obs.parquet
+pseudobulk_sciplex.28976923.out:2025-09-26 16:26:14 | [INFO] Read data from ./data/sciplex/raw/srivatsan20_sciplex3_var.parquet
+pseudobulk_sciplex.28976923.out:2025-09-26 16:26:14 | [INFO] Merge datasets
+pseudobulk_sciplex.28976923.out:2025-09-26 16:26:15 | [INFO] Standardize anndata
+pseudobulk_sciplex.28976923.out:2025-09-26 16:27:23 | [INFO] Mapping drugs to PubChem idx
+pseudobulk_sciplex.28976923.out:2025-09-26 16:27:24 | [INFO] Looking up 188 new perturbations on PubChem...
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:12 | [INFO] Determine groupby fields
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:12 | [INFO] Initial adata size: (799317, 58302)
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:12 | [INFO] Filter by counts
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:14 | [INFO]     n_obs: 799317 --> 425789
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:14 | [INFO]     n_var: 58302 --> 58302
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:14 | [INFO]     n_ct: 3 --> 3
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:14 | [INFO]     n_pa: 188 --> 188
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:14 | [INFO] Filter by nans
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:15 | [INFO]     n_obs: 425789 --> 412454
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:15 | [INFO]     n_var: 58302 --> 58302
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:15 | [INFO]     n_ct: 3 --> 3
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:15 | [INFO]     n_pa: 188 --> 188
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:15 | [INFO] Filter by humanMALAT1
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:20 | [INFO]     n_obs: 412454 --> 294037
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:20 | [INFO]     n_var: 58302 --> 58302
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:20 | [INFO]     n_ct: 3 --> 3
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:20 | [INFO]     n_pa: 188 --> 188
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:20 | [INFO] Final adata size: (294037, 58302)
+pseudobulk_sciplex.28976923.out:2025-09-26 16:29:20 | [INFO] Build pseudobulk
+pseudobulk_sciplex.28976923.out:2025-09-26 16:37:05 | [INFO] Process pseudobulk
+pseudobulk_sciplex.28976923.out:2025-09-26 16:37:14 | [INFO] Save data to ./data/sciplex/pseudobulk/full/srivatsan20_sciplex3.h5ad
+pseudobulk_sciplex.28976923.out:> Pseudobulking is done
+pseudobulk_sciplex.28976923.err:2025-09-26 16:27:32 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+pseudobulk_sciplex.28976923.err:2025-09-26 16:27:46 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+pseudobulk_sciplex.28976923.err:2025-09-26 16:27:56 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+pseudobulk_sciplex.28976923.err:2025-09-26 16:28:12 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+pseudobulk_sciplex.28976923.err:2025-09-26 16:28:18 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+pseudobulk_sciplex.28976923.err:2025-09-26 16:28:52 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)

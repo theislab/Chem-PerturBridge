@@ -1,7 +1,0 @@
-2025-09-12 22:21:31 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
-2025-09-12 22:21:45 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
-2025-09-12 22:21:50 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
-2025-09-12 22:21:59 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
-2025-09-12 22:22:00 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
-2025-09-12 22:22:02 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
-2025-09-12 22:22:10 | [WARNING] PubChem lookup failed for 'canagliflozin': PubChem HTTP Error 503 PUGREST.ServerBusy: Too many requests or server too busy. Retry 0.

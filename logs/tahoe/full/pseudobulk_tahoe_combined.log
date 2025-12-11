@@ -1,0 +1,560 @@
+pseudobulk_tahoe.out:> Work with a full version
+pseudobulk_tahoe.out:> Download dataset
+pseudobulk_tahoe.out:Submitted batch job 28650473
+pseudobulk_tahoe.out:> Running pseudobulking
+pseudobulk_tahoe.out:Submitted batch job 28650875
+pseudobulk_tahoe.out:> Pseudobulking is done
+pseudobulk_tahoe.out:> Running combining datasets
+pseudobulk_tahoe.out:Submitted batch job 28668212
+pseudobulk_tahoe.out:> Combining datasets is done
+plate1_pseudobulk_tahoe_download.28650473_1.out:2025-09-14 12:56:53 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate1.h5ad
+plate1_pseudobulk_tahoe_download.28650473_1.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate1_pseudobulk_tahoe_download.28650473_1.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate1_pseudobulk_tahoe_download.28650473_1.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate1_pseudobulk_tahoe_download.28650473_1.out:2025-09-14 13:26:47 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate1_obs.parquet
+plate1_pseudobulk_tahoe_download.28650473_1.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate1_pseudobulk_tahoe_download.28650473_1.out:2025-09-14 13:27:26 | [INFO] A .var file already exists
+plate1_pseudobulk_tahoe_download.28650473_1.out:2025-09-14 13:27:26 | [INFO] All data is saved
+plate1_pseudobulk_tahoe_download.28650473_1.err:2025-09-14 12:56:53 | [WARNING] [Errno 17] File exists: './data/tahoe/raw'
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:25:07 | [INFO] Read data from ./data/tahoe/raw/plate1.h5ad
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:29:51 | [INFO] Read data from ./data/tahoe/raw/plate1_obs.parquet
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:30:00 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:30:00 | [INFO] Merge datasets
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:30:08 | [INFO] Standardize anndata
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:30:17 | [INFO] Mapping drugs to PubChem idx
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:30:19 | [INFO] Looking up 93 new perturbations on PubChem...
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:16 | [INFO] Determine groupby fields
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:16 | [INFO] Initial adata size: (5481420, 62710)
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:16 | [INFO] Filter by counts
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:32 | [INFO]     n_obs: 5481420 --> 5368941
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:32 | [INFO]     n_var: 62710 --> 62710
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:32 | [INFO]     n_ct: 50 --> 50
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:32 | [INFO]     n_pa: 93 --> 93
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:32 | [INFO] Filter by nans
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:46 | [INFO]     n_obs: 5368941 --> 5368941
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:46 | [INFO]     n_var: 62710 --> 62710
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:46 | [INFO]     n_ct: 50 --> 50
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:46 | [INFO]     n_pa: 93 --> 93
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:31:46 | [INFO] Filter by humanMALAT1
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:32:29 | [INFO]     n_obs: 5368941 --> 5362279
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:32:29 | [INFO]     n_var: 62710 --> 62710
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:32:29 | [INFO]     n_ct: 50 --> 50
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:32:29 | [INFO]     n_pa: 93 --> 93
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:32:36 | [INFO] Final adata size: (5362279, 62710)
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 15:32:36 | [INFO] Build pseudobulk
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 17:30:06 | [INFO] Process pseudobulk
+plate1_pseudobulk_tahoe_process.28650875_1.out:2025-09-14 17:30:18 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate1.h5ad
+plate1_pseudobulk_tahoe_process.28650875_1.err:2025-09-14 15:31:09 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate2_pseudobulk_tahoe_download.28650473_2.out:2025-09-14 12:56:53 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate2.h5ad
+plate2_pseudobulk_tahoe_download.28650473_2.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate2_pseudobulk_tahoe_download.28650473_2.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate2_pseudobulk_tahoe_download.28650473_2.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate2_pseudobulk_tahoe_download.28650473_2.out:2025-09-14 13:41:12 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate2_obs.parquet
+plate2_pseudobulk_tahoe_download.28650473_2.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate2_pseudobulk_tahoe_download.28650473_2.out:2025-09-14 13:42:18 | [INFO] A .var file already exists
+plate2_pseudobulk_tahoe_download.28650473_2.out:2025-09-14 13:42:18 | [INFO] All data is saved
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:34:20 | [INFO] Read data from ./data/tahoe/raw/plate2.h5ad
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:41:02 | [INFO] Read data from ./data/tahoe/raw/plate2_obs.parquet
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:41:15 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:41:15 | [INFO] Merge datasets
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:41:27 | [INFO] Standardize anndata
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:41:40 | [INFO] Mapping drugs to PubChem idx
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:41:45 | [INFO] Looking up 93 new perturbations on PubChem...
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:42:45 | [INFO] Determine groupby fields
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:42:45 | [INFO] Initial adata size: (8064658, 62710)
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:42:45 | [INFO] Filter by counts
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:08 | [INFO]     n_obs: 8064658 --> 7773761
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:08 | [INFO]     n_var: 62710 --> 62710
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:08 | [INFO]     n_ct: 50 --> 50
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:08 | [INFO]     n_pa: 93 --> 93
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:08 | [INFO] Filter by nans
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:29 | [INFO]     n_obs: 7773761 --> 7773761
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:29 | [INFO]     n_var: 62710 --> 62710
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:29 | [INFO]     n_ct: 50 --> 50
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:29 | [INFO]     n_pa: 93 --> 93
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:43:29 | [INFO] Filter by humanMALAT1
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:44:36 | [INFO]     n_obs: 7773761 --> 7762570
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:44:36 | [INFO]     n_var: 62710 --> 62710
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:44:36 | [INFO]     n_ct: 50 --> 50
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:44:36 | [INFO]     n_pa: 93 --> 93
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:44:47 | [INFO] Final adata size: (7762570, 62710)
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 17:44:47 | [INFO] Build pseudobulk
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 20:05:20 | [INFO] Process pseudobulk
+plate2_pseudobulk_tahoe_process.28650875_2.out:2025-09-14 20:05:32 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate2.h5ad
+plate2_pseudobulk_tahoe_process.28650875_2.err:2025-09-14 17:42:35 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate3_pseudobulk_tahoe_download.28650473_3.out:2025-09-14 12:56:53 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate3.h5ad
+plate3_pseudobulk_tahoe_download.28650473_3.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate3_pseudobulk_tahoe_download.28650473_3.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate3_pseudobulk_tahoe_download.28650473_3.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate3_pseudobulk_tahoe_download.28650473_3.out:2025-09-14 13:17:01 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate3_obs.parquet
+plate3_pseudobulk_tahoe_download.28650473_3.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate3_pseudobulk_tahoe_download.28650473_3.out:2025-09-14 13:18:42 | [INFO] Download and save a .var file to ./data/tahoe/raw/var.parquet
+plate3_pseudobulk_tahoe_download.28650473_3.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate3_pseudobulk_tahoe_download.28650473_3.out:2025-09-14 13:18:43 | [INFO] All data is saved
+plate3_pseudobulk_tahoe_download.28650473_3.err:2025-09-14 12:56:53 | [WARNING] [Errno 17] File exists: './data/tahoe/raw'
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:09:18 | [INFO] Read data from ./data/tahoe/raw/plate3.h5ad
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:12:44 | [INFO] Read data from ./data/tahoe/raw/plate3_obs.parquet
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:12:53 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:12:53 | [INFO] Merge datasets
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:13:00 | [INFO] Standardize anndata
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:13:06 | [INFO] Mapping drugs to PubChem idx
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:13:09 | [INFO] Looking up 93 new perturbations on PubChem...
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:12 | [INFO] Determine groupby fields
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:12 | [INFO] Initial adata size: (4705402, 62710)
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:12 | [INFO] Filter by counts
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:24 | [INFO]     n_obs: 4705402 --> 4205352
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:24 | [INFO]     n_var: 62710 --> 62710
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:24 | [INFO]     n_ct: 50 --> 50
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:24 | [INFO]     n_pa: 93 --> 93
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:24 | [INFO] Filter by nans
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:35 | [INFO]     n_obs: 4205352 --> 4205352
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:35 | [INFO]     n_var: 62710 --> 62710
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:35 | [INFO]     n_ct: 50 --> 50
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:35 | [INFO]     n_pa: 93 --> 93
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:14:35 | [INFO] Filter by humanMALAT1
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:15:07 | [INFO]     n_obs: 4205352 --> 4195473
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:15:07 | [INFO]     n_var: 62710 --> 62710
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:15:07 | [INFO]     n_ct: 50 --> 50
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:15:07 | [INFO]     n_pa: 93 --> 93
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:15:12 | [INFO] Final adata size: (4195473, 62710)
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 20:15:12 | [INFO] Build pseudobulk
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 21:45:53 | [INFO] Process pseudobulk
+plate3_pseudobulk_tahoe_process.28650875_3.out:2025-09-14 21:46:04 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate3.h5ad
+plate3_pseudobulk_tahoe_process.28650875_3.err:2025-09-14 20:14:07 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate4_pseudobulk_tahoe_download.28650473_4.out:2025-09-14 12:56:53 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate4.h5ad
+plate4_pseudobulk_tahoe_download.28650473_4.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate4_pseudobulk_tahoe_download.28650473_4.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate4_pseudobulk_tahoe_download.28650473_4.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate4_pseudobulk_tahoe_download.28650473_4.out:2025-09-14 13:34:57 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate4_obs.parquet
+plate4_pseudobulk_tahoe_download.28650473_4.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate4_pseudobulk_tahoe_download.28650473_4.out:2025-09-14 13:35:49 | [INFO] A .var file already exists
+plate4_pseudobulk_tahoe_download.28650473_4.out:2025-09-14 13:35:49 | [INFO] All data is saved
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:50:03 | [INFO] Read data from ./data/tahoe/raw/plate4.h5ad
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:55:29 | [INFO] Read data from ./data/tahoe/raw/plate4_obs.parquet
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:55:41 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:55:41 | [INFO] Merge datasets
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:55:52 | [INFO] Standardize anndata
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:56:01 | [INFO] Mapping drugs to PubChem idx
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:56:06 | [INFO] Looking up 95 new perturbations on PubChem...
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:10 | [INFO] Determine groupby fields
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:10 | [INFO] Initial adata size: (7004356, 62710)
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:10 | [INFO] Filter by counts
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:29 | [INFO]     n_obs: 7004356 --> 6733865
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:29 | [INFO]     n_var: 62710 --> 62710
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:29 | [INFO]     n_ct: 50 --> 50
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:29 | [INFO]     n_pa: 95 --> 95
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:29 | [INFO] Filter by nans
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:47 | [INFO]     n_obs: 6733865 --> 6733865
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:47 | [INFO]     n_var: 62710 --> 62710
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:47 | [INFO]     n_ct: 50 --> 50
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:47 | [INFO]     n_pa: 95 --> 95
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:57:47 | [INFO] Filter by humanMALAT1
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:58:41 | [INFO]     n_obs: 6733865 --> 6728811
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:58:41 | [INFO]     n_var: 62710 --> 62710
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:58:41 | [INFO]     n_ct: 50 --> 50
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:58:41 | [INFO]     n_pa: 95 --> 95
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:58:50 | [INFO] Final adata size: (6728811, 62710)
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-14 21:58:50 | [INFO] Build pseudobulk
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-15 00:29:30 | [INFO] Process pseudobulk
+plate4_pseudobulk_tahoe_process.28650875_4.out:2025-09-15 00:29:42 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate4.h5ad
+plate4_pseudobulk_tahoe_process.28650875_4.err:2025-09-14 21:56:23 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate4_pseudobulk_tahoe_process.28650875_4.err:2025-09-14 21:57:01 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate5_pseudobulk_tahoe_download.28650473_5.out:2025-09-14 13:19:25 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate5.h5ad
+plate5_pseudobulk_tahoe_download.28650473_5.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate5_pseudobulk_tahoe_download.28650473_5.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate5_pseudobulk_tahoe_download.28650473_5.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate5_pseudobulk_tahoe_download.28650473_5.out:2025-09-14 13:50:30 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate5_obs.parquet
+plate5_pseudobulk_tahoe_download.28650473_5.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate5_pseudobulk_tahoe_download.28650473_5.out:2025-09-14 13:51:51 | [INFO] A .var file already exists
+plate5_pseudobulk_tahoe_download.28650473_5.out:2025-09-14 13:51:51 | [INFO] All data is saved
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:33:56 | [INFO] Read data from ./data/tahoe/raw/plate5.h5ad
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:38:59 | [INFO] Read data from ./data/tahoe/raw/plate5_obs.parquet
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:39:11 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:39:11 | [INFO] Merge datasets
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:39:21 | [INFO] Standardize anndata
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:39:29 | [INFO] Mapping drugs to PubChem idx
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:39:32 | [INFO] Looking up 95 new perturbations on PubChem...
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:40:38 | [INFO] Determine groupby fields
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:40:38 | [INFO] Initial adata size: (6419498, 62710)
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:40:38 | [INFO] Filter by counts
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:40:55 | [INFO]     n_obs: 6419498 --> 5988580
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:40:55 | [INFO]     n_var: 62710 --> 62710
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:40:55 | [INFO]     n_ct: 50 --> 50
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:40:55 | [INFO]     n_pa: 95 --> 95
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:40:55 | [INFO] Filter by nans
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:41:11 | [INFO]     n_obs: 5988580 --> 5988580
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:41:11 | [INFO]     n_var: 62710 --> 62710
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:41:11 | [INFO]     n_ct: 50 --> 50
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:41:11 | [INFO]     n_pa: 95 --> 95
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:41:11 | [INFO] Filter by humanMALAT1
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:41:59 | [INFO]     n_obs: 5988580 --> 5981669
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:41:59 | [INFO]     n_var: 62710 --> 62710
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:41:59 | [INFO]     n_ct: 50 --> 50
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:41:59 | [INFO]     n_pa: 95 --> 95
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:42:07 | [INFO] Final adata size: (5981669, 62710)
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 00:42:07 | [INFO] Build pseudobulk
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 02:54:20 | [INFO] Process pseudobulk
+plate5_pseudobulk_tahoe_process.28650875_5.out:2025-09-15 02:54:31 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate5.h5ad
+plate5_pseudobulk_tahoe_process.28650875_5.err:2025-09-15 00:39:50 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate5_pseudobulk_tahoe_process.28650875_5.err:2025-09-15 00:40:30 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate6_pseudobulk_tahoe_download.28650473_6.out:2025-09-14 13:27:36 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate6.h5ad
+plate6_pseudobulk_tahoe_download.28650473_6.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate6_pseudobulk_tahoe_download.28650473_6.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate6_pseudobulk_tahoe_download.28650473_6.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate6_pseudobulk_tahoe_download.28650473_6.out:2025-09-14 14:12:06 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate6_obs.parquet
+plate6_pseudobulk_tahoe_download.28650473_6.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate6_pseudobulk_tahoe_download.28650473_6.out:2025-09-14 14:13:32 | [INFO] A .var file already exists
+plate6_pseudobulk_tahoe_download.28650473_6.out:2025-09-14 14:13:32 | [INFO] All data is saved
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 02:58:24 | [INFO] Read data from ./data/tahoe/raw/plate6.h5ad
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:05:08 | [INFO] Read data from ./data/tahoe/raw/plate6_obs.parquet
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:05:20 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:05:20 | [INFO] Merge datasets
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:05:32 | [INFO] Standardize anndata
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:05:43 | [INFO] Mapping drugs to PubChem idx
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:05:48 | [INFO] Looking up 95 new perturbations on PubChem...
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:06:53 | [INFO] Determine groupby fields
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:06:53 | [INFO] Initial adata size: (7545393, 62710)
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:06:53 | [INFO] Filter by counts
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:14 | [INFO]     n_obs: 7545393 --> 7343169
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:14 | [INFO]     n_var: 62710 --> 62710
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:14 | [INFO]     n_ct: 50 --> 50
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:14 | [INFO]     n_pa: 95 --> 95
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:14 | [INFO] Filter by nans
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:34 | [INFO]     n_obs: 7343169 --> 7343169
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:34 | [INFO]     n_var: 62710 --> 62710
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:34 | [INFO]     n_ct: 50 --> 50
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:34 | [INFO]     n_pa: 95 --> 95
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:07:34 | [INFO] Filter by humanMALAT1
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:08:36 | [INFO]     n_obs: 7343169 --> 7327857
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:08:36 | [INFO]     n_var: 62710 --> 62710
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:08:36 | [INFO]     n_ct: 50 --> 50
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:08:36 | [INFO]     n_pa: 95 --> 95
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:08:46 | [INFO] Final adata size: (7327857, 62710)
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 03:08:46 | [INFO] Build pseudobulk
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 05:45:07 | [INFO] Process pseudobulk
+plate6_pseudobulk_tahoe_process.28650875_6.out:2025-09-15 05:45:20 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate6.h5ad
+plate6_pseudobulk_tahoe_process.28650875_6.err:2025-09-15 03:06:06 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate6_pseudobulk_tahoe_process.28650875_6.err:2025-09-15 03:06:44 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate7_pseudobulk_tahoe_download.28650473_7.out:2025-09-14 13:36:08 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate7.h5ad
+plate7_pseudobulk_tahoe_download.28650473_7.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate7_pseudobulk_tahoe_download.28650473_7.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate7_pseudobulk_tahoe_download.28650473_7.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate7_pseudobulk_tahoe_download.28650473_7.out:2025-09-14 14:00:49 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate7_obs.parquet
+plate7_pseudobulk_tahoe_download.28650473_7.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate7_pseudobulk_tahoe_download.28650473_7.out:2025-09-14 14:01:43 | [INFO] A .var file already exists
+plate7_pseudobulk_tahoe_download.28650473_7.out:2025-09-14 14:01:43 | [INFO] All data is saved
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:47:34 | [INFO] Read data from ./data/tahoe/raw/plate7.h5ad
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:51:51 | [INFO] Read data from ./data/tahoe/raw/plate7_obs.parquet
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:52:00 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:52:00 | [INFO] Merge datasets
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:52:08 | [INFO] Standardize anndata
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:52:16 | [INFO] Mapping drugs to PubChem idx
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:52:19 | [INFO] Looking up 94 new perturbations on PubChem...
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:15 | [INFO] Determine groupby fields
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:15 | [INFO] Initial adata size: (5692117, 62710)
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:15 | [INFO] Filter by counts
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:30 | [INFO]     n_obs: 5692117 --> 5280327
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:30 | [INFO]     n_var: 62710 --> 62710
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:30 | [INFO]     n_ct: 50 --> 50
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:30 | [INFO]     n_pa: 94 --> 94
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:30 | [INFO] Filter by nans
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:44 | [INFO]     n_obs: 5280327 --> 5280327
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:44 | [INFO]     n_var: 62710 --> 62710
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:44 | [INFO]     n_ct: 50 --> 50
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:44 | [INFO]     n_pa: 94 --> 94
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:53:44 | [INFO] Filter by humanMALAT1
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:54:25 | [INFO]     n_obs: 5280327 --> 5274369
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:54:25 | [INFO]     n_var: 62710 --> 62710
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:54:25 | [INFO]     n_ct: 50 --> 50
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:54:25 | [INFO]     n_pa: 94 --> 94
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:54:32 | [INFO] Final adata size: (5274369, 62710)
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 05:54:32 | [INFO] Build pseudobulk
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 07:47:55 | [INFO] Process pseudobulk
+plate7_pseudobulk_tahoe_process.28650875_7.out:2025-09-15 07:48:06 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate7.h5ad
+plate7_pseudobulk_tahoe_process.28650875_7.err:2025-09-15 05:52:33 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate7_pseudobulk_tahoe_process.28650875_7.err:2025-09-15 05:52:40 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate7_pseudobulk_tahoe_process.28650875_7.err:2025-09-15 05:52:43 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate7_pseudobulk_tahoe_process.28650875_7.err:2025-09-15 05:52:49 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate7_pseudobulk_tahoe_process.28650875_7.err:2025-09-15 05:52:52 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate7_pseudobulk_tahoe_process.28650875_7.err:2025-09-15 05:53:08 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate8_pseudobulk_tahoe_download.28650473_8.out:2025-09-14 13:42:25 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate8.h5ad
+plate8_pseudobulk_tahoe_download.28650473_8.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate8_pseudobulk_tahoe_download.28650473_8.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate8_pseudobulk_tahoe_download.28650473_8.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate8_pseudobulk_tahoe_download.28650473_8.out:2025-09-14 14:29:10 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate8_obs.parquet
+plate8_pseudobulk_tahoe_download.28650473_8.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate8_pseudobulk_tahoe_download.28650473_8.out:2025-09-14 14:30:39 | [INFO] A .var file already exists
+plate8_pseudobulk_tahoe_download.28650473_8.out:2025-09-14 14:30:39 | [INFO] All data is saved
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:49:56 | [INFO] Read data from ./data/tahoe/raw/plate8.h5ad
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:57:11 | [INFO] Read data from ./data/tahoe/raw/plate8_obs.parquet
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:57:22 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:57:22 | [INFO] Merge datasets
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:57:36 | [INFO] Standardize anndata
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:57:48 | [INFO] Mapping drugs to PubChem idx
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:57:54 | [INFO] Looking up 94 new perturbations on PubChem...
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:58:53 | [INFO] Determine groupby fields
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:58:53 | [INFO] Initial adata size: (8880979, 62710)
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:58:53 | [INFO] Filter by counts
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:19 | [INFO]     n_obs: 8880979 --> 8595286
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:19 | [INFO]     n_var: 62710 --> 62710
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:19 | [INFO]     n_ct: 50 --> 50
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:19 | [INFO]     n_pa: 94 --> 94
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:19 | [INFO] Filter by nans
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:44 | [INFO]     n_obs: 8595286 --> 8595286
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:44 | [INFO]     n_var: 62710 --> 62710
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:44 | [INFO]     n_ct: 50 --> 50
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:44 | [INFO]     n_pa: 94 --> 94
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 07:59:44 | [INFO] Filter by humanMALAT1
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 08:00:59 | [INFO]     n_obs: 8595286 --> 8584995
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 08:00:59 | [INFO]     n_var: 62710 --> 62710
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 08:00:59 | [INFO]     n_ct: 50 --> 50
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 08:00:59 | [INFO]     n_pa: 94 --> 94
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 08:01:10 | [INFO] Final adata size: (8584995, 62710)
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 08:01:10 | [INFO] Build pseudobulk
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 11:19:12 | [INFO] Process pseudobulk
+plate8_pseudobulk_tahoe_process.28650875_8.out:2025-09-15 11:19:24 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate8.h5ad
+plate8_pseudobulk_tahoe_process.28650875_8.err:2025-09-15 07:58:08 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate8_pseudobulk_tahoe_process.28650875_8.err:2025-09-15 07:58:15 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate8_pseudobulk_tahoe_process.28650875_8.err:2025-09-15 07:58:17 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate8_pseudobulk_tahoe_process.28650875_8.err:2025-09-15 07:58:23 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate8_pseudobulk_tahoe_process.28650875_8.err:2025-09-15 07:58:26 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate8_pseudobulk_tahoe_process.28650875_8.err:2025-09-15 07:58:42 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate9_pseudobulk_tahoe_download.28650473_9.out:2025-09-14 13:52:10 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate9.h5ad
+plate9_pseudobulk_tahoe_download.28650473_9.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate9_pseudobulk_tahoe_download.28650473_9.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate9_pseudobulk_tahoe_download.28650473_9.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate9_pseudobulk_tahoe_download.28650473_9.out:2025-09-14 14:20:31 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate9_obs.parquet
+plate9_pseudobulk_tahoe_download.28650473_9.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate9_pseudobulk_tahoe_download.28650473_9.out:2025-09-14 14:21:37 | [INFO] A .var file already exists
+plate9_pseudobulk_tahoe_download.28650473_9.out:2025-09-14 14:21:37 | [INFO] All data is saved
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:23:24 | [INFO] Read data from ./data/tahoe/raw/plate9.h5ad
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:28:17 | [INFO] Read data from ./data/tahoe/raw/plate9_obs.parquet
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:28:29 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:28:29 | [INFO] Merge datasets
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:28:38 | [INFO] Standardize anndata
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:28:46 | [INFO] Mapping drugs to PubChem idx
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:28:49 | [INFO] Looking up 94 new perturbations on PubChem...
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:29:47 | [INFO] Determine groupby fields
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:29:47 | [INFO] Initial adata size: (5866669, 62710)
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:29:47 | [INFO] Filter by counts
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:03 | [INFO]     n_obs: 5866669 --> 5631389
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:03 | [INFO]     n_var: 62710 --> 62710
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:03 | [INFO]     n_ct: 50 --> 50
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:03 | [INFO]     n_pa: 94 --> 94
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:03 | [INFO] Filter by nans
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:18 | [INFO]     n_obs: 5631389 --> 5631389
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:18 | [INFO]     n_var: 62710 --> 62710
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:18 | [INFO]     n_ct: 50 --> 50
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:18 | [INFO]     n_pa: 94 --> 94
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:30:18 | [INFO] Filter by humanMALAT1
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:31:03 | [INFO]     n_obs: 5631389 --> 5624127
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:31:03 | [INFO]     n_var: 62710 --> 62710
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:31:03 | [INFO]     n_ct: 50 --> 50
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:31:03 | [INFO]     n_pa: 94 --> 94
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:31:10 | [INFO] Final adata size: (5624127, 62710)
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 11:31:10 | [INFO] Build pseudobulk
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 13:35:01 | [INFO] Process pseudobulk
+plate9_pseudobulk_tahoe_process.28650875_9.out:2025-09-15 13:35:13 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate9.h5ad
+plate9_pseudobulk_tahoe_process.28650875_9.err:2025-09-15 11:29:04 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate9_pseudobulk_tahoe_process.28650875_9.err:2025-09-15 11:29:11 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate9_pseudobulk_tahoe_process.28650875_9.err:2025-09-15 11:29:14 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate9_pseudobulk_tahoe_process.28650875_9.err:2025-09-15 11:29:21 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate9_pseudobulk_tahoe_process.28650875_9.err:2025-09-15 11:29:24 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate9_pseudobulk_tahoe_process.28650875_9.err:2025-09-15 11:29:40 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate10_pseudobulk_tahoe_download.28650473_10.out:2025-09-14 14:02:04 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate10.h5ad
+plate10_pseudobulk_tahoe_download.28650473_10.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate10_pseudobulk_tahoe_download.28650473_10.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate10_pseudobulk_tahoe_download.28650473_10.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate10_pseudobulk_tahoe_download.28650473_10.out:2025-09-14 14:41:27 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate10_obs.parquet
+plate10_pseudobulk_tahoe_download.28650473_10.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate10_pseudobulk_tahoe_download.28650473_10.out:2025-09-14 14:42:24 | [INFO] A .var file already exists
+plate10_pseudobulk_tahoe_download.28650473_10.out:2025-09-14 14:42:24 | [INFO] All data is saved
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:39:19 | [INFO] Read data from ./data/tahoe/raw/plate10.h5ad
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:45:36 | [INFO] Read data from ./data/tahoe/raw/plate10_obs.parquet
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:45:50 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:45:50 | [INFO] Merge datasets
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:46:03 | [INFO] Standardize anndata
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:46:15 | [INFO] Mapping drugs to PubChem idx
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:46:20 | [INFO] Looking up 95 new perturbations on PubChem...
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:47:25 | [INFO] Determine groupby fields
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:47:25 | [INFO] Initial adata size: (8044908, 62710)
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:47:25 | [INFO] Filter by counts
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:47:48 | [INFO]     n_obs: 8044908 --> 7818017
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:47:48 | [INFO]     n_var: 62710 --> 62710
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:47:48 | [INFO]     n_ct: 50 --> 50
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:47:48 | [INFO]     n_pa: 95 --> 95
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:47:48 | [INFO] Filter by nans
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:48:09 | [INFO]     n_obs: 7818017 --> 7818017
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:48:09 | [INFO]     n_var: 62710 --> 62710
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:48:09 | [INFO]     n_ct: 50 --> 50
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:48:09 | [INFO]     n_pa: 95 --> 95
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:48:09 | [INFO] Filter by humanMALAT1
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:49:10 | [INFO]     n_obs: 7818017 --> 7804836
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:49:10 | [INFO]     n_var: 62710 --> 62710
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:49:10 | [INFO]     n_ct: 50 --> 50
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:49:10 | [INFO]     n_pa: 95 --> 95
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:49:20 | [INFO] Final adata size: (7804836, 62710)
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 13:49:20 | [INFO] Build pseudobulk
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 17:28:27 | [INFO] Process pseudobulk
+plate10_pseudobulk_tahoe_process.28650875_10.out:2025-09-15 17:28:40 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate10.h5ad
+plate10_pseudobulk_tahoe_process.28650875_10.err:2025-09-15 13:46:23 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate10_pseudobulk_tahoe_process.28650875_10.err:2025-09-15 13:46:40 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate10_pseudobulk_tahoe_process.28650875_10.err:2025-09-15 13:47:01 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate10_pseudobulk_tahoe_process.28650875_10.err:2025-09-15 13:47:15 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate11_pseudobulk_tahoe_download.28650473_11.out:2025-09-14 14:13:57 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate11.h5ad
+plate11_pseudobulk_tahoe_download.28650473_11.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate11_pseudobulk_tahoe_download.28650473_11.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate11_pseudobulk_tahoe_download.28650473_11.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate11_pseudobulk_tahoe_download.28650473_11.out:2025-09-14 14:51:51 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate11_obs.parquet
+plate11_pseudobulk_tahoe_download.28650473_11.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate11_pseudobulk_tahoe_download.28650473_11.out:2025-09-14 14:53:08 | [INFO] A .var file already exists
+plate11_pseudobulk_tahoe_download.28650473_11.out:2025-09-14 14:53:08 | [INFO] All data is saved
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:33:31 | [INFO] Read data from ./data/tahoe/raw/plate11.h5ad
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:38:59 | [INFO] Read data from ./data/tahoe/raw/plate11_obs.parquet
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:39:12 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:39:12 | [INFO] Merge datasets
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:39:24 | [INFO] Standardize anndata
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:39:33 | [INFO] Mapping drugs to PubChem idx
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:39:38 | [INFO] Looking up 95 new perturbations on PubChem...
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:40:41 | [INFO] Determine groupby fields
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:40:41 | [INFO] Initial adata size: (7435869, 62710)
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:40:41 | [INFO] Filter by counts
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:02 | [INFO]     n_obs: 7435869 --> 7151098
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:02 | [INFO]     n_var: 62710 --> 62710
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:02 | [INFO]     n_ct: 50 --> 50
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:02 | [INFO]     n_pa: 95 --> 95
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:02 | [INFO] Filter by nans
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:21 | [INFO]     n_obs: 7151098 --> 7151098
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:21 | [INFO]     n_var: 62710 --> 62710
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:21 | [INFO]     n_ct: 50 --> 50
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:21 | [INFO]     n_pa: 95 --> 95
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:41:21 | [INFO] Filter by humanMALAT1
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:42:18 | [INFO]     n_obs: 7151098 --> 7144443
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:42:18 | [INFO]     n_var: 62710 --> 62710
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:42:18 | [INFO]     n_ct: 50 --> 50
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:42:18 | [INFO]     n_pa: 95 --> 95
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:42:28 | [INFO] Final adata size: (7144443, 62710)
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 17:42:28 | [INFO] Build pseudobulk
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 20:25:06 | [INFO] Process pseudobulk
+plate11_pseudobulk_tahoe_process.28650875_11.out:2025-09-15 20:25:18 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate11.h5ad
+plate11_pseudobulk_tahoe_process.28650875_11.err:2025-09-15 17:39:40 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate11_pseudobulk_tahoe_process.28650875_11.err:2025-09-15 17:39:57 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate11_pseudobulk_tahoe_process.28650875_11.err:2025-09-15 17:40:19 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate11_pseudobulk_tahoe_process.28650875_11.err:2025-09-15 17:40:32 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate12_pseudobulk_tahoe_download.28650473_12.out:2025-09-14 14:21:50 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate12.h5ad
+plate12_pseudobulk_tahoe_download.28650473_12.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate12_pseudobulk_tahoe_download.28650473_12.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate12_pseudobulk_tahoe_download.28650473_12.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate12_pseudobulk_tahoe_download.28650473_12.out:2025-09-14 15:21:56 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate12_obs.parquet
+plate12_pseudobulk_tahoe_download.28650473_12.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate12_pseudobulk_tahoe_download.28650473_12.out:2025-09-14 15:22:44 | [INFO] A .var file already exists
+plate12_pseudobulk_tahoe_download.28650473_12.out:2025-09-14 15:22:44 | [INFO] All data is saved
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:29:52 | [INFO] Read data from ./data/tahoe/raw/plate12.h5ad
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:38:45 | [INFO] Read data from ./data/tahoe/raw/plate12_obs.parquet
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:39:02 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:39:02 | [INFO] Merge datasets
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:39:18 | [INFO] Standardize anndata
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:39:36 | [INFO] Mapping drugs to PubChem idx
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:39:42 | [INFO] Looking up 95 new perturbations on PubChem...
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:40:49 | [INFO] Determine groupby fields
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:40:49 | [INFO] Initial adata size: (10487057, 62710)
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:40:49 | [INFO] Filter by counts
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:19 | [INFO]     n_obs: 10487057 --> 10270141
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:19 | [INFO]     n_var: 62710 --> 62710
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:19 | [INFO]     n_ct: 50 --> 50
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:19 | [INFO]     n_pa: 95 --> 95
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:19 | [INFO] Filter by nans
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:49 | [INFO]     n_obs: 10270141 --> 10270141
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:49 | [INFO]     n_var: 62710 --> 62710
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:49 | [INFO]     n_ct: 50 --> 50
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:49 | [INFO]     n_pa: 95 --> 95
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:41:49 | [INFO] Filter by humanMALAT1
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:43:17 | [INFO]     n_obs: 10270141 --> 10259477
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:43:17 | [INFO]     n_var: 62710 --> 62710
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:43:17 | [INFO]     n_ct: 50 --> 50
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:43:17 | [INFO]     n_pa: 95 --> 95
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:43:31 | [INFO] Final adata size: (10259477, 62710)
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-15 20:43:31 | [INFO] Build pseudobulk
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-16 03:11:15 | [INFO] Process pseudobulk
+plate12_pseudobulk_tahoe_process.28650875_12.out:2025-09-16 03:11:27 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate12.h5ad
+plate12_pseudobulk_tahoe_process.28650875_12.err:2025-09-15 20:39:46 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate12_pseudobulk_tahoe_process.28650875_12.err:2025-09-15 20:40:02 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate12_pseudobulk_tahoe_process.28650875_12.err:2025-09-15 20:40:23 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate12_pseudobulk_tahoe_process.28650875_12.err:2025-09-15 20:40:36 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate13_pseudobulk_tahoe_download.28650473_13.out:2025-09-14 14:30:49 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate13.h5ad
+plate13_pseudobulk_tahoe_download.28650473_13.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate13_pseudobulk_tahoe_download.28650473_13.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate13_pseudobulk_tahoe_download.28650473_13.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate13_pseudobulk_tahoe_download.28650473_13.out:2025-09-14 15:18:10 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate13_obs.parquet
+plate13_pseudobulk_tahoe_download.28650473_13.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate13_pseudobulk_tahoe_download.28650473_13.out:2025-09-14 15:21:06 | [INFO] A .var file already exists
+plate13_pseudobulk_tahoe_download.28650473_13.out:2025-09-14 15:21:06 | [INFO] All data is saved
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:16:04 | [INFO] Read data from ./data/tahoe/raw/plate13.h5ad
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:23:10 | [INFO] Read data from ./data/tahoe/raw/plate13_obs.parquet
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:23:26 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:23:26 | [INFO] Merge datasets
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:23:41 | [INFO] Standardize anndata
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:23:59 | [INFO] Mapping drugs to PubChem idx
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:24:05 | [INFO] Looking up 44 new perturbations on PubChem...
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:24:45 | [INFO] Determine groupby fields
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:24:45 | [INFO] Initial adata size: (8501658, 62710)
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:24:45 | [INFO] Filter by counts
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:13 | [INFO]     n_obs: 8501658 --> 8170202
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:13 | [INFO]     n_var: 62710 --> 62710
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:13 | [INFO]     n_ct: 50 --> 50
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:13 | [INFO]     n_pa: 44 --> 44
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:13 | [INFO] Filter by nans
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:38 | [INFO]     n_obs: 8170202 --> 8170202
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:38 | [INFO]     n_var: 62710 --> 62710
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:38 | [INFO]     n_ct: 50 --> 50
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:38 | [INFO]     n_pa: 44 --> 44
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:25:38 | [INFO] Filter by humanMALAT1
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:26:56 | [INFO]     n_obs: 8170202 --> 8159906
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:26:56 | [INFO]     n_var: 62710 --> 62710
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:26:56 | [INFO]     n_ct: 50 --> 50
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:26:56 | [INFO]     n_pa: 44 --> 44
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:27:08 | [INFO] Final adata size: (8159906, 62710)
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 03:27:08 | [INFO] Build pseudobulk
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 06:20:51 | [INFO] Process pseudobulk
+plate13_pseudobulk_tahoe_process.28650875_13.out:2025-09-16 06:21:04 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate13.h5ad
+plate13_pseudobulk_tahoe_process.28650875_13.err:2025-09-16 03:24:19 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate14_pseudobulk_tahoe_download.28650473_14.out:2025-09-14 14:42:37 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate14.h5ad
+plate14_pseudobulk_tahoe_download.28650473_14.out:[92m→[0m the database (1.11a1) is ahead of your installed lamindb package (1.10.0)
+plate14_pseudobulk_tahoe_download.28650473_14.out:[92m→[0m consider updating lamindb: pip install lamindb>=1.11
+plate14_pseudobulk_tahoe_download.28650473_14.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate14_pseudobulk_tahoe_download.28650473_14.out:2025-09-14 15:19:24 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate14_obs.parquet
+plate14_pseudobulk_tahoe_download.28650473_14.out:[92m→[0m connected lamindb: laminlabs/pertdata
+plate14_pseudobulk_tahoe_download.28650473_14.out:2025-09-14 15:20:02 | [INFO] A .var file already exists
+plate14_pseudobulk_tahoe_download.28650473_14.out:2025-09-14 15:20:02 | [INFO] All data is saved
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:25:35 | [INFO] Read data from ./data/tahoe/raw/plate14.h5ad
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:31:41 | [INFO] Read data from ./data/tahoe/raw/plate14_obs.parquet
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:31:54 | [INFO] Read data from ./data/tahoe/raw/var.parquet
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:31:54 | [INFO] Merge datasets
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:32:05 | [INFO] Standardize anndata
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:32:16 | [INFO] Mapping drugs to PubChem idx
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:32:21 | [INFO] Looking up 95 new perturbations on PubChem...
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:33:21 | [INFO] Determine groupby fields
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:33:21 | [INFO] Initial adata size: (6518806, 62710)
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:33:21 | [INFO] Filter by counts
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:33:41 | [INFO]     n_obs: 6518806 --> 6278868
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:33:41 | [INFO]     n_var: 62710 --> 62710
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:33:41 | [INFO]     n_ct: 50 --> 50
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:33:41 | [INFO]     n_pa: 95 --> 95
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:33:41 | [INFO] Filter by nans
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:34:00 | [INFO]     n_obs: 6278868 --> 6278868
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:34:00 | [INFO]     n_var: 62710 --> 62710
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:34:00 | [INFO]     n_ct: 50 --> 50
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:34:00 | [INFO]     n_pa: 95 --> 95
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:34:00 | [INFO] Filter by humanMALAT1
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:35:00 | [INFO]     n_obs: 6278868 --> 6273332
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:35:00 | [INFO]     n_var: 62710 --> 62710
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:35:00 | [INFO]     n_ct: 50 --> 50
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:35:00 | [INFO]     n_pa: 95 --> 95
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:35:09 | [INFO] Final adata size: (6273332, 62710)
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 06:35:09 | [INFO] Build pseudobulk
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 09:18:28 | [INFO] Process pseudobulk
+plate14_pseudobulk_tahoe_process.28650875_14.out:2025-09-16 09:18:41 | [INFO] Save data to ./data/tahoe/pseudobulk_to_merge/full/plate14.h5ad
+plate14_pseudobulk_tahoe_process.28650875_14.err:2025-09-16 06:32:36 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+plate14_pseudobulk_tahoe_process.28650875_14.err:2025-09-16 06:33:12 | [INFO] PubChem HTTP Error 404 PUGREST.NotFound: No CID found (No CID found that matches the given name)
+pseudobulk_tahoe_unite.28668212.out:2025-09-16 09:22:27 | [INFO] Unite datasets from several plates
+pseudobulk_tahoe_unite.28668212.out:2025-09-16 09:25:17 | [INFO] Save the united dataset to ./data/tahoe/pseudobulk/full/tahoe.h5ad

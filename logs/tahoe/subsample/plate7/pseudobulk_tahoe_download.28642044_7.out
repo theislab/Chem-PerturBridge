@@ -1,6 +1,0 @@
-2025-09-12 21:33:27 | [INFO] Download and save an anndata file to ./data/tahoe/raw/plate7_subsample.h5ad
-[92m→[0m connected lamindb: laminlabs/pertdata
-2025-09-12 21:37:53 | [INFO] Download and save an .obs file to ./data/tahoe/raw/plate7_obs.parquet
-[92m→[0m connected lamindb: laminlabs/pertdata
-2025-09-12 21:38:20 | [INFO] A .var file already exists
-2025-09-12 21:38:20 | [INFO] All data is saved

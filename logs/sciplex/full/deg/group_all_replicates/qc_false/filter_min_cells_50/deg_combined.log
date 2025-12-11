@@ -1,0 +1,398 @@
+deg_sciplex.out:> Do not filter samples that did not pass quality control
+deg_sciplex.out:> Work with a full version
+deg_sciplex.out:> Mode: PARALLEL (array jobs per cell type)
+deg_sciplex.out:> Using config: ./pipelines/sciplex/configs/deg/config.json
+deg_sciplex.out:> Preprocess pseudobulk with a group_all_replicates parameter
+deg_sciplex.out:> Running preprocessing pseudobulk
+deg_sciplex.out:Submitted batch job 31124271
+deg_sciplex.out:> Preprocessing pseudobulk is done
+deg_sciplex.out:> Starting DGE analysis with a group_all_replicates parameter
+deg_sciplex.out:  Found 3 files to process
+deg_sciplex.out:  Submitting array job [3 jobs, max 10 concurrent]...
+deg_sciplex.out:Submitted batch job 31124344
+deg_sciplex.out:> DGE analysis is done
+deg_sciplex.out:> DGE pipeline is finished
+deg_processing_pseudobulk.31124271.out:2025-11-07 21:49:42 | [INFO] Read pseudobulk file
+deg_processing_pseudobulk.31124271.out:2025-11-07 21:49:47 | [INFO] Add perturbation label
+deg_processing_pseudobulk.31124271.out:2025-11-07 21:49:47 | [INFO] Save data
+deg_processing_pseudobulk.31124271.out:2025-11-07 21:50:15 | [INFO] Splitting into 3 cell types
+deg_processing_pseudobulk.31124271.out:2025-11-07 21:50:23 | [INFO]   Saved: CVCL_0004 (1535 obs)
+deg_processing_pseudobulk.31124271.out:2025-11-07 21:50:31 | [INFO]   Saved: CVCL_0023 (1910 obs)
+deg_processing_pseudobulk.31124271.out:2025-11-07 21:50:42 | [INFO]   Saved: CVCL_0031 (1529 obs)
+deg_analysis_31124344_0.out:
+deg_analysis_31124344_0.out:DE analysis started...
+deg_analysis_31124344_0.out:Loaded input file:  ./data/sciplex/pseudobulk_processed/group_rep/by_celltype/CVCL_0004_processed.h5ad 
+deg_analysis_31124344_0.out:Initial dimensions:  1535  samples ×  58302  genes
+deg_analysis_31124344_0.out:Filter samples with the low number of cells
+deg_analysis_31124344_0.out:    Filter threshold (min_cells):  50 
+deg_analysis_31124344_0.out:    n_obs:  1535 -->  948 
+deg_analysis_31124344_0.out:
+deg_analysis_31124344_0.out:▶︎ Processing cell_type  1 / 1 :  CVCL_0004 
+deg_analysis_31124344_0.out:    Filter controls by  pert_time_h  column
+deg_analysis_31124344_0.out:        n_obs:  948 -->  948 
+deg_analysis_31124344_0.out:
+deg_analysis_31124344_0.out:    Running contrast 1/581
+deg_analysis_31124344_0.out:    Running contrast 6/581
+deg_analysis_31124344_0.out:    Running contrast 11/581
+deg_analysis_31124344_0.out:    Running contrast 16/581
+deg_analysis_31124344_0.out:    Running contrast 21/581
+deg_analysis_31124344_0.out:    Running contrast 26/581
+deg_analysis_31124344_0.out:    Running contrast 31/581
+deg_analysis_31124344_0.out:    Running contrast 36/581
+deg_analysis_31124344_0.out:    Running contrast 41/581
+deg_analysis_31124344_0.out:    Running contrast 46/581
+deg_analysis_31124344_0.out:    Running contrast 51/581
+deg_analysis_31124344_0.out:    Running contrast 56/581
+deg_analysis_31124344_0.out:    Running contrast 61/581
+deg_analysis_31124344_0.out:    Running contrast 66/581
+deg_analysis_31124344_0.out:    Running contrast 71/581
+deg_analysis_31124344_0.out:    Running contrast 76/581
+deg_analysis_31124344_0.out:    Running contrast 81/581
+deg_analysis_31124344_0.out:    Running contrast 86/581
+deg_analysis_31124344_0.out:    Running contrast 91/581
+deg_analysis_31124344_0.out:    Running contrast 96/581
+deg_analysis_31124344_0.out:    Running contrast 101/581
+deg_analysis_31124344_0.out:    Running contrast 106/581
+deg_analysis_31124344_0.out:    Running contrast 111/581
+deg_analysis_31124344_0.out:    Running contrast 116/581
+deg_analysis_31124344_0.out:    Running contrast 121/581
+deg_analysis_31124344_0.out:    Running contrast 126/581
+deg_analysis_31124344_0.out:    Running contrast 131/581
+deg_analysis_31124344_0.out:    Running contrast 136/581
+deg_analysis_31124344_0.out:    Running contrast 141/581
+deg_analysis_31124344_0.out:    Running contrast 146/581
+deg_analysis_31124344_0.out:    Running contrast 151/581
+deg_analysis_31124344_0.out:    Running contrast 156/581
+deg_analysis_31124344_0.out:    Running contrast 161/581
+deg_analysis_31124344_0.out:    Running contrast 166/581
+deg_analysis_31124344_0.out:    Running contrast 171/581
+deg_analysis_31124344_0.out:    Running contrast 176/581
+deg_analysis_31124344_0.out:    Running contrast 181/581
+deg_analysis_31124344_0.out:    Running contrast 186/581
+deg_analysis_31124344_0.out:    Running contrast 191/581
+deg_analysis_31124344_0.out:    Running contrast 196/581
+deg_analysis_31124344_0.out:    Running contrast 201/581
+deg_analysis_31124344_0.out:    Running contrast 206/581
+deg_analysis_31124344_0.out:    Running contrast 211/581
+deg_analysis_31124344_0.out:    Running contrast 216/581
+deg_analysis_31124344_0.out:    Running contrast 221/581
+deg_analysis_31124344_0.out:    Running contrast 226/581
+deg_analysis_31124344_0.out:    Running contrast 231/581
+deg_analysis_31124344_0.out:    Running contrast 236/581
+deg_analysis_31124344_0.out:    Running contrast 241/581
+deg_analysis_31124344_0.out:    Running contrast 246/581
+deg_analysis_31124344_0.out:    Running contrast 251/581
+deg_analysis_31124344_0.out:    Running contrast 256/581
+deg_analysis_31124344_0.out:    Running contrast 261/581
+deg_analysis_31124344_0.out:    Running contrast 266/581
+deg_analysis_31124344_0.out:    Running contrast 271/581
+deg_analysis_31124344_0.out:    Running contrast 276/581
+deg_analysis_31124344_0.out:    Running contrast 281/581
+deg_analysis_31124344_0.out:    Running contrast 286/581
+deg_analysis_31124344_0.out:    Running contrast 291/581
+deg_analysis_31124344_0.out:    Running contrast 296/581
+deg_analysis_31124344_0.out:    Running contrast 301/581
+deg_analysis_31124344_0.out:    Running contrast 306/581
+deg_analysis_31124344_0.out:    Running contrast 311/581
+deg_analysis_31124344_0.out:    Running contrast 316/581
+deg_analysis_31124344_0.out:    Running contrast 321/581
+deg_analysis_31124344_0.out:    Running contrast 326/581
+deg_analysis_31124344_0.out:    Running contrast 331/581
+deg_analysis_31124344_0.out:    Running contrast 336/581
+deg_analysis_31124344_0.out:    Running contrast 341/581
+deg_analysis_31124344_0.out:    Running contrast 346/581
+deg_analysis_31124344_0.out:    Running contrast 351/581
+deg_analysis_31124344_0.out:    Running contrast 356/581
+deg_analysis_31124344_0.out:    Running contrast 361/581
+deg_analysis_31124344_0.out:    Running contrast 366/581
+deg_analysis_31124344_0.out:    Running contrast 371/581
+deg_analysis_31124344_0.out:    Running contrast 376/581
+deg_analysis_31124344_0.out:    Running contrast 381/581
+deg_analysis_31124344_0.out:    Running contrast 386/581
+deg_analysis_31124344_0.out:    Running contrast 391/581
+deg_analysis_31124344_0.out:    Running contrast 396/581
+deg_analysis_31124344_0.out:    Running contrast 401/581
+deg_analysis_31124344_0.out:    Running contrast 406/581
+deg_analysis_31124344_0.out:    Running contrast 411/581
+deg_analysis_31124344_0.out:    Running contrast 416/581
+deg_analysis_31124344_0.out:    Running contrast 421/581
+deg_analysis_31124344_0.out:    Running contrast 426/581
+deg_analysis_31124344_0.out:    Running contrast 431/581
+deg_analysis_31124344_0.out:    Running contrast 436/581
+deg_analysis_31124344_0.out:    Running contrast 441/581
+deg_analysis_31124344_0.out:    Running contrast 446/581
+deg_analysis_31124344_0.out:    Running contrast 451/581
+deg_analysis_31124344_0.out:    Running contrast 456/581
+deg_analysis_31124344_0.out:    Running contrast 461/581
+deg_analysis_31124344_0.out:    Running contrast 466/581
+deg_analysis_31124344_0.out:    Running contrast 471/581
+deg_analysis_31124344_0.out:    Running contrast 476/581
+deg_analysis_31124344_0.out:    Running contrast 481/581
+deg_analysis_31124344_0.out:    Running contrast 486/581
+deg_analysis_31124344_0.out:    Running contrast 491/581
+deg_analysis_31124344_0.out:    Running contrast 496/581
+deg_analysis_31124344_0.out:    Running contrast 501/581
+deg_analysis_31124344_0.out:    Running contrast 506/581
+deg_analysis_31124344_0.out:    Running contrast 511/581
+deg_analysis_31124344_0.out:    Running contrast 516/581
+deg_analysis_31124344_0.out:    Running contrast 521/581
+deg_analysis_31124344_0.out:    Running contrast 526/581
+deg_analysis_31124344_0.out:    Running contrast 531/581
+deg_analysis_31124344_0.out:    Running contrast 536/581
+deg_analysis_31124344_0.out:    Running contrast 541/581
+deg_analysis_31124344_0.out:    Running contrast 546/581
+deg_analysis_31124344_0.out:    Running contrast 551/581
+deg_analysis_31124344_0.out:    Running contrast 556/581
+deg_analysis_31124344_0.out:    Running contrast 561/581
+deg_analysis_31124344_0.out:    Running contrast 566/581
+deg_analysis_31124344_0.out:    Running contrast 571/581
+deg_analysis_31124344_0.out:    Running contrast 576/581
+deg_analysis_31124344_0.out:    Running contrast 581/581
+deg_analysis_31124344_0.out:
+deg_analysis_31124344_0.out:    Writing:  ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_50/CVCL_0004_de.h5ad 
+deg_analysis_31124344_0.out:
+deg_analysis_31124344_0.out:    Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_50/CVCL_0004_de.h5ad 
+deg_analysis_31124344_0.out:    Removed X matrix
+deg_analysis_31124344_0.out:    Rewriting h5ad file is done!
+deg_analysis_31124344_0.out:✓ Cell line completed in 641.1 seconds
+deg_analysis_31124344_0.out:
+deg_analysis_31124344_0.out:DE analysis completed!
+deg_analysis_31124344_0.out:
+deg_analysis_31124344_0.out:Total runtime: 657.9 seconds
+deg_analysis_31124344_1.out:
+deg_analysis_31124344_1.out:DE analysis started...
+deg_analysis_31124344_1.out:Loaded input file:  ./data/sciplex/pseudobulk_processed/group_rep/by_celltype/CVCL_0023_processed.h5ad 
+deg_analysis_31124344_1.out:Initial dimensions:  1910  samples ×  58302  genes
+deg_analysis_31124344_1.out:Filter samples with the low number of cells
+deg_analysis_31124344_1.out:    Filter threshold (min_cells):  50 
+deg_analysis_31124344_1.out:    n_obs:  1910 -->  343 
+deg_analysis_31124344_1.out:
+deg_analysis_31124344_1.out:▶︎ Processing cell_type  1 / 1 :  CVCL_0023 
+deg_analysis_31124344_1.out:    Filter controls by  pert_time_h  column
+deg_analysis_31124344_1.out:        n_obs:  343 -->  343 
+deg_analysis_31124344_1.out:
+deg_analysis_31124344_1.out:Coefficients not estimable: plateplate33 plateplate34 plateplate35 plateplate36 plateplate37 plateplate52 
+deg_analysis_31124344_1.out:Coefficients not estimable: plateplate33 plateplate34 plateplate35 plateplate36 plateplate37 plateplate52 
+deg_analysis_31124344_1.out:    Running contrast 1/193
+deg_analysis_31124344_1.out:    Running contrast 6/193
+deg_analysis_31124344_1.out:    Running contrast 11/193
+deg_analysis_31124344_1.out:    Running contrast 16/193
+deg_analysis_31124344_1.out:    Running contrast 21/193
+deg_analysis_31124344_1.out:    Running contrast 26/193
+deg_analysis_31124344_1.out:    Running contrast 31/193
+deg_analysis_31124344_1.out:    Running contrast 36/193
+deg_analysis_31124344_1.out:    Running contrast 41/193
+deg_analysis_31124344_1.out:    Running contrast 46/193
+deg_analysis_31124344_1.out:    Running contrast 51/193
+deg_analysis_31124344_1.out:    Running contrast 56/193
+deg_analysis_31124344_1.out:    Running contrast 61/193
+deg_analysis_31124344_1.out:    Running contrast 66/193
+deg_analysis_31124344_1.out:    Running contrast 71/193
+deg_analysis_31124344_1.out:    Running contrast 76/193
+deg_analysis_31124344_1.out:    Running contrast 81/193
+deg_analysis_31124344_1.out:    Running contrast 86/193
+deg_analysis_31124344_1.out:    Running contrast 91/193
+deg_analysis_31124344_1.out:    Running contrast 96/193
+deg_analysis_31124344_1.out:    Running contrast 101/193
+deg_analysis_31124344_1.out:    Running contrast 106/193
+deg_analysis_31124344_1.out:    Running contrast 111/193
+deg_analysis_31124344_1.out:    Running contrast 116/193
+deg_analysis_31124344_1.out:    Running contrast 121/193
+deg_analysis_31124344_1.out:    Running contrast 126/193
+deg_analysis_31124344_1.out:    Running contrast 131/193
+deg_analysis_31124344_1.out:    Running contrast 136/193
+deg_analysis_31124344_1.out:    Running contrast 141/193
+deg_analysis_31124344_1.out:    Running contrast 146/193
+deg_analysis_31124344_1.out:    Running contrast 151/193
+deg_analysis_31124344_1.out:    Running contrast 156/193
+deg_analysis_31124344_1.out:    Running contrast 161/193
+deg_analysis_31124344_1.out:    Running contrast 166/193
+deg_analysis_31124344_1.out:    Running contrast 171/193
+deg_analysis_31124344_1.out:    Running contrast 176/193
+deg_analysis_31124344_1.out:    Running contrast 181/193
+deg_analysis_31124344_1.out:    Running contrast 186/193
+deg_analysis_31124344_1.out:    Running contrast 191/193
+deg_analysis_31124344_1.out:    Running contrast 193/193
+deg_analysis_31124344_1.out:
+deg_analysis_31124344_1.out:    Writing:  ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_50/CVCL_0023_de.h5ad 
+deg_analysis_31124344_1.out:
+deg_analysis_31124344_1.out:    Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_50/CVCL_0023_de.h5ad 
+deg_analysis_31124344_1.out:    Removed X matrix
+deg_analysis_31124344_1.out:    Rewriting h5ad file is done!
+deg_analysis_31124344_1.out:✓ Cell line completed in 94.7 seconds
+deg_analysis_31124344_1.out:
+deg_analysis_31124344_1.out:DE analysis completed!
+deg_analysis_31124344_1.out:
+deg_analysis_31124344_1.out:Total runtime: 111.5 seconds
+deg_analysis_31124344_1.err:Warning messages:
+deg_analysis_31124344_1.err:1: Partial NA coefficients for 11054 probe(s) 
+deg_analysis_31124344_1.err:2: Partial NA coefficients for 11054 probe(s) 
+deg_analysis_31124344_2.out:
+deg_analysis_31124344_2.out:DE analysis started...
+deg_analysis_31124344_2.out:Loaded input file:  ./data/sciplex/pseudobulk_processed/group_rep/by_celltype/CVCL_0031_processed.h5ad 
+deg_analysis_31124344_2.out:Initial dimensions:  1529  samples ×  58302  genes
+deg_analysis_31124344_2.out:Filter samples with the low number of cells
+deg_analysis_31124344_2.out:    Filter threshold (min_cells):  50 
+deg_analysis_31124344_2.out:    n_obs:  1529 -->  1318 
+deg_analysis_31124344_2.out:
+deg_analysis_31124344_2.out:▶︎ Processing cell_type  1 / 1 :  CVCL_0031 
+deg_analysis_31124344_2.out:    Filter controls by  pert_time_h  column
+deg_analysis_31124344_2.out:        n_obs:  1318 -->  1318 
+deg_analysis_31124344_2.out:
+deg_analysis_31124344_2.out:    Running contrast 1/725
+deg_analysis_31124344_2.out:    Running contrast 6/725
+deg_analysis_31124344_2.out:    Running contrast 11/725
+deg_analysis_31124344_2.out:    Running contrast 16/725
+deg_analysis_31124344_2.out:    Running contrast 21/725
+deg_analysis_31124344_2.out:    Running contrast 26/725
+deg_analysis_31124344_2.out:    Running contrast 31/725
+deg_analysis_31124344_2.out:    Running contrast 36/725
+deg_analysis_31124344_2.out:    Running contrast 41/725
+deg_analysis_31124344_2.out:    Running contrast 46/725
+deg_analysis_31124344_2.out:    Running contrast 51/725
+deg_analysis_31124344_2.out:    Running contrast 56/725
+deg_analysis_31124344_2.out:    Running contrast 61/725
+deg_analysis_31124344_2.out:    Running contrast 66/725
+deg_analysis_31124344_2.out:    Running contrast 71/725
+deg_analysis_31124344_2.out:    Running contrast 76/725
+deg_analysis_31124344_2.out:    Running contrast 81/725
+deg_analysis_31124344_2.out:    Running contrast 86/725
+deg_analysis_31124344_2.out:    Running contrast 91/725
+deg_analysis_31124344_2.out:    Running contrast 96/725
+deg_analysis_31124344_2.out:    Running contrast 101/725
+deg_analysis_31124344_2.out:    Running contrast 106/725
+deg_analysis_31124344_2.out:    Running contrast 111/725
+deg_analysis_31124344_2.out:    Running contrast 116/725
+deg_analysis_31124344_2.out:    Running contrast 121/725
+deg_analysis_31124344_2.out:    Running contrast 126/725
+deg_analysis_31124344_2.out:    Running contrast 131/725
+deg_analysis_31124344_2.out:    Running contrast 136/725
+deg_analysis_31124344_2.out:    Running contrast 141/725
+deg_analysis_31124344_2.out:    Running contrast 146/725
+deg_analysis_31124344_2.out:    Running contrast 151/725
+deg_analysis_31124344_2.out:    Running contrast 156/725
+deg_analysis_31124344_2.out:    Running contrast 161/725
+deg_analysis_31124344_2.out:    Running contrast 166/725
+deg_analysis_31124344_2.out:    Running contrast 171/725
+deg_analysis_31124344_2.out:    Running contrast 176/725
+deg_analysis_31124344_2.out:    Running contrast 181/725
+deg_analysis_31124344_2.out:    Running contrast 186/725
+deg_analysis_31124344_2.out:    Running contrast 191/725
+deg_analysis_31124344_2.out:    Running contrast 196/725
+deg_analysis_31124344_2.out:    Running contrast 201/725
+deg_analysis_31124344_2.out:    Running contrast 206/725
+deg_analysis_31124344_2.out:    Running contrast 211/725
+deg_analysis_31124344_2.out:    Running contrast 216/725
+deg_analysis_31124344_2.out:    Running contrast 221/725
+deg_analysis_31124344_2.out:    Running contrast 226/725
+deg_analysis_31124344_2.out:    Running contrast 231/725
+deg_analysis_31124344_2.out:    Running contrast 236/725
+deg_analysis_31124344_2.out:    Running contrast 241/725
+deg_analysis_31124344_2.out:    Running contrast 246/725
+deg_analysis_31124344_2.out:    Running contrast 251/725
+deg_analysis_31124344_2.out:    Running contrast 256/725
+deg_analysis_31124344_2.out:    Running contrast 261/725
+deg_analysis_31124344_2.out:    Running contrast 266/725
+deg_analysis_31124344_2.out:    Running contrast 271/725
+deg_analysis_31124344_2.out:    Running contrast 276/725
+deg_analysis_31124344_2.out:    Running contrast 281/725
+deg_analysis_31124344_2.out:    Running contrast 286/725
+deg_analysis_31124344_2.out:    Running contrast 291/725
+deg_analysis_31124344_2.out:    Running contrast 296/725
+deg_analysis_31124344_2.out:    Running contrast 301/725
+deg_analysis_31124344_2.out:    Running contrast 306/725
+deg_analysis_31124344_2.out:    Running contrast 311/725
+deg_analysis_31124344_2.out:    Running contrast 316/725
+deg_analysis_31124344_2.out:    Running contrast 321/725
+deg_analysis_31124344_2.out:    Running contrast 326/725
+deg_analysis_31124344_2.out:    Running contrast 331/725
+deg_analysis_31124344_2.out:    Running contrast 336/725
+deg_analysis_31124344_2.out:    Running contrast 341/725
+deg_analysis_31124344_2.out:    Running contrast 346/725
+deg_analysis_31124344_2.out:    Running contrast 351/725
+deg_analysis_31124344_2.out:    Running contrast 356/725
+deg_analysis_31124344_2.out:    Running contrast 361/725
+deg_analysis_31124344_2.out:    Running contrast 366/725
+deg_analysis_31124344_2.out:    Running contrast 371/725
+deg_analysis_31124344_2.out:    Running contrast 376/725
+deg_analysis_31124344_2.out:    Running contrast 381/725
+deg_analysis_31124344_2.out:    Running contrast 386/725
+deg_analysis_31124344_2.out:    Running contrast 391/725
+deg_analysis_31124344_2.out:    Running contrast 396/725
+deg_analysis_31124344_2.out:    Running contrast 401/725
+deg_analysis_31124344_2.out:    Running contrast 406/725
+deg_analysis_31124344_2.out:    Running contrast 411/725
+deg_analysis_31124344_2.out:    Running contrast 416/725
+deg_analysis_31124344_2.out:    Running contrast 421/725
+deg_analysis_31124344_2.out:    Running contrast 426/725
+deg_analysis_31124344_2.out:    Running contrast 431/725
+deg_analysis_31124344_2.out:    Running contrast 436/725
+deg_analysis_31124344_2.out:    Running contrast 441/725
+deg_analysis_31124344_2.out:    Running contrast 446/725
+deg_analysis_31124344_2.out:    Running contrast 451/725
+deg_analysis_31124344_2.out:    Running contrast 456/725
+deg_analysis_31124344_2.out:    Running contrast 461/725
+deg_analysis_31124344_2.out:    Running contrast 466/725
+deg_analysis_31124344_2.out:    Running contrast 471/725
+deg_analysis_31124344_2.out:    Running contrast 476/725
+deg_analysis_31124344_2.out:    Running contrast 481/725
+deg_analysis_31124344_2.out:    Running contrast 486/725
+deg_analysis_31124344_2.out:    Running contrast 491/725
+deg_analysis_31124344_2.out:    Running contrast 496/725
+deg_analysis_31124344_2.out:    Running contrast 501/725
+deg_analysis_31124344_2.out:    Running contrast 506/725
+deg_analysis_31124344_2.out:    Running contrast 511/725
+deg_analysis_31124344_2.out:    Running contrast 516/725
+deg_analysis_31124344_2.out:    Running contrast 521/725
+deg_analysis_31124344_2.out:    Running contrast 526/725
+deg_analysis_31124344_2.out:    Running contrast 531/725
+deg_analysis_31124344_2.out:    Running contrast 536/725
+deg_analysis_31124344_2.out:    Running contrast 541/725
+deg_analysis_31124344_2.out:    Running contrast 546/725
+deg_analysis_31124344_2.out:    Running contrast 551/725
+deg_analysis_31124344_2.out:    Running contrast 556/725
+deg_analysis_31124344_2.out:    Running contrast 561/725
+deg_analysis_31124344_2.out:    Running contrast 566/725
+deg_analysis_31124344_2.out:    Running contrast 571/725
+deg_analysis_31124344_2.out:    Running contrast 576/725
+deg_analysis_31124344_2.out:    Running contrast 581/725
+deg_analysis_31124344_2.out:    Running contrast 586/725
+deg_analysis_31124344_2.out:    Running contrast 591/725
+deg_analysis_31124344_2.out:    Running contrast 596/725
+deg_analysis_31124344_2.out:    Running contrast 601/725
+deg_analysis_31124344_2.out:    Running contrast 606/725
+deg_analysis_31124344_2.out:    Running contrast 611/725
+deg_analysis_31124344_2.out:    Running contrast 616/725
+deg_analysis_31124344_2.out:    Running contrast 621/725
+deg_analysis_31124344_2.out:    Running contrast 626/725
+deg_analysis_31124344_2.out:    Running contrast 631/725
+deg_analysis_31124344_2.out:    Running contrast 636/725
+deg_analysis_31124344_2.out:    Running contrast 641/725
+deg_analysis_31124344_2.out:    Running contrast 646/725
+deg_analysis_31124344_2.out:    Running contrast 651/725
+deg_analysis_31124344_2.out:    Running contrast 656/725
+deg_analysis_31124344_2.out:    Running contrast 661/725
+deg_analysis_31124344_2.out:    Running contrast 666/725
+deg_analysis_31124344_2.out:    Running contrast 671/725
+deg_analysis_31124344_2.out:    Running contrast 676/725
+deg_analysis_31124344_2.out:    Running contrast 681/725
+deg_analysis_31124344_2.out:    Running contrast 686/725
+deg_analysis_31124344_2.out:    Running contrast 691/725
+deg_analysis_31124344_2.out:    Running contrast 696/725
+deg_analysis_31124344_2.out:    Running contrast 701/725
+deg_analysis_31124344_2.out:    Running contrast 706/725
+deg_analysis_31124344_2.out:    Running contrast 711/725
+deg_analysis_31124344_2.out:    Running contrast 716/725
+deg_analysis_31124344_2.out:    Running contrast 721/725
+deg_analysis_31124344_2.out:    Running contrast 725/725
+deg_analysis_31124344_2.out:
+deg_analysis_31124344_2.out:    Writing:  ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_50/CVCL_0031_de.h5ad 
+deg_analysis_31124344_2.out:
+deg_analysis_31124344_2.out:    Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_50/CVCL_0031_de.h5ad 
+deg_analysis_31124344_2.out:    Removed X matrix
+deg_analysis_31124344_2.out:    Rewriting h5ad file is done!
+deg_analysis_31124344_2.out:✓ Cell line completed in 2031.9 seconds
+deg_analysis_31124344_2.out:
+deg_analysis_31124344_2.out:DE analysis completed!
+deg_analysis_31124344_2.out:
+deg_analysis_31124344_2.out:Total runtime: 2047.5 seconds
