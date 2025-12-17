@@ -475,14 +475,32 @@ get_layers <- function(de_df,
         {
           # Check for matching errors
           match_indices <- match(.$contrast, rownames(obs_out))
-          if (any(is.na(match_indices))) {
-            missing_contrasts <- .$contrast[is.na(match_indices)]
-            stop("ERROR in get_layers(): Cannot match contrasts between layers and obs_out.\n",
-                 "  Missing contrasts: ", paste(missing_contrasts, collapse=", "), "\n",
+          
+          # Check for complete mismatch
+          if (all(is.na(match_indices))) {
+            stop("ERROR in get_layers(): Complete mismatch - ALL contrasts failed to match.\n",
+                 "  Contrasts in layers: ", paste(.$contrast, collapse=", "), "\n",
                  "  obs_out rownames: ", paste(rownames(obs_out), collapse=", "))
           }
+          
+          # Check for partial mismatch
+          if (any(is.na(match_indices))) {
+            missing_contrasts <- .$contrast[is.na(match_indices)]
+            warning("Partial mismatch in get_layers(): Some contrasts not found in obs_out.\n",
+                    "  Missing contrasts: ", paste(missing_contrasts, collapse=", "), "\n",
+                    "  These contrasts will be removed from layers.")
+          }
+          
+          # Check for contrasts in obs_out not in layers
+          extra_in_obs <- setdiff(rownames(obs_out), .$contrast)
+          if (length(extra_in_obs) > 0) {
+            warning("Contrasts in obs_out not found in layers (may indicate failed DE analysis):\n",
+                    "  ", paste(extra_in_obs, collapse=", "))
+          }
+          
           .
         } %>%
+        filter(contrast %in% rownames(obs_out)) %>%
         arrange(match(contrast, rownames(obs_out))) %>%
         select(-contrast) %>%
         as.matrix()
