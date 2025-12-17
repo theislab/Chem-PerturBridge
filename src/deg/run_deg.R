@@ -456,7 +456,8 @@ get_layers <- function(de_df,
   # Parameter validation
   stopifnot(!missing(de_df),
             !missing(obs_out),
-            "gene" %in% names(de_df), "cond" %in% names(de_df))
+            "gene" %in% names(de_df), "cond" %in% names(de_df),
+            "control" %in% names(de_df))
   
   # Create layers for each DE statistic
   layers <- map(res_cols, function(m) {
@@ -465,12 +466,29 @@ get_layers <- function(de_df,
       return(NULL)
     }
     
-    de_df %>%
-      select(gene, cond, !!sym(m)) %>%
-      pivot_wider(names_from = gene, values_from = !!sym(m)) %>%
-      arrange(match(cond, rownames(obs_out))) %>%
-      select(-cond) %>%
-      as.matrix()
+    # Create contrast column and pivot to wide format
+    tryCatch({
+      de_df %>%
+        mutate(contrast = paste0(cond, ' - ', control)) %>%
+        select(gene, contrast, !!sym(m)) %>%
+        pivot_wider(names_from = gene, values_from = !!sym(m)) %>%
+        {
+          # Check for matching errors
+          match_indices <- match(.$contrast, rownames(obs_out))
+          if (any(is.na(match_indices))) {
+            missing_contrasts <- .$contrast[is.na(match_indices)]
+            stop("ERROR in get_layers(): Cannot match contrasts between layers and obs_out.\n",
+                 "  Missing contrasts: ", paste(missing_contrasts, collapse=", "), "\n",
+                 "  obs_out rownames: ", paste(rownames(obs_out), collapse=", "))
+          }
+          .
+        } %>%
+        arrange(match(contrast, rownames(obs_out))) %>%
+        select(-contrast) %>%
+        as.matrix()
+    }, error = function(e) {
+      stop("Error in get_layers() for metric '", m, "': ", e$message)
+    })
   }) %>% 
     set_names(res_cols) %>%
     compact()  # Remove NULL entries
