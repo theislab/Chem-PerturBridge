@@ -106,7 +106,7 @@ def save_read(file_input: str,
         except BlockingIOError:
             print(f'Attempt {attempt + 1}: file locked, retrying...')
             time.sleep(delay)
-    raise RuntimeError(f'Could not read {file_input} after {retries} attempts.')
+    raise RuntimeError(f'Could not read {file_input} after {n_retries} attempts.')
 
 def get_output_path_combined(file_input: str,
                         dir_output: str) -> str:

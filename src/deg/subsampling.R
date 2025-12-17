@@ -34,7 +34,7 @@ subsampling <- function(adata, par) {
         control_perts <- as.character(unique(adata[(adata$obs$is_control == TRUE)]$obs$perturbagen))
         keep_perts <- c(control_perts, par$specific_perturbagens)
         cat("Using specific perturbagens: ", paste(keep_perts, collapse=", "), "\n")
-        adata <- adata[adata$obs$perturbation %in% keep_perts, ]
+        adata <- adata[adata$obs$perturbagen %in% keep_perts, ]
       } else if (!is.null(par$max_perturbations)) {
         # Otherwise limit to max_perturbations
         perturbagens <- as.character(unique(adata$obs$perturbagen))
