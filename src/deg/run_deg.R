@@ -478,24 +478,41 @@ get_layers <- function(de_df,
           
           # Check for complete mismatch
           if (all(is.na(match_indices))) {
+            n_contrasts <- length(.$contrast)
+            sample_contrasts <- head(.$contrast, 3)
+            sample_obs <- head(rownames(obs_out), 3)
+            
             stop("ERROR in get_layers(): Complete mismatch - ALL contrasts failed to match.\n",
-                 "  Contrasts in layers: ", paste(.$contrast, collapse=", "), "\n",
-                 "  obs_out rownames: ", paste(rownames(obs_out), collapse=", "))
+                 "  Total contrasts: ", n_contrasts, "\n",
+                 "  Sample contrasts in layers: ", paste(sample_contrasts, collapse=", "),
+                 if(n_contrasts > 3) " ..." else "", "\n",
+                 "  Sample obs_out rownames: ", paste(sample_obs, collapse=", "),
+                 if(length(rownames(obs_out)) > 3) " ..." else "")
           }
           
           # Check for partial mismatch
           if (any(is.na(match_indices))) {
             missing_contrasts <- .$contrast[is.na(match_indices)]
+            n_missing <- length(missing_contrasts)
+            sample_missing <- head(missing_contrasts, 5)
+            
             warning("Partial mismatch in get_layers(): Some contrasts not found in obs_out.\n",
-                    "  Missing contrasts: ", paste(missing_contrasts, collapse=", "), "\n",
+                    "  Missing ", n_missing, " of ", length(.$contrast), " contrasts: ",
+                    paste(sample_missing, collapse=", "),
+                    if(n_missing > 5) " ..." else "", "\n",
                     "  These contrasts will be removed from layers.")
           }
           
           # Check for contrasts in obs_out not in layers
           extra_in_obs <- setdiff(rownames(obs_out), .$contrast)
           if (length(extra_in_obs) > 0) {
+            n_extra <- length(extra_in_obs)
+            sample_extra <- head(extra_in_obs, 5)
+            
             warning("Contrasts in obs_out not found in layers (may indicate failed DE analysis):\n",
-                    "  ", paste(extra_in_obs, collapse=", "))
+                    "  ", n_extra, " extra contrast(s): ",
+                    paste(sample_extra, collapse=", "),
+                    if(n_extra > 5) " ..." else "")
           }
           
           .
