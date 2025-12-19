@@ -1,3 +1,18 @@
+# Description
+
+**OP3_v2** is a set of pipelines for analyzing single-cell RNA sequencing data from perturbation experiments. 
+
+The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234) and [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full) datasets.
+
+It consists of the following steps:
+
+* **Pseudobulking**: 
+Aggregates raw single-cell RNA sequencing data to pseudobulk samples for downstream analysis
+
+* **DEG Analysis**: 
+Identifies differentially expressed genes between treatment and control conditions in pseudobulk samples
+
+# Quick start guide
 You can run scripts on the HPC cluster with the workload manager (SLURM)
 
 **NB!** Before running some bash scripts, you may need to run `chmod u+x ./path/script.sh` before their execution.
@@ -87,7 +102,7 @@ Currently, scripts have pre-defined parameters.
 
 ### 3. Run scripts 
 
-**3.1** To start a SLURM-based pipeline, you need to execute a wrapper script (`run_pseudobulking.sh`), which allow to run dataset-specific pseudobulking pipelines:
+**3.1** To start a SLURM-based pseudobulking pipeline, you need to execute a wrapper script (`./run_pipelines/run_pseudobulking.sh`), which allow to run dataset-specific pipelines:
 
 You can execute it with following arguments:
 ```
@@ -102,28 +117,65 @@ cd /op3_v2
 ./run_pipelines/run_pseudobulking.sh -s -d sciplex
 ```
 
-## Project structure:
+**3.2** To start a SLURM-based DGE (Differential Gene Expression) pipeline, you need to execute a wrapper script (`./run_pipelines/run_deg.sh`), which allows to run dataset-specific DGE pipelines:
+
+You can execute it with following arguments:
+```
+-s if this flag is included, then the script is executed for a subsample of a dataset, default=false
+-j if this flag is included, then the script is executed in parallel mode (array jobs per cell type), default=false
+-h if this flag is included, then the help is printed, default=false
+-f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
+-q if this flag is included, then samples that did not pass quality control are filtered out, default=false
+-d it is a required flag specifying which dataset should be processed: sciplex | tahoe
+-p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
+```
+For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode you need to run:
+```
+cd /op3_v2
+./run_pipelines/run_deg.sh -s -j -d sciplex -p group_all_replicates
+```
+
+# Project structure:
 The structure of the repo:
 ```
  tree .
 .
-├── data -> /home/icb/olga.novitskaia/data/
+├── data -> /lustre/groups/ml01/workspace/olga.novitskaia/data
 ├── env.yaml
 ├── logs
-│   ├── dataset_i
-│   └── ...
+│   └── dataset_i
+│       ├── full (or subsample)
+│       │   └── deg
+│       │       └── parameter_name (group_all_replicates or separate_replicates)
+│       │           └── qc_true (or qc_false)
+│       │               └── filter_min_cells_f
+│       │                   └── deg_*.out, deg_*.err
+│       └── ...
 ├── pipelines
-│   ├── sciplex
-│   │   └── sciplex_pseudobulking.sh
-│   └── tahoe
-│       └── tahoe_pseudobulking_parallel.sh
+│   ├── common
+│   │   └── deg.sh
+│   ├── sciplex
+│   │   └─── configs/
+│   │       ├── deg/
+│   │       │   └── config.json
+│   │       └── sciplex_pseudobulking.sh
+│   └── tahoe
+│       └─── configs/
+│           ├── deg/
+│           │   └── config.json
+│           └── tahoe_pseudobulking_parallel.sh
 ├── README.md
 ├── requirements.txt
 ├── run_pipelines
-│   └── run_pseudobulking.sh
+│   ├── run_pseudobulking.sh
+│   └── run_deg.sh
 ├── src
 │   ├── configs
 │   │   └── datasets.json
+│   ├── deg
+│   │   ├── run_deg.R
+│   │   ├── run_processing_pseudobulk.py
+│   │   └── subsampling.R
 │   ├── downloading
 │   │   └── run_downloading_datasets.py
 │   ├── pseudobulking
@@ -139,28 +191,58 @@ The structure of the repo:
 │   │           ├── pubchem_imputation.py
 │   │           └── standardization.py
 │   └── utils
-│       ├── parsing_utils.py
+│       └─── parsing_utils.py
 └── venv -> /home/icb/olga.novitskaia/venv/
 ```
 
-## Data
+# Data
 The structure of the `data` folder:
 ```
 ├──dataset_i
-    ├──raw
-        ├──dataset_i.h5ad
-        ├──dataset_i_subsample.h5ad (optionally)
-        ├──dataset_i_obs.parquet
-        ├──dataset_i_var.parquet
-    ├──pseudobulk
-        ├──full
-            ├──dataset_i.h5ad
-        ├──subsample
-            ├──dataset_i_subsample.h5ad
-    ├──pseudobulk_to_merge (optionally for tahoe)
-        ├──full
-            ├──dataset_i.h5ad
-        ├──subsample
-            ├──dataset_i_subsample.h5ad
+│   ├──deg_data
+│   │   └──group_rep (or sep_rep)
+│   │       ├──full
+│   │       │   ├──qc_true
+│   │       │   │   ├──filter_min_cells_0
+│   │       │   │   │   ├──celltype1_de.h5ad
+│   │       │   │   │   ├──celltype2_de.h5ad
+│   │       │   │   │   └──...
+│   │       │   │   ├──filter_min_cells_50
+│   │       │   │   │   └──...
+│   │       │   │   └──...
+│   │       │   └──qc_false
+│   │       │       └──...
+│   │       └──subsampling
+│   │           ├──qc_true
+│   │           │   └──...
+│   │           └──qc_false
+│   │               └──filter_min_cells_0
+│   │                   ├──celltype1_de.h5ad
+│   │                   └──...
+│   ├──raw
+│   │   ├──dataset_i.h5ad
+│   │   ├──dataset_i_subsample.h5ad (optionally)
+│   │   ├──dataset_i_obs.parquet
+│   │   └──dataset_i_var.parquet
+│   ├──pseudobulk
+│   │   ├──full
+│   │   │   └──dataset_i.h5ad
+│   │   └──subsample
+│   │       └──dataset_i_subsample.h5ad
+│   ├──pseudobulk_to_merge (optionally for tahoe)
+│   │   ├──full
+│   │   │   └──dataset_i.h5ad
+│   │   └──subsample
+│   │       └──dataset_i_subsample.h5ad
+│   └──pseudobulk_processed
+│       ├──group_rep (or sep_rep)
+│       │   ├──dataset_i_processed.h5ad
+│       │   └──by_celltype
+│       │       ├──celltype1_processed.h5ad
+│       │       ├──celltype2_processed.h5ad
+│       │       └──...
+│       └──...
+└──...        
+
 ```
 		
