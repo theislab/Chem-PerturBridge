@@ -3,6 +3,7 @@ import json
 import time
 import fcntl
 import argparse
+import importlib
 import numpy as np
 import pandas as pd
 import scanpy as sc
@@ -10,9 +11,8 @@ import anndata as ad
 from typing import Optional, Tuple, Union
 
 from src.utils.parsing_utils import *
+from src.deg.ensembl_mapping import map_ensembl_ids_for_dataset
 
-RATIO_MAX = 1.1
-RATIO_MIN = 0.9
 MAX_N_NON_CONTROL_OBS = 2500
 #MAX_N_NON_CONTROL_OBS = 1000
 
@@ -189,17 +189,6 @@ def get_control_info(controls: Optional[ad.AnnData]) -> Tuple[int, int]:
     return 0, 0
 
 
-def get_target_sizes() -> Tuple[int, int]:
-    '''
-    Calculate target n_obs sizes for non-control observations.
-    
-    Returns:
-    --------
-    Tuple[int, int]
-        (target_min, target_max) - thresholds for non-control observations only
-    '''
-    return (round(RATIO_MIN * MAX_N_NON_CONTROL_OBS),
-            round(RATIO_MAX * MAX_N_NON_CONTROL_OBS))
 
 
 
@@ -331,8 +320,8 @@ def create_batches(non_controls: ad.AnnData,
     Create multiple batches from perturbagens using Best Fit algorithm.
     
     Randomly shuffles perturbagens and assigns them to batches using Best Fit algorithm,
-    targeting non-control n_obs within target_min and target_max. The algorithm selects 
-    the batch that minimizes waste (gets closest to target_max without exceeding it) for 
+    targeting non-control n_obs not exceeding MAX_N_NON_CONTROL_OBS. The algorithm selects 
+    the batch that minimizes waste (gets closest to MAX_N_NON_CONTROL_OBS without exceeding it) for 
     each perturbagen. Thresholds are based on non-control observations only.
     
     Parameters:
@@ -361,7 +350,6 @@ def create_batches(non_controls: ad.AnnData,
     np.random.shuffle(shuffled_perturbagens)
     
     batches = []
-    target_min, target_max = get_target_sizes()
     
     for pert in shuffled_perturbagens:
         pert_n_obs, pert_n_labels, pert_data = get_perturbagen_properties(perturbagen_info, pert)
@@ -372,8 +360,8 @@ def create_batches(non_controls: ad.AnnData,
         for batch_idx, batch in enumerate(batches):
             new_n_obs, _, _ = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels)
             
-            if new_n_obs <= target_max:
-                waste = target_max - new_n_obs
+            if new_n_obs <= MAX_N_NON_CONTROL_OBS:
+                waste = MAX_N_NON_CONTROL_OBS - new_n_obs
                 if waste < best_waste:
                     best_waste = waste
                     best_batch_idx = batch_idx
@@ -402,11 +390,11 @@ def pad_batches(batches: list,
     '''
     Pad smaller batches to balance sizes using perturbagens not in current batch.
     
-    For batches with non-control n_obs below target_min, this function iteratively adds
+    For batches with non-control n_obs below MAX_N_NON_CONTROL_OBS, this function iteratively adds
     perturbagens from other batches (not already in the current batch). Perturbagens
     are shuffled and added one at a time, checking that non-control n_obs doesn't exceed
-    target_max. The process stops when the batch reaches target_min or no more
-    suitable perturbagens are available. Thresholds are based on non-control observations only.
+    MAX_N_NON_CONTROL_OBS. The process stops when no more suitable perturbagens are available.
+    Thresholds are based on non-control observations only.
     
     Parameters:
     -----------
@@ -426,19 +414,18 @@ def pad_batches(batches: list,
     '''
     
     perturbagen_info = calculate_perturbagen_info(non_controls, unique_perturbagens)
-    target_min, target_max = get_target_sizes()
     ctl_n_obs, ctl_n_labels = get_control_info(controls)
     
     if len(batches) > 1:
         cnt = 0
         for batch in batches:
-            if batch['n_obs'] < target_min:
+            if batch['n_obs'] < MAX_N_NON_CONTROL_OBS:
                 cnt += 1
         logger.info(f'  {cnt} batches need to be padded')
 
         for batch_idx, batch in enumerate(batches):
 
-            if batch['n_obs'] < target_min:
+            if batch['n_obs'] < MAX_N_NON_CONTROL_OBS:
                 current_batch_perts = batch['perturbagens']
                 all_perts = set(non_controls.obs['perturbagen'].unique())
                 available_perts = list(all_perts - current_batch_perts)
@@ -454,11 +441,8 @@ def pad_batches(batches: list,
                     pert_n_obs, pert_n_labels, pert_data = get_perturbagen_properties(perturbagen_info, pert)
                     
                     new_n_obs, _, _ = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels)
-                    if new_n_obs <= target_max:
+                    if new_n_obs <= MAX_N_NON_CONTROL_OBS:
                         add_data_to_batch(batch, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
-                        
-                        if batch['n_obs'] >= target_min:
-                            break
     
     # Log final batch statistics after padding
     if len(batches) > 0:
@@ -551,7 +535,7 @@ def check_and_save_if_small(adata_ct: ad.AnnData,
     '''
     n_obs_non_controls = non_controls.n_obs
     
-    if n_obs_non_controls <= round(RATIO_MAX * MAX_N_NON_CONTROL_OBS):
+    if n_obs_non_controls <= MAX_N_NON_CONTROL_OBS:
         file_output = os.path.join(dir_output, f"{ct_clean}_processed.h5ad")
         save_single_file(adata_ct, file_output)
         return True
@@ -678,7 +662,7 @@ def batch_celltype(adata_ct: ad.AnnData,
     n_non_control_obs = non_controls.n_obs
     n_labels = adata_ct.obs['perturbation_label'].nunique()
     logger.info(f'Splitting {ct_clean}: {n_obs} obs, {n_labels} perturbation labels')
-    logger.warning(f'  Non-control n_obs ({n_non_control_obs}) exceeds {round(RATIO_MAX * MAX_N_NON_CONTROL_OBS)}, creating batches')
+    logger.warning(f'  Non-control n_obs ({n_non_control_obs}) exceeds {MAX_N_NON_CONTROL_OBS}, creating batches')
     
     
     unique_perturbagens = get_unique_perturbagens_or_save(non_controls, adata_ct, dir_output, ct_clean)
@@ -761,6 +745,7 @@ def save_by_celltype(padata: ad.AnnData,
         os.makedirs(ct_dir, exist_ok=True)
         adata_ct = padata[padata.obs['cell_type'] == ct].copy()
         batch_celltype(adata_ct, ct_dir, ct_clean)
+        #break
         
 
 
@@ -817,6 +802,9 @@ def add_perturbation_label_to_padata(file_input: str,
     '''
     Add perturbation labels to pseudobulk data and save processed files.
     
+    This function is maintained for backward compatibility. It uses the
+    PseudobulkProcessor class internally.
+    
     Parameters:
     -----------
     file_input : str
@@ -836,34 +824,13 @@ def add_perturbation_label_to_padata(file_input: str,
         '{basename}_processed.h5ad' in dir_output. If split_by_celltype is True,
         additional files are saved in dir_output/by_celltype/.
     '''
-    
-    # Check if output files already exist
-    if check_output_files_exist(file_input, dir_output, split_by_celltype):
-        logger.info('Output files already exist, skipping processing')
-        return
-    
-    logger.info('Read pseudobulk file')
-
-    padata = save_read(file_input)
-    obs = padata.obs.copy()
-    obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: format(x, ".15g"))
-    obs['pert_time_h'] = obs['pert_time_h'].apply(lambda x: format(x, ".15g"))
-    
-    logger.info('Add perturbation label')
-    padata.obs['perturbation_label'] =  obs.apply(lambda x: create_perturbation_label(x.is_control,
-                                                x.perturbagen,
-                                                x.pert_dose_uM,
-                                                x.pert_time_h,
-                                                x.well,
-                                                x.plate,
-                                                design_param), axis=1).astype("category")
-    
-    logger.info('Save data')
-    file_output = get_output_path_combined(file_input, dir_output)
-    save_single_file(padata, file_output)
-    
-    if split_by_celltype:
-        save_by_celltype(padata, dir_output)
+    processor = PseudobulkProcessor(
+        file_input=file_input,
+        dir_output=dir_output,
+        design_param=design_param,
+        split_by_celltype=split_by_celltype
+    )
+    processor.process()
 
     
 
@@ -884,6 +851,175 @@ def sanitize_celltype_name(celltype: str) -> str:
     '''
     return celltype.replace(' ', '_').replace('/', '-').replace('(', '').replace(')', '')
 
+
+class PseudobulkProcessor:
+    """
+    Sequential processor for pseudobulk data.
+    
+    Processing steps:
+    1. Read data
+    2. Apply dataset-specific processing (optional)
+    3. Map ensemble IDs to current/replacement IDs
+    4. Add perturbation labels
+    5. Save data
+    6. Split by cell type (optional)
+    
+    Parameters:
+    -----------
+    file_input : str
+        Path to the input pseudobulk h5ad file
+    dir_output : str
+        Output directory path
+    design_param : str
+        Design parameter for perturbation labeling ('group_all_replicates' or 'separate_replicates')
+    split_by_celltype : bool, default=False
+        If True, splits output by cell type and processes each separately
+    dataset : str, optional
+        Dataset name for dataset-specific processing (e.g., 'tahoe', 'l1000')
+    post_processing : dict, optional
+        Post-processing configuration with:
+        - processing_functions: dict with 'path' (config file) and 'name' (function key)
+        - var_parquet_path: path to var parquet file (dataset-specific)
+    """
+    
+    def __init__(self,
+                 file_input: str,
+                 dir_output: str,
+                 design_param: str,
+                 split_by_celltype: bool = False,
+                 dataset: Optional[str] = None,
+                 post_processing: Optional[dict] = None):
+        self.file_input = file_input
+        self.dir_output = dir_output
+        self.design_param = design_param
+        self.split_by_celltype = split_by_celltype
+        self.dataset = dataset
+        self.post_processing = post_processing or {}
+        self.padata = None
+    
+    def read_data(self) -> None:
+        """Step 1: Read pseudobulk file."""
+        logger.info('Read pseudobulk file')
+        self.padata = save_read(self.file_input)
+    
+    def _load_processing_function(self, config_path: str, dataset_name: str, func_key: str):
+        """
+        Load processing function from datasets config file.
+        
+        Parameters
+        ----------
+        config_path : str
+            Path to datasets config file
+        dataset_name : str
+            Name of the dataset
+        func_key : str
+            Key for the function (e.g., 'post_processing')
+            
+        Returns
+        -------
+        callable or None
+            The processing function if found, None otherwise
+        """
+        if not os.path.exists(config_path):
+            raise FileNotFoundError(f'Config file not found: {config_path}')
+        
+        with open(config_path, 'r', encoding='utf-8') as f:
+            datasets_config = json.load(f)
+        
+        if dataset_name not in datasets_config:
+            logger.warning(f'Dataset {dataset_name} not found in {config_path}')
+            return None
+        
+        func_info = datasets_config[dataset_name].get(func_key)
+        if not func_info:
+            logger.info(f'No {func_key} configured for dataset {dataset_name}, skipping')
+            return None
+        
+        module_path = func_info.get('module')
+        func_name = func_info.get('func')
+        
+        if not (module_path and func_name):
+            logger.warning(f'Dataset {dataset_name} config missing module or func in {func_key}')
+            return None
+        
+        module = importlib.import_module(module_path)
+        processing_func = getattr(module, func_name)
+        logger.info(f'Loaded {func_name} from {module_path}')
+        
+        return processing_func
+    
+    def apply_dataset_processing(self) -> None:
+        """Step 2: Apply dataset-specific processing (if needed)."""
+        processing_funcs = self.post_processing.get('processing_functions')
+        
+        if not processing_funcs:
+            if self.dataset:
+                logger.info(f'Dataset "{self.dataset}" specified but no processing_functions configured, skipping')
+            return
+        
+        logger.info('Apply dataset-specific processing')
+        
+        config_path = processing_funcs.get('path')
+        func_key = processing_funcs.get('name')
+        
+        if not (config_path and func_key and self.dataset):
+            logger.warning('processing_functions missing required fields: "path", "name", or dataset not set')
+            return
+        
+        processing_func = self._load_processing_function(config_path, self.dataset, func_key)
+        if processing_func:
+            # Pass all post_processing params as kwargs (except processing_functions itself)
+            kwargs = {k: v for k, v in self.post_processing.items() if k != 'processing_functions'}
+            self.padata = processing_func(self.padata, **kwargs)
+    
+    def map_ensemble_ids(self) -> None:
+        """Step 3: Map ensemble IDs to current/replacement IDs."""
+        logger.info('Map ensemble IDs to current/replacement IDs')
+        self.padata = map_ensembl_ids_for_dataset(self.padata)
+    
+    def add_perturbation_labels(self) -> None:
+        """Step 4: Add perturbation labels."""
+        logger.info('Add perturbation label')
+        obs = self.padata.obs.copy()
+        obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: format(x, ".15g"))
+        obs['pert_time_h'] = obs['pert_time_h'].apply(lambda x: format(x, ".15g"))
+        
+        self.padata.obs['perturbation_label'] = obs.apply(
+            lambda x: create_perturbation_label(
+                x.is_control,
+                x.perturbagen,
+                x.pert_dose_uM,
+                x.pert_time_h,
+                x.well,
+                x.plate,
+                self.design_param
+            ), axis=1
+        ).astype("category")
+    
+    def save_data(self) -> None:
+        """Step 5: Save processed data."""
+        logger.info('Save data')
+        file_output = get_output_path_combined(self.file_input, self.dir_output)
+        save_single_file(self.padata, file_output)
+    
+    def save_splitted_data(self) -> None:
+        """Step 6: Split by cell type (if needed)."""
+        if self.split_by_celltype:
+            save_by_celltype(self.padata, self.dir_output)
+    
+    def process(self) -> None:
+        """Run the complete processing pipeline sequentially."""
+        if check_output_files_exist(self.file_input, self.dir_output, 
+                                   self.split_by_celltype):
+            logger.info('Output files already exist, skipping processing')
+            return
+        
+        self.read_data()
+        self.apply_dataset_processing()
+        self.map_ensemble_ids()
+        self.add_perturbation_labels()
+        self.save_data()
+        self.save_splitted_data()
 
 
 def main():
@@ -910,6 +1046,21 @@ def main():
     --split_by_celltype : bool, optional
         If True, splits output by cell type and processes each separately.
         Default: False
+    --dataset : str, optional
+        Dataset name for dataset-specific processing (e.g., 'l1000', 'tahoe')
+    
+    Configuration File:
+    -------------------
+    The config file can specify dataset-specific processing functions:
+    {
+      "par_process": {
+        "dataset": "l1000",
+        "processing_functions": {
+          "path": "src.pseudobulking.datasets.l1000.post_processing",
+          "name": "process_l1000_dataset"
+        }
+      }
+    }
         
     Raises:
     -------
@@ -924,6 +1075,7 @@ def main():
     parser.add_argument('--design_param', choices=['group_all_replicates',
                                                    'separate_replicates'])
     parser.add_argument('--split_by_celltype', action='store_true', default=False)
+    parser.add_argument('--dataset', type=str, default=None)
     args = parser.parse_args()
     d_args = vars(args).copy()
     del d_args['config']
@@ -935,13 +1087,18 @@ def main():
 
     for key in ['input_file', 'output_dir', 'design_param']:
         if not d_args.get(key):
-            raise Exception(f'The argument {key} is not set')
+            raise ValueError(f'Required argument {key} is not set. Please provide it in the config file or as a command line argument.')
 
-    
-    add_perturbation_label_to_padata(d_args['input_file'],
-                                     d_args['output_dir'],
-                                     d_args['design_param'],
-                                     d_args.get('split_by_celltype', False))
+    # Use PseudobulkProcessor class
+    processor = PseudobulkProcessor(
+        file_input=d_args['input_file'],
+        dir_output=d_args['output_dir'],
+        design_param=d_args['design_param'],
+        split_by_celltype=d_args.get('split_by_celltype', False),
+        dataset=d_args.get('dataset'),
+        post_processing=d_args.get('post_processing')
+    )
+    processor.process()
 
 
 

@@ -501,7 +501,8 @@ get_layers <- function(de_df,
   # Parameter validation
   stopifnot(!missing(de_df),
             !missing(obs_out),
-            "gene" %in% names(de_df), "cond" %in% names(de_df))
+            "gene" %in% names(de_df), "cond" %in% names(de_df),
+            "control" %in% names(de_df))
   
   # Create layers for each DE statistic
   layers <- map(res_cols, function(m) {
@@ -510,12 +511,64 @@ get_layers <- function(de_df,
       return(NULL)
     }
     
-    de_df %>%
-      select(gene, cond, !!sym(m)) %>%
-      pivot_wider(names_from = gene, values_from = !!sym(m)) %>%
-      arrange(match(cond, rownames(obs_out))) %>%
-      select(-cond) %>%
-      as.matrix()
+    # Create contrast column and pivot to wide format
+    tryCatch({
+      de_df %>%
+        mutate(contrast = paste0(cond, ' - ', control)) %>%
+        select(gene, contrast, !!sym(m)) %>%
+        pivot_wider(names_from = gene, values_from = !!sym(m)) %>%
+        {
+          # Check for matching errors
+          match_indices <- match(.$contrast, rownames(obs_out))
+          
+          # Check for complete mismatch
+          if (all(is.na(match_indices))) {
+            n_contrasts <- length(.$contrast)
+            sample_contrasts <- head(.$contrast, 3)
+            sample_obs <- head(rownames(obs_out), 3)
+            
+            stop("ERROR in get_layers(): Complete mismatch - ALL contrasts failed to match.\n",
+                 "  Total contrasts: ", n_contrasts, "\n",
+                 "  Sample contrasts in layers: ", paste(sample_contrasts, collapse=", "),
+                 if(n_contrasts > 3) " ..." else "", "\n",
+                 "  Sample obs_out rownames: ", paste(sample_obs, collapse=", "),
+                 if(length(rownames(obs_out)) > 3) " ..." else "")
+          }
+          
+          # Check for partial mismatch
+          if (any(is.na(match_indices))) {
+            missing_contrasts <- .$contrast[is.na(match_indices)]
+            n_missing <- length(missing_contrasts)
+            sample_missing <- head(missing_contrasts, 5)
+            
+            warning("Partial mismatch in get_layers(): Some contrasts not found in obs_out.\n",
+                    "  Missing ", n_missing, " of ", length(.$contrast), " contrasts: ",
+                    paste(sample_missing, collapse=", "),
+                    if(n_missing > 5) " ..." else "", "\n",
+                    "  These contrasts will be removed from layers.")
+          }
+          
+          # Check for contrasts in obs_out not in layers
+          extra_in_obs <- setdiff(rownames(obs_out), .$contrast)
+          if (length(extra_in_obs) > 0) {
+            n_extra <- length(extra_in_obs)
+            sample_extra <- head(extra_in_obs, 5)
+            
+            warning("Contrasts in obs_out not found in layers (may indicate failed DE analysis):\n",
+                    "  ", n_extra, " extra contrast(s): ",
+                    paste(sample_extra, collapse=", "),
+                    if(n_extra > 5) " ..." else "")
+          }
+          
+          .
+        } %>%
+        filter(contrast %in% rownames(obs_out)) %>%
+        arrange(match(contrast, rownames(obs_out))) %>%
+        select(-contrast) %>%
+        as.matrix()
+    }, error = function(e) {
+      stop("Error in get_layers() for metric '", m, "': ", e$message)
+    })
   }) %>% 
     set_names(res_cols) %>%
     compact()  # Remove NULL entries
@@ -696,15 +749,10 @@ run_dge_pipeline <- function(par) {
   # Print any warnings that occurred (to stderr)
   if (length(warning_messages) > 0) {
     message(sprintf("\n=== %d Warnings encountered ===\n", length(warning_messages)))
-    # Print first 20 unique warnings
-    unique_warns <- unique(unlist(warning_messages))
-    n_show <- min(20, length(unique_warns))
-    for (i in 1:n_show) {
-      message(sprintf("%d. %s", i, unique_warns[i]))
-    }
-    if (length(unique_warns) > n_show) {
-      message(sprintf("... and %d more unique warning types (total %d warnings)", 
-                  length(unique_warns) - n_show, length(warning_messages)))
+    # Print all warnings
+    all_warns <- unlist(warning_messages)
+    for (i in 1:length(all_warns)) {
+      message(sprintf("%d. %s", i, all_warns[i]))
     }
   }
 }
@@ -750,7 +798,7 @@ main <- function() {
 
   args <- parser$parse_args()
   config <- jsonlite::fromJSON(args$config)
-  args$config = NULL
+  args$config <- NULL
   args <- merge_config(args, config)  
   # Start timer
   deg_start <- Sys.time()

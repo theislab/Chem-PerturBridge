@@ -3,6 +3,16 @@
 set -e
 
 # ============================================================================
+# DEG (Differential Expression) Pipeline
+# ============================================================================
+#
+# This pipeline runs differential expression analysis on pseudobulk data:
+#   STEP 1: Preprocess pseudobulk (add labels, split by cell type if -j)
+#   STEP 2: Run DEG analysis (R-based, per cell type in parallel or sequential)
+#   STEP 3: Aggregate batch results (if parallel mode was used)
+# ============================================================================
+
+# ============================================================================
 # Configuration
 # ============================================================================
 
@@ -15,8 +25,11 @@ PIPELINE_NAME="deg"
 ENV_DIR=./venv
 LOGS_DIR=./logs
 MAX_CONCURRENT=50
+#QOS=cpu_preemptible
 QOS=cpu_normal
 PARTITION=cpu_p
+#QOS=gpu_normal
+#PARTITION=gpu_p
 
 # Default values
 MODE_S=False
@@ -42,15 +55,20 @@ while getopts ":sjqp:f:c:d:nh" opt; do
         case $opt in
                 h)
                         echo "Run: $0 [-s] [-j] [-h] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
-                        echo "  -s Subsample of a dataset for debugging, default=false"
-                        echo "  -j Parallel mode (array jobs per cell type), default=false"
-                        echo "  -h Help option, default=false"
-                        echo "  -f Min number of cells in pseudobulk to filter samples with the lower number"
-                        echo "  -q Filter samples that did not pass quality control"
-                        echo "  -n Dataset is already normalized, skip normalization steps, default=false"
-                        echo "  -p Parameter for DEG pipeline, required"
-                        echo "  -c Path to the config file, required"
-                        echo "  -d Dataset name, required"
+                        echo ""
+                        echo "Required arguments:"
+                        echo "  -d  Dataset name (sciplex, tahoe, l1000)"
+                        echo "  -p  Design parameter (group_all_replicates, separate_replicates)"
+                        echo "  -c  Path to config file (auto-set by run_deg.sh)"
+                        echo ""
+                        echo "Optional flags:"
+                        echo "  -s  Subsample mode - limits DEG analysis for testing/debugging"
+                        echo "      NOTE: Does NOT change input files (those are defined in config)"
+                        echo "  -j  Parallel mode - run array jobs per cell type (faster)"
+                        echo "  -f  VALUE - Filter: minimum cells per sample (e.g., -f 50)"
+                        echo "  -q  Quality control filter - remove samples that failed QC"
+                        echo "  -n  Skip normalization - dataset is already normalized"
+                        echo "  -h  Show this help message"
                         exit 0
                         ;;
                 s)
@@ -122,12 +140,10 @@ fi
 
 if [ "$MODE_S" = "True" ]; then
     echo "> Work with a subsample"
-    SUFFIX="_subsample"
     SUBDIR="subsample"
     ARG_S="--subsampling"
 else
 	echo "> Work with a full version"
-	SUFFIX=""
 	SUBDIR="full"
 	ARG_S=""
 fi
@@ -190,13 +206,13 @@ mkdir -p "${LOGS_BASE_DIR}/preprocessing"
 extract_cell_type() {
     local INPUT_FILE=$1
     # If file is in a /by_celltype/ directory, extract cell type from directory name
-    # Otherwise, extract from filename (file may contain multiple cell types)
+    # Otherwise, return empty string (file is not split by cell type)
     if [[ "$INPUT_FILE" == *"/by_celltype/"* ]]; then
         dirname "$INPUT_FILE" | xargs basename
     else
-        # For files not in /by_celltype/, use filename as identifier
-        # Note: These files may contain multiple cell types, but logs will be grouped by filename
-        basename "$INPUT_FILE" .h5ad | sed 's/_processed//'
+        # For files not in /by_celltype/, return empty string
+        # This indicates the file contains multiple cell types or is not split by cell type
+        echo ""
     fi
 }
 
@@ -217,8 +233,6 @@ fi
 preprocess_config="${TMP_DIR_DEG}/preprocess_config.json"
 echo "$par_process" | jq "." > "$preprocess_config"
 
-LOGS_BASE_DIR="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}"
-mkdir -p "${LOGS_BASE_DIR}/preprocessing"
 
 
 echo "> Running preprocessing pseudobulk"
@@ -311,11 +325,18 @@ run_deg() {
     # Extract unique cell types and create directories
     declare -A CELL_TYPES
     for INPUT_FILE in "${FILES_ARRAY[@]}"; do
-        CELL_TYPES["$(extract_cell_type "$INPUT_FILE")"]=1
+        CELL_TYPE=$(extract_cell_type "$INPUT_FILE")
+        # Only add non-empty cell types to the array (empty means file is not in by_celltype/)
+        if [[ -n "$CELL_TYPE" ]]; then
+            CELL_TYPES["$CELL_TYPE"]=1
+        fi
     done
     
     # Create results directory for combined files (no cell type)
     mkdir -p "${RESULTS_DIR}"
+    
+    # Create base log directory (needed for files without cell types)
+    mkdir -p "${LOGS_BASE_DIR}/deg"
     
     # Create intermediate directories for separate files (with cell types)
     # Logs go directly to cell_type folders, no cleanup needed
@@ -353,7 +374,7 @@ run_deg() {
                     OUTPUT_DIR=\"${INTERMEDIATE_DIR}/\${CELL_TYPE}\"; \
                 fi && \
                 mkdir -p \"\${LOG_DIR}\" \"\${OUTPUT_DIR}\" && \
-                exec > \"\${LOG_DIR}/deg.\${SLURM_JOB_ID}_\${SLURM_ARRAY_TASK_ID}.out\" 2> \"\${LOG_DIR}/deg.\${SLURM_JOB_ID}_\${SLURM_ARRAY_TASK_ID}.err\" && \
+                exec > \"\${LOG_DIR}/deg_analysis.\${SLURM_JOB_ID}_\${SLURM_ARRAY_TASK_ID}.out\" 2> \"\${LOG_DIR}/deg_analysis.\${SLURM_JOB_ID}_\${SLURM_ARRAY_TASK_ID}.err\" && \
                 Rscript ./src/deg/run_deg.R \
                     --input_file \"\$INPUT_FILE\" \
                     --output_dir \"\${OUTPUT_DIR}\" \
@@ -404,7 +425,7 @@ if [ -d "$INTERMEDIATE_DIR" ] && [ "$(ls -A $INTERMEDIATE_DIR 2>/dev/null)" ]; t
             --output="${LOGS_BASE_DIR}/aggregation/deg_aggregation.%j.out" \
             --error="${LOGS_BASE_DIR}/aggregation/deg_aggregation.%j.err" \
             --wrap="${SBATCH_PREAMBLE} && \
-                    python3 -m src.deg.aggregating \
+                    python3 -m src.deg.aggregating_deg \
                     --input_dir ${INTERMEDIATE_DIR} \
                     --output_dir ${RESULTS_DIR}"
         
@@ -420,7 +441,9 @@ echo ""
 echo "============================================"
 echo "DGE PIPELINE COMPLETED"
 echo "============================================"
-echo "  Results saved to: ${BASE_OUTPUT_DIR} (intermediate/ for separate files, results/ for combined)"
+echo "  Results saved to: ${BASE_OUTPUT_DIR}"
+echo "    - intermediate/ for separate files"
+echo "    - results/ for combined"
 echo ""
 echo "> DGE pipeline is finished"
 echo "> Cleaning up temporary files..."

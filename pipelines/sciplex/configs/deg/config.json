@@ -3,7 +3,8 @@
     "par_process": {
       "input_file": "./data/sciplex/pseudobulk/full/srivatsan20_sciplex3.h5ad",
       "output_dir": "./data/sciplex/pseudobulk_processed/group_rep",
-      "design_param": "group_all_replicates"
+      "design_param": "group_all_replicates",
+      "dataset": "sciplex"
     },
     "par_deg": {
       "input_dir": "./data/sciplex/pseudobulk_processed/group_rep",
@@ -20,7 +21,9 @@
     "par_process": {
       "input_file": "./data/sciplex/pseudobulk/full/srivatsan20_sciplex3.h5ad",
       "output_dir": "./data/sciplex/pseudobulk_processed/sep_rep",
-      "design_param": "separate_replicates"
+      "design_param": "separate_replicates",
+      "dataset": "sciplex",
+      "datasets_config_path": "./src/configs/datasets.json"
     },
     "par_deg": {
       "input_dir": "./data/sciplex/pseudobulk_processed/sep_rep",

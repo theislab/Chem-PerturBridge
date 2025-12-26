@@ -18,7 +18,8 @@ FILT=""
 VALID_CHOICES=(
         "sciplex"
         "tahoe"
-        "l1000"
+        "l1000_phase1"
+        "l1000_phase2"
 )
 
 DEG_PARAMETERS=(

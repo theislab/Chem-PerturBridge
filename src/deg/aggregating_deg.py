@@ -134,7 +134,7 @@ def aggregate_cell_type_batches(input_dir: str,
     
     # Concatenate all batches
     logger.info(f'  Concatenating {len(adatas)} batches...')
-    aggregated = ad.concat(adatas, merge='same', join='outer')
+    aggregated = ad.concat(adatas, merge='same', join='outer', uns_merge='same')
     
     # Log batch information
     if 'processing_batch' in aggregated.obs.columns:
@@ -234,4 +234,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 

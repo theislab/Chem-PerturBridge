@@ -9,6 +9,10 @@
 		  "pubchem_mapping": {
 			  "module": "src.pseudobulking.datasets.tahoe.pubchem_imputation",
 			  "func": "pubchem_mapping_tahoe"
+		  	},
+		  "post_processing": {
+			  "module": "src.pseudobulking.datasets.tahoe.post_processing",
+			  "func": "process_tahoe_dataset"
 		  	}
 
 		 },
@@ -22,5 +26,11 @@
                           "func": "pubchem_mapping_sciplex"
                   	}
 
-		 }
+		 },
+	"l1000": {
+		"assembling": {
+			"module": "src.pseudobulking.datasets.l1000.assembling",
+			"func": "assemble_l1000_dataset"
+		}
+	}
 }
