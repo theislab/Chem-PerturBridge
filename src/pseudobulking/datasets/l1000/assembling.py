@@ -474,6 +474,30 @@ def process_cellinfo(cellinfo: pd.DataFrame,
     rename_map = {col: f"cellinfo_{col}" for col in df.columns if col != "cell_id"}
     return df.rename(columns=rename_map).set_index("cell_id")
 
+def process_pert_metadata(pert: pd.DataFrame, inst: pd.DataFrame) -> pd.DataFrame:
+    """
+    Process perturbation metadata.
+    
+    Parameters
+    ----------
+    pert : pd.DataFrame
+        Perturbation metadata
+    inst : pd.DataFrame
+        Instance metadata
+        
+    Returns
+    -------
+    pd.DataFrame
+        Processed perturbation metadata
+    """
+    pert = pert.copy()
+    inst = inst.copy()
+
+    if not 'pubchem_cid' in pert.columns:
+        pert['pubchem_cid'] = None
+
+    return pd.concat([pert, inst]).drop_duplicates('pert_id', keep='first')[pert.columns]
+
 
 def standardize_dose(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -686,6 +710,8 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     obs["organism"] = "human"
     obs["sex"] = inst["cellinfo_donor_sex"].map({"M": "male", "F": "female"})
     obs["self_reported_ethnicity"] = inst.get("cellinfo_donor_ethnicity", "unknown")
+    if 'pubchem_cid' in inst.columns:
+        inst['pubchem_cid'] = pd.to_numeric(inst['pubchem_cid'], errors='coerce').fillna(-666).astype('int64')
     obs["pubchem_cid"] = inst.get("pubchem_cid", None)
     obs["psbulk_cells"] = None
     obs["psbulk_counts"] = None
@@ -701,13 +727,11 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
         obs["perturbagen"].astype(str).str.replace(" ", "_", regex=False) + "_" +
         obs["cell_type"].astype(str).str.replace(" ", "_", regex=False)
     )
-    
     # Clean up missing values and duplicates
     obs = obs.replace({-666: None, '-666': None, 'None': None, 'nan': None, '<NA>': None})
     obs = obs[~obs["sample_id"].duplicated(keep="first")]
     obs = obs.set_index("inst_id", drop=True)
     obs = materialize_string_columns(obs)
-    
     return obs
 
 
@@ -957,9 +981,9 @@ def add_alternative_identifiers(inst_raw: pd.DataFrame) -> pd.DataFrame:
     return inst
 
 
-def annotate_pubchem_cids(pert_raw: pd.DataFrame, paths: dict, config: dict = None) -> pd.DataFrame:
+def annotate_pubchem_cids(df: pd.DataFrame, paths: dict, config: dict = None) -> pd.DataFrame:
     """
-    Annotate perturbation dataframe with PubChem CIDs.
+    Annotate metadata containing perturbation information with PubChem CIDs.
     
     This function adds or updates PubChem CID information for perturbations
     using multiple lookup strategies (InChIKey, SMILES, drug name) with
@@ -970,57 +994,66 @@ def annotate_pubchem_cids(pert_raw: pd.DataFrame, paths: dict, config: dict = No
     
     Parameters:
     -----------
-    pert_raw : pd.DataFrame
-        Perturbation information dataframe
+    df : pd.DataFrame
+        Metadata dataframe containing perturbation information (e.g., instance metadata
+        enriched with perturbation data via merge). Must contain columns: pert_id, pert_type,
+        pert_iname, and optionally inchi_key, canonical_smiles.
     paths : dict
         Dictionary of file paths from define_paths(), must include 'pubchem_cache'
         
     Returns:
     --------
     pd.DataFrame
-        Perturbation dataframe with updated pubchem_cid column
+        Metadata dataframe with updated pubchem_cid column
     """
     def standardize_pubchem_cid(cid):
         try:
-            return int(cid) if (not cid is None) and (int(cid) > 0) else None
+            if pd.isna(cid):
+                return None
+            cid_int = int(cid)
+            return cid_int if cid_int > 0 else None
         except Exception as e:
             logger.warning(f"Error standardizing pubchem_cid: {e}")
             return None
 
     # Filter to only compound perturbations (trt_cp and ctl_vehicle)
     # Other types (shRNA, CRISPR, etc.) don't have PubChem CIDs
-    if not 'pubchem_cid' in pert_raw.columns:
-        pert_raw['pubchem_cid'] = None
+    df = df.copy()
 
-    pert_raw['pubchem_cid'] = pert_raw['pubchem_cid'].apply(standardize_pubchem_cid).fillna(-666).astype('int64')
+    if not 'pubchem_cid' in df.columns:
+        df['pubchem_cid'] = None
+
+    df['pubchem_cid'] = df['pubchem_cid'].apply(standardize_pubchem_cid)
+    df['pubchem_cid'] = pd.to_numeric(df['pubchem_cid'], errors='coerce').fillna(-666).astype('int64')
+
     compound_types = {"trt_cp", "ctl_vehicle"}
-    pert_compounds = pert_raw[pert_raw["pert_type"].isin(compound_types)].copy()
+    df_compounds = df[df["pert_type"].isin(compound_types)].copy()
+
+    if len(df_compounds) == 0:
+        logger.warning("No compound perturbations found to annotate")
+        return df
 
     if config is not None and config.get("subsampling"):
-        pert_compounds = pert_compounds.sample(n=1000, random_state=0)
+        df_compounds = df_compounds.sample(n=1000, random_state=0)
     
-    if len(pert_compounds) == 0:
-        logger.warning("No compound perturbations found to annotate")
-        return pert_raw
+    
     
     
     pubchem_cache = {}
     cache_path = str(paths["pubchem_cache"])
-    pert_compounds = add_pubchem_cids(
-        pert_compounds, 
+    df_compounds = add_pubchem_cids(
+        df_compounds, 
         cache=pubchem_cache, 
         pert_id_col='pert_id',
         drug_col='pert_iname',
         cache_path=cache_path
     )
     
-    pert_compounds['pubchem_cid'] = pert_compounds['pubchem_cid'].fillna(-666).astype("int64")
+    df_compounds['pubchem_cid'] = pd.to_numeric(df_compounds['pubchem_cid'], errors='coerce').fillna(-666).astype("int64")
     
-    # Update the original pert_raw with annotated CIDs
-    pert_raw = pert_raw.copy()
-    pert_raw.loc[pert_compounds.index, "pubchem_cid"] = pert_compounds["pubchem_cid"]
-    
-    return pert_raw
+    # Update the original df with annotated CIDs
+    df.loc[df_compounds.index, "pubchem_cid"] = df_compounds["pubchem_cid"]
+    return df
 
 
 def enrich_instance_metadata(inst: pd.DataFrame, 
@@ -1490,14 +1523,17 @@ def assemble_l1000_dataset(padata: ad.AnnData,
     
     # Load metadata tables
     inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta, cellinfo_beta = load_metadata_tables(PATHS)
+    
+    # Process cell info
+    cellinfo = process_cellinfo(cellinfo_raw, cellinfo_extra=cellinfo_beta)
+
+    # Process perturbation metadata
+    pert_raw = process_pert_metadata(pert_raw, inst_raw)
 
     # Annotate compounds with PubChem CIDs (optional)
     if CONFIG.get("annotate_pubchem", False):
         logger.info("Mapping compounds to PubChem CIDs")
         pert_raw = annotate_pubchem_cids(pert_raw, PATHS, config=CONFIG)
-    
-    # Process cell info
-    cellinfo = process_cellinfo(cellinfo_raw, cellinfo_extra=cellinfo_beta)
     
     # Process instance metadata
     inst = process_instance_metadata(inst_raw, cellinfo, pert_raw, CONFIG, PATHS)

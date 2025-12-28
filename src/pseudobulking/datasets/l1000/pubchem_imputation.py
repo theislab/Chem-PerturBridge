@@ -51,15 +51,12 @@ def load_cache_from_json(cache_path: str) -> Dict[str, Optional[int]]:
         try:
             with open(cache_path, 'r') as f:
                 cache = json.load(f)
-            # Convert string keys back to Optional[int] values
+            # Convert loaded JSON values to Optional[int] type
             # JSON stores None as null, which becomes None in Python
-            # Integer values are stored as strings in JSON, convert them back
+            # Integer values are stored as numbers in JSON, which become Python int when loaded
             cache_typed = {}
             for key, value in cache.items():
-                if value is None:
-                    cache_typed[key] = None
-                else:
-                    cache_typed[key] = int(value)
+                cache_typed[key] = int(value) if value is not None else None
             logger.info(f"Loaded cache from {cache_path} with {len(cache_typed)} entries")
             return cache_typed
         except Exception as e:
@@ -87,17 +84,10 @@ def save_cache_to_json(cache: Dict[str, Optional[int]], cache_path: str) -> None
         if cache_dir:  # Only create directory if path contains a directory
             os.makedirs(cache_dir, exist_ok=True)
         
-        # Convert cache to JSON-serializable format
-        # None values are preserved, integers are converted to strings for JSON
-        cache_json = {}
-        for key, value in cache.items():
-            if value is None:
-                cache_json[key] = None
-            else:
-                cache_json[key] = value
-        
+        # Save cache directly to JSON (cache is already JSON-serializable: Dict[str, Optional[int]])
+        # None values are preserved as null, integers are stored as numbers (JSON natively supports integers)
         with open(cache_path, 'w') as f:
-            json.dump(cache_json, f, indent=2)
+            json.dump(cache, f, indent=2)
         logger.debug(f"Saved cache to {cache_path} with {len(cache)} entries")
     except Exception as e:
         logger.warning(f"Failed to save cache to {cache_path}: {e}")
@@ -165,7 +155,7 @@ def _fetch_pubchem_cid_with_retry(identifier: str,
         try:
             compounds = pcp.get_compounds(identifier, lookup_type)
             cid = compounds[0].cid if compounds else None
-            logger.debug("CID for %s '%s': %d", identifier_label, identifier, cid)
+            logger.debug("CID for %s '%s': %s", identifier_label, identifier, cid)
             break
         except Exception as e:
             if (isinstance(e, pcp.PubChemHTTPError) or isinstance(e, pcp.TimeoutError) or
@@ -179,10 +169,11 @@ def _fetch_pubchem_cid_with_retry(identifier: str,
                              identifier_label, identifier, str(e))
                 break
     
-    # Store in both method-specific and universal cache keys
-    cache[cache_key] = cid
-    if universal_cache_key:
-        cache[universal_cache_key] = cid
+    # Store in both method-specific and universal cache keys (only if cid is not None)
+    if cid is not None:
+        cache[cache_key] = cid
+        if universal_cache_key:
+            cache[universal_cache_key] = cid
     
     return cid
 
@@ -357,6 +348,8 @@ def add_pubchem_cids(df: pd.DataFrame,
     pd.DataFrame
         DataFrame with updated pubchem_cid column
     """
+    df = df.copy()
+
     if df is None:
         raise Exception("The pseudobulk dataset is empty")
     
@@ -437,7 +430,7 @@ def add_pubchem_cids(df: pd.DataFrame,
             logger.info(f"Processed {iteration_count}/{n_compounds} compounds ({n_mapped_so_far} mapped so far)")
         
         # Save cache every 10 iterations if cache_path is provided
-        if cache_path and iteration_count % 10 == 0:
+        if cache_path and iteration_count % 500 == 0:
             save_cache_to_json(cache, cache_path)
     
     # Final save of cache if cache_path is provided
@@ -447,7 +440,6 @@ def add_pubchem_cids(df: pd.DataFrame,
     # Update pubchem_cid column
     df_updated = df.copy()
     df_updated[pubchem_cid_col] = cids
-    df_updated[pubchem_cid_col] = df_updated[pubchem_cid_col]
     
     n_mapped = df_updated[pubchem_cid_col].notna().sum()
     logger.info(f"Mapped {n_mapped} out of {len(df)} compounds to PubChem CIDs")
