@@ -994,11 +994,29 @@ class PseudobulkProcessor:
     
     def add_perturbation_labels(self) -> None:
         """Step 4: Add perturbation labels."""
+        from decimal import Decimal, ROUND_HALF_UP
+        
+        def normalize_number(x, decimals=4):
+            """Normalize number to specified decimal places using half-up rounding."""
+            d = Decimal(str(x)).quantize(
+                Decimal('1.' + '0' * decimals),
+                rounding=ROUND_HALF_UP
+            )
+            return format(d.normalize(), 'f')
+
+        def has_more_than_decimals(x, decimals=4):
+            """Check if number has more than specified decimal places."""
+            d = Decimal(str(x))
+            return -d.as_tuple().exponent > decimals
+
         logger.info('Add perturbation label')
         obs = self.padata.obs.copy()
         obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: format(x, ".15g"))
         obs['pert_time_h'] = obs['pert_time_h'].apply(lambda x: format(x, ".15g"))
         
+        if obs['pert_dose_uM'].apply(lambda x: has_more_than_decimals(x)).any():
+            obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: normalize_number(x))
+
         self.padata.obs['perturbation_label'] = obs.apply(
             lambda x: create_perturbation_label(
                 x.is_control,
