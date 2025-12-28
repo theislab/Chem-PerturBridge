@@ -1,7 +1,7 @@
 {
   "group_all_replicates": {
     "par_process": {
-      "input_file": "./data/l1000_phase2/pseudobulk/l1000_phase2_level3_deg_ready_landmark.h5ad",
+      "input_file": "./data/l1000_phase2/pseudobulk/full/l1000_phase2_level3_deg_ready_landmark.h5ad",
       "output_dir": "./data/l1000_phase2/pseudobulk_processed/group_rep",
       "design_param": "group_all_replicates",
       "dataset": "l1000_phase2"
@@ -19,7 +19,7 @@
   },
   "separate_replicates": {
     "par_process": {
-      "input_file": "./data/l1000_phase2/pseudobulk/l1000_phase2_level3_deg_ready_landmark.h5ad",
+      "input_file": "./data/l1000_phase2/pseudobulk/full/l1000_phase2_level3_deg_ready_landmark.h5ad",
       "output_dir": "./data/l1000_phase2/pseudobulk_processed/sep_rep",
       "design_param": "separate_replicates",
       "dataset": "l1000_phase2"

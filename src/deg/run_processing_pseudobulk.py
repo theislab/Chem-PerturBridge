@@ -16,6 +16,8 @@ from src.deg.ensembl_mapping import map_ensembl_ids_for_dataset
 MAX_N_NON_CONTROL_OBS = 2500
 #MAX_N_NON_CONTROL_OBS = 1000
 
+MAX_ALLOWED_EXCESS = 200  # Maximum allowed excess over MAX_N_NON_CONTROL_OBS
+
 MIN_N_PERTURBAGENS = 500
 RANDOM_SEED = 0
 
@@ -357,19 +359,27 @@ def create_batches(non_controls: ad.AnnData,
         best_batch_idx = None
         best_waste = float('inf')
         
+        # Only consider batches that haven't exceeded yet
         for batch_idx, batch in enumerate(batches):
-            new_n_obs, _, _ = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels)
-            
-            if new_n_obs <= MAX_N_NON_CONTROL_OBS:
-                waste = MAX_N_NON_CONTROL_OBS - new_n_obs
-                if waste < best_waste:
-                    best_waste = waste
-                    best_batch_idx = batch_idx
+            if batch['n_obs'] < MAX_N_NON_CONTROL_OBS:  # Changed: check current size, not future
+                new_n_obs, _, _ = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels)
+                
+                # Only consider if it doesn't exceed too much
+                if new_n_obs <= MAX_N_NON_CONTROL_OBS + MAX_ALLOWED_EXCESS:
+                    # Calculate waste (allow exceeding up to MAX_ALLOWED_EXCESS)
+                    waste = abs(MAX_N_NON_CONTROL_OBS - new_n_obs)
+                    
+                    if waste < best_waste:
+                        best_waste = waste
+                        best_batch_idx = batch_idx
         
         if best_batch_idx is not None:
+            # Found a batch that hasn't exceeded yet - add to it (even if it will exceed)
             batch = batches[best_batch_idx]
             add_data_to_batch(batch, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
         else:
+            # No suitable batch found (either no batches exist, or all have exceeded)
+            # Create a new batch
             new_batch = {
                 'perturbagens': {pert},
                 'n_obs': pert_n_obs,
@@ -438,10 +448,15 @@ def pad_batches(batches: list,
                 np.random.shuffle(shuffled_perts)
                 
                 for pert in shuffled_perts:
+                    # Stop adding to this batch if it has already exceeded the limit
+                    if batch['n_obs'] >= MAX_N_NON_CONTROL_OBS:
+                        break
+                    
                     pert_n_obs, pert_n_labels, pert_data = get_perturbagen_properties(perturbagen_info, pert)
                     
                     new_n_obs, _, _ = calculate_new_batch_size(batch, pert_n_obs, pert_n_labels)
-                    if new_n_obs <= MAX_N_NON_CONTROL_OBS:
+                    # Only add if it doesn't exceed too much (consistent with create_batches)
+                    if new_n_obs <= MAX_N_NON_CONTROL_OBS + MAX_ALLOWED_EXCESS:
                         add_data_to_batch(batch, pert_n_obs, pert_n_labels, pert_data.obs.index.tolist(), pert=pert)
     
     # Log final batch statistics after padding

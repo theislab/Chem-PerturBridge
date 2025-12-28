@@ -469,6 +469,7 @@ def process_cellinfo(cellinfo: pd.DataFrame,
     if cellinfo_extra is not None and not cellinfo_extra.empty:
         df_extra = cellinfo_extra.copy()
         df_extra[cellinfo_id] = df_extra['cell_iname'].str.replace('_', '.')
+        df = pd.concat([df, df_extra])[df.columns].drop_duplicates(cellinfo_id).copy()
         df = df.merge(df_extra[[cellinfo_id, 'cellosaurus_id']], on=cellinfo_id, how='left')
         df[cellinfo_id + '_mixed'] = df['cellosaurus_id'].fillna(df[cellinfo_id])
     rename_map = {col: f"cellinfo_{col}" for col in df.columns if col != "cell_id"}
@@ -689,7 +690,7 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     # Build standard obs columns
     obs["plate"] = inst.get("det_plate", None)
     obs["well"] = inst.get("rna_well", inst.get("det_well", None))
-    obs["cell_type"] = inst.get("cellinfo_cell_id_mixed", inst.get("cell_id", None))
+    obs["cell_type"] = inst.get("cellinfo_cell_id_mixed", inst.get("cell_id", None)).fillna(inst.get("cell_id", None))
     obs["perturbagen"] = inst.get("pert_iname", None)
     obs["pert_type"] = inst["pert_type"].map(PERT_TYPE_MAP)
     obs["is_control"] = inst["pert_type"].str.startswith("ctl")
@@ -1137,7 +1138,15 @@ def process_instance_metadata(inst_raw: pd.DataFrame,
     if config["control"] is not None:
         inst = inst[(inst['pert_type'].str.startswith('ctl') & inst['pert_iname'].isin(config['control'])) |
                     (~inst['pert_type'].str.startswith('ctl'))]
-    
+
+    cell_ids_with_controls = set(inst[inst['pert_type'].str.startswith('ctl')]['cell_id'].unique())
+    cell_ids_with_compounds = set(inst[~inst['pert_type'].str.startswith('ctl')]['cell_id'].unique())
+    valid_cell_ids = cell_ids_with_controls & cell_ids_with_compounds
+    if len(valid_cell_ids) == 0:
+        raise ValueError("No cell lines found with both controls and compounds")
+
+    inst = inst[inst['cell_id'].isin(valid_cell_ids)].copy()
+
     if config["subsampling"]:
         inst = inst.sample(max_samples, random_state=0)
     
