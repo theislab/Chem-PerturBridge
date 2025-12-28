@@ -651,6 +651,7 @@ def process_gene_annotations(geneinfo: pd.DataFrame,
 def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd.DataFrame:
     """
     Build standardized .obs dataframe from instance metadata.
+    Sticked to https://lamin.ai/laminlabs/pertdata/transform/REAvqqdo3sbH0000
     
     Parameters
     ----------
@@ -672,13 +673,18 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     # Map perturbation types to standard schema
     PERT_TYPE_MAP = {
         "trt_cp": "compound",
-        "trt_lig": "ligand",
-        "trt_misc": "misc",
-        "trt_sh": "shRNA",
-        "trt_oe": "overexpression",
-        "trt_xpr": "CRISPR-Cas9",
-        "ctl_vehicle": "compound"
+        "trt_lig": "biologic",
+        "trt_sh": "genetic",
+        "trt_oe": "genetic",
+        "trt_oe.mut": "genetic",
+        "trt_xpr": "genetic",
+        "ctl_vehicle": "compound",
+        "trt_poscon": "compound",
+        "ctl_vector": "genetic",
+        "ctl_untrt": "biologic"
+        
     }
+
     
     # Build standard obs columns
     obs["plate"] = inst.get("det_plate", None)
@@ -705,7 +711,7 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     else:
         raise ValueError(f"Invalid dataset: {dataset}")
 
-    obs["assay"] = "L1000"
+    obs["assay"] = "L1000 mRNA profiling assay"
     obs["development_stage"] = inst.apply(build_development_stage, axis=1)
     obs["organism"] = "human"
     obs["sex"] = inst["cellinfo_donor_sex"].map({"M": "male", "F": "female"})
