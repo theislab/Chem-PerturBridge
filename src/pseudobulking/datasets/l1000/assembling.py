@@ -683,7 +683,7 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     # Build standard obs columns
     obs["plate"] = inst.get("det_plate", None)
     obs["well"] = inst.get("rna_well", inst.get("det_well", None))
-    obs["cell_type"] = inst.get("cell_id_mixed", inst.get("cell_id", None))
+    obs["cell_type"] = inst.get("cellinfo_cell_id_mixed", inst.get("cell_id", None))
     obs["perturbagen"] = inst.get("pert_iname", None)
     obs["pert_type"] = inst["pert_type"].map(PERT_TYPE_MAP)
     obs["is_control"] = inst["pert_type"].str.startswith("ctl")
