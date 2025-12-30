@@ -250,7 +250,8 @@ derive_top_table <- function(fit,
                              perturbagen,
                              pert_dose_uM,
                              pert_time_h,
-                             subsampling) {
+                             subsampling,
+                             normalized = FALSE) {
   # Parameter validation
   stopifnot(!missing(fit),
             !missing(raw_control),
@@ -262,9 +263,9 @@ derive_top_table <- function(fit,
     contrast <- paste0("cond", clean(raw_cond), " - cond", clean(raw_control))
     tryCatch({
         ctr <- makeContrasts(contrasts = contrast, levels = colnames(coef(fit)))
-        
+
         fit2 <- contrasts.fit(fit, ctr) %>% 
-          eBayes(robust = !isTRUE(subsampling))  # Skip robust for speed in subsampling mode
+          eBayes(robust = !isTRUE(subsampling), trend = isTRUE(normalized))  # Skip robust for speed in subsampling mode
         
         top_table <- topTable(fit2, number = Inf, sort = "none", adjust.method="BH", confint=TRUE) %>%
           rownames_to_column("gene") %>%
@@ -340,7 +341,8 @@ run_contrasts <- function(fit,
                                   perturbagen,
                                   pert_dose_uM,
                                   pert_time_h,
-                                  par$subsampling)
+                                  par$subsampling,
+                                  par$normalized)
         }
       top_tables <- compact(top_tables)
       if (length(top_tables) > 0) {
@@ -378,16 +380,28 @@ run_dge <- function(ad,
             !is.null(ad$X),
             is.list(par))
   
-  # build DGEList + design
+  
   counts <- Matrix::t(ad$X)
-  dge    <- DGEList(counts=counts)
 
   cat("    Constructing design matrix...\n")
   start_time <- Sys.time()
-  design <- model.matrix(
-    ~ 0 + cond + plate,
-    data = obs
-    )
+
+  # build design matrix
+  plates_to_process <- unique(obs$plate)
+  n_plates <- length(plates_to_process)
+
+  if (n_plates > 1) {
+    design <- model.matrix(
+      ~ 0 + cond + plate,
+      data = obs
+      )
+  } else {
+    design <- model.matrix(
+      ~ 0 + cond,
+      data = obs
+      )
+  }
+
   diff_time <- difftime(Sys.time(), start_time, units = "secs")
   cat(sprintf("    Design matrix is constructed in %.1f seconds\n", diff_time))
   cat("    Design matrix dimensions:", nrow(design), "samples ×", ncol(design), "coefficients\n")
@@ -396,6 +410,8 @@ run_dge <- function(ad,
   if (is.null(par$normalized) || !par$normalized) {
     cat("    Filtering genes and normalizing counts...\n")
     start_time <- Sys.time()
+    # build DGEList
+    dge    <- DGEList(counts=counts)
     keep <- filterByExpr(dge, design)
     dge  <- dge[keep, , keep.lib.sizes=FALSE] %>% calcNormFactors()
     diff_time <- difftime(Sys.time(), start_time, units = "secs")
@@ -410,9 +426,9 @@ run_dge <- function(ad,
     cat("    Skipping voom transformation (dataset is already normalized)\n")
     cat("    Using as.matrix() directly for lmFit (data assumed to be normalized and log-transformed)...\n")
     start_time <- Sys.time()
-    # lmFit can work with as.matrix() directly via getEAWP() -> as.matrix(dge)
-    # This extracts dge$counts which should contain normalized log-transformed values
-    v <- as.matrix(dge$counts)
+    # lmFit can work with as.matrix() directly via getEAWP() -> as.matrix(counts)
+    # This extracts counts which should contain normalized log-transformed values
+    v <- as.matrix(counts)
     diff_time <- difftime(Sys.time(), start_time, units = "secs")
     cat(sprintf("    as.matrix() prepared in %.1f seconds\n", diff_time))
   }
