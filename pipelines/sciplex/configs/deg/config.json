@@ -22,8 +22,7 @@
       "input_file": "./data/sciplex/pseudobulk/full/srivatsan20_sciplex3.h5ad",
       "output_dir": "./data/sciplex/pseudobulk_processed/sep_rep",
       "design_param": "separate_replicates",
-      "dataset": "sciplex",
-      "datasets_config_path": "./src/configs/datasets.json"
+      "dataset": "sciplex"
     },
     "par_deg": {
       "input_dir": "./data/sciplex/pseudobulk_processed/sep_rep",

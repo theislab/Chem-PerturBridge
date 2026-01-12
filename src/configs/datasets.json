@@ -16,7 +16,7 @@
 		  	}
 
 		 },
-        "sciplex": {
+    "sciplex": {
 		"standardize_dataset": {
                             "module": "src.pseudobulking.datasets.sciplex.standardization",
                             "func": "standardize_sciplex"
@@ -26,11 +26,5 @@
                           "func": "pubchem_mapping_sciplex"
                   	}
 
-		 },
-	"l1000": {
-		"assembling": {
-			"module": "src.pseudobulking.datasets.l1000.assembling",
-			"func": "assemble_l1000_dataset"
-		}
-	}
+		 }
 }
