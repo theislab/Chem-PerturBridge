@@ -138,7 +138,7 @@ def aggregate_cell_type_batches(input_dir: str,
     
     # Log batch information
     if 'processing_batch' in aggregated.obs.columns:
-        logger.info(f'  Batch column added with {aggregated.obs['processing_batch'].nunique()}')
+        logger.info(f"  Batch column added with {aggregated.obs['processing_batch'].nunique()}")
     
     # Save aggregated file
     os.makedirs(output_dir, exist_ok=True)

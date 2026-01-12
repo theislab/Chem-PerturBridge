@@ -2,7 +2,7 @@
 
 **OP3_v2** is a set of pipelines for analyzing single-cell RNA sequencing data from perturbation experiments. 
 
-The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234) and [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full) datasets.
+The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234), [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full), and [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0) datasets.
 
 It consists of the following steps:
 
@@ -108,7 +108,7 @@ You can execute it with following arguments:
 ```
 -s if this flag is included, then the script is executed for a subsample of a dataset, default=false
 -h if this flag is included, then the help is printed, default=false
--d it is a required flag speifying which dataset should be processed: sciplex | tahoe ...
+-d it is a required flag speifying which dataset should be processed: sciplex | tahoe | l1000_phase1 | l1000_phase2
 ```
 
 For example, for subsample of Sci-Plex dataset, you need to run:
@@ -122,7 +122,7 @@ cd /op3_v2
 The DEG pipeline consists of three main steps:
 1. **Preprocessing**: Processes pseudobulk data and adds perturbation labels (`run_processing_pseudobulk.py`)
 2. **DGE Analysis**: Performs differential gene expression analysis using limma/edgeR (`run_deg.R`)
-3. **Aggregation**: Aggregates batched results into final output files (`aggregating.py`)
+3. **Aggregation**: Aggregates batched results into final output files (`aggregating_deg.py`)
 
 You can execute it with following arguments:
 ```
@@ -132,7 +132,7 @@ You can execute it with following arguments:
 -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
 -q if this flag is included, then samples that did not pass quality control are filtered out, default=false
 -n if this flag is included, then the dataset is already normalized and normalization steps are skipped, default=false
--d it is a required flag specifying which dataset should be processed: sciplex | tahoe | l1000
+-d it is a required flag specifying which dataset should be processed: sciplex | tahoe | l1000_phase1 | l1000_phase2
 -p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
 ```
 
@@ -145,7 +145,7 @@ cd /op3_v2
 For a normalized dataset (e.g., L1000) with separate_replicates parameter:
 ```
 cd /op3_v2
-./run_pipelines/run_deg.sh -d l1000 -p separate_replicates -j -n
+./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n
 ```
 
 # Project structure:
@@ -166,9 +166,9 @@ The structure of the repo:
 │       │                   │   └── deg_processing_pseudobulk.*.out, *.err
 │       │                   ├── deg/
 │       │                   │   ├── celltype1/
-│       │                   │   │   └── deg.*.out, *.err
+│       │                   │   │   └── deg_analysis.*.out, *.err
 │       │                   │   ├── celltype2/
-│       │                   │   │   └── deg.*.out, *.err
+│       │                   │   │   └── deg_analysis.*.out, *.err
 │       │                   │   └── ...
 │       │                   └── aggregation/
 │       │                       └── deg_aggregation.*.out, *.err
@@ -181,23 +181,33 @@ The structure of the repo:
 │   │       ├── deg/
 │   │       │   └── config.json
 │   │       └── sciplex_pseudobulking.sh
-│   └── tahoe
-│       └─── configs/
-│           ├── deg/
-│           │   └── config.json
-│           └── tahoe_pseudobulking_parallel.sh
+│   ├── tahoe
+│   │   └─── configs/
+│   │       ├── deg/
+│   │       │   └── config.json
+│   │       └── tahoe_pseudobulking_parallel.sh
+│   ├── l1000_phase1
+│   │   ├── configs/
+│   │   │   └── deg/
+│   │   │       └── config.json
+│   │   └── l1000_phase1_pseudobulking.sh
+│   └── l1000_phase2
+│       ├── configs/
+│       │   └── deg/
+│       │       └── config.json
+│       └── l1000_phase2_pseudobulking.sh
 ├── README.md
 ├── requirements.txt
 ├── run_pipelines
 │   ├── run_pseudobulking.sh
 │   └── run_deg.sh
 ├── src
-│   ├── configs
-│   │   └── datasets.json
+│   ├── configs
+│   │   └── datasets.json
 │   ├── deg
 │   │   ├── run_deg.R
 │   │   ├── run_processing_pseudobulk.py
-│   │   ├── aggregating.py
+│   │   ├── aggregating_deg.py
 │   │   └── subsampling.R
 │   ├── downloading
 │   │   └── run_downloading_datasets.py
@@ -210,9 +220,13 @@ The structure of the repo:
 │   │       ├── sciplex
 │   │       │   ├── pubchem_imputation.py
 │   │       │   └── standardization.py
-│   │       └── tahoe
+│   │       ├── tahoe
+│   │       │   ├── pubchem_imputation.py
+│   │       │   └── standardization.py
+│   │       └── l1000
+│   │           ├── assembling.py
 │   │           ├── pubchem_imputation.py
-│   │           └── standardization.py
+│   │           └── run_assembling.py
 │   └── utils
 │       └─── parsing_utils.py
 └── venv -> /home/icb/olga.novitskaia/venv/

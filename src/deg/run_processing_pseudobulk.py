@@ -67,6 +67,8 @@ def create_perturbation_label(is_control: bool,
                 + 'uM_' + str(time) + 'h' \
                 + '_' + str(well) \
                 + '_' + str(plate)
+        else:
+            raise ValueError(f'Invalid design parameter: {design_param}')
 
 
 def create_dir_if_not_exists(file_output: str) -> None:

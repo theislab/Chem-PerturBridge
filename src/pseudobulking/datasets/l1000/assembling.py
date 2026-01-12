@@ -17,7 +17,8 @@ import scipy.sparse as sp
 import anndata as ad
 
 from src.utils.parsing_utils import *
-from src.pseudobulking.datasets.l1000.pubchem_imputation import add_pubchem_cids
+from src.pseudobulking.common.pubchem import lookup_pubchem_cids
+from src.pseudobulking.datasets.l1000.pubchem_imputation import pubchem_mapping_l1000
 
 # Try to import cmapPy for GCTX parsing
 try:
@@ -28,9 +29,8 @@ except ImportError:
     HAS_CMAPPY = False
     logger.warning("cmapPy not available. GCTX parsing will not work.")
 
-# Global variables for caching GCTX metadata
-_GCTX_COL_IDS = None
-_GCTX_COL_ID_MAP = None
+# Global cache for GCTX metadata keyed by file path
+_GCTX_COL_CACHE = {}
 
 def _read_table(path: Path, **kwargs) -> pd.DataFrame:
     """
@@ -427,17 +427,14 @@ def standardize_inst(inst: pd.DataFrame) -> pd.DataFrame:
     """
     df = inst.copy()
     
-    # Find ID column
-    for id_col in ["inst_id", "sample_id", "distil_id"]:
-        if id_col in df.columns:
-            df = df.rename(columns={id_col: "lincs_inst_id"})
-            break
-    else:
-        raise KeyError("inst info missing inst_id/sample_id/distil_id")
+    if "inst_id" not in df.columns:
+        raise KeyError("inst info missing inst_id")
     
     # Add plate info if missing
     if 'det_plate' not in df.columns:
-        df['det_plate'] = df['lincs_inst_id'].str.split(':').str[0]
+        df['det_plate'] = df['inst_id'].str.split(':').str[0]
+
+    df['lincs_inst_id'] = df['inst_id'].astype("string")
     
     return df.set_index("lincs_inst_id", drop=False)
 
@@ -464,6 +461,16 @@ def process_cellinfo(cellinfo: pd.DataFrame,
     pd.DataFrame
         Processed cell info indexed by cell_id with prefixed column names
     """
+    NAME_TO_CVCL = {
+        "HA1E": "CVCL_VU89",
+        "HEK293T": "CVCL_0063",
+        "HS27A": "CVCL_3719",
+        "FIBRNPC": "CVCL_UK07",
+        "U266": "CVCL_0566",
+        "HUES3":   "CVCL_B161",
+        "HUVEC":   "CVCL_2959"
+    }
+
     df = cellinfo.copy()
     cellinfo_id = 'cell_id'
     if cellinfo_extra is not None and not cellinfo_extra.empty:
@@ -473,7 +480,10 @@ def process_cellinfo(cellinfo: pd.DataFrame,
         df = df.merge(df_extra[[cellinfo_id, 'cellosaurus_id']], on=cellinfo_id, how='left')
         df[cellinfo_id + '_mixed'] = df['cellosaurus_id'].fillna(df[cellinfo_id])
     rename_map = {col: f"cellinfo_{col}" for col in df.columns if col != "cell_id"}
-    return df.rename(columns=rename_map).set_index("cell_id")
+    df = df.rename(columns=rename_map).set_index("cell_id").copy()
+    if 'cellinfo_cell_id_mixed' in df.columns:
+        df['cellinfo_cell_id_mixed'] = df['cellinfo_cell_id_mixed'].replace(NAME_TO_CVCL)
+    return df
 
 def process_pert_metadata(pert: pd.DataFrame, inst: pd.DataFrame) -> pd.DataFrame:
     """
@@ -666,10 +676,8 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     """
     obs = pd.DataFrame(index=inst.index)
     
-    # Copy identifier columns
-    for extra_id in ("lincs_inst_id", "distil_id", "inst_id", "sample_id", "sig_id"):
-        if extra_id in inst.columns:
-            obs[extra_id] = inst[extra_id].astype("string")
+    # Copy required identifier columns
+    obs["inst_id"] = inst["inst_id"].astype("string")
     
     # Map perturbation types to standard schema
     PERT_TYPE_MAP = {
@@ -692,8 +700,12 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     obs["well"] = inst.get("rna_well", inst.get("det_well", None))
     obs["cell_type"] = inst.get("cellinfo_cell_id_mixed", inst.get("cell_id", None)).fillna(inst.get("cell_id", None))
     obs["perturbagen"] = inst.get("pert_iname", None)
-    obs["pert_type"] = inst["pert_type"].map(PERT_TYPE_MAP)
-    obs["is_control"] = inst["pert_type"].str.startswith("ctl")
+    if 'pert_type' in inst.columns:
+        obs["pert_type"] = inst["pert_type"].map(PERT_TYPE_MAP)
+        obs["is_control"] = inst["pert_type"].str.startswith("ctl")
+    else:
+        raise ValueError("pert_type column not found in instance metadata")
+    
     obs["pert_dose_uM"] = inst["pert_dose_um"].astype(float)
     obs.loc[obs['is_control'], 'pert_dose_uM'] = 0
     obs["pert_time_h"] = inst["pert_time_h"].astype(float)
@@ -715,7 +727,12 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     obs["assay"] = "L1000 mRNA profiling assay"
     obs["development_stage"] = inst.apply(build_development_stage, axis=1)
     obs["organism"] = "human"
-    obs["sex"] = inst["cellinfo_donor_sex"].map({"M": "male", "F": "female"})
+
+    if 'cellinfo_donor_sex' in inst.columns:
+        obs["sex"] = inst["cellinfo_donor_sex"].map({"M": "male", "F": "female"})
+    else:
+        obs["sex"] = "unknown"
+        
     obs["self_reported_ethnicity"] = inst.get("cellinfo_donor_ethnicity", "unknown")
     if 'pubchem_cid' in inst.columns:
         inst['pubchem_cid'] = pd.to_numeric(inst['pubchem_cid'], errors='coerce').fillna(-666).astype('int64')
@@ -736,7 +753,6 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     )
     # Clean up missing values and duplicates
     obs = obs.replace({-666: None, '-666': None, 'None': None, 'nan': None, '<NA>': None})
-    obs = obs[~obs["sample_id"].duplicated(keep="first")]
     obs = obs.set_index("inst_id", drop=True)
     obs = materialize_string_columns(obs)
     return obs
@@ -864,7 +880,7 @@ def build_config(config: Optional[dict] = None) -> dict:
 
 def define_obs_schema() -> list:
     """
-    Define the strict obs schema for L1000 pseudobulk data.
+    Define the strict obs schema for pseudobulk data.
     
     Returns
     -------
@@ -873,19 +889,19 @@ def define_obs_schema() -> list:
     """
     return [
         ("sample_id", "category", "ID of the observation: plate + well + cell_type + perturbagen"),
-        ("plate", "category", "Assay plate identifier (det_plate)"),
-        ("well", "category", "Well ID on the RNA plate (rna_well)"),
+        ("plate", "category", "Assay detection plate identifier (det_plate)"),
+        ("well", "category", "Well ID on the RNA/detection plate (rna_well or det_well)"),
         ("cell_type", "category", "Cell line / cell_id"),
-        ("perturbagen", "category", "Human-readable perturbagen label"),
-        ("pert_type", "category", "Perturbation class"),
+        ("perturbagen", "category", "Perturbagen name"),
+        ("pert_type", "category", "Perturbation type"),
         ("is_control", "category", "True/False for controls"),
         ("pert_dose_uM", "float64", "Dose in micromolar"),
         ("pert_time_h", "float64", "Exposure time in hours"),
-        ("suspension_type", "category", "Growth pattern"),
+        ("suspension_type", "category", "Type of biological material that was isolated into suspension and used for profiling"),
         ("tissue", "category", "Primary tissue/site"),
-        ("tissue_type", "category", "Sample type"),
+        ("tissue_type", "category", "Type of tissue: tissue, cell culture or organoid"),
         ("disease", "category", "Disease/subtype"),
-        ("library", "category", "Library/release"),
+        ("library", "category", "Library ID"),
         ("stimulation", "category", "High-level stimulus"),
         ("guide", "category", "A guide RNA directs the CRISPR system"),
         ("dataset", "category", "Dataset label"),
@@ -950,41 +966,18 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
 
 def add_alternative_identifiers(inst_raw: pd.DataFrame) -> pd.DataFrame:
     """
-    Standardize instance metadata and add alternative identifier columns.
-    
-    This function standardizes the instance ID column and preserves alternative
-    identifiers (distil_id, inst_id, sample_id, sig_id) for cross-referencing.
-    
-    Parameters
-    ----------
-    inst_raw : pd.DataFrame
-        Raw instance/sample metadata
-        
-    Returns
-    -------
-    pd.DataFrame
-        Instance metadata with standardized lincs_inst_id index
-        and additional identifier columns
+    Standardize instance metadata and ensure inst_id/lincs_inst_id are present.
     """
     logger.info('  Processing instance metadata')
     inst = standardize_inst(inst_raw)
-    
-    # Keep alternative identifier columns
-    inst_raw_tmp = inst_raw.copy()
-    if 'lincs_inst_id' not in inst_raw_tmp.columns:
-        if 'sample_id' in inst_raw_tmp.columns:
-            inst_raw_tmp['lincs_inst_id'] = inst_raw_tmp['sample_id']
-        elif 'inst_id' in inst_raw_tmp.columns:
-            inst_raw_tmp['lincs_inst_id'] = inst_raw_tmp['inst_id']
-        else:
-            raise ValueError("instance metadata must have lincs_inst_id, sample_id, or inst_id column")
-    
-    inst_raw_indexed = inst_raw_tmp.set_index("lincs_inst_id", drop=False)
-    
-    for extra_id in ("distil_id", "inst_id", "sample_id", "sig_id"):
-        if extra_id in inst_raw_indexed.columns:
-            inst[extra_id] = inst_raw_indexed.loc[inst.index, extra_id].astype("string")
-    
+
+    if 'inst_id' not in inst_raw.columns:
+        raise ValueError("instance metadata must have inst_id column")
+
+    if 'lincs_inst_id' not in inst.columns:
+        inst['lincs_inst_id'] = inst['inst_id'].astype("string")
+
+
     return inst
 
 
@@ -1048,12 +1041,14 @@ def annotate_pubchem_cids(df: pd.DataFrame, paths: dict, config: dict = None) ->
     
     pubchem_cache = {}
     cache_path = str(paths["pubchem_cache"])
-    df_compounds = add_pubchem_cids(
+    df_compounds = lookup_pubchem_cids(
         df_compounds, 
         cache=pubchem_cache, 
         pert_id_col='pert_id',
         drug_col='pert_iname',
-        cache_path=cache_path
+        cache_path=cache_path,
+        manual_mapping_func=pubchem_mapping_l1000,
+        dataset_key='l1000'
     )
     
     df_compounds['pubchem_cid'] = pd.to_numeric(df_compounds['pubchem_cid'], errors='coerce').fillna(-666).astype("int64")
@@ -1234,21 +1229,33 @@ def _get_gctx_column_ids(gctx_path: Path) -> set:
     set
         Set of GCTX column IDs.
     """
-    global _GCTX_COL_IDS, _GCTX_COL_ID_MAP
-    
-    if _GCTX_COL_IDS is None:
+    cache_key = str(gctx_path)
+    if cache_key not in _GCTX_COL_CACHE:
         if not gctx_path.exists():
             raise FileNotFoundError(gctx_path)
         with h5py.File(gctx_path, "r") as handle:
             root = handle["0"] if "0" in handle else handle
             ids = root["META"]["COL"]["id"][:]
-        _GCTX_COL_IDS = [
+        col_ids = [
             id_.decode("utf-8") if isinstance(id_, bytes) else str(id_)
             for id_ in ids
         ]
-        _GCTX_COL_ID_MAP = {id_.lower(): id_ for id_ in _GCTX_COL_IDS}
-        logger.info(f"  Loaded {len(_GCTX_COL_IDS):,} column IDs from {gctx_path.name}")
-    return set(_GCTX_COL_IDS)
+        _GCTX_COL_CACHE[cache_key] = {
+            "ids": col_ids,
+            "id_map": {id_.lower(): id_ for id_ in col_ids},
+        }
+        logger.info(f"  Loaded {len(col_ids):,} column IDs from {gctx_path.name}")
+    return set(_GCTX_COL_CACHE[cache_key]["ids"])
+
+
+def _get_gctx_id_map(gctx_path: Path) -> dict:
+    """
+    Return case-insensitive GCTX ID map for a given file path.
+    """
+    cache_key = str(gctx_path)
+    if cache_key not in _GCTX_COL_CACHE:
+        _get_gctx_column_ids(gctx_path)
+    return _GCTX_COL_CACHE[cache_key]["id_map"]
 
 
 def _filter_obs_for_gctx(obs_subset: pd.DataFrame, gctx_path: Path) -> pd.DataFrame:
@@ -1326,7 +1333,7 @@ def build_obs_helpers(obs: pd.DataFrame, gctx_path: Path) -> pd.DataFrame:
         If none of the obs IDs match the GCTX metadata.
     """
     gctx_ids = _get_gctx_column_ids(gctx_path)
-    id_map = _GCTX_COL_ID_MAP or {}
+    id_map = _get_gctx_id_map(gctx_path)
     index_vals = obs.index.astype("string")
     mask = index_vals.isin(gctx_ids)
     
@@ -1576,4 +1583,3 @@ def assemble_l1000_dataset(padata: ad.AnnData,
     logger.info('L1000-specific processing completed')
     
     return padata_processed
-

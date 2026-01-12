@@ -21,6 +21,13 @@ DATA_ROOT=./data/${DATASET}/raw/
 OUTPUT_DIR=./data/${DATASET}/pseudobulk/${SUBDIR}
 LOGS_DIR=./logs
 ENV_DIR=./venv
+
+# Get project root directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+
+# Common sbatch preamble
+SBATCH_PREAMBLE="export PATH=\${HOME}/miniforge3/bin:\${PATH} && cd ${PROJECT_ROOT} && eval \"\$(mamba shell hook --shell bash)\" && mamba activate ${ENV_DIR}"
 QOS=cpu_preemptible
 PARTITION=cpu_p
 #QOS=gpu_normal
@@ -41,8 +48,7 @@ sbatch -W -J pseudobulk_${DATASET} \
        --cpus-per-task=2 \
        -e ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.%j.err \
        -o ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.%j.out \
-       --wrap="eval \"\$(mamba shell hook --shell bash)\" && \
-               mamba activate ${ENV_DIR} && \
+       --wrap="${SBATCH_PREAMBLE} && \
 	       python3 -m src.pseudobulking.datasets.l1000.run_assembling \
 	       --output_file ${OUTPUT_DIR}/${DATASET}_level3_deg_ready_landmark${SUFFIX}.h5ad \
 	       --data_root ${DATA_ROOT} \
@@ -51,4 +57,3 @@ sbatch -W -J pseudobulk_${DATASET} \
                ${ARG}"
 
 echo "> ${DATASET} assembly is done"
-
