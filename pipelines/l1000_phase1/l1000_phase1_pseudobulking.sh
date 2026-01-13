@@ -3,9 +3,9 @@ set -e
 
 if [ "$1" = "subsampling" ]; then
         echo "> Work with a subsample"
-	SUFFIX="_subsample"
+        SUFFIX="_subsample"
         SUBDIR="subsample"
-	ARG="--subsampling"
+        ARG="--subsampling"
 	MEM="250G"
 else
 	echo "> Work with a full version"

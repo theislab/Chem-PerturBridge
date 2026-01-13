@@ -26,10 +26,10 @@ ENV_DIR=./venv
 LOGS_DIR=./logs
 MAX_CONCURRENT=50
 #QOS=cpu_preemptible
-QOS=cpu_normal
-PARTITION=cpu_p
 #QOS=gpu_normal
 #PARTITION=gpu_p
+QOS=cpu_normal
+PARTITION=cpu_p
 
 # Default values
 MODE_S=False
@@ -128,7 +128,7 @@ else
 fi
 
 # Set QC argument if flag is provided
-if [[ "$MODE_Q" == "True" ]]; then
+if [ "$MODE_Q" = "True" ]; then
     echo "> Filter samples that did not pass quality control"
     QC_FOLDER="qc_true"
     ARG_Q="--qc"
@@ -208,7 +208,7 @@ extract_cell_type() {
     # If file is in a /by_celltype/ directory, extract cell type from directory name
     # Otherwise, return empty string (file is not split by cell type)
     if [[ "$INPUT_FILE" == *"/by_celltype/"* ]]; then
-        dirname "$INPUT_FILE" | xargs basename
+        basename "$(dirname "$INPUT_FILE")"
     else
         # For files not in /by_celltype/, return empty string
         # This indicates the file contains multiple cell types or is not split by cell type
@@ -242,6 +242,7 @@ sbatch -W -J deg_processing_pseudobulk \
     --mem=500G \
     --time=2:00:00 \
     --cpus-per-task=2 \
+    --exclude=supercpu01 \
     --output="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.out" \
     --error="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.err" \
     --wrap="${SBATCH_PREAMBLE} && \
@@ -361,6 +362,7 @@ run_deg() {
         --mem=${MEM} \
         --time=10:00:00 \
         --cpus-per-task=2 \
+        --exclude=supercpu01 \
         --output=/dev/null \
         --error=/dev/null \
         --wrap="${SBATCH_PREAMBLE} && \
@@ -422,6 +424,7 @@ if [ -d "$INTERMEDIATE_DIR" ] && [ "$(ls -A $INTERMEDIATE_DIR 2>/dev/null)" ]; t
             --mem=500G \
             --time=2:00:00 \
             --cpus-per-task=2 \
+            --exclude=supercpu01 \
             --output="${LOGS_BASE_DIR}/aggregation/deg_aggregation.%j.out" \
             --error="${LOGS_BASE_DIR}/aggregation/deg_aggregation.%j.err" \
             --wrap="${SBATCH_PREAMBLE} && \
@@ -449,4 +452,3 @@ echo "> DGE pipeline is finished"
 echo "> Cleaning up temporary files..."
 rm -rf "${TMP_DIR_DEG}"
 echo "> Cleanup complete"
-

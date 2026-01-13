@@ -59,7 +59,6 @@ def _read_table(path: Path, **kwargs) -> pd.DataFrame:
     if not path.exists():
         gz = path.with_suffix(path.suffix + ".gz")
         if gz.exists():
-            import gzip
             with gzip.open(gz, "rt") as fh:
                 df = pd.read_csv(fh, **kwargs)
         else:
@@ -504,7 +503,7 @@ def process_pert_metadata(pert: pd.DataFrame, inst: pd.DataFrame) -> pd.DataFram
     pert = pert.copy()
     inst = inst.copy()
 
-    if not 'pubchem_cid' in pert.columns:
+    if 'pubchem_cid' not in pert.columns:
         pert['pubchem_cid'] = None
 
     return pd.concat([pert, inst]).drop_duplicates('pert_id', keep='first')[pert.columns]
@@ -691,7 +690,6 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
         "trt_poscon": "compound",
         "ctl_vector": "genetic",
         "ctl_untrt": "biologic"
-        
     }
 
     
@@ -1020,7 +1018,7 @@ def annotate_pubchem_cids(df: pd.DataFrame, paths: dict, config: dict = None) ->
     # Other types (shRNA, CRISPR, etc.) don't have PubChem CIDs
     df = df.copy()
 
-    if not 'pubchem_cid' in df.columns:
+    if 'pubchem_cid' not in df.columns:
         df['pubchem_cid'] = None
 
     df['pubchem_cid'] = df['pubchem_cid'].apply(standardize_pubchem_cid)
