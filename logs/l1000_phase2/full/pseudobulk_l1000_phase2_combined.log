@@ -1,0 +1,523 @@
+pseudobulk_l1000_phase2.PID1972360.out:> Work with a full version
+pseudobulk_l1000_phase2.PID1972360.out:> Running l1000_phase2 assembly
+pseudobulk_l1000_phase2.PID1972360.out:Submitted batch job 33071153
+pseudobulk_l1000_phase2.PID1972360.out:> l1000_phase2 assembly is done
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:18:33 | [INFO] Assembling l1000_phase2 dataset
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:18:34 | [INFO] Applying L1000-specific processing
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:18:34 | [INFO] Checking data availability...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:18:34 | [INFO]   Run download_l1000_files() to download them
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:18:34 | [INFO] Downloading 7 missing file(s)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:18:34 | [INFO] Downloading L1000 Level 3 files to: data/l1000_phase2/raw
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:18:34 | [INFO]   Downloading GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx.gz (12.6 GB)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:25 | [INFO]     Downloaded GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx.gz
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:26 | [INFO]   Downloading GSE70138_Broad_LINCS_inst_info_2017-03-06.txt.gz (~150 MB)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:27 | [INFO]     Downloaded GSE70138_Broad_LINCS_inst_info_2017-03-06.txt.gz
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:27 | [INFO]   Downloading GSE70138_Broad_LINCS_cell_info_2017-04-28.txt.gz (<10 KB)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:28 | [INFO]     Downloaded GSE70138_Broad_LINCS_cell_info_2017-04-28.txt.gz
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:28 | [INFO]   Downloading GSE70138_Broad_LINCS_pert_info.txt.gz (~5 MB)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:28 | [INFO]     Downloaded GSE70138_Broad_LINCS_pert_info.txt.gz
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:28 | [INFO]   Downloading GSE70138_Broad_LINCS_gene_info_2017-03-06.txt.gz (~210 KB)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:29 | [INFO]     Downloaded GSE70138_Broad_LINCS_gene_info_2017-03-06.txt.gz
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:29 | [INFO]   Downloading geneinfo_beta.txt (1.09 MB)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:30 | [INFO]     Downloaded geneinfo_beta.txt
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:30 | [INFO]   Downloading cellinfo_beta.txt (<100 KB)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO]     Downloaded cellinfo_beta.txt
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO] All downloads complete
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO] All required files are present
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO]   Run decompress_l1000_files() to extract them
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO] Decompressing 5 compressed file(s)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO] 2 file(s) already decompressed
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO]   - geneinfo_beta: geneinfo_beta.txt
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO]   - cellinfo_beta: cellinfo_beta.txt
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO] Decompressing 5 file(s)...
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO]   - level3_gctx: GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx.gz -> GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:24:31 | [INFO]     (GCTX is large, this may take a few minutes...)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]     Done
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]   - instinfo: GSE70138_Broad_LINCS_inst_info_2017-03-06.txt.gz -> GSE70138_Broad_LINCS_inst_info_2017-03-06.txt
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]     Done
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]   - cellinfo: GSE70138_Broad_LINCS_cell_info_2017-04-28.txt.gz -> GSE70138_Broad_LINCS_cell_info_2017-04-28.txt
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]     Done
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]   - pert_info: GSE70138_Broad_LINCS_pert_info.txt.gz -> GSE70138_Broad_LINCS_pert_info.txt
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]     Done
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]   - geneinfo_level3: GSE70138_Broad_LINCS_gene_info_2017-03-06.txt.gz -> GSE70138_Broad_LINCS_gene_info_2017-03-06.txt
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]     Done
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO] All 5 file(s) successfully decompressed
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO] All required files are present
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO] All files are uncompressed and ready to use
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO] All required data files are available
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:21 | [INFO]   Loading metadata tables
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:23 | [INFO]     Loaded 345,976 instances
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:23 | [INFO]     Loaded 98 cell lines
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:23 | [INFO]     Loaded 2,170 perturbations
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:23 | [INFO]     Loaded 12,328 genes
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:23 | [INFO] Mapping compounds to PubChem CIDs
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:23 | [INFO] Cache file data/l1000_phase2/raw/processed/pubchem_cache.json not found. Starting with empty cache.
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:23 | [INFO] Processing 1797 compounds
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:26:49 | [INFO] Processed 50/1797 compounds (50 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:27:15 | [INFO] Processed 100/1797 compounds (100 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:27:40 | [INFO] Processed 150/1797 compounds (150 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:28:05 | [INFO] Processed 200/1797 compounds (200 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:28:30 | [INFO] Processed 250/1797 compounds (250 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:28:54 | [INFO] Processed 300/1797 compounds (300 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:29:24 | [INFO] Processed 350/1797 compounds (350 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:29:48 | [INFO] Processed 400/1797 compounds (400 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:30:13 | [INFO] Processed 450/1797 compounds (450 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:30:38 | [INFO] Processed 500/1797 compounds (500 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:31:03 | [INFO] Processed 550/1797 compounds (550 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:31:28 | [INFO] Processed 600/1797 compounds (600 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:31:53 | [INFO] Processed 650/1797 compounds (650 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:32:18 | [INFO] Processed 700/1797 compounds (700 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:32:44 | [INFO] Processed 750/1797 compounds (750 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:33:08 | [INFO] Processed 800/1797 compounds (800 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:33:33 | [INFO] Processed 850/1797 compounds (850 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:34:00 | [INFO] Processed 900/1797 compounds (900 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:34:26 | [INFO] Processed 950/1797 compounds (950 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:34:52 | [INFO] Processed 1000/1797 compounds (1000 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:35:16 | [INFO] Processed 1050/1797 compounds (1050 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:35:44 | [INFO] Processed 1100/1797 compounds (1100 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:36:09 | [INFO] Processed 1150/1797 compounds (1150 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:36:35 | [INFO] Processed 1200/1797 compounds (1200 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:37:02 | [INFO] Processed 1250/1797 compounds (1250 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:37:27 | [INFO] Processed 1300/1797 compounds (1300 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:37:51 | [INFO] Processed 1350/1797 compounds (1350 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:38:16 | [INFO] Processed 1400/1797 compounds (1400 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:38:40 | [INFO] Processed 1450/1797 compounds (1450 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:39:06 | [INFO] Processed 1500/1797 compounds (1500 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:39:32 | [INFO] Processed 1550/1797 compounds (1550 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:40:03 | [INFO] Processed 1600/1797 compounds (1599 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:40:27 | [INFO] Processed 1650/1797 compounds (1649 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:40:52 | [INFO] Processed 1700/1797 compounds (1699 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:20 | [INFO] Processed 1750/1797 compounds (1749 mapped so far)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:44 | [INFO] Mapped 1796 out of 1797 compounds to PubChem CIDs
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:45 | [INFO]   Processing instance metadata
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:47 | [INFO]   Building .obs dataframe
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:52 | [INFO]   Enforcing strict obs schema
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:53 | [INFO]   Processing gene annotations
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:53 | [INFO]   Restricting to 978 landmark genes
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:53 | [INFO]   Matching obs to GCTX column IDs
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:54 | [INFO]   Loaded 345,976 column IDs from GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:54 | [INFO]   Using obs index to subset GCTX (333680/333680 samples match)
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:41:54 | [INFO]   Extracting expression from GCTX
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:42:09 | [INFO]   Assembling AnnData
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:42:20 | [INFO]   Assembled AnnData: 333,680 × 978
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:42:20 | [INFO] L1000-specific processing completed
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:42:20 | [INFO] Saving assembled dataset to: ./data/l1000_phase2/pseudobulk/full/l1000_phase2_level3_deg_ready_landmark.h5ad
+pseudobulk_l1000_phase2.33071153.out:2025-12-28 18:42:52 | [INFO] l1000_phase2 assembly complete
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:18:34 | [WARNING] 7 file(s) missing:
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:18:34 | [WARNING]   - level3_gctx: GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:18:34 | [WARNING]   - instinfo: GSE70138_Broad_LINCS_inst_info_2017-03-06.txt
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:18:34 | [WARNING]   - cellinfo: GSE70138_Broad_LINCS_cell_info_2017-04-28.txt
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:18:34 | [WARNING]   - pert_info: GSE70138_Broad_LINCS_pert_info.txt
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:18:34 | [WARNING]   - geneinfo_level3: GSE70138_Broad_LINCS_gene_info_2017-03-06.txt
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:18:34 | [WARNING]   - geneinfo_beta: geneinfo_beta.txt
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:18:34 | [WARNING]   - cellinfo_beta: cellinfo_beta.txt
+pseudobulk_l1000_phase2.33071153.err:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+pseudobulk_l1000_phase2.33071153.err:                                 Dload  Upload   Total   Spent    Left  Speed
+pseudobulk_l1000_phase2.33071153.err:
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err:  0 12913M   0  8296k   0     0  4776k     0   0:46:08  0:00:01  0:46:07  4776k
+pseudobulk_l1000_phase2.33071153.err:  0 12913M   0 47296k   0     0 17208k     0   0:12:48  0:00:02  0:12:46 17211k
+pseudobulk_l1000_phase2.33071153.err:  0 12913M   0 84421k   0     0 22592k     0   0:09:45  0:00:03  0:09:42 22596k
+pseudobulk_l1000_phase2.33071153.err:  0 12913M   0 120.4M   0     0 25997k     0   0:08:28  0:00:04  0:08:24 25999k
+pseudobulk_l1000_phase2.33071153.err:  1 12913M   1 156.6M   0     0 27969k     0   0:07:52  0:00:05  0:07:47 32159k
+pseudobulk_l1000_phase2.33071153.err:  1 12913M   1 194.6M   0     0 29606k     0   0:07:26  0:00:06  0:07:20 38232k
+pseudobulk_l1000_phase2.33071153.err:  1 12913M   1 231.0M   0     0 30580k     0   0:07:12  0:00:07  0:07:05 37945k
+pseudobulk_l1000_phase2.33071153.err:  2 12913M   2 268.8M   0     0 31504k     0   0:06:59  0:00:08  0:06:51 38168k
+pseudobulk_l1000_phase2.33071153.err:  2 12913M   2 305.2M   0     0 32112k     0   0:06:51  0:00:09  0:06:42 37925k
+pseudobulk_l1000_phase2.33071153.err:  2 12913M   2 342.9M   0     0 32719k     0   0:06:44  0:00:10  0:06:34 38168k
+pseudobulk_l1000_phase2.33071153.err:  2 12913M   2 379.5M   0     0 33117k     0   0:06:39  0:00:11  0:06:28 37847k
+pseudobulk_l1000_phase2.33071153.err:  3 12913M   3 416.9M   0     0 33533k     0   0:06:34  0:00:12  0:06:22 38102k
+pseudobulk_l1000_phase2.33071153.err:  3 12913M   3 453.6M   0     0 33826k     0   0:06:30  0:00:13  0:06:17 37884k
+pseudobulk_l1000_phase2.33071153.err:  3 12913M   3 490.8M   0     0 34115k     0   0:06:27  0:00:14  0:06:13 38012k
+pseudobulk_l1000_phase2.33071153.err:  4 12913M   4 527.8M   0     0 34356k     0   0:06:24  0:00:15  0:06:09 37871k
+pseudobulk_l1000_phase2.33071153.err:  4 12913M   4 564.8M   0     0 34564k     0   0:06:22  0:00:16  0:06:06 37956k
+pseudobulk_l1000_phase2.33071153.err:  4 12913M   4 602.0M   0     0 34763k     0   0:06:20  0:00:17  0:06:03 37901k
+pseudobulk_l1000_phase2.33071153.err:  4 12913M   4 638.7M   0     0 34917k     0   0:06:18  0:00:18  0:06:00 37913k
+pseudobulk_l1000_phase2.33071153.err:  5 12913M   5 676.2M   0     0 35088k     0   0:06:16  0:00:19  0:05:57 37954k
+pseudobulk_l1000_phase2.33071153.err:  5 12913M   5 712.7M   0     0 35204k     0   0:06:15  0:00:20  0:05:55 37873k
+pseudobulk_l1000_phase2.33071153.err:  5 12913M   5 750.3M   0     0 35355k     0   0:06:14  0:00:21  0:05:53 38003k
+pseudobulk_l1000_phase2.33071153.err:  6 12913M   6 786.9M   0     0 35446k     0   0:06:13  0:00:22  0:05:51 37867k
+pseudobulk_l1000_phase2.33071153.err:  6 12913M   6 824.5M   0     0 35576k     0   0:06:11  0:00:23  0:05:48 38045k
+pseudobulk_l1000_phase2.33071153.err:  6 12913M   6 861.1M   0     0 35651k     0   0:06:10  0:00:24  0:05:46 37868k
+pseudobulk_l1000_phase2.33071153.err:  6 12913M   6 898.7M   0     0 35764k     0   0:06:09  0:00:25  0:05:44 38082k
+pseudobulk_l1000_phase2.33071153.err:  7 12913M   7 935.3M   0     0 35827k     0   0:06:09  0:00:26  0:05:43 37879k
+pseudobulk_l1000_phase2.33071153.err:  7 12913M   7 973.0M   0     0 35927k     0   0:06:08  0:00:27  0:05:41 38109k
+pseudobulk_l1000_phase2.33071153.err:  7 12913M   7  1009M   0     0 35977k     0   0:06:07  0:00:28  0:05:39 37887k
+pseudobulk_l1000_phase2.33071153.err:  8 12913M   8  1047M   0     0 36064k     0   0:06:06  0:00:29  0:05:37 38114k
+pseudobulk_l1000_phase2.33071153.err:  8 12913M   8  1083M   0     0 36107k     0   0:06:06  0:00:30  0:05:36 37881k
+pseudobulk_l1000_phase2.33071153.err:  8 12913M   8  1121M   0     0 36186k     0   0:06:05  0:00:31  0:05:34 38104k
+pseudobulk_l1000_phase2.33071153.err:  8 12913M   8  1157M   0     0 36222k     0   0:06:05  0:00:32  0:05:33 37864k
+pseudobulk_l1000_phase2.33071153.err:  9 12913M   9  1195M   0     0 36293k     0   0:06:04  0:00:33  0:05:31 38115k
+pseudobulk_l1000_phase2.33071153.err:  9 12913M   9  1232M   0     0 36325k     0   0:06:04  0:00:34  0:05:30 37879k
+pseudobulk_l1000_phase2.33071153.err:  9 12913M   9  1269M   0     0 36389k     0   0:06:03  0:00:35  0:05:28 38124k
+pseudobulk_l1000_phase2.33071153.err: 10 12913M  10  1306M   0     0 36414k     0   0:06:03  0:00:36  0:05:27 37859k
+pseudobulk_l1000_phase2.33071153.err: 10 12913M  10  1344M   0     0 36475k     0   0:06:02  0:00:37  0:05:25 38134k
+pseudobulk_l1000_phase2.33071153.err: 10 12913M  10  1380M   0     0 36494k     0   0:06:02  0:00:38  0:05:24 37853k
+pseudobulk_l1000_phase2.33071153.err: 10 12913M  10  1418M   0     0 36546k     0   0:06:01  0:00:39  0:05:22 38076k
+pseudobulk_l1000_phase2.33071153.err: 11 12913M  11  1454M   0     0 36568k     0   0:06:01  0:00:40  0:05:21 37842k
+pseudobulk_l1000_phase2.33071153.err: 11 12913M  11  1491M   0     0 36609k     0   0:06:01  0:00:41  0:05:20 38034k
+pseudobulk_l1000_phase2.33071153.err: 11 12913M  11  1528M   0     0 36634k     0   0:06:00  0:00:42  0:05:18 37832k
+pseudobulk_l1000_phase2.33071153.err: 12 12913M  12  1565M   0     0 36665k     0   0:06:00  0:00:43  0:05:17 37981k
+pseudobulk_l1000_phase2.33071153.err: 12 12913M  12  1603M   0     0 36695k     0   0:06:00  0:00:44  0:05:16 37882k
+pseudobulk_l1000_phase2.33071153.err: 12 12913M  12  1639M   0     0 36719k     0   0:06:00  0:00:45  0:05:15 37945k
+pseudobulk_l1000_phase2.33071153.err: 12 12913M  12  1677M   0     0 36751k     0   0:05:59  0:00:46  0:05:13 37939k
+pseudobulk_l1000_phase2.33071153.err: 13 12913M  13  1714M   0     0 36770k     0   0:05:59  0:00:47  0:05:12 37934k
+pseudobulk_l1000_phase2.33071153.err: 13 12913M  13  1751M   0     0 36802k     0   0:05:59  0:00:48  0:05:11 38006k
+pseudobulk_l1000_phase2.33071153.err: 13 12913M  13  1788M   0     0 36816k     0   0:05:59  0:00:49  0:05:10 37909k
+pseudobulk_l1000_phase2.33071153.err: 14 12913M  14  1825M   0     0 36849k     0   0:05:58  0:00:50  0:05:08 38045k
+pseudobulk_l1000_phase2.33071153.err: 14 12913M  14  1862M   0     0 36862k     0   0:05:58  0:00:51  0:05:07 37901k
+pseudobulk_l1000_phase2.33071153.err: 14 12913M  14  1899M   0     0 36894k     0   0:05:58  0:00:52  0:05:06 38081k
+pseudobulk_l1000_phase2.33071153.err: 14 12913M  14  1936M   0     0 36903k     0   0:05:58  0:00:53  0:05:05 37895k
+pseudobulk_l1000_phase2.33071153.err: 15 12913M  15  1974M   0     0 36935k     0   0:05:58  0:00:54  0:05:04 38117k
+pseudobulk_l1000_phase2.33071153.err: 15 12913M  15  2010M   0     0 36942k     0   0:05:57  0:00:55  0:05:02 37884k
+pseudobulk_l1000_phase2.33071153.err: 15 12913M  15  2048M   0     0 36972k     0   0:05:57  0:00:56  0:05:01 38117k
+pseudobulk_l1000_phase2.33071153.err: 16 12913M  16  2084M   0     0 36978k     0   0:05:57  0:00:57  0:05:00 37865k
+pseudobulk_l1000_phase2.33071153.err: 16 12913M  16  2122M   0     0 37009k     0   0:05:57  0:00:58  0:04:59 38145k
+pseudobulk_l1000_phase2.33071153.err: 16 12913M  16  2159M   0     0 37011k     0   0:05:57  0:00:59  0:04:58 37845k
+pseudobulk_l1000_phase2.33071153.err: 17 12913M  17  2196M   0     0 37041k     0   0:05:56  0:01:00  0:04:56 38142k
+pseudobulk_l1000_phase2.33071153.err: 17 12913M  17  2233M   0     0 37039k     0   0:05:56  0:01:01  0:04:55 37809k
+pseudobulk_l1000_phase2.33071153.err: 17 12913M  17  2271M   0     0 37072k     0   0:05:56  0:01:02  0:04:54 38151k
+pseudobulk_l1000_phase2.33071153.err: 17 12913M  17  2307M   0     0 37072k     0   0:05:56  0:01:03  0:04:53 37809k
+pseudobulk_l1000_phase2.33071153.err: 18 12913M  18  2345M   0     0 37097k     0   0:05:56  0:01:04  0:04:52 38121k
+pseudobulk_l1000_phase2.33071153.err: 18 12913M  18  2381M   0     0 37100k     0   0:05:56  0:01:05  0:04:51 37814k
+pseudobulk_l1000_phase2.33071153.err: 18 12913M  18  2419M   0     0 37120k     0   0:05:56  0:01:06  0:04:50 38111k
+pseudobulk_l1000_phase2.33071153.err: 19 12913M  19  2455M   0     0 37128k     0   0:05:56  0:01:07  0:04:49 37834k
+pseudobulk_l1000_phase2.33071153.err: 19 12913M  19  2492M   0     0 37140k     0   0:05:56  0:01:08  0:04:48 38006k
+pseudobulk_l1000_phase2.33071153.err: 19 12913M  19  2530M   0     0 37153k     0   0:05:55  0:01:09  0:04:46 37873k
+pseudobulk_l1000_phase2.33071153.err: 19 12913M  19  2566M   0     0 37161k     0   0:05:55  0:01:10  0:04:45 37963k
+pseudobulk_l1000_phase2.33071153.err: 20 12913M  20  2604M   0     0 37177k     0   0:05:55  0:01:11  0:04:44 37934k
+pseudobulk_l1000_phase2.33071153.err: 20 12913M  20  2641M   0     0 37182k     0   0:05:55  0:01:12  0:04:43 37918k
+pseudobulk_l1000_phase2.33071153.err: 20 12913M  20  2678M   0     0 37199k     0   0:05:55  0:01:13  0:04:42 38009k
+pseudobulk_l1000_phase2.33071153.err: 21 12913M  21  2715M   0     0 37203k     0   0:05:55  0:01:14  0:04:41 37909k
+pseudobulk_l1000_phase2.33071153.err: 21 12913M  21  2752M   0     0 37220k     0   0:05:55  0:01:15  0:04:40 38056k
+pseudobulk_l1000_phase2.33071153.err: 21 12913M  21  2789M   0     0 37224k     0   0:05:55  0:01:16  0:04:39 37896k
+pseudobulk_l1000_phase2.33071153.err: 21 12913M  21  2826M   0     0 37239k     0   0:05:55  0:01:17  0:04:38 38062k
+pseudobulk_l1000_phase2.33071153.err: 22 12913M  22  2863M   0     0 37242k     0   0:05:55  0:01:18  0:04:37 37860k
+pseudobulk_l1000_phase2.33071153.err: 22 12913M  22  2901M   0     0 37259k     0   0:05:54  0:01:19  0:04:35 38092k
+pseudobulk_l1000_phase2.33071153.err: 22 12913M  22  2937M   0     0 37259k     0   0:05:54  0:01:20  0:04:34 37851k
+pseudobulk_l1000_phase2.33071153.err: 23 12913M  23  2975M   0     0 37278k     0   0:05:54  0:01:21  0:04:33 38118k
+pseudobulk_l1000_phase2.33071153.err: 23 12913M  23  3011M   0     0 37276k     0   0:05:54  0:01:22  0:04:32 37845k
+pseudobulk_l1000_phase2.33071153.err: 23 12913M  23  3049M   0     0 37296k     0   0:05:54  0:01:23  0:04:31 38148k
+pseudobulk_l1000_phase2.33071153.err: 23 12913M  23  3085M   0     0 37292k     0   0:05:54  0:01:24  0:04:30 37825k
+pseudobulk_l1000_phase2.33071153.err: 24 12913M  24  3123M   0     0 37311k     0   0:05:54  0:01:25  0:04:29 38161k
+pseudobulk_l1000_phase2.33071153.err: 24 12913M  24  3160M   0     0 37309k     0   0:05:54  0:01:26  0:04:28 37809k
+pseudobulk_l1000_phase2.33071153.err: 24 12913M  24  3198M   0     0 37328k     0   0:05:54  0:01:27  0:04:27 38181k
+pseudobulk_l1000_phase2.33071153.err: 25 12913M  25  3234M   0     0 37324k     0   0:05:54  0:01:28  0:04:26 37798k
+pseudobulk_l1000_phase2.33071153.err: 25 12913M  25  3272M   0     0 37342k     0   0:05:54  0:01:29  0:04:25 38168k
+pseudobulk_l1000_phase2.33071153.err: 25 12913M  25  3308M   0     0 37342k     0   0:05:54  0:01:30  0:04:24 37857k
+pseudobulk_l1000_phase2.33071153.err: 25 12913M  25  3346M   0     0 37354k     0   0:05:53  0:01:31  0:04:22 38134k
+pseudobulk_l1000_phase2.33071153.err: 26 12913M  26  3382M   0     0 37355k     0   0:05:53  0:01:32  0:04:21 37846k
+pseudobulk_l1000_phase2.33071153.err: 26 12913M  26  3420M   0     0 37365k     0   0:05:53  0:01:33  0:04:20 38091k
+pseudobulk_l1000_phase2.33071153.err: 26 12913M  26  3457M   0     0 37369k     0   0:05:53  0:01:34  0:04:19 37868k
+pseudobulk_l1000_phase2.33071153.err: 27 12913M  27  3494M   0     0 37376k     0   0:05:53  0:01:35  0:04:18 37990k
+pseudobulk_l1000_phase2.33071153.err: 27 12913M  27  3531M   0     0 37382k     0   0:05:53  0:01:36  0:04:17 37901k
+pseudobulk_l1000_phase2.33071153.err: 27 12913M  27  3568M   0     0 37386k     0   0:05:53  0:01:37  0:04:16 37960k
+pseudobulk_l1000_phase2.33071153.err: 27 12913M  27  3605M   0     0 37394k     0   0:05:53  0:01:38  0:04:15 37955k
+pseudobulk_l1000_phase2.33071153.err: 28 12913M  28  3642M   0     0 37396k     0   0:05:53  0:01:39  0:04:14 37907k
+pseudobulk_l1000_phase2.33071153.err: 28 12913M  28  3679M   0     0 37407k     0   0:05:53  0:01:40  0:04:13 38009k
+pseudobulk_l1000_phase2.33071153.err: 28 12913M  28  3716M   0     0 37406k     0   0:05:53  0:01:41  0:04:12 37865k
+pseudobulk_l1000_phase2.33071153.err: 29 12913M  29  3753M   0     0 37418k     0   0:05:53  0:01:42  0:04:11 38028k
+pseudobulk_l1000_phase2.33071153.err: 29 12913M  29  3790M   0     0 37417k     0   0:05:53  0:01:43  0:04:10 37852k
+pseudobulk_l1000_phase2.33071153.err: 29 12913M  29  3828M   0     0 37429k     0   0:05:53  0:01:44  0:04:09 38084k
+pseudobulk_l1000_phase2.33071153.err: 29 12913M  29  3864M   0     0 37427k     0   0:05:53  0:01:45  0:04:08 37843k
+pseudobulk_l1000_phase2.33071153.err: 30 12913M  30  3902M   0     0 37440k     0   0:05:53  0:01:46  0:04:07 38154k
+pseudobulk_l1000_phase2.33071153.err: 30 12913M  30  3938M   0     0 37438k     0   0:05:53  0:01:47  0:04:06 37846k
+pseudobulk_l1000_phase2.33071153.err: 30 12913M  30  3976M   0     0 37451k     0   0:05:53  0:01:48  0:04:05 38160k
+pseudobulk_l1000_phase2.33071153.err: 31 12913M  31  4012M   0     0 37448k     0   0:05:53  0:01:49  0:04:04 37837k
+pseudobulk_l1000_phase2.33071153.err: 31 12913M  31  4050M   0     0 37461k     0   0:05:52  0:01:50  0:04:02 38160k
+pseudobulk_l1000_phase2.33071153.err: 31 12913M  31  4087M   0     0 37458k     0   0:05:53  0:01:51  0:04:02 37831k
+pseudobulk_l1000_phase2.33071153.err: 31 12913M  31  4125M   0     0 37470k     0   0:05:52  0:01:52  0:04:00 38176k
+pseudobulk_l1000_phase2.33071153.err: 32 12913M  32  4161M   0     0 37467k     0   0:05:52  0:01:53  0:03:59 37824k
+pseudobulk_l1000_phase2.33071153.err: 32 12913M  32  4199M   0     0 37480k     0   0:05:52  0:01:54  0:03:58 38182k
+pseudobulk_l1000_phase2.33071153.err: 32 12913M  32  4235M   0     0 37477k     0   0:05:52  0:01:55  0:03:57 37829k
+pseudobulk_l1000_phase2.33071153.err: 33 12913M  33  4273M   0     0 37487k     0   0:05:52  0:01:56  0:03:56 38139k
+pseudobulk_l1000_phase2.33071153.err: 33 12913M  33  4309M   0     0 37485k     0   0:05:52  0:01:57  0:03:55 37837k
+pseudobulk_l1000_phase2.33071153.err: 33 12913M  33  4347M   0     0 37493k     0   0:05:52  0:01:58  0:03:54 38087k
+pseudobulk_l1000_phase2.33071153.err: 33 12913M  33  4384M   0     0 37494k     0   0:05:52  0:01:59  0:03:53 37832k
+pseudobulk_l1000_phase2.33071153.err: 34 12913M  34  4421M   0     0 37499k     0   0:05:52  0:02:00  0:03:52 38006k
+pseudobulk_l1000_phase2.33071153.err: 34 12913M  34  4458M   0     0 37503k     0   0:05:52  0:02:01  0:03:51 37876k
+pseudobulk_l1000_phase2.33071153.err: 34 12913M  34  4495M   0     0 37505k     0   0:05:52  0:02:02  0:03:50 37956k
+pseudobulk_l1000_phase2.33071153.err: 35 12913M  35  4532M   0     0 37511k     0   0:05:52  0:02:03  0:03:49 37934k
+pseudobulk_l1000_phase2.33071153.err: 35 12913M  35  4569M   0     0 37511k     0   0:05:52  0:02:04  0:03:48 37907k
+pseudobulk_l1000_phase2.33071153.err: 35 12913M  35  4606M   0     0 37519k     0   0:05:52  0:02:05  0:03:47 38015k
+pseudobulk_l1000_phase2.33071153.err: 35 12913M  35  4643M   0     0 37517k     0   0:05:52  0:02:06  0:03:46 37875k
+pseudobulk_l1000_phase2.33071153.err: 36 12913M  36  4681M   0     0 37527k     0   0:05:52  0:02:07  0:03:45 38087k
+pseudobulk_l1000_phase2.33071153.err: 36 12913M  36  4717M   0     0 37525k     0   0:05:52  0:02:08  0:03:44 37862k
+pseudobulk_l1000_phase2.33071153.err: 36 12913M  36  4755M   0     0 37535k     0   0:05:52  0:02:09  0:03:43 38135k
+pseudobulk_l1000_phase2.33071153.err: 37 12913M  37  4791M   0     0 37532k     0   0:05:52  0:02:10  0:03:42 37839k
+pseudobulk_l1000_phase2.33071153.err: 37 12913M  37  4829M   0     0 37541k     0   0:05:52  0:02:11  0:03:41 38145k
+pseudobulk_l1000_phase2.33071153.err: 37 12913M  37  4865M   0     0 37539k     0   0:05:52  0:02:12  0:03:40 37829k
+pseudobulk_l1000_phase2.33071153.err: 37 12913M  37  4903M   0     0 37548k     0   0:05:52  0:02:13  0:03:39 38148k
+pseudobulk_l1000_phase2.33071153.err: 38 12913M  38  4940M   0     0 37545k     0   0:05:52  0:02:14  0:03:38 37828k
+pseudobulk_l1000_phase2.33071153.err: 38 12913M  38  4978M   0     0 37555k     0   0:05:52  0:02:15  0:03:37 38165k
+pseudobulk_l1000_phase2.33071153.err: 38 12913M  38  5014M   0     0 37552k     0   0:05:52  0:02:16  0:03:36 37826k
+pseudobulk_l1000_phase2.33071153.err: 39 12913M  39  5052M   0     0 37561k     0   0:05:52  0:02:17  0:03:35 38165k
+pseudobulk_l1000_phase2.33071153.err: 39 12913M  39  5088M   0     0 37558k     0   0:05:52  0:02:18  0:03:34 37839k
+pseudobulk_l1000_phase2.33071153.err: 39 12913M  39  5126M   0     0 37568k     0   0:05:51  0:02:19  0:03:32 38170k
+pseudobulk_l1000_phase2.33071153.err: 39 12913M  39  5162M   0     0 37565k     0   0:05:52  0:02:20  0:03:32 37840k
+pseudobulk_l1000_phase2.33071153.err: 40 12913M  40  5200M   0     0 37573k     0   0:05:51  0:02:21  0:03:30 38154k
+pseudobulk_l1000_phase2.33071153.err: 40 12913M  40  5237M   0     0 37571k     0   0:05:51  0:02:22  0:03:29 37840k
+pseudobulk_l1000_phase2.33071153.err: 40 12913M  40  5274M   0     0 37577k     0   0:05:51  0:02:23  0:03:28 38082k
+pseudobulk_l1000_phase2.33071153.err: 41 12913M  41  5311M   0     0 37577k     0   0:05:51  0:02:24  0:03:27 37848k
+pseudobulk_l1000_phase2.33071153.err: 41 12913M  41  5348M   0     0 37580k     0   0:05:51  0:02:25  0:03:26 38014k
+pseudobulk_l1000_phase2.33071153.err: 41 12913M  41  5385M   0     0 37583k     0   0:05:51  0:02:26  0:03:25 37862k
+pseudobulk_l1000_phase2.33071153.err: 41 12913M  41  5422M   0     0 37584k     0   0:05:51  0:02:27  0:03:24 37959k
+pseudobulk_l1000_phase2.33071153.err: 42 12913M  42  5459M   0     0 37589k     0   0:05:51  0:02:28  0:03:23 37929k
+pseudobulk_l1000_phase2.33071153.err: 42 12913M  42  5496M   0     0 37587k     0   0:05:51  0:02:29  0:03:22 37879k
+pseudobulk_l1000_phase2.33071153.err: 42 12913M  42  5533M   0     0 37594k     0   0:05:51  0:02:30  0:03:21 37995k
+pseudobulk_l1000_phase2.33071153.err: 43 12913M  43  5570M   0     0 37592k     0   0:05:51  0:02:31  0:03:20 37865k
+pseudobulk_l1000_phase2.33071153.err: 43 12913M  43  5608M   0     0 37600k     0   0:05:51  0:02:32  0:03:19 38067k
+pseudobulk_l1000_phase2.33071153.err: 43 12913M  43  5644M   0     0 37597k     0   0:05:51  0:02:33  0:03:18 37851k
+pseudobulk_l1000_phase2.33071153.err: 44 12913M  44  5682M   0     0 37605k     0   0:05:51  0:02:34  0:03:17 38129k
+pseudobulk_l1000_phase2.33071153.err: 44 12913M  44  5718M   0     0 37602k     0   0:05:51  0:02:35  0:03:16 37821k
+pseudobulk_l1000_phase2.33071153.err: 44 12913M  44  5756M   0     0 37610k     0   0:05:51  0:02:36  0:03:15 38145k
+pseudobulk_l1000_phase2.33071153.err: 44 12913M  44  5792M   0     0 37607k     0   0:05:51  0:02:37  0:03:14 37828k
+pseudobulk_l1000_phase2.33071153.err: 45 12913M  45  5830M   0     0 37615k     0   0:05:51  0:02:38  0:03:13 38164k
+pseudobulk_l1000_phase2.33071153.err: 45 12913M  45  5867M   0     0 37611k     0   0:05:51  0:02:39  0:03:12 37817k
+pseudobulk_l1000_phase2.33071153.err: 45 12913M  45  5905M   0     0 37620k     0   0:05:51  0:02:40  0:03:11 38189k
+pseudobulk_l1000_phase2.33071153.err: 46 12913M  46  5941M   0     0 37616k     0   0:05:51  0:02:41  0:03:10 37828k
+pseudobulk_l1000_phase2.33071153.err: 46 12913M  46  5979M   0     0 37625k     0   0:05:51  0:02:42  0:03:09 38178k
+pseudobulk_l1000_phase2.33071153.err: 46 12913M  46  6015M   0     0 37622k     0   0:05:51  0:02:43  0:03:08 37834k
+pseudobulk_l1000_phase2.33071153.err: 46 12913M  46  6053M   0     0 37629k     0   0:05:51  0:02:44  0:03:07 38189k
+pseudobulk_l1000_phase2.33071153.err: 47 12913M  47  6089M   0     0 37626k     0   0:05:51  0:02:45  0:03:06 37832k
+pseudobulk_l1000_phase2.33071153.err: 47 12913M  47  6127M   0     0 37632k     0   0:05:51  0:02:46  0:03:05 38142k
+pseudobulk_l1000_phase2.33071153.err: 47 12913M  47  6164M   0     0 37631k     0   0:05:51  0:02:47  0:03:04 37826k
+pseudobulk_l1000_phase2.33071153.err: 48 12913M  48  6201M   0     0 37635k     0   0:05:51  0:02:48  0:03:03 38065k
+pseudobulk_l1000_phase2.33071153.err: 48 12913M  48  6238M   0     0 37635k     0   0:05:51  0:02:49  0:03:02 37839k
+pseudobulk_l1000_phase2.33071153.err: 48 12913M  48  6275M   0     0 37637k     0   0:05:51  0:02:50  0:03:01 38010k
+pseudobulk_l1000_phase2.33071153.err: 48 12913M  48  6312M   0     0 37640k     0   0:05:51  0:02:51  0:03:00 37904k
+pseudobulk_l1000_phase2.33071153.err: 49 12913M  49  6349M   0     0 37640k     0   0:05:51  0:02:52  0:02:59 37959k
+pseudobulk_l1000_phase2.33071153.err: 49 12913M  49  6386M   0     0 37644k     0   0:05:51  0:02:53  0:02:58 37968k
+pseudobulk_l1000_phase2.33071153.err: 49 12913M  49  6423M   0     0 37643k     0   0:05:51  0:02:54  0:02:57 37912k
+pseudobulk_l1000_phase2.33071153.err: 50 12913M  50  6461M   0     0 37648k     0   0:05:51  0:02:55  0:02:56 38023k
+pseudobulk_l1000_phase2.33071153.err: 50 12913M  50  6497M   0     0 37646k     0   0:05:51  0:02:56  0:02:55 37853k
+pseudobulk_l1000_phase2.33071153.err: 50 12913M  50  6535M   0     0 37652k     0   0:05:51  0:02:57  0:02:54 38067k
+pseudobulk_l1000_phase2.33071153.err: 50 12913M  50  6571M   0     0 37650k     0   0:05:51  0:02:58  0:02:53 37846k
+pseudobulk_l1000_phase2.33071153.err: 51 12913M  51  6609M   0     0 37656k     0   0:05:51  0:02:59  0:02:52 38109k
+pseudobulk_l1000_phase2.33071153.err: 51 12913M  51  6645M   0     0 37653k     0   0:05:51  0:03:00  0:02:51 37820k
+pseudobulk_l1000_phase2.33071153.err: 51 12913M  51  6683M   0     0 37660k     0   0:05:51  0:03:01  0:02:50 38136k
+pseudobulk_l1000_phase2.33071153.err: 52 12913M  52  6720M   0     0 37657k     0   0:05:51  0:03:02  0:02:49 37832k
+pseudobulk_l1000_phase2.33071153.err: 52 12913M  52  6757M   0     0 37664k     0   0:05:51  0:03:03  0:02:48 38156k
+pseudobulk_l1000_phase2.33071153.err: 52 12913M  52  6794M   0     0 37661k     0   0:05:51  0:03:04  0:02:47 37843k
+pseudobulk_l1000_phase2.33071153.err: 52 12913M  52  6832M   0     0 37667k     0   0:05:51  0:03:05  0:02:46 38170k
+pseudobulk_l1000_phase2.33071153.err: 53 12913M  53  6868M   0     0 37665k     0   0:05:51  0:03:06  0:02:45 37850k
+pseudobulk_l1000_phase2.33071153.err: 53 12913M  53  6906M   0     0 37671k     0   0:05:51  0:03:07  0:02:44 38176k
+pseudobulk_l1000_phase2.33071153.err: 53 12913M  53  6942M   0     0 37668k     0   0:05:51  0:03:08  0:02:43 37842k
+pseudobulk_l1000_phase2.33071153.err: 54 12913M  54  6980M   0     0 37674k     0   0:05:50  0:03:09  0:02:41 38162k
+pseudobulk_l1000_phase2.33071153.err: 54 12913M  54  7017M   0     0 37672k     0   0:05:51  0:03:10  0:02:41 37859k
+pseudobulk_l1000_phase2.33071153.err: 54 12913M  54  7054M   0     0 37678k     0   0:05:50  0:03:11  0:02:39 38156k
+pseudobulk_l1000_phase2.33071153.err: 54 12913M  54  7091M   0     0 37675k     0   0:05:50  0:03:12  0:02:38 37851k
+pseudobulk_l1000_phase2.33071153.err: 55 12913M  55  7128M   0     0 37680k     0   0:05:50  0:03:13  0:02:37 38114k
+pseudobulk_l1000_phase2.33071153.err: 55 12913M  55  7165M   0     0 37679k     0   0:05:50  0:03:14  0:02:36 37850k
+pseudobulk_l1000_phase2.33071153.err: 55 12913M  55  7202M   0     0 37682k     0   0:05:50  0:03:15  0:02:35 38053k
+pseudobulk_l1000_phase2.33071153.err: 56 12913M  56  7239M   0     0 37682k     0   0:05:50  0:03:16  0:02:34 37854k
+pseudobulk_l1000_phase2.33071153.err: 56 12913M  56  7276M   0     0 37684k     0   0:05:50  0:03:17  0:02:33 38006k
+pseudobulk_l1000_phase2.33071153.err: 56 12913M  56  7313M   0     0 37685k     0   0:05:50  0:03:18  0:02:32 37875k
+pseudobulk_l1000_phase2.33071153.err: 56 12913M  56  7350M   0     0 37686k     0   0:05:50  0:03:19  0:02:31 37956k
+pseudobulk_l1000_phase2.33071153.err: 57 12913M  57  7388M   0     0 37688k     0   0:05:50  0:03:20  0:02:30 37932k
+pseudobulk_l1000_phase2.33071153.err: 57 12913M  57  7424M   0     0 37688k     0   0:05:50  0:03:21  0:02:29 37913k
+pseudobulk_l1000_phase2.33071153.err: 57 12913M  57  7462M   0     0 37692k     0   0:05:50  0:03:22  0:02:28 37998k
+pseudobulk_l1000_phase2.33071153.err: 58 12913M  58  7498M   0     0 37690k     0   0:05:50  0:03:23  0:02:27 37884k
+pseudobulk_l1000_phase2.33071153.err: 58 12913M  58  7536M   0     0 37694k     0   0:05:50  0:03:24  0:02:26 38042k
+pseudobulk_l1000_phase2.33071153.err: 58 12913M  58  7572M   0     0 37693k     0   0:05:50  0:03:25  0:02:25 37871k
+pseudobulk_l1000_phase2.33071153.err: 58 12913M  58  7610M   0     0 37697k     0   0:05:50  0:03:26  0:02:24 38079k
+pseudobulk_l1000_phase2.33071153.err: 59 12913M  59  7647M   0     0 37695k     0   0:05:50  0:03:27  0:02:23 37849k
+pseudobulk_l1000_phase2.33071153.err: 59 12913M  59  7684M   0     0 37700k     0   0:05:50  0:03:28  0:02:22 38125k
+pseudobulk_l1000_phase2.33071153.err: 59 12913M  59  7721M   0     0 37698k     0   0:05:50  0:03:29  0:02:21 37851k
+pseudobulk_l1000_phase2.33071153.err: 60 12913M  60  7759M   0     0 37703k     0   0:05:50  0:03:30  0:02:20 38139k
+pseudobulk_l1000_phase2.33071153.err: 60 12913M  60  7795M   0     0 37701k     0   0:05:50  0:03:31  0:02:19 37846k
+pseudobulk_l1000_phase2.33071153.err: 60 12913M  60  7833M   0     0 37706k     0   0:05:50  0:03:32  0:02:18 38156k
+pseudobulk_l1000_phase2.33071153.err: 60 12913M  60  7869M   0     0 37703k     0   0:05:50  0:03:33  0:02:17 37835k
+pseudobulk_l1000_phase2.33071153.err: 61 12913M  61  7907M   0     0 37709k     0   0:05:50  0:03:34  0:02:16 38164k
+pseudobulk_l1000_phase2.33071153.err: 61 12913M  61  7943M   0     0 37706k     0   0:05:50  0:03:35  0:02:15 37834k
+pseudobulk_l1000_phase2.33071153.err: 61 12913M  61  7981M   0     0 37712k     0   0:05:50  0:03:36  0:02:14 38179k
+pseudobulk_l1000_phase2.33071153.err: 62 12913M  62  8018M   0     0 37709k     0   0:05:50  0:03:37  0:02:13 37832k
+pseudobulk_l1000_phase2.33071153.err: 62 12913M  62  8056M   0     0 37714k     0   0:05:50  0:03:38  0:02:12 38173k
+pseudobulk_l1000_phase2.33071153.err: 62 12913M  62  8092M   0     0 37712k     0   0:05:50  0:03:39  0:02:11 37828k
+pseudobulk_l1000_phase2.33071153.err: 62 12913M  62  8130M   0     0 37716k     0   0:05:50  0:03:40  0:02:10 38132k
+pseudobulk_l1000_phase2.33071153.err: 63 12913M  63  8166M   0     0 37714k     0   0:05:50  0:03:41  0:02:09 37823k
+pseudobulk_l1000_phase2.33071153.err: 63 12913M  63  8204M   0     0 37717k     0   0:05:50  0:03:42  0:02:08 38075k
+pseudobulk_l1000_phase2.33071153.err: 63 12913M  63  8240M   0     0 37717k     0   0:05:50  0:03:43  0:02:07 37831k
+pseudobulk_l1000_phase2.33071153.err: 64 12913M  64  8277M   0     0 37715k     0   0:05:50  0:03:44  0:02:06 37877k
+pseudobulk_l1000_phase2.33071153.err: 64 12913M  64  8315M   0     0 37720k     0   0:05:50  0:03:45  0:02:05 37898k
+pseudobulk_l1000_phase2.33071153.err: 64 12913M  64  8351M   0     0 37719k     0   0:05:50  0:03:46  0:02:04 37950k
+pseudobulk_l1000_phase2.33071153.err: 64 12913M  64  8389M   0     0 37722k     0   0:05:50  0:03:47  0:02:03 37945k
+pseudobulk_l1000_phase2.33071153.err: 65 12913M  65  8426M   0     0 37721k     0   0:05:50  0:03:48  0:02:02 37923k
+pseudobulk_l1000_phase2.33071153.err: 65 12913M  65  8463M   0     0 37725k     0   0:05:50  0:03:49  0:02:01 38146k
+pseudobulk_l1000_phase2.33071153.err: 65 12913M  65  8500M   0     0 37723k     0   0:05:50  0:03:50  0:02:00 37862k
+pseudobulk_l1000_phase2.33071153.err: 66 12913M  66  8537M   0     0 37727k     0   0:05:50  0:03:51  0:01:59 38070k
+pseudobulk_l1000_phase2.33071153.err: 66 12913M  66  8574M   0     0 37725k     0   0:05:50  0:03:52  0:01:58 37854k
+pseudobulk_l1000_phase2.33071153.err: 66 12913M  66  8612M   0     0 37729k     0   0:05:50  0:03:53  0:01:57 38093k
+pseudobulk_l1000_phase2.33071153.err: 66 12913M  66  8648M   0     0 37727k     0   0:05:50  0:03:54  0:01:56 37839k
+pseudobulk_l1000_phase2.33071153.err: 67 12913M  67  8684M   0     0 37723k     0   0:05:50  0:03:55  0:01:55 37707k
+pseudobulk_l1000_phase2.33071153.err: 67 12913M  67  8721M   0     0 37723k     0   0:05:50  0:03:56  0:01:54 37543k
+pseudobulk_l1000_phase2.33071153.err: 67 12913M  67  8757M   0     0 37723k     0   0:05:50  0:03:57  0:01:53 37618k
+pseudobulk_l1000_phase2.33071153.err: 68 12913M  68  8796M   0     0 37728k     0   0:05:50  0:03:58  0:01:52 37674k
+pseudobulk_l1000_phase2.33071153.err: 68 12913M  68  8831M   0     0 37724k     0   0:05:50  0:03:59  0:01:51 37567k
+pseudobulk_l1000_phase2.33071153.err: 68 12913M  68  8870M   0     0 37731k     0   0:05:50  0:04:00  0:01:50 38104k
+pseudobulk_l1000_phase2.33071153.err: 68 12913M  68  8906M   0     0 37726k     0   0:05:50  0:04:01  0:01:49 37876k
+pseudobulk_l1000_phase2.33071153.err: 69 12913M  69  8944M   0     0 37733k     0   0:05:50  0:04:02  0:01:48 38232k
+pseudobulk_l1000_phase2.33071153.err: 69 12913M  69  8980M   0     0 37729k     0   0:05:50  0:04:03  0:01:47 37770k
+pseudobulk_l1000_phase2.33071153.err: 69 12913M  69  9019M   0     0 37736k     0   0:05:50  0:04:04  0:01:46 38342k
+pseudobulk_l1000_phase2.33071153.err: 70 12913M  70  9054M   0     0 37732k     0   0:05:50  0:04:05  0:01:45 37781k
+pseudobulk_l1000_phase2.33071153.err: 70 12913M  70  9093M   0     0 37739k     0   0:05:50  0:04:06  0:01:44 38350k
+pseudobulk_l1000_phase2.33071153.err: 70 12913M  70  9129M   0     0 37734k     0   0:05:50  0:04:07  0:01:43 37769k
+pseudobulk_l1000_phase2.33071153.err: 70 12913M  70  9167M   0     0 37740k     0   0:05:50  0:04:08  0:01:42 38296k
+pseudobulk_l1000_phase2.33071153.err: 71 12913M  71  9203M   0     0 37737k     0   0:05:50  0:04:09  0:01:41 37751k
+pseudobulk_l1000_phase2.33071153.err: 71 12913M  71  9241M   0     0 37741k     0   0:05:50  0:04:10  0:01:40 38207k
+pseudobulk_l1000_phase2.33071153.err: 71 12913M  71  9277M   0     0 37739k     0   0:05:50  0:04:11  0:01:39 37753k
+pseudobulk_l1000_phase2.33071153.err: 72 12913M  72  9315M   0     0 37742k     0   0:05:50  0:04:12  0:01:38 38114k
+pseudobulk_l1000_phase2.33071153.err: 72 12913M  72  9352M   0     0 37742k     0   0:05:50  0:04:13  0:01:37 37806k
+pseudobulk_l1000_phase2.33071153.err: 72 12913M  72  9389M   0     0 37742k     0   0:05:50  0:04:14  0:01:36 38030k
+pseudobulk_l1000_phase2.33071153.err: 72 12913M  72  9426M   0     0 37744k     0   0:05:50  0:04:15  0:01:35 37744k
+pseudobulk_l1000_phase2.33071153.err: 73 12913M  73  9462M   0     0 37743k     0   0:05:50  0:04:16  0:01:34 37482k
+pseudobulk_l1000_phase2.33071153.err: 73 12913M  73  9500M   0     0 37747k     0   0:05:50  0:04:17  0:01:33 38050k
+pseudobulk_l1000_phase2.33071153.err: 73 12913M  73  9536M   0     0 37745k     0   0:05:50  0:04:18  0:01:32 37749k
+pseudobulk_l1000_phase2.33071153.err: 74 12913M  74  9574M   0     0 37749k     0   0:05:50  0:04:19  0:01:31 38042k
+pseudobulk_l1000_phase2.33071153.err: 74 12913M  74  9610M   0     0 37745k     0   0:05:50  0:04:20  0:01:30 37801k
+pseudobulk_l1000_phase2.33071153.err: 74 12913M  74  9649M   0     0 37751k     0   0:05:50  0:04:21  0:01:29 38150k
+pseudobulk_l1000_phase2.33071153.err: 75 12913M  75  9685M   0     0 37747k     0   0:05:50  0:04:22  0:01:28 37779k
+pseudobulk_l1000_phase2.33071153.err: 75 12913M  75  9723M   0     0 37753k     0   0:05:50  0:04:23  0:01:27 38181k
+pseudobulk_l1000_phase2.33071153.err: 75 12913M  75  9759M   0     0 37750k     0   0:05:50  0:04:24  0:01:26 37795k
+pseudobulk_l1000_phase2.33071153.err: 75 12913M  75  9797M   0     0 37755k     0   0:05:50  0:04:25  0:01:25 38242k
+pseudobulk_l1000_phase2.33071153.err: 76 12913M  76  9833M   0     0 37752k     0   0:05:50  0:04:26  0:01:24 37795k
+pseudobulk_l1000_phase2.33071153.err: 76 12913M  76  9871M   0     0 37757k     0   0:05:50  0:04:27  0:01:23 38240k
+pseudobulk_l1000_phase2.33071153.err: 76 12913M  76  9908M   0     0 37754k     0   0:05:50  0:04:28  0:01:22 37823k
+pseudobulk_l1000_phase2.33071153.err: 77 12913M  77  9946M   0     0 37758k     0   0:05:50  0:04:29  0:01:21 38218k
+pseudobulk_l1000_phase2.33071153.err: 77 12913M  77  9982M   0     0 37756k     0   0:05:50  0:04:30  0:01:20 37829k
+pseudobulk_l1000_phase2.33071153.err: 77 12913M  77 10020M   0     0 37760k     0   0:05:50  0:04:31  0:01:19 38188k
+pseudobulk_l1000_phase2.33071153.err: 77 12913M  77 10056M   0     0 37758k     0   0:05:50  0:04:32  0:01:18 37820k
+pseudobulk_l1000_phase2.33071153.err: 78 12913M  78 10094M   0     0 37761k     0   0:05:50  0:04:33  0:01:17 38135k
+pseudobulk_l1000_phase2.33071153.err: 78 12913M  78 10130M   0     0 37759k     0   0:05:50  0:04:34  0:01:16 37815k
+pseudobulk_l1000_phase2.33071153.err: 78 12913M  78 10168M   0     0 37762k     0   0:05:50  0:04:35  0:01:15 38057k
+pseudobulk_l1000_phase2.33071153.err: 79 12913M  79 10204M   0     0 37761k     0   0:05:50  0:04:36  0:01:14 37826k
+pseudobulk_l1000_phase2.33071153.err: 79 12913M  79 10240M   0     0 37756k     0   0:05:50  0:04:37  0:01:13 37645k
+pseudobulk_l1000_phase2.33071153.err: 79 12913M  79 10278M   0     0 37759k     0   0:05:50  0:04:38  0:01:12 37657k
+pseudobulk_l1000_phase2.33071153.err: 79 12913M  79 10315M   0     0 37758k     0   0:05:50  0:04:39  0:01:11 37684k
+pseudobulk_l1000_phase2.33071153.err: 80 12913M  80 10351M   0     0 37759k     0   0:05:50  0:04:40  0:01:10 37631k
+pseudobulk_l1000_phase2.33071153.err: 80 12913M  80 10389M   0     0 37761k     0   0:05:50  0:04:41  0:01:09 37783k
+pseudobulk_l1000_phase2.33071153.err: 80 12913M  80 10425M   0     0 37760k     0   0:05:50  0:04:42  0:01:08 37981k
+pseudobulk_l1000_phase2.33071153.err: 81 12913M  81 10463M   0     0 37764k     0   0:05:50  0:04:43  0:01:07 38009k
+pseudobulk_l1000_phase2.33071153.err: 81 12913M  81 10499M   0     0 37761k     0   0:05:50  0:04:44  0:01:06 37908k
+pseudobulk_l1000_phase2.33071153.err: 81 12913M  81 10538M   0     0 37765k     0   0:05:50  0:04:45  0:01:05 38110k
+pseudobulk_l1000_phase2.33071153.err: 81 12913M  81 10573M   0     0 37762k     0   0:05:50  0:04:46  0:01:04 37777k
+pseudobulk_l1000_phase2.33071153.err: 82 12913M  82 10612M   0     0 37767k     0   0:05:50  0:04:47  0:01:03 38198k
+pseudobulk_l1000_phase2.33071153.err: 82 12913M  82 10648M   0     0 37763k     0   0:05:50  0:04:48  0:01:02 37753k
+pseudobulk_l1000_phase2.33071153.err: 82 12913M  82 10686M   0     0 37769k     0   0:05:50  0:04:49  0:01:01 38243k
+pseudobulk_l1000_phase2.33071153.err: 83 12913M  83 10722M   0     0 37765k     0   0:05:50  0:04:50  0:01:00 37765k
+pseudobulk_l1000_phase2.33071153.err: 83 12913M  83 10760M   0     0 37771k     0   0:05:50  0:04:51  0:00:59 38285k
+pseudobulk_l1000_phase2.33071153.err: 83 12913M  83 10796M   0     0 37767k     0   0:05:50  0:04:52  0:00:58 37773k
+pseudobulk_l1000_phase2.33071153.err: 83 12913M  83 10835M   0     0 37772k     0   0:05:50  0:04:53  0:00:57 38278k
+pseudobulk_l1000_phase2.33071153.err: 84 12913M  84 10871M   0     0 37769k     0   0:05:50  0:04:54  0:00:56 37777k
+pseudobulk_l1000_phase2.33071153.err: 84 12913M  84 10909M   0     0 37773k     0   0:05:50  0:04:55  0:00:55 38225k
+pseudobulk_l1000_phase2.33071153.err: 84 12913M  84 10945M   0     0 37771k     0   0:05:50  0:04:56  0:00:54 37774k
+pseudobulk_l1000_phase2.33071153.err: 85 12913M  85 10983M   0     0 37774k     0   0:05:50  0:04:57  0:00:53 38139k
+pseudobulk_l1000_phase2.33071153.err: 85 12913M  85 11019M   0     0 37773k     0   0:05:50  0:04:58  0:00:52 37809k
+pseudobulk_l1000_phase2.33071153.err: 85 12913M  85 11057M   0     0 37774k     0   0:05:50  0:04:59  0:00:51 38090k
+pseudobulk_l1000_phase2.33071153.err: 85 12913M  85 11094M   0     0 37775k     0   0:05:50  0:05:00  0:00:50 37856k
+pseudobulk_l1000_phase2.33071153.err: 86 12913M  86 11130M   0     0 37775k     0   0:05:50  0:05:01  0:00:49 38010k
+pseudobulk_l1000_phase2.33071153.err: 86 12913M  86 11168M   0     0 37776k     0   0:05:50  0:05:02  0:00:48 37922k
+pseudobulk_l1000_phase2.33071153.err: 86 12913M  86 11204M   0     0 37775k     0   0:05:50  0:05:03  0:00:47 37920k
+pseudobulk_l1000_phase2.33071153.err: 87 12913M  87 11242M   0     0 37778k     0   0:05:50  0:05:04  0:00:46 37989k
+pseudobulk_l1000_phase2.33071153.err: 87 12913M  87 11278M   0     0 37776k     0   0:05:50  0:05:05  0:00:45 37860k
+pseudobulk_l1000_phase2.33071153.err: 87 12913M  87 11316M   0     0 37780k     0   0:05:49  0:05:06  0:00:43 38095k
+pseudobulk_l1000_phase2.33071153.err: 87 12913M  87 11352M   0     0 37777k     0   0:05:50  0:05:07  0:00:43 37812k
+pseudobulk_l1000_phase2.33071153.err: 88 12913M  88 11391M   0     0 37781k     0   0:05:49  0:05:08  0:00:41 38153k
+pseudobulk_l1000_phase2.33071153.err: 88 12913M  88 11427M   0     0 37778k     0   0:05:50  0:05:09  0:00:41 37790k
+pseudobulk_l1000_phase2.33071153.err: 88 12913M  88 11465M   0     0 37783k     0   0:05:49  0:05:10  0:00:39 38201k
+pseudobulk_l1000_phase2.33071153.err: 89 12913M  89 11501M   0     0 37780k     0   0:05:49  0:05:11  0:00:38 37781k
+pseudobulk_l1000_phase2.33071153.err: 89 12913M  89 11539M   0     0 37784k     0   0:05:49  0:05:12  0:00:37 38253k
+pseudobulk_l1000_phase2.33071153.err: 89 12913M  89 11575M   0     0 37782k     0   0:05:49  0:05:13  0:00:36 37800k
+pseudobulk_l1000_phase2.33071153.err: 89 12913M  89 11613M   0     0 37785k     0   0:05:49  0:05:14  0:00:35 38242k
+pseudobulk_l1000_phase2.33071153.err: 90 12913M  90 11649M   0     0 37783k     0   0:05:49  0:05:15  0:00:34 37789k
+pseudobulk_l1000_phase2.33071153.err: 90 12913M  90 11688M   0     0 37787k     0   0:05:49  0:05:16  0:00:33 38206k
+pseudobulk_l1000_phase2.33071153.err: 90 12913M  90 11724M   0     0 37785k     0   0:05:49  0:05:17  0:00:32 37800k
+pseudobulk_l1000_phase2.33071153.err: 91 12913M  91 11762M   0     0 37788k     0   0:05:49  0:05:18  0:00:31 38218k
+pseudobulk_l1000_phase2.33071153.err: 91 12913M  91 11798M   0     0 37786k     0   0:05:49  0:05:19  0:00:30 37836k
+pseudobulk_l1000_phase2.33071153.err: 91 12913M  91 11836M   0     0 37789k     0   0:05:49  0:05:20  0:00:29 38159k
+pseudobulk_l1000_phase2.33071153.err: 91 12913M  91 11872M   0     0 37788k     0   0:05:49  0:05:21  0:00:28 37846k
+pseudobulk_l1000_phase2.33071153.err: 92 12913M  92 11910M   0     0 37789k     0   0:05:49  0:05:22  0:00:27 38091k
+pseudobulk_l1000_phase2.33071153.err: 92 12913M  92 11947M   0     0 37789k     0   0:05:49  0:05:23  0:00:26 37832k
+pseudobulk_l1000_phase2.33071153.err: 92 12913M  92 11984M   0     0 37790k     0   0:05:49  0:05:24  0:00:25 38014k
+pseudobulk_l1000_phase2.33071153.err: 93 12913M  93 12021M   0     0 37790k     0   0:05:49  0:05:25  0:00:24 37883k
+pseudobulk_l1000_phase2.33071153.err: 93 12913M  93 12057M   0     0 37790k     0   0:05:49  0:05:26  0:00:23 37918k
+pseudobulk_l1000_phase2.33071153.err: 93 12913M  93 12095M   0     0 37792k     0   0:05:49  0:05:27  0:00:22 37943k
+pseudobulk_l1000_phase2.33071153.err: 93 12913M  93 12131M   0     0 37790k     0   0:05:49  0:05:28  0:00:21 37871k
+pseudobulk_l1000_phase2.33071153.err: 94 12913M  94 12169M   0     0 37793k     0   0:05:49  0:05:29  0:00:20 38010k
+pseudobulk_l1000_phase2.33071153.err: 94 12913M  94 12205M   0     0 37791k     0   0:05:49  0:05:30  0:00:19 37835k
+pseudobulk_l1000_phase2.33071153.err: 94 12913M  94 12243M   0     0 37794k     0   0:05:49  0:05:31  0:00:18 38098k
+pseudobulk_l1000_phase2.33071153.err: 95 12913M  95 12280M   0     0 37792k     0   0:05:49  0:05:32  0:00:17 37815k
+pseudobulk_l1000_phase2.33071153.err: 95 12913M  95 12318M   0     0 37796k     0   0:05:49  0:05:33  0:00:16 38168k
+pseudobulk_l1000_phase2.33071153.err: 95 12913M  95 12354M   0     0 37793k     0   0:05:49  0:05:34  0:00:15 37809k
+pseudobulk_l1000_phase2.33071153.err: 95 12913M  95 12392M   0     0 37797k     0   0:05:49  0:05:35  0:00:14 38195k
+pseudobulk_l1000_phase2.33071153.err: 96 12913M  96 12428M   0     0 37794k     0   0:05:49  0:05:36  0:00:13 37798k
+pseudobulk_l1000_phase2.33071153.err: 96 12913M  96 12466M   0     0 37798k     0   0:05:49  0:05:37  0:00:12 38209k
+pseudobulk_l1000_phase2.33071153.err: 96 12913M  96 12502M   0     0 37796k     0   0:05:49  0:05:38  0:00:11 37790k
+pseudobulk_l1000_phase2.33071153.err: 97 12913M  97 12540M   0     0 37800k     0   0:05:49  0:05:39  0:00:10 38215k
+pseudobulk_l1000_phase2.33071153.err: 97 12913M  97 12577M   0     0 37797k     0   0:05:49  0:05:40  0:00:09 37807k
+pseudobulk_l1000_phase2.33071153.err: 97 12913M  97 12615M   0     0 37801k     0   0:05:49  0:05:41  0:00:08 38221k
+pseudobulk_l1000_phase2.33071153.err: 97 12913M  97 12651M   0     0 37799k     0   0:05:49  0:05:42  0:00:07 37837k
+pseudobulk_l1000_phase2.33071153.err: 98 12913M  98 12689M   0     0 37801k     0   0:05:49  0:05:43  0:00:06 38154k
+pseudobulk_l1000_phase2.33071153.err: 98 12913M  98 12725M   0     0 37800k     0   0:05:49  0:05:44  0:00:05 37837k
+pseudobulk_l1000_phase2.33071153.err: 98 12913M  98 12763M   0     0 37802k     0   0:05:49  0:05:45  0:00:04 38098k
+pseudobulk_l1000_phase2.33071153.err: 99 12913M  99 12799M   0     0 37801k     0   0:05:49  0:05:46  0:00:03 37846k
+pseudobulk_l1000_phase2.33071153.err: 99 12913M  99 12836M   0     0 37802k     0   0:05:49  0:05:47  0:00:02 38006k
+pseudobulk_l1000_phase2.33071153.err: 99 12913M  99 12874M   0     0 37802k     0   0:05:49  0:05:48  0:00:01 37893k
+pseudobulk_l1000_phase2.33071153.err: 99 12913M  99 12910M   0     0 37802k     0   0:05:49  0:05:49 --:--:-- 37935k
+pseudobulk_l1000_phase2.33071153.err:100 12913M 100 12913M   0     0 37803k     0   0:05:49  0:05:49 --:--:-- 37908k
+pseudobulk_l1000_phase2.33071153.err:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+pseudobulk_l1000_phase2.33071153.err:                                 Dload  Upload   Total   Spent    Left  Speed
+pseudobulk_l1000_phase2.33071153.err:
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err: 20  4671k  20 983649   0     0 938849     0   0:00:05  0:00:01  0:00:04 939492
+pseudobulk_l1000_phase2.33071153.err:100  4671k 100  4671k   0     0  3650k     0   0:00:01  0:00:01 --:--:--  3652k
+pseudobulk_l1000_phase2.33071153.err:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+pseudobulk_l1000_phase2.33071153.err:                                 Dload  Upload   Total   Spent    Left  Speed
+pseudobulk_l1000_phase2.33071153.err:
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err:100  2528 100  2528   0     0  6913     0  --:--:-- --:--:-- --:--:--  6926
+pseudobulk_l1000_phase2.33071153.err:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+pseudobulk_l1000_phase2.33071153.err:                                 Dload  Upload   Total   Spent    Left  Speed
+pseudobulk_l1000_phase2.33071153.err:
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err:100 83669 100 83669   0     0 153920     0  --:--:-- --:--:-- --:--:-- 153803
+pseudobulk_l1000_phase2.33071153.err:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+pseudobulk_l1000_phase2.33071153.err:                                 Dload  Upload   Total   Spent    Left  Speed
+pseudobulk_l1000_phase2.33071153.err:
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err:100 216692 100 216692   0     0 288073     0  --:--:-- --:--:-- --:--:-- 288154
+pseudobulk_l1000_phase2.33071153.err:100 216692 100 216692   0     0 287632     0  --:--:-- --:--:-- --:--:-- 287389
+pseudobulk_l1000_phase2.33071153.err:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+pseudobulk_l1000_phase2.33071153.err:                                 Dload  Upload   Total   Spent    Left  Speed
+pseudobulk_l1000_phase2.33071153.err:
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err: 67  1114k  67 765464   0     0 780580     0   0:00:01 --:--:--  0:00:01 780289
+pseudobulk_l1000_phase2.33071153.err:100  1114k 100  1114k   0     0  1035k     0   0:00:01  0:00:01 --:--:--  1035k
+pseudobulk_l1000_phase2.33071153.err:  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+pseudobulk_l1000_phase2.33071153.err:                                 Dload  Upload   Total   Spent    Left  Speed
+pseudobulk_l1000_phase2.33071153.err:
+pseudobulk_l1000_phase2.33071153.err:  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
+pseudobulk_l1000_phase2.33071153.err:100 37979 100 37979   0     0 65239     0  --:--:-- --:--:-- --:--:-- 65368
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:24:31 | [WARNING] 5 file(s) still compressed:
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:24:31 | [WARNING]   - level3_gctx: GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx.gz
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:24:31 | [WARNING]   - instinfo: GSE70138_Broad_LINCS_inst_info_2017-03-06.txt.gz
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:24:31 | [WARNING]   - cellinfo: GSE70138_Broad_LINCS_cell_info_2017-04-28.txt.gz
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:24:31 | [WARNING]   - pert_info: GSE70138_Broad_LINCS_pert_info.txt.gz
+pseudobulk_l1000_phase2.33071153.err:2025-12-28 18:24:31 | [WARNING]   - geneinfo_level3: GSE70138_Broad_LINCS_gene_info_2017-03-06.txt.gz
+pseudobulk_l1000_phase2.33071153.err:[18:39:54] SMILES Parse Error: syntax error while parsing: restricted
+pseudobulk_l1000_phase2.33071153.err:[18:39:54] SMILES Parse Error: check for mistakes around position 1:
+pseudobulk_l1000_phase2.33071153.err:[18:39:54] restricted
+pseudobulk_l1000_phase2.33071153.err:[18:39:54] ^
+pseudobulk_l1000_phase2.33071153.err:[18:40:00] SMILES Parse Error: Failed parsing SMILES 'restricted' for input: 'restricted'
+pseudobulk_l1000_phase2.33071153.err:[18:41:11] SMILES Parse Error: syntax error while parsing: restricted
+pseudobulk_l1000_phase2.33071153.err:[18:41:11] SMILES Parse Error: check for mistakes around position 1:
+pseudobulk_l1000_phase2.33071153.err:[18:41:11] restricted
+pseudobulk_l1000_phase2.33071153.err:[18:41:11] ^
+pseudobulk_l1000_phase2.33071153.err:[18:41:11] SMILES Parse Error: Failed parsing SMILES 'restricted' for input: 'restricted'
+pseudobulk_l1000_phase2.33071153.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/cmapPy/pandasGEXpress/parse_gctx.py:275: FutureWarning: errors='ignore' is deprecated and will raise in a future version. Use to_numeric without passing `errors` and catch exceptions explicitly instead
+pseudobulk_l1000_phase2.33071153.err:  meta_df = meta_df.apply(lambda x: pd.to_numeric(x, errors="ignore"))
+pseudobulk_l1000_phase2.33071153.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/cmapPy/pandasGEXpress/parse_gctx.py:275: FutureWarning: errors='ignore' is deprecated and will raise in a future version. Use to_numeric without passing `errors` and catch exceptions explicitly instead
+pseudobulk_l1000_phase2.33071153.err:  meta_df = meta_df.apply(lambda x: pd.to_numeric(x, errors="ignore"))
