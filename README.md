@@ -148,6 +148,30 @@ cd /op3_v2
 ./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n
 ```
 
+### 4. Aggregate logs
+
+After running pipelines, aggregate scattered log files into combined logs for easier review.
+
+**Recursive mode** (all datasets):
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -r -l logs
+```
+
+**Targeted mode** (specific directory):
+
+Pseudobulk logs:
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -l logs/tahoe/full -t pseudobulk
+```
+
+DEG logs:
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -l logs/sciplex/full/deg/separate_replicates/qc_false/filter_min_cells_10 -t deg
+```
+
 # Project structure:
 The structure of the repo:
 ```
@@ -293,5 +317,4 @@ The structure of the `data` folder:
 │       └──...
 └──...        
 
-```
-		
+```	
