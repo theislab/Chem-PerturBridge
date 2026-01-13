@@ -1,0 +1,357 @@
+deg_sciplex.PID3727058.out:> Do not filter samples that did not pass quality control
+deg_sciplex.PID3727058.out:> Work with a full version
+deg_sciplex.PID3727058.out:> Mode: PARALLEL BY CELL TYPE (array jobs per cell type)
+deg_sciplex.PID3727058.out:> Dataset is not normalized, running normalization steps
+deg_sciplex.PID3727058.out:> Using config: ./pipelines/sciplex/configs/deg/config.json
+deg_sciplex.PID3727058.out:> Preprocess pseudobulk with parameter: separate_replicates
+deg_sciplex.PID3727058.out:> Running preprocessing pseudobulk
+deg_sciplex.PID3727058.out:Submitted batch job 33066762
+deg_sciplex.PID3727058.out:> Preprocessing completed
+deg_sciplex.PID3727058.out:> Starting DGE analysis with parameter: separate_replicates
+deg_sciplex.PID3727058.out:  Found 3 file(s) to process
+deg_sciplex.PID3727058.out:
+deg_sciplex.PID3727058.out:============================================
+deg_sciplex.PID3727058.out:DGE ANALYSIS
+deg_sciplex.PID3727058.out:============================================
+deg_sciplex.PID3727058.out:  Processing 3 file(s)...
+deg_sciplex.PID3727058.out:
+deg_sciplex.PID3727058.out:
+deg_sciplex.PID3727058.out:============================================
+deg_sciplex.PID3727058.out:DEG ANALYSIS: Array Job Mode
+deg_sciplex.PID3727058.out:============================================
+deg_sciplex.PID3727058.out:  Processing 3 file(s) with array job...
+deg_sciplex.PID3727058.out:  Submitting array job [3 jobs, max 50 concurrent]...
+deg_sciplex.PID3727058.out:Submitted batch job 33066768
+deg_sciplex.PID3727058.out:> DEG array job completed
+deg_sciplex.PID3727058.out:
+deg_sciplex.PID3727058.out:============================================
+deg_sciplex.PID3727058.out:AGGREGATING BATCH FILES
+deg_sciplex.PID3727058.out:============================================
+deg_sciplex.PID3727058.out:  Found files in ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/intermediate and results directory is empty
+deg_sciplex.PID3727058.out:  Aggregating batch files from intermediate/ to results/...
+deg_sciplex.PID3727058.out:  Running aggregation...
+deg_sciplex.PID3727058.out:Submitted batch job 33066968
+deg_sciplex.PID3727058.out:> Aggregation completed
+deg_sciplex.PID3727058.out:
+deg_sciplex.PID3727058.out:============================================
+deg_sciplex.PID3727058.out:DGE PIPELINE COMPLETED
+deg_sciplex.PID3727058.out:============================================
+deg_sciplex.PID3727058.out:  Results saved to: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50
+deg_sciplex.PID3727058.out:    - intermediate/ for separate files
+deg_sciplex.PID3727058.out:    - results/ for combined
+deg_sciplex.PID3727058.out:
+deg_sciplex.PID3727058.out:> DGE pipeline is finished
+deg_sciplex.PID3727058.out:> Cleaning up temporary files...
+deg_sciplex.PID3727058.out:> Cleanup complete
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:33:55 | [INFO] Read pseudobulk file
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:33:59 | [INFO] Dataset "sciplex" specified but no processing_functions configured, skipping
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:33:59 | [INFO] Map ensemble IDs to current/replacement IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:33:59 | [INFO] Mapping Ensembl IDs to current/replacement IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:33:59 | [INFO]   Found 58302 genes with Ensembl IDs in var.index
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:33:59 | [INFO] Processing 58302 IDs in 59 queries
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:33:59 | [INFO]   Query 1/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:02 | [INFO]   Query 2/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:05 | [INFO]   Query 3/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:07 | [INFO]   Query 4/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:10 | [INFO]   Query 5/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:12 | [INFO]   Query 6/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:15 | [INFO]   Query 7/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:17 | [INFO]   Query 8/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:19 | [INFO]   Query 9/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:21 | [INFO]   Query 10/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:23 | [INFO]   Query 11/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:25 | [INFO]   Query 12/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:28 | [INFO]   Query 13/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:29 | [INFO]   Query 14/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:32 | [INFO]   Query 15/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:34 | [INFO]   Query 16/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:36 | [INFO]   Query 17/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:38 | [INFO]   Query 18/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:40 | [INFO]   Query 19/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:43 | [INFO]   Query 20/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:45 | [INFO]   Query 21/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:48 | [INFO]   Query 22/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:50 | [INFO]   Query 23/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:52 | [INFO]   Query 24/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:54 | [INFO]   Query 25/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:56 | [INFO]   Query 26/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:34:58 | [INFO]   Query 27/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:00 | [INFO]   Query 28/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:04 | [INFO]   Query 29/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:07 | [INFO]   Query 30/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:08 | [INFO]   Query 31/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:12 | [INFO]   Query 32/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:14 | [INFO]   Query 33/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:16 | [INFO]   Query 34/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:18 | [INFO]   Query 35/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:19 | [INFO]   Query 36/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:21 | [INFO]   Query 37/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:24 | [INFO]   Query 38/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:26 | [INFO]   Query 39/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:27 | [INFO]   Query 40/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:29 | [INFO]   Query 41/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:31 | [INFO]   Query 42/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:34 | [INFO]   Query 43/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:36 | [INFO]   Query 44/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:38 | [INFO]   Query 45/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:39 | [INFO]   Query 46/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:41 | [INFO]   Query 47/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:44 | [INFO]   Query 48/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:46 | [INFO]   Query 49/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:48 | [INFO]   Query 50/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:49 | [INFO]   Query 51/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:52 | [INFO]   Query 52/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:53 | [INFO]   Query 53/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:55 | [INFO]   Query 54/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:35:57 | [INFO]   Query 55/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:03 | [INFO]   Query 56/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:06 | [INFO]   Query 57/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:07 | [INFO]   Query 58/59: processing 1000 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:09 | [INFO]   Query 59/59: processing 302 IDs
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO] Summary:
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO]   Total results: 58298 out of 58302
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO]   Current IDs: 56693
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO]   Deprecated (no replacement): 776
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO]   Single replacements: 809
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO]   Multiple replacements: 20
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO]   Unique target IDs with duplicates: 604
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO]   Mapping size: 57502
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO] Aggregating running...
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:11 | [INFO]   The layer containing 'psbulk_props' will be deprecated.
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:17 | [INFO]   Result: 58302 → 56799 genes (reduced by 1503)
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:17 | [INFO] Add perturbation label
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:17 | [INFO] Save data
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:28 | [INFO]     Saved: ./data/sciplex/pseudobulk_processed/sep_rep/srivatsan20_sciplex3_processed.h5ad (4974 obs, 188 perturbagens)
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:28 | [INFO] Splitting into 3 cell types
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:32 | [INFO]     Saved: ./data/sciplex/pseudobulk_processed/sep_rep/by_celltype/CVCL_0004/CVCL_0004_processed.h5ad (1535 obs, 188 perturbagens)
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:35 | [INFO]     Saved: ./data/sciplex/pseudobulk_processed/sep_rep/by_celltype/CVCL_0023/CVCL_0023_processed.h5ad (1910 obs, 188 perturbagens)
+deg_processing_pseudobulk.33066762.out:2025-12-26 13:36:41 | [INFO]     Saved: ./data/sciplex/pseudobulk_processed/sep_rep/by_celltype/CVCL_0031/CVCL_0031_processed.h5ad (1529 obs, 188 perturbagens)
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000243135 has more than one replacements: [{'stable_id': 'ENSG00000288702', 'score': 0.986504}, {'stable_id': 'ENSG00000288705', 'score': 0.986027}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000272196 has more than one replacements: [{'score': 0.971741, 'stable_id': 'ENSG00000288825'}, {'score': 0.973404, 'stable_id': 'ENSG00000288859'}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000244693 has more than one replacements: [{'score': 0.994811, 'stable_id': 'ENSG00000288784'}, {'stable_id': 'ENSG00000289604', 'score': 0.994837}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000225932 has more than one replacements: [{'stable_id': 'ENSG00000288784', 'score': 0.994837}, {'stable_id': 'ENSG00000289604', 'score': 0.994811}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000277203 has more than one replacements: [{'stable_id': 'ENSG00000288722', 'score': 0.998249}, {'stable_id': 'ENSG00000288709', 'score': 0.998246}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000256374 has more than one replacements: [{'stable_id': 'ENSG00000288867', 'score': 0.788845}, {'score': 0.788845, 'stable_id': 'ENSG00000289549'}, {'stable_id': 'ENSG00000289022', 'score': 0.788845}, {'stable_id': 'ENSG00000289240', 'score': 0.788845}, {'score': 0.788845, 'stable_id': 'ENSG00000289542'}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000183791 has more than one replacements: [{'score': 0.865191, 'stable_id': 'ENSG00000288631'}, {'stable_id': 'ENSG00000288616', 'score': 0.865191}, {'stable_id': 'ENSG00000288607', 'score': 0.865191}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000283401 has more than one replacements: [{'stable_id': 'ENSG00000284892', 'score': 0.995138}, {'score': 0.993041, 'stable_id': 'ENSG00000285116'}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000283137 has more than one replacements: [{'score': 0.933268, 'stable_id': 'ENSG00000284788'}, {'stable_id': 'ENSG00000285405', 'score': 0.953564}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000283336 has more than one replacements: [{'stable_id': 'ENSG00000285135', 'score': 0.879434}, {'stable_id': 'ENSG00000285491', 'score': 0.886146}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000233776 has more than one replacements: [{'score': 0.99, 'stable_id': 'ENSG00000235481'}, {'score': 0.99, 'stable_id': 'ENSG00000173575'}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000274267 has more than one replacements: [{'score': 0.944828, 'stable_id': 'ENSG00000287080'}, {'stable_id': 'ENSG00000286522', 'score': 0.896401}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000261277 has more than one replacements: [{'score': 0.755262, 'stable_id': 'ENSG00000285116'}, {'score': 0.756659, 'stable_id': 'ENSG00000284892'}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000278272 has more than one replacements: [{'score': 0.896401, 'stable_id': 'ENSG00000286522'}, {'score': 0.947712, 'stable_id': 'ENSG00000287080'}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000258652 has more than one replacements: [{'stable_id': 'ENSG00000285491', 'score': 0.979415}, {'stable_id': 'ENSG00000285135', 'score': 0.988649}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000203812 has more than one replacements: [{'score': 0.958449, 'stable_id': 'ENSG00000288859'}, {'score': 0.959544, 'stable_id': 'ENSG00000288825'}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000240224 has more than one replacements: [{'stable_id': 'ENSG00000288702', 'score': 0.981993}, {'stable_id': 'ENSG00000288705', 'score': 0.982788}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000274791 has more than one replacements: [{'stable_id': 'ENSG00000288709', 'score': 0.790648}, {'score': 0.790648, 'stable_id': 'ENSG00000288722'}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000258786 has more than one replacements: [{'stable_id': 'ENSG00000284788', 'score': 0.931866}, {'score': 0.95872, 'stable_id': 'ENSG00000285405'}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Warning, the gene ENSG00000263464 has more than one replacements: [{'stable_id': 'ENSG00000289549', 'score': 0.882353}, {'score': 0.894737, 'stable_id': 'ENSG00000288867'}, {'score': 0.882353, 'stable_id': 'ENSG00000289022'}, {'stable_id': 'ENSG00000289240', 'score': 0.882353}, {'stable_id': 'ENSG00000289542', 'score': 0.882353}]
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Filtering out 800 genes that could not be mapped (deprecated with no replacement or multiple replacements)
+deg_processing_pseudobulk.33066762.err:2025-12-26 13:36:11 | [WARNING] Found 604 target IDs with duplicates - will aggregate counts
+deg_analysis.33066769_0.out:
+deg_analysis.33066769_0.out:DE analysis started...
+deg_analysis.33066769_0.out:Loaded input file:  ./data/sciplex/pseudobulk_processed/sep_rep/by_celltype/CVCL_0004/CVCL_0004_processed.h5ad
+deg_analysis.33066769_0.out:Initial dimensions:  1535  samples ×  56799  genes
+deg_analysis.33066769_0.out:Filter samples with the low number of cells
+deg_analysis.33066769_0.out:    Filter threshold (min_cells):  50
+deg_analysis.33066769_0.out:    n_obs:  1535 -->  948
+deg_analysis.33066769_0.out:
+deg_analysis.33066769_0.out:▶︎ Processing cell_type:  CVCL_0004
+deg_analysis.33066769_0.out:    Filter controls by  pert_time_h  column
+deg_analysis.33066769_0.out:        n_obs:  948 -->  948
+deg_analysis.33066769_0.out:
+deg_analysis.33066769_0.out:    Constructing design matrix...
+deg_analysis.33066769_0.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.33066769_0.out:    Design matrix dimensions: 948 samples × 937 coefficients
+deg_analysis.33066769_0.out:    Filtering genes and normalizing counts...
+deg_analysis.33066769_0.out:    Genes are filtered and normalized in 6.8 seconds
+deg_analysis.33066769_0.out:    Running voom...
+deg_analysis.33066769_0.out:Coefficients not estimable: plateplate28
+deg_analysis.33066769_0.out:    Voom is completed in 6.0 seconds
+deg_analysis.33066769_0.out:    Running lmFit...
+deg_analysis.33066769_0.out:Coefficients not estimable: plateplate28
+deg_analysis.33066769_0.out:    LmFit is completed in 946.4 seconds
+deg_analysis.33066769_0.out:DGE fit is completed in 961.7 seconds
+deg_analysis.33066769_0.out:    Running contrasts...
+deg_analysis.33066769_0.out:    Running contrast 1/921
+deg_analysis.33066769_0.out:    Running contrast 51/921
+deg_analysis.33066769_0.out:    Running contrast 101/921
+deg_analysis.33066769_0.out:    Running contrast 151/921
+deg_analysis.33066769_0.out:    Running contrast 201/921
+deg_analysis.33066769_0.out:    Running contrast 251/921
+deg_analysis.33066769_0.out:    Running contrast 301/921
+deg_analysis.33066769_0.out:    Running contrast 351/921
+deg_analysis.33066769_0.out:    Running contrast 401/921
+deg_analysis.33066769_0.out:    Running contrast 451/921
+deg_analysis.33066769_0.out:    Running contrast 501/921
+deg_analysis.33066769_0.out:    Running contrast 551/921
+deg_analysis.33066769_0.out:    Running contrast 601/921
+deg_analysis.33066769_0.out:    Running contrast 651/921
+deg_analysis.33066769_0.out:    Running contrast 701/921
+deg_analysis.33066769_0.out:    Running contrast 751/921
+deg_analysis.33066769_0.out:    Running contrast 801/921
+deg_analysis.33066769_0.out:    Running contrast 851/921
+deg_analysis.33066769_0.out:    Running contrast 901/921
+deg_analysis.33066769_0.out:    Running contrast 921/921
+deg_analysis.33066769_0.out:Contrasts are completed in 266.9 seconds
+deg_analysis.33066769_0.out:
+deg_analysis.33066769_0.out:    Writing:  ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/intermediate/CVCL_0004/CVCL_0004_de.h5ad
+deg_analysis.33066769_0.out:
+deg_analysis.33066769_0.out:    Rewriting h5ad file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/intermediate/CVCL_0004/CVCL_0004_de.h5ad
+deg_analysis.33066769_0.out:    Removed X matrix
+deg_analysis.33066769_0.out:    Rewriting h5ad file is done!
+deg_analysis.33066769_0.out:✓ Cell line completed in 1273.7 seconds
+deg_analysis.33066769_0.out:
+deg_analysis.33066769_0.out:DE analysis completed!
+deg_analysis.33066769_0.out:
+deg_analysis.33066769_0.out:Total runtime: 1284.0 seconds
+deg_analysis.33066769_0.err:
+deg_analysis.33066769_0.err:=== 2 Warnings encountered ===
+deg_analysis.33066769_0.err:
+deg_analysis.33066769_0.err:1. Partial NA coefficients for 7371 probe(s)
+deg_analysis.33066769_0.err:2. Partial NA coefficients for 7371 probe(s)
+deg_analysis.33066770_1.out:
+deg_analysis.33066770_1.out:DE analysis started...
+deg_analysis.33066770_1.out:Loaded input file:  ./data/sciplex/pseudobulk_processed/sep_rep/by_celltype/CVCL_0023/CVCL_0023_processed.h5ad
+deg_analysis.33066770_1.out:Initial dimensions:  1910  samples ×  56799  genes
+deg_analysis.33066770_1.out:Filter samples with the low number of cells
+deg_analysis.33066770_1.out:    Filter threshold (min_cells):  50
+deg_analysis.33066770_1.out:    n_obs:  1910 -->  343
+deg_analysis.33066770_1.out:
+deg_analysis.33066770_1.out:▶︎ Processing cell_type:  CVCL_0023
+deg_analysis.33066770_1.out:    Filter controls by  pert_time_h  column
+deg_analysis.33066770_1.out:        n_obs:  343 -->  343
+deg_analysis.33066770_1.out:
+deg_analysis.33066770_1.out:    Constructing design matrix...
+deg_analysis.33066770_1.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.33066770_1.out:    Design matrix dimensions: 343 samples × 346 coefficients
+deg_analysis.33066770_1.out:    Filtering genes and normalizing counts...
+deg_analysis.33066770_1.out:    Genes are filtered and normalized in 3.4 seconds
+deg_analysis.33066770_1.out:    Running voom...
+deg_analysis.33066770_1.out:Coefficients not estimable: plateplate33 plateplate34 plateplate35 plateplate36 plateplate37 plateplate40 plateplate52
+deg_analysis.33066770_1.out:    Voom is completed in 2.0 seconds
+deg_analysis.33066770_1.out:    Running lmFit...
+deg_analysis.33066770_1.out:Coefficients not estimable: plateplate33 plateplate34 plateplate35 plateplate36 plateplate37 plateplate40 plateplate52
+deg_analysis.33066770_1.out:    LmFit is completed in 97.2 seconds
+deg_analysis.33066770_1.out:DGE fit is completed in 104.0 seconds
+deg_analysis.33066770_1.out:    Running contrasts...
+deg_analysis.33066770_1.out:    Running contrast 1/334
+deg_analysis.33066770_1.out:    Running contrast 51/334
+deg_analysis.33066770_1.out:    Running contrast 101/334
+deg_analysis.33066770_1.out:    Running contrast 151/334
+deg_analysis.33066770_1.out:    Running contrast 201/334
+deg_analysis.33066770_1.out:    Running contrast 251/334
+deg_analysis.33066770_1.out:    Running contrast 301/334
+deg_analysis.33066770_1.out:    Running contrast 334/334
+deg_analysis.33066770_1.out:Contrasts are completed in 69.3 seconds
+deg_analysis.33066770_1.out:
+deg_analysis.33066770_1.out:    Writing:  ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/intermediate/CVCL_0023/CVCL_0023_de.h5ad
+deg_analysis.33066770_1.out:
+deg_analysis.33066770_1.out:    Rewriting h5ad file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/intermediate/CVCL_0023/CVCL_0023_de.h5ad
+deg_analysis.33066770_1.out:    Removed X matrix
+deg_analysis.33066770_1.out:    Rewriting h5ad file is done!
+deg_analysis.33066770_1.out:✓ Cell line completed in 202.9 seconds
+deg_analysis.33066770_1.out:
+deg_analysis.33066770_1.out:DE analysis completed!
+deg_analysis.33066770_1.out:
+deg_analysis.33066770_1.out:Total runtime: 213.2 seconds
+deg_analysis.33066770_1.err:
+deg_analysis.33066770_1.err:=== 2 Warnings encountered ===
+deg_analysis.33066770_1.err:
+deg_analysis.33066770_1.err:1. Partial NA coefficients for 11031 probe(s)
+deg_analysis.33066770_1.err:2. Partial NA coefficients for 11031 probe(s)
+deg_analysis.33066768_2.out:
+deg_analysis.33066768_2.out:DE analysis started...
+deg_analysis.33066768_2.out:Loaded input file:  ./data/sciplex/pseudobulk_processed/sep_rep/by_celltype/CVCL_0031/CVCL_0031_processed.h5ad
+deg_analysis.33066768_2.out:Initial dimensions:  1529  samples ×  56799  genes
+deg_analysis.33066768_2.out:Filter samples with the low number of cells
+deg_analysis.33066768_2.out:    Filter threshold (min_cells):  50
+deg_analysis.33066768_2.out:    n_obs:  1529 -->  1318
+deg_analysis.33066768_2.out:
+deg_analysis.33066768_2.out:▶︎ Processing cell_type:  CVCL_0031
+deg_analysis.33066768_2.out:    Filter controls by  pert_time_h  column
+deg_analysis.33066768_2.out:        n_obs:  1318 -->  1318
+deg_analysis.33066768_2.out:
+deg_analysis.33066768_2.out:    Constructing design matrix...
+deg_analysis.33066768_2.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.33066768_2.out:    Design matrix dimensions: 1318 samples × 1306 coefficients
+deg_analysis.33066768_2.out:    Filtering genes and normalizing counts...
+deg_analysis.33066768_2.out:    Genes are filtered and normalized in 14.9 seconds
+deg_analysis.33066768_2.out:    Running voom...
+deg_analysis.33066768_2.out:Coefficients not estimable: plateplate19 plateplate22
+deg_analysis.33066768_2.out:    Voom is completed in 18.7 seconds
+deg_analysis.33066768_2.out:    Running lmFit...
+deg_analysis.33066768_2.out:Coefficients not estimable: plateplate19 plateplate22
+deg_analysis.33066768_2.out:    LmFit is completed in 4256.2 seconds
+deg_analysis.33066768_2.out:DGE fit is completed in 4293.6 seconds
+deg_analysis.33066768_2.out:    Running contrasts...
+deg_analysis.33066768_2.out:    Running contrast 1/1290
+deg_analysis.33066768_2.out:    Running contrast 51/1290
+deg_analysis.33066768_2.out:    Running contrast 101/1290
+deg_analysis.33066768_2.out:    Running contrast 151/1290
+deg_analysis.33066768_2.out:    Running contrast 201/1290
+deg_analysis.33066768_2.out:    Running contrast 251/1290
+deg_analysis.33066768_2.out:    Running contrast 301/1290
+deg_analysis.33066768_2.out:    Running contrast 351/1290
+deg_analysis.33066768_2.out:    Running contrast 401/1290
+deg_analysis.33066768_2.out:    Running contrast 451/1290
+deg_analysis.33066768_2.out:    Running contrast 501/1290
+deg_analysis.33066768_2.out:    Running contrast 551/1290
+deg_analysis.33066768_2.out:    Running contrast 601/1290
+deg_analysis.33066768_2.out:    Running contrast 651/1290
+deg_analysis.33066768_2.out:    Running contrast 701/1290
+deg_analysis.33066768_2.out:    Running contrast 751/1290
+deg_analysis.33066768_2.out:    Running contrast 801/1290
+deg_analysis.33066768_2.out:    Running contrast 851/1290
+deg_analysis.33066768_2.out:    Running contrast 901/1290
+deg_analysis.33066768_2.out:    Running contrast 951/1290
+deg_analysis.33066768_2.out:    Running contrast 1001/1290
+deg_analysis.33066768_2.out:    Running contrast 1051/1290
+deg_analysis.33066768_2.out:    Running contrast 1101/1290
+deg_analysis.33066768_2.out:    Running contrast 1151/1290
+deg_analysis.33066768_2.out:    Running contrast 1201/1290
+deg_analysis.33066768_2.out:    Running contrast 1251/1290
+deg_analysis.33066768_2.out:    Running contrast 1290/1290
+deg_analysis.33066768_2.out:Contrasts are completed in 771.3 seconds
+deg_analysis.33066768_2.out:
+deg_analysis.33066768_2.out:    Writing:  ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/intermediate/CVCL_0031/CVCL_0031_de.h5ad
+deg_analysis.33066768_2.out:
+deg_analysis.33066768_2.out:    Rewriting h5ad file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/intermediate/CVCL_0031/CVCL_0031_de.h5ad
+deg_analysis.33066768_2.out:    Removed X matrix
+deg_analysis.33066768_2.out:    Rewriting h5ad file is done!
+deg_analysis.33066768_2.out:✓ Cell line completed in 5189.1 seconds
+deg_analysis.33066768_2.out:
+deg_analysis.33066768_2.out:DE analysis completed!
+deg_analysis.33066768_2.out:
+deg_analysis.33066768_2.out:Total runtime: 5199.6 seconds
+deg_analysis.33066768_2.err:
+deg_analysis.33066768_2.err:=== 2 Warnings encountered ===
+deg_analysis.33066768_2.err:
+deg_analysis.33066768_2.err:1. Partial NA coefficients for 13143 probe(s)
+deg_analysis.33066768_2.err:2. Partial NA coefficients for 13143 probe(s)
+deg_aggregation.33066968.out:2025-12-26 23:02:53 | [INFO] Found 3 cell type(s) to aggregate
+deg_aggregation.33066968.out:2025-12-26 23:02:53 | [INFO] Aggregating 1 batch files for CVCL_0004
+deg_aggregation.33066968.out:2025-12-26 23:02:53 | [INFO]   Reading: CVCL_0004_de.h5ad
+deg_aggregation.33066968.out:2025-12-26 23:02:57 | [INFO]   Concatenating 1 batches...
+deg_aggregation.33066968.out:2025-12-26 23:02:57 | [INFO]   Batch column added with 1
+deg_aggregation.33066968.out:2025-12-26 23:03:11 | [INFO]     Rewriting h5ad file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/results/CVCL_0004_de.h5ad
+deg_aggregation.33066968.out:2025-12-26 23:03:11 | [INFO]     Removed X matrix
+deg_aggregation.33066968.out:2025-12-26 23:03:11 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.33066968.out:2025-12-26 23:03:11 | [INFO]   Saved aggregated file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/results/CVCL_0004_de.h5ad (921 obs, 7371 vars)
+deg_aggregation.33066968.out:2025-12-26 23:03:11 | [INFO] Aggregating 1 batch files for CVCL_0023
+deg_aggregation.33066968.out:2025-12-26 23:03:11 | [INFO]   Reading: CVCL_0023_de.h5ad
+deg_aggregation.33066968.out:2025-12-26 23:03:14 | [INFO]   Concatenating 1 batches...
+deg_aggregation.33066968.out:2025-12-26 23:03:14 | [INFO]   Batch column added with 1
+deg_aggregation.33066968.out:2025-12-26 23:03:23 | [INFO]     Rewriting h5ad file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/results/CVCL_0023_de.h5ad
+deg_aggregation.33066968.out:2025-12-26 23:03:23 | [INFO]     Removed X matrix
+deg_aggregation.33066968.out:2025-12-26 23:03:23 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.33066968.out:2025-12-26 23:03:23 | [INFO]   Saved aggregated file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/results/CVCL_0023_de.h5ad (334 obs, 11031 vars)
+deg_aggregation.33066968.out:2025-12-26 23:03:23 | [INFO] Aggregating 1 batch files for CVCL_0031
+deg_aggregation.33066968.out:2025-12-26 23:03:23 | [INFO]   Reading: CVCL_0031_de.h5ad
+deg_aggregation.33066968.out:2025-12-26 23:03:33 | [INFO]   Concatenating 1 batches...
+deg_aggregation.33066968.out:2025-12-26 23:03:34 | [INFO]   Batch column added with 1
+deg_aggregation.33066968.out:2025-12-26 23:04:11 | [INFO]     Rewriting h5ad file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/results/CVCL_0031_de.h5ad
+deg_aggregation.33066968.out:2025-12-26 23:04:11 | [INFO]     Removed X matrix
+deg_aggregation.33066968.out:2025-12-26 23:04:11 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.33066968.out:2025-12-26 23:04:11 | [INFO]   Saved aggregated file: ./data/sciplex/deg_data/sep_rep/full/qc_false/filter_min_cells_50/results/CVCL_0031_de.h5ad (1290 obs, 13143 vars)
+deg_aggregation.33066968.out:2025-12-26 23:04:11 | [INFO] Aggregation completed
