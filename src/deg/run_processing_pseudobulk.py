@@ -439,8 +439,8 @@ def pad_batches(batches: list,
 
             if batch['n_obs'] < MAX_N_NON_CONTROL_OBS:
                 current_batch_perts = batch['perturbagens']
-                all_perts = set(non_controls.obs['perturbagen'].unique())
-                available_perts = list(all_perts - current_batch_perts)
+                all_perts = list(non_controls.obs['perturbagen'].unique())
+                available_perts = [pert for pert in all_perts if pert not in current_batch_perts]
                 
                 if len(available_perts) == 0:
                     continue
