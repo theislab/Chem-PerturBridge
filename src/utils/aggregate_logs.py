@@ -173,7 +173,7 @@ def extract_dataset_from_path(log_dir: str) -> Optional[str]:
 
 def sort_log_files(files: List[str], pipeline_type: str, log_dir: Optional[str] = None) -> List[str]:
     """
-    Sort log files by priority, then by job ID and array index.
+    Sort log files by priority, then by array index and job ID.
     
     Args:
         files: List of log file paths
@@ -342,7 +342,7 @@ def is_valid_deg_subdir(root: str, deg_root: str) -> bool:
     rel = os.path.relpath(root, deg_root)
     parts = rel.split(os.sep)
     
-    # Must have exactly 3 levels: param/qc/filter
+    # Must have exactly 3 levels; expected layout: param/qc/filter
     if len(parts) != 3:
         return False
     

@@ -41,6 +41,8 @@ def main():
     --annotate-pubchem : bool, default=False
         If set, annotates perturbations with PubChem CIDs using multiple lookup strategies.
         This may involve API calls to PubChem and can be time-consuming.
+    --dataset : str, required
+        Dataset name (l1000_phase1 or l1000_phase2)
     """
     parser = argparse.ArgumentParser(
         description='Assemble L1000 Level 3 dataset from GCTX files'
@@ -86,9 +88,7 @@ def main():
     
     # Assemble the dataset
     logger.info(f"Assembling {args.dataset} dataset")
-    placeholder_adata = ad.AnnData()
     assembled_adata = assemble_l1000_dataset(
-        placeholder_adata,
         data_root=args.data_root,
         config=config
     )
@@ -101,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

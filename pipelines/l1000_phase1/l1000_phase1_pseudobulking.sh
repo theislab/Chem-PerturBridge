@@ -28,10 +28,9 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 # Common sbatch preamble
 SBATCH_PREAMBLE="export PATH=\${HOME}/miniforge3/bin:\${PATH} && cd ${PROJECT_ROOT} && eval \"\$(mamba shell hook --shell bash)\" && mamba activate ${ENV_DIR}"
-QOS=cpu_preemptible
+QOS=cpu_normal
 PARTITION=cpu_p
-#QOS=gpu_normal
-#PARTITION=gpu_p
+
 
 mkdir -p ${DATA_ROOT}
 mkdir -p ${OUTPUT_DIR}

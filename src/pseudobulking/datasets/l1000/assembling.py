@@ -86,6 +86,8 @@ def get_download_manifest(data_root: Path, dataset: str = "l1000_phase1") -> pd.
     ----------
     data_root : Path
         Root directory where files will be downloaded
+    dataset : str, default="l1000_phase1"
+        Dataset name: "l1000_phase1" or "l1000_phase2"
         
     Returns
     -------
@@ -224,6 +226,8 @@ def download_l1000_files(data_root: Optional[str] = None, dataset: str = "l1000_
     ----------
     data_root : str, optional
         Root directory for data files. If None, uses default from define_paths()
+    dataset : str, default="l1000_phase1"
+        Dataset name: "l1000_phase1" or "l1000_phase2"
     skip_existing : bool, default=True
         If True, skips downloading files that already exist
         
@@ -923,6 +927,8 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
     data_root : str, optional
         Root directory containing L1000 data files.
         Defaults to './lincs_data'
+    dataset : str, default="l1000_phase1"
+        Dataset name: "l1000_phase1" or "l1000_phase2"
         
     Returns
     -------
@@ -998,6 +1004,9 @@ def annotate_pubchem_cids(df: pd.DataFrame, paths: dict, config: dict = None) ->
         pert_iname, and optionally inchi_key, canonical_smiles.
     paths : dict
         Dictionary of file paths from define_paths(), must include 'pubchem_cache'
+    config : dict, optional
+        Configuration dictionary. If config["subsampling"] is True, annotates a sample
+        of 1,000 compound rows.
         
     Returns:
     --------
@@ -1466,10 +1475,8 @@ def load_expression(obs_helpers: pd.DataFrame, gctx_path: Path,
     return expr_df
 
 
-def assemble_l1000_dataset(padata: ad.AnnData,
-                         data_root: Optional[str] = None,
-                         config: Optional[dict] = None,
-                         **kwargs) -> ad.AnnData:
+def assemble_l1000_dataset(data_root: Optional[str] = None,
+                         config: Optional[dict] = None) -> ad.AnnData:
     """
     Assemble L1000 Level 3 data from GCTX files into standardized AnnData format.
     
@@ -1483,8 +1490,6 @@ def assemble_l1000_dataset(padata: ad.AnnData,
     
     Parameters:
     -----------
-    padata : ad.AnnData
-        Pseudobulk AnnData object (may be empty or placeholder)
     data_root : str, optional
         Path to L1000 data root directory containing GCTX and metadata files.
         If files are missing, they will be automatically downloaded.
@@ -1495,9 +1500,6 @@ def assemble_l1000_dataset(padata: ad.AnnData,
         - 'download_if_missing' (bool, default=True) to control automatic downloads
         - 'annotate_pubchem' (bool, default=False) to annotate perturbations with PubChem CIDs
           (may involve API calls to PubChem and can be time-consuming)
-    **kwargs
-        Additional processing parameters
-        
     Returns:
     --------
     ad.AnnData

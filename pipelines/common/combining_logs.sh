@@ -86,13 +86,13 @@ if [ "$RECURSIVE" = "true" ]; then
     echo "Running recursive log aggregation..."
     
     # Build command
-    CMD="python3 -m src.utils.aggregate_logs --recursive"
+    CMD=(python3 -m src.utils.aggregate_logs --recursive)
     
     if [ -n "$LOG_DIR" ]; then
-        CMD="$CMD --log_dir $LOG_DIR"
+        CMD+=(--log_dir "$LOG_DIR")
     fi
     
-    eval $CMD
+    "${CMD[@]}"
     
 else
     # Targeted mode
@@ -115,10 +115,10 @@ else
     fi
     
     # Build command
-    CMD="python3 -m src.utils.aggregate_logs --log_dir $LOG_DIR --pipeline_type $PIPELINE_TYPE"
+    CMD=(python3 -m src.utils.aggregate_logs --log_dir "$LOG_DIR" --pipeline_type "$PIPELINE_TYPE")
     
     if [ -n "$OUTPUT_NAME" ]; then
-        CMD="$CMD --output_name $OUTPUT_NAME"
+        CMD+=(--output_name "$OUTPUT_NAME")
     fi
     
     echo "Running targeted log aggregation..."
@@ -129,7 +129,7 @@ else
     fi
     echo ""
     
-    eval $CMD
+    "${CMD[@]}"
 fi
 
 echo ""

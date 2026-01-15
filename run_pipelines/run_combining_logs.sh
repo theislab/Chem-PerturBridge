@@ -83,23 +83,23 @@ if [ -n "$PIPELINE_TYPE" ]; then
 fi
 
 # Build command for common script
-CMD="./pipelines/common/combining_logs.sh"
+CMD=(./pipelines/common/combining_logs.sh)
 
 if [ -n "$RECURSIVE" ]; then
-    CMD="$CMD $RECURSIVE"
+    CMD+=("$RECURSIVE")
 fi
 
 if [ -n "$LOG_DIR" ]; then
-    CMD="$CMD -l $LOG_DIR"
+    CMD+=(-l "$LOG_DIR")
 fi
 
 if [ -n "$PIPELINE_TYPE" ]; then
-    CMD="$CMD -t $PIPELINE_TYPE"
+    CMD+=(-t "$PIPELINE_TYPE")
 fi
 
 if [ -n "$OUTPUT_NAME" ]; then
-    CMD="$CMD -o $OUTPUT_NAME"
+    CMD+=(-o "$OUTPUT_NAME")
 fi
 
 # Execute the command
-eval $CMD
+"${CMD[@]}"

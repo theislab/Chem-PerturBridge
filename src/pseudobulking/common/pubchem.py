@@ -290,7 +290,7 @@ def lookup_pubchem_cids(df: pd.DataFrame,
                            manual_mapping_func: Optional[Callable[[], Dict]] = None,
                            dataset_key: Optional[str] = None) -> pd.DataFrame:
     """
-    Add or update 'pubchem_cid' column to dataframe for L1000 dataset.
+    Add or update 'pubchem_cid' column in a dataframe.
     
     Uses multiple strategies in order of preference:
     1. Use existing valid pubchem_cid if present
@@ -326,7 +326,7 @@ def lookup_pubchem_cids(df: pd.DataFrame,
     manual_mapping_func : Optional[Callable[[], Dict]], default=None
         Function that returns manual PubChem CID mappings. If provided, should return
         either a dict directly (e.g., {'drug_name': cid}) or a dict with dataset keys
-        (e.g., {'dataset_name': {'drug_name': cid}}). If None, uses default pubchem_mapping_l1000().
+        (e.g., {'dataset_name': {'drug_name': cid}}). If None, no manual mapping is used.
     dataset_key : Optional[str], default=None
         Key to extract from the dict returned by manual_mapping_func if it returns
         a nested dict structure. If None and manual_mapping_func returns a nested dict,
@@ -439,7 +439,7 @@ def lookup_pubchem_cids(df: pd.DataFrame,
             n_mapped_so_far = sum(1 for c in cids if c is not None)
             logger.info(f"Processed {iteration_count}/{n_compounds} compounds ({n_mapped_so_far} mapped so far)")
         
-        # Save cache every 10 iterations if cache_path is provided
+        # Save cache every 500 iterations if cache_path is provided
         if cache_path and iteration_count % 500 == 0:
             save_cache_to_json(cache, cache_path)
     
@@ -455,5 +455,3 @@ def lookup_pubchem_cids(df: pd.DataFrame,
     logger.info(f"Mapped {n_mapped} out of {len(df)} compounds to PubChem CIDs")
     
     return df_updated
-
-

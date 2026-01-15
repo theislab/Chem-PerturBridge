@@ -6,7 +6,6 @@ import argparse
 import importlib
 import numpy as np
 import pandas as pd
-import scanpy as sc
 import anndata as ad
 from typing import Optional, Tuple, Union
 
@@ -324,9 +323,9 @@ def create_batches(non_controls: ad.AnnData,
     Create multiple batches from perturbagens using Best Fit algorithm.
     
     Randomly shuffles perturbagens and assigns them to batches using Best Fit algorithm,
-    targeting non-control n_obs not exceeding MAX_N_NON_CONTROL_OBS. The algorithm selects 
-    the batch that minimizes waste (gets closest to MAX_N_NON_CONTROL_OBS without exceeding it) for 
-    each perturbagen. Thresholds are based on non-control observations only.
+    targeting non-control n_obs near MAX_N_NON_CONTROL_OBS. The algorithm selects the batch
+    that minimizes waste (gets closest to MAX_N_NON_CONTROL_OBS, allowing up to MAX_ALLOWED_EXCESS)
+    for each perturbagen. Thresholds are based on non-control observations only.
     
     Parameters:
     -----------
@@ -405,7 +404,8 @@ def pad_batches(batches: list,
     For batches with non-control n_obs below MAX_N_NON_CONTROL_OBS, this function iteratively adds
     perturbagens from other batches (not already in the current batch). Perturbagens
     are shuffled and added one at a time, checking that non-control n_obs doesn't exceed
-    MAX_N_NON_CONTROL_OBS. The process stops when no more suitable perturbagens are available.
+    MAX_N_NON_CONTROL_OBS + MAX_ALLOWED_EXCESS. The process stops when no more suitable
+    perturbagens are available.
     Thresholds are based on non-control observations only.
     
     Parameters:
@@ -762,7 +762,6 @@ def save_by_celltype(padata: ad.AnnData,
         os.makedirs(ct_dir, exist_ok=True)
         adata_ct = padata[padata.obs['cell_type'] == ct].copy()
         batch_celltype(adata_ct, ct_dir, ct_clean)
-        #break
         
 
 
@@ -876,7 +875,7 @@ class PseudobulkProcessor:
     Processing steps:
     1. Read data
     2. Apply dataset-specific processing (optional)
-    3. Map ensemble IDs to current/replacement IDs
+    3. Map Ensembl IDs to current/replacement IDs
     4. Add perturbation labels
     5. Save data
     6. Split by cell type (optional)
@@ -990,7 +989,7 @@ class PseudobulkProcessor:
             self.padata = processing_func(self.padata, **kwargs)
     
     def map_ensemble_ids(self) -> None:
-        """Step 3: Map ensemble IDs to current/replacement IDs."""
+        """Step 3: Map Ensembl IDs to current/replacement IDs."""
         logger.info('Map ensemble IDs to current/replacement IDs')
         self.padata = map_ensembl_ids_for_dataset(self.padata)
     
@@ -1086,13 +1085,17 @@ def main():
     
     Configuration File:
     -------------------
-    The config file can specify dataset-specific processing functions:
+    The config file can specify dataset-specific processing functions by
+    providing a JSON file path in post_processing.processing_functions.path:
     {
       "par_process": {
-        "dataset": "l1000",
-        "processing_functions": {
-          "path": "src.pseudobulking.datasets.l1000.post_processing",
-          "name": "process_l1000_dataset"
+        "dataset": "tahoe",
+        "post_processing": {
+          "var_lamindb_path": "./data/tahoe/raw/var.parquet",
+          "processing_functions": {
+            "path": "./src/configs/datasets.json",
+            "name": "post_processing"
+          }
         }
       }
     }

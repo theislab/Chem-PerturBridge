@@ -1,6 +1,3 @@
-"""
-Ensembl archive client and mapping utilities for gene ID conversion.
-"""
 import requests
 import time
 import pandas as pd
@@ -20,6 +17,8 @@ class EnsemblArchiveClient:
     
     The Ensembl Archive API allows querying archive information for Ensembl IDs
     to determine if they are current or deprecated, and find replacement IDs.
+
+    https://github.com/Ensembl/ensembl-rest/wiki/Example-Python-Client
     """
     
     def __init__(self, server: str = 'https://rest.ensembl.org', 
@@ -116,7 +115,7 @@ class EnsemblArchiveClient:
         query_size : int, default=1000
             Number of IDs to query per request
         verbose : bool, default=True
-            Show progress with logger (uses logger.info instead of tqdm)
+            Show progress with logger
         
         Returns:
         --------
@@ -220,9 +219,6 @@ def _aggregate_matrix(matrix, groups, new_id_to_index, var_index):
     """
     Aggregate matrix (X or layer) for duplicated genes using vectorized matrix multiplication.
     
-    This is much faster than iterating through groups because it uses a single matrix multiplication
-    instead of extracting columns one by one. Orders of magnitude faster for large matrices.
-    
     Parameters:
     -----------
     matrix : scipy.sparse or np.ndarray
@@ -293,7 +289,7 @@ def map_and_aggregate_duplicated_genes(adata: AnnData,
     var_index_col : str, optional
         Column name in var if IDs are not in index. If None, uses var.index
     keep_unmapped : bool, default=False
-        If True, keep genes not in mapping (mapped to None). If False, remove them.
+        If True, keep genes not in mapping (retain original IDs). If False, remove them.
     verbose : bool, default=True
         Show progress and summary statistics
         
@@ -317,7 +313,6 @@ def map_and_aggregate_duplicated_genes(adata: AnnData,
     mapping_df = pd.DataFrame({'old_id': gene_ids.values, 'new_id': mapped_ids}, index=adata.var.index)
     groups = mapping_df.groupby('new_id')
     unique_new_ids = mapping_df['new_id'].dropna().unique()
-    duplicated_targets = mapping_df[mapping_df['new_id'].duplicated(keep=False)]['new_id'].unique()
     
     
     new_id_to_index = {gid: idx for idx, gid in enumerate(unique_new_ids)}
@@ -353,8 +348,8 @@ def map_ensembl_ids_for_dataset(padata: AnnData,
     This function:
     1. Extracts Ensembl IDs from var.index or var column
     2. Queries Ensembl Archive API to find current/replacement IDs
-    3. Updates the AnnData object with current IDs
-    4. Filters out genes that couldn't be mapped (deprecated with no replacement)
+    3. Aggregates counts for duplicated genes
+    4. Filters out genes that couldn't be mapped (deprecated with no replacement or multiple replacements)
     
     Parameters:
     -----------
@@ -434,4 +429,3 @@ def map_ensembl_ids_for_dataset(padata: AnnData,
         logger.info(f"  Result: {padata.n_vars} → {padata_mapped.n_vars} genes (reduced by {padata.n_vars - padata_mapped.n_vars})")
     
     return padata_mapped
-

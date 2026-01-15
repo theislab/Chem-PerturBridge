@@ -57,7 +57,7 @@ while getopts ":sjqp:f:c:d:nh" opt; do
                         echo "Run: $0 [-s] [-j] [-h] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
                         echo ""
                         echo "Required arguments:"
-                        echo "  -d  Dataset name (sciplex, tahoe, l1000)"
+                        echo "  -d  Dataset name (sciplex, tahoe, l1000_phase1, l1000_phase2)"
                         echo "  -p  Design parameter (group_all_replicates, separate_replicates)"
                         echo "  -c  Path to config file (auto-set by run_deg.sh)"
                         echo ""
@@ -138,6 +138,7 @@ else
     ARG_Q=""
 fi
 
+# Set subsample flag if flag is provided
 if [ "$MODE_S" = "True" ]; then
     echo "> Work with a subsample"
     SUBDIR="subsample"

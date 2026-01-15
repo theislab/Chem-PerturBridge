@@ -45,16 +45,14 @@ def rewrite_h5ad(path2file: str) -> None:
     logger.info('    Rewriting h5ad file is done!')
 
 
-def get_batch_files(cell_type_dir: str, cell_type: str) -> List[str]:
+def get_batch_files(cell_type_dir: str) -> List[str]:
     '''
-    Get all batch files for a cell type, sorted by filename.
+    Get all batch files for a cell type, sorted by batch number in filename.
     
     Parameters:
     -----------
     cell_type_dir : str
         Directory containing batch files for the cell type
-    cell_type : str
-        Cell type name (not used, kept for API compatibility)
         
     Returns:
     --------
@@ -106,7 +104,7 @@ def aggregate_cell_type_batches(input_dir: str,
         logger.warning(f'Cell type directory not found: {cell_type_dir}')
         return
     
-    batch_files = get_batch_files(cell_type_dir, cell_type)
+    batch_files = get_batch_files(cell_type_dir)
     
     if len(batch_files) == 0:
         logger.warning(f'No batch files found for {cell_type} in {cell_type_dir}')
@@ -234,5 +232,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 

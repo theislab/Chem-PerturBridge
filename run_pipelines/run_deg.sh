@@ -105,14 +105,12 @@ else
 	ARG_N=""
 fi
 
-# Determine filter folder names
 if [[ -z "$FILT" ]]; then
 	FILTER_FOLDER="filter_min_cells_0"
 else
 	FILTER_FOLDER="filter_min_cells_${FILT}"
 fi
 
-# Determine QC folder name
 if [[ "$MODE_Q" == "True" ]]; then
 	QC_FOLDER="qc_true"
 	ARG_Q="-q"
