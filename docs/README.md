@@ -18,30 +18,31 @@ If you want to add the dataset-specific functions <u>to process a dataset</u> an
 Once you add the processing functions unique for your dataset, you need to create/update wrapper scripts responsible for <u>running the pipelines</u> in `op3_v2/pipelines` and `op3_v2/run_pipelines` and add config files as well.
 
 **NB!** Data and Log directories are created automatically when you execute the pipelines.
+
 **NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding the datasets the user needs to check if the dataset has been alredy annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the dataset-specific loader needs to be added to `op3_v2/src/pseudobulking/datasets/mynewdataset`.
 
 ## Overview
 
 ### 1. Update a pseudobulking step:
 
-   **a.** Add the dataset folder `mynewdataset` to `src/pseudobulking/datasets/` which stores scripts with the dataset-specific standardization functions
-   
-   **b.** Update `src/configs/datasets.json` file which stores the paths to the dataset-specific functions mentioned in (a)
-   
-   **c.** Update shell scripts:
-      - Update `run_pipelines/run_pseudobulking.sh`
-      - Create the dataset folder `mynewdataset` in `pipelines/` and add `mynewdataset_pseudobulking.sh` script to this folder
+- Add the dataset folder `mynewdataset` to `src/pseudobulking/datasets/` which stores scripts with the dataset-specific standardization functions
 
-   **d.** Add `pipelines/mynewdataset/configs/` folder
+- Update `src/configs/datasets.json` file which stores the paths to the dataset-specific functions mentioned above
+
+- Update shell scripts:
+  - Update `run_pipelines/run_pseudobulking.sh`
+  - Create the dataset folder `mynewdataset` in `pipelines/` and add `mynewdataset_pseudobulking.sh` script to this folder
+  
+- Add `pipelines/mynewdataset/configs/` folder
 
 ### 2. Update a DEG step:
 
-   **a.** Update shell script:
-      - Update `run_pipelines/run_deg.sh`
-   
-   **b.** If you are planning to process additionally the obtained pseudobulk, then you need to add post-processing functions to `src/pseudobulking/datasets/mynewdataset`
-   
-   **c.** Create `pipelines/mynewdataset/configs/deg/` directory
-   
-   **d.** Add `config.json` to the `pipelines/mynewdataset/configs/deg/` which keeps the parameters for DEG analysis
+- Update shell script:
+  - Update `run_pipelines/run_deg.sh`
+
+- If you are planning to process additionally the obtained pseudobulk, then you need to add post-processing functions to `src/pseudobulking/datasets/mynewdataset`
+
+- Create `pipelines/mynewdataset/configs/deg/` directory
+
+- Add `config.json` to the `pipelines/mynewdataset/configs/deg/` which keeps the parameters for DEG analysis
 
