@@ -18,10 +18,10 @@ This repository is a collection; each component retains its original license; ou
 
 The datasets used in this project are provided under the following licenses:
 
-- **Sciplex3** – Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt))
-- **Tahoe** - Creative Commons Zero v1.0 Universal ([CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt))
+- **Sciplex3** – Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt)) - [scPerturb Single-Cell Perturbation Data](https://zenodo.org/records/13350497)
+- **Tahoe** - Creative Commons Zero v1.0 Universal ([CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt)) - [Arc Virtual Cell Atlas](https://arcinstitute.org/tools/virtualcellatlas)
 - **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes.
-- **OP3** – Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt))
+- **OP3** – Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt)) - [Open Problems Perturbation Prediction benchmark](https://openreview.net/forum?id=WTI4RJYSVm)
 
 # Quick start guide
 You can run scripts on the HPC cluster with the workload manager (SLURM)
