@@ -1,25 +1,25 @@
 # Guide: Adding a New Dataset to the OP3_v2 Pipeline
 
-This document describes step-by-step integration of the new dataset to the OP3_v2 pipeline.
+This document describes step-by-step integration of a new dataset into the OP3_v2 pipeline.
 
 ## General description
 
-The code could be divided into 2 parts: 
+The code is divided into two parts: 
 * `.py` and `.R` scripts which are targeted to work with the content of datasets, they are located in `op3_v2/src` directory (and related config files)
 * `.sh` wrapper scripts located in `op3_v2/pipelines` and `op3_v2/run_pipelines` (and related config files)
 
 
-`.py` and `.R` scripts are mainly focused on the data downloading, processing, data annotation, aggregation, while .sh are responsible for setting the parameters for running `.py` and `.R` scripts, initiating the run for the pipeline and stacking the scripts in one workflow if it is needed or parallelizing the jobs.
+`.py` and `.R` scripts are mainly focused on data downloading, processing, and annotation, while `.sh` scripts are responsible for setting parameters for running `.py` and `.R` scripts, initiating the pipeline, and stacking scripts into a workflow when needed or parallelizing the jobs.
 
-If you want to add the dataset-specific functions <u>to process a dataset</u> and modifies them, you need to use `op3_v2/src` directory: 
+If you want to add dataset-specific functions <u>to process a dataset</u> and modify them, you need to use the `op3_v2/src` directory: 
 * add the scripts to `op3_v2/src/pseudobulking/datasets/mynewdataset` (e.g. `standardization.py`)
 * modify `op3_v2/src/configs/datasets.json` pointing the location for the dataset-specific module (e.g. `op3_v2/src/pseudobulking/datasets/mynewdataset/standardization.py`).
 
-Once you add the processing functions unique for your dataset, you need to create/update wrapper scripts responsible for <u>running the pipelines</u> in `op3_v2/pipelines` and `op3_v2/run_pipelines` and add config files as well.
+Once you add the processing functions unique to your dataset, you need to create/update wrapper scripts responsible for <u>running the pipelines</u> in `op3_v2/pipelines` and `op3_v2/run_pipelines` and add config files as well.
 
 **NB!** Data and Log directories are created automatically when you execute the pipelines.
 
-**NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding the datasets the user needs to check if the dataset has been alredy annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the dataset-specific loader needs to be added to `op3_v2/src/pseudobulking/datasets/mynewdataset`.
+**NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding a dataset the user needs to check if the dataset has been already annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the dataset-specific loader needs to be added to `op3_v2/src/pseudobulking/datasets/mynewdataset` by the user.
 
 ## Overview
 
