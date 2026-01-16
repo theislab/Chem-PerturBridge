@@ -12,6 +12,17 @@ Aggregates raw single-cell RNA sequencing data to pseudobulk samples for downstr
 * **DEG Analysis**: 
 Identifies differentially expressed genes between treatment and control conditions in pseudobulk samples
 
+# License
+
+This repository is a collection; each component retains its original license; our processed integration is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt).
+
+The datasets used in this project are provided under the following licenses:
+
+- **Sciplex3** – Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt))
+- **Tahoe** - Creative Commons Zero v1.0 Universal ([CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt))
+- **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes.
+- **OP3** – Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt))
+
 # Quick start guide
 You can run scripts on the HPC cluster with the workload manager (SLURM)
 
