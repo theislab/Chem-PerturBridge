@@ -4,11 +4,11 @@ This document describes step-by-step integration of a new dataset with an identi
 
 ## General description
 
-The whole pipeline could be divided into two main steps:
+The whole **pipeline** could be divided into two main steps:
 * Pseudobulking
 * DEG analysis
 
-The executed code could be divided into two parts:
+The **executed code** could be divided into two parts:
 
 * `.py` and `.R` scripts which are targeted to work with the content of datasets, they are located in `op3_v2/src` directory (and related config files)
 * `.sh` wrapper scripts located in `op3_v2/pipelines` and `op3_v2/run_pipelines` (and related config files)
