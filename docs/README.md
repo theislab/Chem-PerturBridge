@@ -1,4 +1,4 @@
-# Guide: Adding a New Dataset to the OP3_v2 Pipeline
+# Adding a New Dataset to the OP3_v2 Pipeline
 
 This document describes step-by-step integration of a new dataset with an identifier `mynewdataset` into the OP3_v2 pipeline.
 
@@ -17,14 +17,14 @@ The **executed code** could be divided into two parts:
 
 **NB!** Data and Log directories are created automatically when you execute the pipelines.
 
-## Overview
+## Quick start guide
 
 ### 1 Update a pseudobulking step:
 
 **1.1** **`.py` scripts and config**
 
-: **1.1.1** **directories**
-: * Create a directory `op3_v2/src/pseudobulking/datasets/mynewdataset` which will store modules with the dataset-specific functions.
+> **1.1.1** **directories**
+> * Create a directory `op3_v2/src/pseudobulking/datasets/mynewdataset` which will store modules with the dataset-specific functions.
 >
 > **1.1.2** **scripts**
 > * Add python modules to the directory created in **1.1.1** containing specific helping functions to prepare the dataset which you want to add.
@@ -71,3 +71,5 @@ The **executed code** could be divided into two parts:
 >
 > **2.2.3** **configs**
 > * Create a file `op3_v2/pipelines/mynewdataset/configs/deg/config.json` which keeps the parameters for DEG analysis.
+
+### Validate your integration
