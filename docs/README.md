@@ -23,8 +23,8 @@ The **executed code** could be divided into two parts:
 
 **1.1** **`.py` scripts and config**
 
-> **1.1.1** **directories**
-> * Create a directory `op3_v2/src/pseudobulking/datasets/mynewdataset` which will store modules with the dataset-specific functions.
+: **1.1.1** **directories**
+: * Create a directory `op3_v2/src/pseudobulking/datasets/mynewdataset` which will store modules with the dataset-specific functions.
 >
 > **1.1.2** **scripts**
 > * Add python modules to the directory created in **1.1.1** containing specific helping functions to prepare the dataset which you want to add.
