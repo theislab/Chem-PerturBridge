@@ -23,11 +23,13 @@ The executed code could be divided into two parts:
 
 **1.1** **`.py` scripts and config**
 
-  **1.1.1** **directories**
-    * Create a directory `op3_v2/src/pseudobulking/datasets/mynewdataset` which will store modules with the dataset-specific functions.
+> **1.1.1** **directories**
+>
+> * Create a directory `op3_v2/src/pseudobulking/datasets/mynewdataset` which will store modules with the dataset-specific functions.
 
-  **1.1.2** **scripts**
-    * Add python modules to the directory created in **1.1.1** containing specific helping functions to prepare the dataset which you want to add.
+> **1.1.2** **scripts**
+>
+> * Add python modules to the directory created in **1.1.1** containing specific helping functions to prepare the dataset which you want to add.
     * **NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding a dataset you need to check if the dataset has been already annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the script which downloads and assembles your dataset, and saves in `.h5ad` format needs to be added to `op3_v2/src/pseudobulking/datasets/mynewdataset`.
     * **NB!** If you already has the bulked/pseudobulked version of the data, there is no need to compute pseudobulks. But you need to add the assembling modules to `op3_v2/src/pseudobulking/datasets/mynewdataset`, and execute them later with `op3_v2/run_pipelines/run_pseudobulking.sh`. Look at **L1000** case for the detailes.
 
