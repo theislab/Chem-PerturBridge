@@ -436,8 +436,13 @@ def aggregate_recursive(base_dir: str) -> List[str]:
     
     created = []
     
-    # Iterate through dataset directories
-    dataset_dirs = sorted([d for d in base_path.iterdir() if d.is_dir()])
+    # If base_path already points to a dataset directory (contains full/subsample),
+    # process it as a single dataset. Otherwise, treat base_path as logs root.
+    if (base_path / 'full').is_dir() or (base_path / 'subsample').is_dir():
+        dataset_dirs = [base_path]
+    else:
+        # Iterate through dataset directories
+        dataset_dirs = sorted([d for d in base_path.iterdir() if d.is_dir()])
     
     for dataset_dir in dataset_dirs:
         dataset_name = dataset_dir.name

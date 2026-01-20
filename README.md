@@ -158,6 +158,12 @@ cd /op3_v2
 ./run_pipelines/run_combining_logs.sh -r -l logs
 ```
 
+**Recursive mode** (single dataset):
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -r -l logs/tahoe/
+```
+
 **Targeted mode** (specific directory):
 
 Pseudobulk logs:
