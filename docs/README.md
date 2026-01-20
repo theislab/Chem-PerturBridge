@@ -1,6 +1,6 @@
 # Adding a New Dataset to the OP3_v2 Pipeline
 
-This document describes step-by-step integration of a new dataset with an identifier `mynewdataset` into the OP3_v2 pipeline.
+This document describes step-by-step integration of a new dataset with an identifier `mynewdataset` into the **OP3_v2** pipeline.
 
 ## General description
 
