@@ -135,6 +135,9 @@ cd /op3_v2
 ./run_pipelines/run_deg.sh -s -j -d sciplex -p group_all_replicates
 ```
 
+### 4. Add datasets
+To add a new dataset to the pipeline, follow the instructions in [`./docs/README.md`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/docs/README.md)
+
 # Project structure:
 The structure of the repo:
 ```

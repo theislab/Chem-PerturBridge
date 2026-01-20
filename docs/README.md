@@ -13,26 +13,26 @@ The **executed code** could be divided into two parts:
 * `.py` and `.R` scripts which are targeted to work with the content of datasets, they are located in `op3_v2/src` directory (and related config files)
 * `.sh` wrapper scripts located in `op3_v2/pipelines` and `op3_v2/run_pipelines` (and related config files)
 
-`.py` and `.R` scripts are mainly focused on data downloading, processing, and annotation, while `.sh` scripts are responsible for setting parameters for running `.py` and `.R` scripts, initiating the pipeline, and stacking scripts into a workflow when needed or parallelizing the jobs.
+`.py` and `.R` scripts are mainly focused on data downloading, processing, aggregation, and annotation, while `.sh` scripts are responsible for setting parameters for running `.py` and `.R` scripts, initiating the pipeline, and stacking scripts into a workflow when needed or parallelizing the jobs.
 
-**NB!** Data and Log directories are created automatically when you execute the pipelines.
+**NB!** Data and log directories are created automatically when you execute the pipelines.
 
 ## Quick start guide
 
-### 1 Update a pseudobulking step:
+### 1. Update a pseudobulking step:
 
 **1.1** **`.py` scripts and config**
 
 > **1.1.1** **directories**
-> * Create a directory `op3_v2/src/pseudobulking/datasets/mynewdataset` which will store modules with the dataset-specific functions.
+> * Create a directory `op3_v2/src/pseudobulking/datasets/mynewdataset` which will store modules containing dataset-specific functions.
 >
 > **1.1.2** **scripts**
 > * Add python modules to the directory created in **1.1.1** containing specific helping functions to prepare the dataset which you want to add.
-> * **NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding a dataset you need to check if the dataset has been already annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the script which downloads and assembles your dataset, and saves in `.h5ad` format needs to be added to `op3_v2/src/pseudobulking/datasets/mynewdataset`. Look at [**L1000** case](https://github.com/theislab/op3_v2/tree/slurm_scripts_deg_dev/src/pseudobulking/datasets/l1000) for the detailes; it is still "under development" branch.
-> * **NB!** If you already has the bulked/pseudobulked version of the data, there is no need to compute pseudobulks. But you need to add the assembling modules to `op3_v2/src/pseudobulking/datasets/mynewdataset`, and execute them later with `op3_v2/run_pipelines/run_pseudobulking.sh`. Look at [**L1000** case](https://github.com/theislab/op3_v2/tree/slurm_scripts_deg_dev/src/pseudobulking/datasets/l1000) for the detailes; it is still "under development" branch.
+> * **NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding a dataset you need to check if the dataset has been already annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the script that downloads and assembles your dataset and saves it in `.h5ad` format needs to be added to `op3_v2/src/pseudobulking/datasets/mynewdataset`. Look at [**L1000** case](https://github.com/theislab/op3_v2/tree/slurm_scripts_deg_dev/src/pseudobulking/datasets/l1000) for the details; it is still "under development" branch.
+> * **NB!** If you already have the bulked/pseudobulked version of the data, there is no need to compute pseudobulks. But you need to add the assembling modules to `op3_v2/src/pseudobulking/datasets/mynewdataset`, and execute them later with `op3_v2/run_pipelines/run_pseudobulking.sh`. Look at [**L1000** case](https://github.com/theislab/op3_v2/tree/slurm_scripts_deg_dev/src/pseudobulking/datasets/l1000) for the details; it is still "under development" branch.
 >
 > **1.1.3** **configs**
-> * Update a file `op3_v2/src/configs/datasets.json` which stores locations to the modules from **1.1.2**.
+> * Update a file `op3_v2/src/configs/datasets.json` which stores paths to the modules from **1.1.2**.
 
 **1.2** **`.sh` scripts and configs**
 >
@@ -48,7 +48,7 @@ The **executed code** could be divided into two parts:
 > **1.2.3** **configs**
 > * No need to add configs on this step for the current version of the repository. In the future there might be updates, but not now.
 
-### **2** Update a DEG anaysis step:
+### **2** Update a DEG analysis step:
 
 **2.1** **`.py` scripts and config**
 > **2.1.1** **directories**
