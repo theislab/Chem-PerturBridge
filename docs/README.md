@@ -28,8 +28,8 @@ The **executed code** could be divided into two parts:
 >
 > **1.1.2** **scripts**
 > * Add python modules to the directory created in **1.1.1** containing specific helping functions to prepare the dataset which you want to add.
-> * **NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding a dataset you need to check if the dataset has been already annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the script which downloads and assembles your dataset, and saves in `.h5ad` format needs to be added to `op3_v2/src/pseudobulking/datasets/mynewdataset`.
-> * **NB!** If you already has the bulked/pseudobulked version of the data, there is no need to compute pseudobulks. But you need to add the assembling modules to `op3_v2/src/pseudobulking/datasets/mynewdataset`, and execute them later with `op3_v2/run_pipelines/run_pseudobulking.sh`. Look at **L1000** case for the detailes.
+> * **NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding a dataset you need to check if the dataset has been already annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the script which downloads and assembles your dataset, and saves in `.h5ad` format needs to be added to `op3_v2/src/pseudobulking/datasets/mynewdataset`. Look at [**L1000** case](https://github.com/theislab/op3_v2/tree/slurm_scripts_deg_dev/src/pseudobulking/datasets/l1000) for the detailes; it is still "under development" branch.
+> * **NB!** If you already has the bulked/pseudobulked version of the data, there is no need to compute pseudobulks. But you need to add the assembling modules to `op3_v2/src/pseudobulking/datasets/mynewdataset`, and execute them later with `op3_v2/run_pipelines/run_pseudobulking.sh`. Look at [**L1000** case](https://github.com/theislab/op3_v2/tree/slurm_scripts_deg_dev/src/pseudobulking/datasets/l1000) for the detailes; it is still "under development" branch.
 >
 > **1.1.3** **configs**
 > * Update a file `op3_v2/src/configs/datasets.json` which stores locations to the modules from **1.1.2**.
@@ -72,4 +72,41 @@ The **executed code** could be divided into two parts:
 > **2.2.3** **configs**
 > * Create a file `op3_v2/pipelines/mynewdataset/configs/deg/config.json` which keeps the parameters for DEG analysis.
 
-### Validate your integration
+
+### **3** Validate your integration
+
+**3.1** **Test with subsample `-s` first**
+
+**NB!** Always test with a subsample before running on the full dataset.
+
+> **3.1.1** **run the script**
+
+>```bash
+># E.g. Test pseudobulking
+>cd /path/to/op3_v2
+>./run_pipelines/run_pseudobulking.sh -s -d mynewdataset
+>```
+
+> **3.1.2** **check logs**
+>
+>```bash
+># E.g. Monitor logs for pseudobulking
+>tail -f logs/mynewdataset/subsample/pseudobulk_mynewdataset.*.out
+>tail -f logs/mynewdataset/subsample/pseudobulk_mynewdataset.*.err
+>```
+
+> **3.1.3** **verify pseudobulk output**
+>
+>```bash
+># E.g. Check that the pseudobulk data was created correctly
+>ls -lh data/mynewdataset/pseudobulk/subsample/
+>```
+
+**3.2** **Run on the full dataset...**
+
+For full command usage and examples, refer to [`../README.md`](https://github.com/theislab/op3_v2/blob/main/README.md)
+
+## Additional Resources
+
+- Main README: [`../README.md`](https://github.com/theislab/op3_v2/blob/main/README.md)
+- Check existing files and directories for the following datasets: **sciplex** and **tahoe** in the `main` branch, **L1000** in the `slurm_scripts_deg_dev` branch, as reference examples.
