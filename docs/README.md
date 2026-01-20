@@ -19,6 +19,8 @@ The **executed code** could be divided into two parts:
 
 ## Quick start guide
 
+**NB!** Use `sciplex` or `tahoe` as reference examples by replacing `mynewdataset` in the scripts and directories.
+
 ### 1. Update a pseudobulking step:
 
 **1.1** **`.py` scripts and config**
