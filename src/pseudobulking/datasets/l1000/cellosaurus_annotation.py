@@ -150,6 +150,7 @@ def annotate_cell_lines(
     rows: int = 100,
     size: int = 10,
     n_retries: int = 3,
+    request_delay_s: float = 0.2,
     manual_map: Optional[Dict[str, str]] = None,
     progress: bool = True,
 ) -> "pd.DataFrame":
@@ -170,6 +171,8 @@ def annotate_cell_lines(
         Number of results to fetch from Cellosaurus API
     n_retries : int, default=3
         Number of retries for API calls
+    request_delay_s : float, default=0.2
+        Delay in seconds between OLS/Cellosaurus API requests (fair-use throttling).
     manual_map : Optional[Dict[str, str]], default=None
         Manual mapping of cell line names to Cellosaurus IDs
     progress : bool, default=True
@@ -231,6 +234,9 @@ def annotate_cell_lines(
         if progress and iteration_count % 10 == 0:
             n_mapped_so_far = sum(1 for r in results if r["cellosaurus_id"] is not None)
             logger.info(f"Processed {iteration_count}/{n_cell_lines} cell types ({n_mapped_so_far} mapped so far)")
+        
+        if request_delay_s > 0:
+            time.sleep(request_delay_s)
 
     # Create annotations dataframe
     annotations_df = pd.DataFrame(results)

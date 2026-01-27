@@ -288,7 +288,8 @@ def lookup_pubchem_cids(df: pd.DataFrame,
                            smiles_col: str = 'canonical_smiles',
                            cache_path: Optional[str] = None,
                            manual_mapping_func: Optional[Callable[[], Dict]] = None,
-                           dataset_key: Optional[str] = None) -> pd.DataFrame:
+                           dataset_key: Optional[str] = None,
+                           request_delay_s: float = 0.2) -> pd.DataFrame:
     """
     Add or update 'pubchem_cid' column in a dataframe.
     
@@ -331,6 +332,8 @@ def lookup_pubchem_cids(df: pd.DataFrame,
         Key to extract from the dict returned by manual_mapping_func if it returns
         a nested dict structure. If None and manual_mapping_func returns a nested dict,
         defaults to 'l1000' for backward compatibility.
+    request_delay_s : float, default=0.2
+        Delay in seconds at the end of each compound iteration (fair-use throttling).
         
     Returns:
     --------
@@ -386,6 +389,7 @@ def lookup_pubchem_cids(df: pd.DataFrame,
     for idx, row in df.iterrows():
         iteration_count += 1
         cid = None
+        stored_cid = False
         
         # Determine universal cache key (pert_id or perturbagen)
         if pert_id_col and pert_id_col in row and pd.notna(row[pert_id_col]):
@@ -398,6 +402,7 @@ def lookup_pubchem_cids(df: pd.DataFrame,
         # Check universal cache first
         if universal_key and universal_key in cache:
             cid = cache[universal_key]
+            stored_cid = True
         
         # Strategy 1: Use existing valid pubchem_cid
         if cid is None and pubchem_cid_col in row and is_valid_pubchem_cid(row[pubchem_cid_col]):
@@ -405,6 +410,7 @@ def lookup_pubchem_cids(df: pd.DataFrame,
             # Store in universal cache
             if universal_key:
                 cache[universal_key] = cid
+            stored_cid = True
         
         # Strategy 2: Lookup by InChIKey (if CID not found yet)
         if cid is None and inchikey_col in row and pd.notna(row[inchikey_col]):
@@ -431,6 +437,8 @@ def lookup_pubchem_cids(df: pd.DataFrame,
                 # Store in universal cache
                 if universal_key:
                     cache[universal_key] = cid
+                stored_cid = True
+                
         
         cids.append(cid)
         
@@ -442,6 +450,9 @@ def lookup_pubchem_cids(df: pd.DataFrame,
         # Save cache every 500 iterations if cache_path is provided
         if cache_path and iteration_count % 500 == 0:
             save_cache_to_json(cache, cache_path)
+        
+        if (request_delay_s > 0) and (not stored_cid):
+            time.sleep(request_delay_s)
     
     # Final save of cache if cache_path is provided
     if cache_path:

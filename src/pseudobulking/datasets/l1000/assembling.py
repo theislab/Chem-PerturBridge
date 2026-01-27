@@ -47,7 +47,6 @@ NAME_TO_CVCL = {
         "H1299": "CVCL_0060",
         "HL60": "CVCL_0002",
         "SKBR3": "CVCL_0033",
-        "U266": "CVCL_0566",
         "ASC": "CVCL_U602"
     }
 
@@ -690,7 +689,13 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     obs["suspension_type"] = "cell"
     obs["tissue"] = inst.get("cellinfo_primary_site", "unknown")
     obs["tissue_type"] = "cell culture"
-    obs["disease"] = inst.get("cellinfo_subtype", "unknown")
+    subtype = inst.get("cellinfo_subtype", "unknown")
+    sample_type = inst.get("cellinfo_sample_type", None)
+    if sample_type is not None:
+        use_normal = sample_type.isin(["primary", "normal"]) & (subtype != "carcinoma")
+        obs["disease"] = np.where(use_normal, "normal", subtype)
+    else:
+        obs["disease"] = subtype
     obs["library"] = None
     obs["stimulation"] = None
     obs["guide"] = None
@@ -1057,10 +1062,23 @@ def enrich_instance_metadata(inst: pd.DataFrame,
     pd.DataFrame
         Enriched instance metadata with merged information
     """
+
+    def fix_cell_line_annotation(inst: pd.DataFrame) -> pd.DataFrame:
+        mask = inst['cell_id'] == 'SNUC4'
+        inst.loc[mask, 'cellinfo_subtype'] = 'colon adenocarcinoma'
+        inst.loc[mask, 'cellinfo_donor_age'] = '35'
+        inst.loc[mask, 'cellinfo_donor_sex'] = 'M'
+        inst.loc[mask, 'cellinfo_donor_ethnicity'] = 'Korean'
+        inst.loc[mask, 'cellinfo_cellosaurus_id'] = 'CVCL_5111'
+        inst.loc[mask, 'cellinfo_cell_id_mixed'] = 'CVCL_5111'
+        return inst
+
     pert_cols = ["pert_id", "pert_iname", "pert_type", "pubchem_cid"]
     inst = inst.merge(cellinfo, how="left", left_on="cell_id", right_index=True)    
     inst = inst.merge(pert_raw[pert_cols].drop_duplicates("pert_id"), 
                      how="left", on="pert_id", suffixes=("", "_pert"))
+
+    inst = fix_cell_line_annotation(inst).copy()
     
     return inst
 
