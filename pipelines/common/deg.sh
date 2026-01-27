@@ -25,9 +25,7 @@ PIPELINE_NAME="deg"
 ENV_DIR=./venv
 LOGS_DIR=./logs
 MAX_CONCURRENT=50
-#QOS=cpu_preemptible
-#QOS=gpu_normal
-#PARTITION=gpu_p
+# QOS/PARTITION: set by -g flag (gpu_normal/gpu_p) or default (cpu_normal/cpu_p)
 QOS=cpu_normal
 PARTITION=cpu_p
 
@@ -36,6 +34,7 @@ MODE_S=False
 MODE_J=False
 MODE_Q=False
 MODE_N=False
+MODE_G=False
 PAR=""
 FILT=""
 CONFIG=""
@@ -51,10 +50,10 @@ DEG_PARAMETERS=(
     "separate_replicates"
 )
 
-while getopts ":sjqp:f:c:d:nh" opt; do
+while getopts ":sjqp:f:c:d:nhg" opt; do
         case $opt in
                 h)
-                        echo "Run: $0 [-s] [-j] [-h] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
+                        echo "Run: $0 [-s] [-j] [-h] [-g] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
                         echo ""
                         echo "Required arguments:"
                         echo "  -d  Dataset name (sciplex, tahoe, l1000_phase1, l1000_phase2)"
@@ -65,6 +64,7 @@ while getopts ":sjqp:f:c:d:nh" opt; do
                         echo "  -s  Subsample mode - limits DEG analysis for testing/debugging"
                         echo "      NOTE: Does NOT change input files (those are defined in config)"
                         echo "  -j  Parallel mode - run array jobs per cell type (faster)"
+                        echo "  -g  Use GPU QOS/partition (gpu_normal/gpu_p); default is CPU (cpu_normal/cpu_p)"
                         echo "  -f  VALUE - Filter: minimum cells per sample (e.g., -f 50)"
                         echo "  -q  Quality control filter - remove samples that failed QC"
                         echo "  -n  Skip normalization - dataset is already normalized"
@@ -95,8 +95,16 @@ while getopts ":sjqp:f:c:d:nh" opt; do
                 n)
                         MODE_N=True
                         ;;
+                g)
+                        MODE_G=True
+                        ;;
         esac
 done
+
+if [ "$MODE_G" = True ]; then
+    QOS=gpu_normal
+    PARTITION=gpu_p
+fi
 
 # ============================================================================
 # Validate arguments
@@ -243,7 +251,7 @@ sbatch -W -J deg_processing_pseudobulk \
     --mem=500G \
     --time=2:00:00 \
     --cpus-per-task=2 \
-    --exclude=supercpu01 \
+    --exclude=supercpu01,gpusrv36,gpusrv56,gpusrv60,gpusrv45 \
     --output="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.out" \
     --error="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.err" \
     --wrap="${SBATCH_PREAMBLE} && \
@@ -363,7 +371,7 @@ run_deg() {
         --mem=${MEM} \
         --time=10:00:00 \
         --cpus-per-task=2 \
-        --exclude=supercpu01 \
+        --exclude=supercpu01,gpusrv36,gpusrv56,gpusrv60,gpusrv45 \
         --output=/dev/null \
         --error=/dev/null \
         --wrap="${SBATCH_PREAMBLE} && \
@@ -425,7 +433,7 @@ if [ -d "$INTERMEDIATE_DIR" ] && [ "$(ls -A $INTERMEDIATE_DIR 2>/dev/null)" ]; t
             --mem=500G \
             --time=2:00:00 \
             --cpus-per-task=2 \
-            --exclude=supercpu01 \
+            --exclude=supercpu01,gpusrv36,gpusrv56,gpusrv60,gpusrv45 \
             --output="${LOGS_BASE_DIR}/aggregation/deg_aggregation.%j.out" \
             --error="${LOGS_BASE_DIR}/aggregation/deg_aggregation.%j.err" \
             --wrap="${SBATCH_PREAMBLE} && \

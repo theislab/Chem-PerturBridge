@@ -8,10 +8,12 @@ MODE_S=False
 MODE_J=False
 MODE_Q=False
 MODE_N=False
+MODE_G=False
 ARG_S=""
 ARG_F=""
 ARG_J=""
 ARG_N=""
+ARG_G=""
 DATASET=""
 PAR=""
 FILT=""
@@ -29,12 +31,13 @@ DEG_PARAMETERS=(
 
 mkdir -p $LOGS_DIR
 
-while getopts ":sjd:p:f:qnh" opt; do
+while getopts ":sjd:p:f:qnhg" opt; do
   	case $opt in
 		h)
-			echo "Run: $0 [-s] [-j] [-h] [-f] [-q] [-n] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
+			echo "Run: $0 [-s] [-j] [-h] [-g] [-f] [-q] [-n] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
                         echo "  -s Subsample of a dataset for debugging, default=false"
                         echo "  -j Parallel mode (array jobs per cell type), default=false"
+                        echo "  -g Use GPU QOS/partition (gpu_normal/gpu_p), default=CPU"
                         echo "  -h Help option"
 			echo "  -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number"
 			echo "  -q Filter samples that did not pass quality control"
@@ -64,6 +67,9 @@ while getopts ":sjd:p:f:qnh" opt; do
 		n)
 			MODE_N=True
       			;;
+		g)
+			MODE_G=True
+			;;
   	esac
 done
 
@@ -105,6 +111,12 @@ else
 	ARG_N=""
 fi
 
+if [[ "$MODE_G" == "True" ]]; then
+	ARG_G="-g"
+else
+	ARG_G=""
+fi
+
 if [[ -z "$FILT" ]]; then
 	FILTER_FOLDER="filter_min_cells_0"
 else
@@ -120,7 +132,7 @@ else
 fi
 
 mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}
-./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_Q $ARG_J $ARG_N \
+./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_Q $ARG_J $ARG_N $ARG_G \
 	-c ./pipelines/${DATASET}/configs/deg/config.json \
 	-d ${DATASET} \
 		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.PID$$.out \
