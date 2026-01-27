@@ -19,6 +19,9 @@ import anndata as ad
 from src.utils.parsing_utils import *
 from src.pseudobulking.common.pubchem import lookup_pubchem_cids
 from src.pseudobulking.datasets.l1000.pubchem_imputation import pubchem_mapping_l1000
+from src.pseudobulking.datasets.l1000.cellosaurus_annotation import annotate_cell_lines
+from src.pseudobulking.datasets.l1000.donor_metadata_annotation import fetch_donor_info_from_cellosaurus
+from src.pseudobulking.datasets.l1000.gene_annotation import fetch_ensg_ids
 
 # Try to import cmapPy for GCTX parsing
 try:
@@ -31,6 +34,22 @@ except ImportError:
 
 # Global cache for GCTX metadata keyed by file path
 _GCTX_COL_CACHE = {}
+
+# Cellosaurus ID mapping for cell lines
+NAME_TO_CVCL = {
+        "HA1E": "CVCL_VU89",
+        "HEK293T": "CVCL_0063",
+        "HS27A": "CVCL_3719",
+        "FIBRNPC": "CVCL_UK07",
+        "U266": "CVCL_0566",
+        "HUES3": "CVCL_B161",
+        "HUVEC": "CVCL_2959",
+        "H1299": "CVCL_0060",
+        "HL60": "CVCL_0002",
+        "SKBR3": "CVCL_0033",
+        "U266": "CVCL_0566",
+        "ASC": "CVCL_U602"
+    }
 
 def _read_table(path: Path, **kwargs) -> pd.DataFrame:
     """
@@ -137,13 +156,6 @@ def get_download_manifest(data_root: Path, dataset: str = "l1000_phase1") -> pd.
                 "size": "<1 MB",
                 "url": "https://s3.amazonaws.com/macchiato.clue.io/builds/LINCS2020/geneinfo_beta.txt",
                 "notes": "Beta gene info with Ensembl IDs"
-            },
-            {
-                "file": "cellinfo_beta.txt",
-                "kind": "metadata",
-                "size": "<100 KB",
-                "url": "https://s3.amazonaws.com/macchiato.clue.io/builds/LINCS2020/cellinfo_beta.txt",
-                "notes": "Beta cell info with Cellosaurus IDs"
             }
         ]
     elif dataset == "l1000_phase2":
@@ -190,13 +202,6 @@ def get_download_manifest(data_root: Path, dataset: str = "l1000_phase1") -> pd.
                 "url": "https://s3.amazonaws.com/macchiato.clue.io/builds/LINCS2020/geneinfo_beta.txt",
                 "notes": "2020 CLUE gene dictionary (for Ensembl IDs)"
             },
-            {
-                "file": "cellinfo_beta.txt",
-                "kind": "metadata",
-                "size": "<100 KB",
-                "url": "https://s3.amazonaws.com/macchiato.clue.io/builds/LINCS2020/cellinfo_beta.txt",
-                "notes": "2020 CLUE Cell line annotations (for Cellosaurus IDs)"
-            }
         ]
     else:
         raise ValueError(f"Invalid dataset: {dataset}")
@@ -446,46 +451,40 @@ def standardize_inst(inst: pd.DataFrame) -> pd.DataFrame:
 
 
 def process_cellinfo(cellinfo: pd.DataFrame,
-                     cellinfo_extra: Optional[pd.DataFrame] = None) -> pd.DataFrame:
+                     cellinfo_id: str = 'cell_id') -> pd.DataFrame:
     """
-    Process cell info with optional extra metadata.
-    
-    Merges base cell info with extra metadata with Cellosaurus IDs.
+    Process cell info with Cellosaurus ID and donor information.
     
     Parameters
     ----------
     cellinfo : pd.DataFrame
         Base cell line information with cell_id column
-    cellinfo_extra : pd.DataFrame, optional
-        Extra cell line metadata with Cellosaurus IDs
+    cellinfo_id : str, default='cell_id'
+        Column name for cell line ID
         
     Returns
     -------
     pd.DataFrame
         Processed cell info indexed by cell_id with prefixed column names
     """
-    NAME_TO_CVCL = {
-        "HA1E": "CVCL_VU89",
-        "HEK293T": "CVCL_0063",
-        "HS27A": "CVCL_3719",
-        "FIBRNPC": "CVCL_UK07",
-        "U266": "CVCL_0566",
-        "HUES3":   "CVCL_B161",
-        "HUVEC":   "CVCL_2959"
-    }
-
     df = cellinfo.copy()
-    cellinfo_id = 'cell_id'
-    if cellinfo_extra is not None and not cellinfo_extra.empty:
-        df_extra = cellinfo_extra.copy()
-        df_extra[cellinfo_id] = df_extra['cell_iname'].str.replace('_', '.')
-        df = pd.concat([df, df_extra])[df.columns].drop_duplicates(cellinfo_id).copy()
-        df = df.merge(df_extra[[cellinfo_id, 'cellosaurus_id']], on=cellinfo_id, how='left')
+    
+    # Annotate cell lines with Cellosaurus IDs
+    logger.info("Annotating cell lines with Cellosaurus IDs")
+    df = annotate_cell_lines(df, manual_map=NAME_TO_CVCL, progress=True)
+    
+    # Fetch donor information from Cellosaurus API
+    logger.info("Fetching donor information from Cellosaurus API")
+    df, _ = fetch_donor_info_from_cellosaurus(df, progress=True)
+        
+    # Create cell_id_mixed: use cellosaurus_id if available, otherwise use cell_id
+    if 'cellosaurus_id' in df.columns:
         df[cellinfo_id + '_mixed'] = df['cellosaurus_id'].fillna(df[cellinfo_id])
-    rename_map = {col: f"cellinfo_{col}" for col in df.columns if col != "cell_id"}
-    df = df.rename(columns=rename_map).set_index("cell_id").copy()
-    if 'cellinfo_cell_id_mixed' in df.columns:
-        df['cellinfo_cell_id_mixed'] = df['cellinfo_cell_id_mixed'].replace(NAME_TO_CVCL)
+    else:
+        df[cellinfo_id + '_mixed'] = df[cellinfo_id]
+    
+    rename_map = {col: f"cellinfo_{col}" for col in df.columns if col != cellinfo_id}
+    df = df.rename(columns=rename_map).set_index(cellinfo_id).copy()
     return df
 
 def process_pert_metadata(pert: pd.DataFrame, inst: pd.DataFrame) -> pd.DataFrame:
@@ -602,8 +601,7 @@ def build_development_stage(row: pd.Series,
 
 
 def process_gene_annotations(geneinfo: pd.DataFrame,
-                            geneinfo_beta: Optional[pd.DataFrame] = None,
-                            full_gene_matrix: bool = False) -> pd.DataFrame:
+                             full_gene_matrix: bool = False) -> pd.DataFrame:
     """
     Process gene annotations from L1000 gene info tables.
     
@@ -611,8 +609,6 @@ def process_gene_annotations(geneinfo: pd.DataFrame,
     ----------
     geneinfo : pd.DataFrame
         Level 3 gene info table with L1000 gene annotations
-    geneinfo_beta : pd.DataFrame, optional
-        Beta gene info table with Ensembl ID mappings
     full_gene_matrix : bool, default=False
         If False, restrict to landmark genes only
         
@@ -634,22 +630,6 @@ def process_gene_annotations(geneinfo: pd.DataFrame,
     var = var.drop_duplicates(subset=["gene_id"]).set_index("gene_id")
     var["symbol"] = var["symbol"].astype("string")
     
-    # Map to Ensembl IDs if available
-    if geneinfo_beta is not None and {"gene_id", "ensembl_id"}.issubset(geneinfo_beta.columns):
-        sym_to_ens = (
-            geneinfo_beta[["gene_id", "ensembl_id"]]
-            .dropna()
-            .drop_duplicates(subset=["gene_id"])
-            .set_index("gene_id")
-            ["ensembl_id"]
-        )
-        var["ensembl_id"] = var.index.map(sym_to_ens)
-    else:
-        var["ensembl_id"] = var.index.astype("string")
-    
-    # Fill missing Ensembl IDs with gene_id
-    var["ensembl_id"] = var["ensembl_id"].fillna(var.index.to_series().astype("string"))
-    var = var[["symbol", "ensembl_id", "is_landmark"]]
     
     # Filter to landmark genes if requested
     if not full_gene_matrix:
@@ -658,6 +638,16 @@ def process_gene_annotations(geneinfo: pd.DataFrame,
         logger.info(f'  Restricting to {len(var):,} landmark genes')
     else:
         logger.info(f'  Using all {len(var):,} gene features')
+
+    # Fetch ENSG IDs
+    ensg_ids = fetch_ensg_ids(list(var.index))
+    var['ensembl_id'] = ensg_ids
+    var["ensembl_id"] = var["ensembl_id"].astype("string")
+
+    # Fill missing Ensembl IDs with gene_id
+    var["ensembl_id"] = var["ensembl_id"].fillna(var.index.to_series().astype("string"))
+    var = var[["symbol", "ensembl_id", "is_landmark"]]
+    
     
     return var
 
@@ -950,7 +940,6 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
             "pert_info": data_root / "GSE92742_Broad_LINCS_pert_info.txt",
             "geneinfo_level3": data_root / "GSE92742_Broad_LINCS_gene_info.txt",
             "geneinfo_beta": data_root / "geneinfo_beta.txt",
-            "cellinfo_beta": data_root / "cellinfo_beta.txt",
             "pubchem_cache": processed_dir / "pubchem_cache.json",
         }
     elif dataset == "l1000_phase2":
@@ -962,7 +951,6 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
                 "pert_info": data_root / "GSE70138_Broad_LINCS_pert_info.txt",
                 "geneinfo_level3": data_root / "GSE70138_Broad_LINCS_gene_info_2017-03-06.txt",
                 "geneinfo_beta": data_root / "geneinfo_beta.txt",
-                "cellinfo_beta": data_root / "cellinfo_beta.txt",
                 "pubchem_cache": processed_dir / "pubchem_cache.json",
         }
     else:
@@ -1170,13 +1158,12 @@ def load_metadata_tables(paths: dict) -> tuple:
     Returns
     -------
     tuple
-        (inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta, cellinfo_beta)
+        (inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta)
         - inst_raw: Instance/sample information
         - cellinfo_raw: Cell line information
         - pert_raw: Perturbation information
         - geneinfo: Gene annotations (Level 3)
         - geneinfo_beta: Gene annotations (beta) - optional, None if not found
-        - cellinfo_beta: Cell line annotations (beta) - optional, None if not found
     """
     logger.info('  Loading metadata tables')
     
@@ -1185,7 +1172,6 @@ def load_metadata_tables(paths: dict) -> tuple:
     pert_raw = _read_table(paths["pert_info"], sep="\t")
     geneinfo = _read_table(paths["geneinfo_level3"], sep="\t")
     geneinfo_beta = _read_table(paths["geneinfo_beta"], sep="\t") if paths["geneinfo_beta"].exists() else None
-    cellinfo_beta = _read_table(paths["cellinfo_beta"], sep="\t") if paths["cellinfo_beta"].exists() else None
     
     # Log loaded table sizes
     logger.info(f"    Loaded {len(inst_raw):,} instances")
@@ -1193,7 +1179,7 @@ def load_metadata_tables(paths: dict) -> tuple:
     logger.info(f"    Loaded {len(pert_raw):,} perturbations")
     logger.info(f"    Loaded {len(geneinfo):,} genes")
     
-    return inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta, cellinfo_beta
+    return inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta
 
 
 def materialize_string_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -1544,10 +1530,10 @@ def assemble_l1000_dataset(data_root: Optional[str] = None,
     FULL_GENE_MATRIX = CONFIG["full_gene_matrix"]
     
     # Load metadata tables
-    inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta, cellinfo_beta = load_metadata_tables(PATHS)
+    inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta = load_metadata_tables(PATHS)
     
-    # Process cell info
-    cellinfo = process_cellinfo(cellinfo_raw, cellinfo_extra=cellinfo_beta)
+    # Process cell info (includes Cellosaurus and donor annotations)
+    cellinfo = process_cellinfo(cellinfo_raw)
 
     # Process perturbation metadata
     pert_raw = process_pert_metadata(pert_raw, inst_raw)
@@ -1567,7 +1553,7 @@ def assemble_l1000_dataset(data_root: Optional[str] = None,
     obs_for_schema = enforce_obs_schema(obs)
     
     logger.info('  Processing gene annotations')
-    var = process_gene_annotations(geneinfo, geneinfo_beta, FULL_GENE_MATRIX)
+    var = process_gene_annotations(geneinfo, full_gene_matrix=FULL_GENE_MATRIX)
     
     logger.info('  Matching obs to GCTX column IDs')
     obs_helpers = build_obs_helpers(obs, PATHS["level3_gctx"])
