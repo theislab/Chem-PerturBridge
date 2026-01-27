@@ -149,13 +149,6 @@ def get_download_manifest(data_root: Path, dataset: str = "l1000_phase1") -> pd.
                 "size": "<1 MB",
                 "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE92nnn/GSE92742/suppl/GSE92742_Broad_LINCS_gene_info.txt.gz",
                 "notes": "Gene annotations"
-            },
-            {
-                "file": "geneinfo_beta.txt",
-                "kind": "metadata",
-                "size": "<1 MB",
-                "url": "https://s3.amazonaws.com/macchiato.clue.io/builds/LINCS2020/geneinfo_beta.txt",
-                "notes": "Beta gene info with Ensembl IDs"
             }
         ]
     elif dataset == "l1000_phase2":
@@ -194,14 +187,7 @@ def get_download_manifest(data_root: Path, dataset: str = "l1000_phase1") -> pd.
                 "size": "~210 KB",
                 "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE70nnn/GSE70138/suppl/GSE70138_Broad_LINCS_gene_info_2017-03-06.txt.gz",
                 "notes": "Landmark gene annotations"
-            },
-            {
-                "file": "geneinfo_beta.txt",
-                "kind": "metadata",
-                "size": "1.09 MB",
-                "url": "https://s3.amazonaws.com/macchiato.clue.io/builds/LINCS2020/geneinfo_beta.txt",
-                "notes": "2020 CLUE gene dictionary (for Ensembl IDs)"
-            },
+            }
         ]
     else:
         raise ValueError(f"Invalid dataset: {dataset}")
@@ -939,7 +925,6 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
             "cellinfo": data_root / "GSE92742_Broad_LINCS_cell_info.txt",
             "pert_info": data_root / "GSE92742_Broad_LINCS_pert_info.txt",
             "geneinfo_level3": data_root / "GSE92742_Broad_LINCS_gene_info.txt",
-            "geneinfo_beta": data_root / "geneinfo_beta.txt",
             "pubchem_cache": processed_dir / "pubchem_cache.json",
         }
     elif dataset == "l1000_phase2":
@@ -950,7 +935,6 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
                 "cellinfo": data_root / "GSE70138_Broad_LINCS_cell_info_2017-04-28.txt",
                 "pert_info": data_root / "GSE70138_Broad_LINCS_pert_info.txt",
                 "geneinfo_level3": data_root / "GSE70138_Broad_LINCS_gene_info_2017-03-06.txt",
-                "geneinfo_beta": data_root / "geneinfo_beta.txt",
                 "pubchem_cache": processed_dir / "pubchem_cache.json",
         }
     else:
@@ -1158,12 +1142,11 @@ def load_metadata_tables(paths: dict) -> tuple:
     Returns
     -------
     tuple
-        (inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta)
+        (inst_raw, cellinfo_raw, pert_raw, geneinfo)
         - inst_raw: Instance/sample information
         - cellinfo_raw: Cell line information
         - pert_raw: Perturbation information
         - geneinfo: Gene annotations (Level 3)
-        - geneinfo_beta: Gene annotations (beta) - optional, None if not found
     """
     logger.info('  Loading metadata tables')
     
@@ -1171,7 +1154,6 @@ def load_metadata_tables(paths: dict) -> tuple:
     cellinfo_raw = _read_table(paths["cellinfo"], sep="\t")
     pert_raw = _read_table(paths["pert_info"], sep="\t")
     geneinfo = _read_table(paths["geneinfo_level3"], sep="\t")
-    geneinfo_beta = _read_table(paths["geneinfo_beta"], sep="\t") if paths["geneinfo_beta"].exists() else None
     
     # Log loaded table sizes
     logger.info(f"    Loaded {len(inst_raw):,} instances")
@@ -1179,7 +1161,7 @@ def load_metadata_tables(paths: dict) -> tuple:
     logger.info(f"    Loaded {len(pert_raw):,} perturbations")
     logger.info(f"    Loaded {len(geneinfo):,} genes")
     
-    return inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta
+    return inst_raw, cellinfo_raw, pert_raw, geneinfo
 
 
 def materialize_string_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -1526,11 +1508,9 @@ def assemble_l1000_dataset(data_root: Optional[str] = None,
                 f"Missing: {len(final_status['missing'])}, Compressed: {len(final_status['compressed'])}"
             )
         logger.info("All required data files are available")
-    
-    FULL_GENE_MATRIX = CONFIG["full_gene_matrix"]
-    
+        
     # Load metadata tables
-    inst_raw, cellinfo_raw, pert_raw, geneinfo, geneinfo_beta = load_metadata_tables(PATHS)
+    inst_raw, cellinfo_raw, pert_raw, geneinfo = load_metadata_tables(PATHS)
     
     # Process cell info (includes Cellosaurus and donor annotations)
     cellinfo = process_cellinfo(cellinfo_raw)
@@ -1553,7 +1533,7 @@ def assemble_l1000_dataset(data_root: Optional[str] = None,
     obs_for_schema = enforce_obs_schema(obs)
     
     logger.info('  Processing gene annotations')
-    var = process_gene_annotations(geneinfo, full_gene_matrix=FULL_GENE_MATRIX)
+    var = process_gene_annotations(geneinfo, full_gene_matrix=CONFIG.get("full_gene_matrix"))
     
     logger.info('  Matching obs to GCTX column IDs')
     obs_helpers = build_obs_helpers(obs, PATHS["level3_gctx"])
