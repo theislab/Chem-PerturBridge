@@ -144,7 +144,8 @@ def fetch_donor_info_from_cellosaurus(
     Returns:
     --------
     pd.DataFrame
-        Original dataframe with added columns: donor_age, donor_sex, donor_ethnicity
+        Original dataframe with added columns: donor_age, donor_sex, 
+        donor_ethnicity and dataframe with fetched donor information
     """
     
     # Filter dataframe where cell_id == base_cell_id
@@ -213,8 +214,8 @@ def fetch_donor_info_from_cellosaurus(
     
     # Update existing columns or create new ones, only filling empty values
     # For donor_age
-    result_df['donor_age'] = result_df['donor_age'].astype(str)
     if "donor_age" in result_df.columns:
+        result_df['donor_age'] = result_df['donor_age'].astype(str)
         mask = result_df["donor_age_new"] != "-666"
         result_df.loc[mask, "donor_age"] = result_df.loc[mask, "donor_age_new"]
     else:

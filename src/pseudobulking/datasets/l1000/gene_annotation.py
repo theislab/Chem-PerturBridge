@@ -2,7 +2,7 @@ import requests
 import time
 import json
 import os
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Union
 
 from src.utils.parsing_utils import *
 
@@ -129,7 +129,7 @@ class EntrezToEnsemblClient:
             logger.warning(f"NCBI Datasets API failed for Entrez ID {entrez_id_str}: {e}")
             return None
     
-    def entrez_to_ensg(self, entrez_id: str | int) -> Optional[str]:
+    def entrez_to_ensg(self, entrez_id: Union[str, int]) -> Optional[str]:
         """
         Convert Entrez gene ID to Ensembl gene ID.
         Tries HGNC API first, then NCBI Datasets API if HGNC returns None.
@@ -172,7 +172,7 @@ class EntrezToEnsemblClient:
         self._save_cache()
 
 
-def fetch_ensg_ids(entrez_ids: List[str | int], 
+def fetch_ensg_ids(entrez_ids: List[Union[str, int]], 
                    cache_path: Optional[str] = None,
                    requests_per_second: float = 10.0) -> List[Optional[str]]:
     """
@@ -182,8 +182,11 @@ def fetch_ensg_ids(entrez_ids: List[str | int],
     -----------
     entrez_ids : List[str | int]
         List of Entrez gene IDs to map
-    cache_path : Optional[str]
-        Path to JSON file for persistent cache storage (default: None)
+    cache_path : str, optional
+        Path to JSON file for persistent cache storage. If None, no persistent
+        cache is used. Callers should pass a path relative to project/data root
+        (e.g. from define_paths()["hgnc_cache"]) so all runs and scripts share
+        the same cache, same procedure as PubChem cache.
     requests_per_second : float
         Maximum number of requests per second (default: 10.0)
         
@@ -195,10 +198,6 @@ def fetch_ensg_ids(entrez_ids: List[str | int],
     ensg_ids = []
     iteration_count = 0
     n_ids = len(entrez_ids)
-    
-    # Use default cache path if not provided
-    if cache_path is None:
-        cache_path = 'hgnc_cache.json'
     
     client = EntrezToEnsemblClient(cache_path=cache_path, 
                                    requests_per_second=requests_per_second)

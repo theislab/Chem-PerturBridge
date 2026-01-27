@@ -10,6 +10,21 @@ import pandas as pd
 
 from src.utils.parsing_utils import *
 
+# Cellosaurus ID mapping for cell lines
+NAME_TO_CVCL = {
+        "HA1E": "CVCL_VU89",
+        "HEK293T": "CVCL_0063",
+        "HS27A": "CVCL_3719",
+        "FIBRNPC": "CVCL_UK07",
+        "U266": "CVCL_0566",
+        "HUES3": "CVCL_B161",
+        "HUVEC": "CVCL_2959",
+        "H1299": "CVCL_0060",
+        "HL60": "CVCL_0002",
+        "SKBR3": "CVCL_0033",
+        "ASC": "CVCL_U602"
+    }
+
 def ols_search_clo(query: str, rows: int = 100, start: int = 0):
     url = "https://www.ebi.ac.uk/ols4/api/search"
     params = {
@@ -187,7 +202,7 @@ def annotate_cell_lines(
     Returns:
     --------
     pd.DataFrame
-        Original dataframe with added columns: clo_id, cellosaurus_id
+        Original dataframe with added columns: cellosaurus_id
     """
     if manual_map is None:
         manual_map = globals().get("NAME_TO_CVCL", {})

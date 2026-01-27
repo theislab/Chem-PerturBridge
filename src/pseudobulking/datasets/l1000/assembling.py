@@ -362,6 +362,10 @@ def check_l1000_files(data_root: Optional[str] = None, dataset: str = "l1000_pha
         path_str = str(path)
         if "pubchem_cache" in key.lower() and path_str.endswith(".json"):
             continue
+
+        # Skip hgnc cache JSON files
+        if "hgnc_cache" in key.lower() and path_str.endswith(".json"):
+            continue
         
         path = Path(path)
         if path.suffix == ".gz":
@@ -586,7 +590,8 @@ def build_development_stage(row: pd.Series,
 
 
 def process_gene_annotations(geneinfo: pd.DataFrame,
-                             full_gene_matrix: bool = False) -> pd.DataFrame:
+                             full_gene_matrix: bool = False,
+                             paths: Optional[dict] = None) -> pd.DataFrame:
     """
     Process gene annotations from L1000 gene info tables.
     
@@ -596,6 +601,10 @@ def process_gene_annotations(geneinfo: pd.DataFrame,
         Level 3 gene info table with L1000 gene annotations
     full_gene_matrix : bool, default=False
         If False, restrict to landmark genes only
+    paths : dict, optional
+        Dictionary from define_paths(). If provided and contains 'hgnc_cache',
+        that path is used for Entrez→Ensembl cache (same pattern as pubchem_cache).
+        Ensures cache is under data_root/processed and stable across runs/callers.
         
     Returns
     -------
@@ -624,8 +633,9 @@ def process_gene_annotations(geneinfo: pd.DataFrame,
     else:
         logger.info(f'  Using all {len(var):,} gene features')
 
-    # Fetch ENSG IDs
-    ensg_ids = fetch_ensg_ids(list(var.index))
+    # Fetch ENSG IDs (cache path from paths, same procedure as PubChem cache)
+    cache_path = str(paths["hgnc_cache"]) if paths and "hgnc_cache" in paths else None
+    ensg_ids = fetch_ensg_ids(list(var.index), cache_path=cache_path)
     var['ensembl_id'] = ensg_ids
     var["ensembl_id"] = var["ensembl_id"].astype("string")
 
@@ -931,6 +941,7 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
             "pert_info": data_root / "GSE92742_Broad_LINCS_pert_info.txt",
             "geneinfo_level3": data_root / "GSE92742_Broad_LINCS_gene_info.txt",
             "pubchem_cache": processed_dir / "pubchem_cache.json",
+            "hgnc_cache": processed_dir / "hgnc_cache.json",
         }
     elif dataset == "l1000_phase2":
         return {
@@ -941,6 +952,7 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
                 "pert_info": data_root / "GSE70138_Broad_LINCS_pert_info.txt",
                 "geneinfo_level3": data_root / "GSE70138_Broad_LINCS_gene_info_2017-03-06.txt",
                 "pubchem_cache": processed_dir / "pubchem_cache.json",
+                "hgnc_cache": processed_dir / "hgnc_cache.json",
         }
     else:
         raise ValueError(f"Invalid dataset: {dataset}")
@@ -1551,7 +1563,7 @@ def assemble_l1000_dataset(data_root: Optional[str] = None,
     obs_for_schema = enforce_obs_schema(obs)
     
     logger.info('  Processing gene annotations')
-    var = process_gene_annotations(geneinfo, full_gene_matrix=CONFIG.get("full_gene_matrix"))
+    var = process_gene_annotations(geneinfo, full_gene_matrix=CONFIG.get("full_gene_matrix"), paths=PATHS)
     
     logger.info('  Matching obs to GCTX column IDs')
     obs_helpers = build_obs_helpers(obs, PATHS["level3_gctx"])
