@@ -999,12 +999,11 @@ class PseudobulkProcessor:
         """Step 4: Combine perturbagen and PubChem CID."""
         def merge_columns_content(
             perturbagen: Optional[str],
-            pubchem_cid: Optional[Union[int, float, str]],
-            use_cid_in_label: bool,
+            pubchem_cid: Optional[Union[int, float, str]]
         ) -> str:
             # Build CID suffix if enabled and valid
             cid_suffix = ""
-            if use_cid_in_label and pubchem_cid is not None and pd.notna(pubchem_cid):
+            if pubchem_cid is not None and pd.notna(pubchem_cid):
                 try:
                     # Handle category dtype: convert to underlying value if needed
                     cid_value = pubchem_cid if not hasattr(pubchem_cid, 'item') else pubchem_cid.item()
@@ -1021,11 +1020,10 @@ class PseudobulkProcessor:
         combined = obs.apply(
             lambda x: merge_columns_content(
                 x.perturbagen,
-                pubchem_cid=x.get('pubchem_cid', None) if has_cid else None,
-                use_cid_in_label=self.use_pubchem_cid_in_label,
+                pubchem_cid=x.get('pubchem_cid', None) if has_cid else None
             ), axis=1
-        ).astype("category")
-        self.padata.obs.loc[:, 'perturbagen'] = combined
+        )
+        self.padata.obs['perturbagen'] = pd.Categorical(combined)
 
     def add_perturbation_labels(self) -> None:
         """Step 5: Add perturbation labels."""
@@ -1052,7 +1050,7 @@ class PseudobulkProcessor:
         if obs['pert_dose_uM'].apply(lambda x: has_more_than_decimals(x) if pd.notna(x) else False).any():
             obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: normalize_number(x) if pd.notna(x) else x)
 
-        self.padata.obs.loc[:, 'perturbation_label'] = obs.apply(
+        self.padata.obs['perturbation_label'] = obs.apply(
             lambda x: create_perturbation_label(
                 x.is_control,
                 x.perturbagen,
@@ -1085,7 +1083,8 @@ class PseudobulkProcessor:
         self.read_data()
         self.apply_dataset_processing()
         self.map_ensemble_ids()
-        self.combine_perturbagen_pubchem_cid()
+        if self.use_pubchem_cid_in_label:
+            self.combine_perturbagen_pubchem_cid()
         self.add_perturbation_labels()
         self.save_data()
         self.save_splitted_data()

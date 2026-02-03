@@ -1592,16 +1592,14 @@ def load_compound_metadata_tables(paths: dict) -> tuple:
     paths : dict
         Dictionary of file paths containing keys:
         - compound_lsmids: Path to LINCS ID mapping table
-        - compound_deprecated_sample_table: Path to deprecated sample table
         - compound_external_annotations: Path to external annotations table
         - compound_lincs_standardized_cmpds: Path to standardized compounds table
         
     Returns
     -------
     tuple
-        Tuple of four DataFrames:
+        Tuple of three DataFrames:
         - compound_lsmids: LINCS ID mapping table
-        - compound_deprecated_sample_table: Deprecated sample table
         - compound_external_annotations: External annotations table
         - compound_lincs_standardized_cmpds: Standardized compounds table
         
@@ -1612,12 +1610,10 @@ def load_compound_metadata_tables(paths: dict) -> tuple:
     """
     logger.info('  Loading compound metadata tables')
     compound_lsmids = _read_table(paths["compound_lsmids"], sep="\t")
-    compound_deprecated_sample_table = _read_table(paths["compound_deprecated_sample_table"], sep="\t")
     compound_external_annotations = _read_table(paths["compound_external_annotations"], sep="\t", encoding="latin1")
     compound_lincs_standardized_cmpds = _read_table(paths["compound_lincs_standardized_cmpds"], sep="\t")
 
     return (compound_lsmids, 
-            compound_deprecated_sample_table, 
             compound_external_annotations, 
             compound_lincs_standardized_cmpds)
 
@@ -1958,7 +1954,6 @@ def assemble_l1000_dataset(data_root: Optional[str] = None,
     # Load metadata tables
     inst_raw, cellinfo_raw, pert_raw_phase1, pert_raw_phase2, geneinfo = load_l1000_tables(PATHS)
     compound_lsmids, \
-        compound_deprecated_sample_table, \
         compound_external_annotations, \
         compound_lincs_standardized_cmpds = load_compound_metadata_tables(PATHS)
     
