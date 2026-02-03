@@ -27,8 +27,7 @@ def create_perturbation_label(is_control: bool,
                               well: str,
                               plate: str,
                               design_param: str,
-                              pubchem_cid: Optional[Union[int, float, str]] = None,
-                              use_cid_in_label: bool = False) -> str:
+                              ) -> str:
     '''
     Create a perturbation label based on design parameters.
     
@@ -48,35 +47,20 @@ def create_perturbation_label(is_control: bool,
         Plate identifier
     design_param : str
         Design parameter determining label format ('group_all_replicates' or 'separate_replicates')
-    pubchem_cid : optional
-        PubChem CID; used in label only if use_cid_in_label is True and value is valid
-    use_cid_in_label : bool, default=False
-        If True and pubchem_cid is a valid positive integer, include it in the label
         
     Returns:
     --------
     str
         Formatted perturbation label
     '''
-    # Build CID suffix if enabled and valid
-    cid_suffix = ""
-    if use_cid_in_label and pubchem_cid is not None and pd.notna(pubchem_cid):
-        try:
-            # Handle category dtype: convert to underlying value if needed
-            cid_value = pubchem_cid if not hasattr(pubchem_cid, 'item') else pubchem_cid.item()
-            cid_int = int(float(cid_value))
-            if cid_int > 0:
-                cid_suffix = f"_CID{cid_int}"
-        except (ValueError, TypeError):
-            pass
     
     if is_control:
-        return f"{pert}{cid_suffix}_{time}h"
+        return f"{pert}_{time}h"
     else:
         if design_param == 'group_all_replicates':
-            return f"{pert}{cid_suffix}_{dose}uM_{time}h"
+            return f"{pert}_{dose}uM_{time}h"
         elif design_param == 'separate_replicates':
-            return f"{pert}{cid_suffix}_{dose}uM_{time}h_{well}_{plate}"
+            return f"{pert}_{dose}uM_{time}h_{well}_{plate}"
         else:
             raise ValueError(f'Invalid design parameter: {design_param}')
 
@@ -888,9 +872,10 @@ class PseudobulkProcessor:
     1. Read data
     2. Apply dataset-specific processing (optional)
     3. Map Ensembl IDs to current/replacement IDs
-    4. Add perturbation labels
-    5. Save data
-    6. Split by cell type (optional)
+    4. Combine perturbagen and PubChem CID
+    5. Add perturbation labels
+    6. Save data
+    7. Split by cell type (optional)
     
     Parameters:
     -----------
@@ -1008,9 +993,41 @@ class PseudobulkProcessor:
         """Step 3: Map Ensembl IDs to current/replacement IDs."""
         logger.info('Map ensemble IDs to current/replacement IDs')
         self.padata = map_ensembl_ids_for_dataset(self.padata)
-    
+
+    def combine_perturbagen_pubchem_cid(self) -> None:
+        """Step 4: Combine perturbagen and PubChem CID."""
+        def merge_columns_content(
+            perturbagen: Optional[str],
+            pubchem_cid: Optional[Union[int, float, str]],
+            use_cid_in_label: bool,
+        ) -> str:
+            # Build CID suffix if enabled and valid
+            cid_suffix = ""
+            if use_cid_in_label and pubchem_cid is not None and pd.notna(pubchem_cid):
+                try:
+                    # Handle category dtype: convert to underlying value if needed
+                    cid_value = pubchem_cid if not hasattr(pubchem_cid, 'item') else pubchem_cid.item()
+                    cid_int = int(float(cid_value))
+                    if cid_int > 0:
+                        cid_suffix = f"_CID{cid_int}"
+                except (ValueError, TypeError):
+                    pass
+            return str(perturbagen) + cid_suffix
+
+        logger.info('Combine perturbagen and PubChem CID')
+        has_cid = 'pubchem_cid' in self.padata.obs.columns
+        obs = self.padata.obs.copy()
+        combined = obs.apply(
+            lambda x: merge_columns_content(
+                x.perturbagen,
+                pubchem_cid=x.get('pubchem_cid', None) if has_cid else None,
+                use_cid_in_label=self.use_pubchem_cid_in_label,
+            ), axis=1
+        ).astype("category")
+        self.padata.obs.loc[:, 'perturbagen'] = combined
+
     def add_perturbation_labels(self) -> None:
-        """Step 4: Add perturbation labels."""
+        """Step 5: Add perturbation labels."""
         from decimal import Decimal, ROUND_HALF_UP
         
         def normalize_number(x, decimals=4):
@@ -1051,13 +1068,13 @@ class PseudobulkProcessor:
         ).astype("category")
     
     def save_data(self) -> None:
-        """Step 5: Save processed data."""
+        """Step 6: Save processed data."""
         logger.info('Save data')
         file_output = get_output_path_combined(self.file_input, self.dir_output)
         save_single_file(self.padata, file_output)
     
     def save_splitted_data(self) -> None:
-        """Step 6: Split by cell type (if needed)."""
+        """Step 7: Split by cell type (if needed)."""
         if self.split_by_celltype:
             save_by_celltype(self.padata, self.dir_output)
     
