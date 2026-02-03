@@ -1051,9 +1051,7 @@ class PseudobulkProcessor:
         if obs['pert_dose_uM'].apply(lambda x: has_more_than_decimals(x)).any():
             obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: normalize_number(x))
 
-        has_cid = 'pubchem_cid' in obs.columns
-
-        self.padata.obs['perturbation_label'] = obs.apply(
+        self.padata.obs.loc[:, 'perturbation_label'] = obs.apply(
             lambda x: create_perturbation_label(
                 x.is_control,
                 x.perturbagen,
@@ -1062,8 +1060,6 @@ class PseudobulkProcessor:
                 x.well,
                 x.plate,
                 self.design_param,
-                pubchem_cid=x.get('pubchem_cid', None) if has_cid else None,
-                use_cid_in_label=self.use_pubchem_cid_in_label,
             ), axis=1
         ).astype("category")
     
@@ -1088,6 +1084,7 @@ class PseudobulkProcessor:
         self.read_data()
         self.apply_dataset_processing()
         self.map_ensemble_ids()
+        self.combine_perturbagen_pubchem_cid()
         self.add_perturbation_labels()
         self.save_data()
         self.save_splitted_data()
@@ -1159,7 +1156,7 @@ def main():
     d_args = vars(args).copy()
     del d_args['config']
 
-    if not args.config is None:
+    if args.config is not None:
         with open(args.config, 'r', encoding='utf-8') as f:
             config = json.load(f)
         d_args = merge_args(d_args, config)
