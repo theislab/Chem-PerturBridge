@@ -195,6 +195,7 @@ The structure of the repo:
  tree .
 .
 ├── data -> /lustre/groups/ml01/workspace/olga.novitskaia/data
+├── docs
 ├── env.yaml
 ├── logs
 │   └── dataset_i
@@ -216,6 +217,7 @@ The structure of the repo:
 │       └── ...
 ├── pipelines
 │   ├── common
+|   |   ├── combining_logs.sh
 │   │   └── deg.sh
 │   ├── sciplex
 │   │   └─── configs/
@@ -238,10 +240,11 @@ The structure of the repo:
 │       │       └── config.json
 │       └── l1000_phase2_pseudobulking.sh
 ├── README.md
-├── requirements.txt
 ├── run_pipelines
-│   ├── run_pseudobulking.sh
-│   └── run_deg.sh
+│   ├── run_combining_logs.sh
+│   ├── run_deg.sh
+│   └── run_pseudobulking.sh
+├── LICENSE
 ├── src
 │   ├── configs
 │   │   └── datasets.json
@@ -249,12 +252,14 @@ The structure of the repo:
 │   │   ├── run_deg.R
 │   │   ├── run_processing_pseudobulk.py
 │   │   ├── aggregating_deg.py
+│   │   ├── ensembl_mapping.py
 │   │   └── subsampling.R
 │   ├── downloading
 │   │   └── run_downloading_datasets.py
 │   ├── pseudobulking
 │   │   ├── common
 │   │   │   ├── pseudobulk.py
+│   │   │   ├── pubchem.py
 │   │   │   ├── run_combining_datasets.py
 │   │   │   └── run_pseudobulking.py
 │   │   └── datasets
@@ -262,13 +267,18 @@ The structure of the repo:
 │   │       │   ├── pubchem_imputation.py
 │   │       │   └── standardization.py
 │   │       ├── tahoe
+│   │       │   ├── post_processing.py
 │   │       │   ├── pubchem_imputation.py
 │   │       │   └── standardization.py
 │   │       └── l1000
 │   │           ├── assembling.py
+│   │           ├── cellosaurus_annotation.py
+│   │           ├── donor_metadata_annotation.py
+│   │           ├── gene_annotation.py
 │   │           ├── pubchem_imputation.py
 │   │           └── run_assembling.py
 │   └── utils
+│       ├──  aggregate_logs.py
 │       └─── parsing_utils.py
 └── venv -> /home/icb/olga.novitskaia/venv/
 ```
@@ -319,7 +329,7 @@ The structure of the `data` folder:
 │   │   │   └──dataset_i.h5ad
 │   │   └──subsample
 │   │       └──dataset_i_subsample.h5ad
-│   ├──pseudobulk_to_merge (optionally for tahoe)
+│   ├──pseudobulk_to_merge (optionally)
 │   │   ├──full
 │   │   │   └──dataset_i.h5ad
 │   │   └──subsample
