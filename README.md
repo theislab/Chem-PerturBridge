@@ -153,7 +153,7 @@ cd /op3_v2
 ./run_pipelines/run_deg.sh -s -j -d sciplex -p group_all_replicates
 ```
 
-For a normalized dataset (e.g., L1000) with separate_replicates parameter:
+For a normalized dataset (e.g. L1000) with separate_replicates parameter:
 ```
 cd /op3_v2
 ./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n
