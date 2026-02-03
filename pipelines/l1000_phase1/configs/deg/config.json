@@ -4,7 +4,8 @@
       "input_file": "./data/l1000_phase1/pseudobulk/full/l1000_phase1_level3_deg_ready_landmark.h5ad",
       "output_dir": "./data/l1000_phase1/pseudobulk_processed/group_rep",
       "design_param": "group_all_replicates",
-      "dataset": "l1000_phase1"
+      "dataset": "l1000_phase1",
+      "use_pubchem_cid_in_label": true
     },
     "par_deg": {
       "input_dir": "./data/l1000_phase1/pseudobulk_processed/group_rep",
@@ -22,7 +23,8 @@
       "input_file": "./data/l1000_phase1/pseudobulk/full/l1000_phase1_level3_deg_ready_landmark.h5ad",
       "output_dir": "./data/l1000_phase1/pseudobulk_processed/sep_rep",
       "design_param": "separate_replicates",
-      "dataset": "l1000_phase1"
+      "dataset": "l1000_phase1",
+      "use_pubchem_cid_in_label": true
     },
     "par_deg": {
       "input_dir": "./data/l1000_phase1/pseudobulk_processed/sep_rep",

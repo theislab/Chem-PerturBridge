@@ -1,12 +1,6 @@
-"""
-Dataset-specific processing functions for L1000 Level 3 assembly.
-
-This module contains functions to assemble L1000 Level 3 data from GCTX files
-into a standardized AnnData format matching the pseudobulk schema.
-"""
 from __future__ import annotations
 
-from typing import Optional, Iterable
+from typing import Optional, Iterable, Callable, Union
 from pathlib import Path
 import gzip
 import shutil
@@ -98,7 +92,7 @@ def get_download_manifest(data_root: Path, dataset: str = "l1000_phase1") -> pd.
     Get manifest of L1000 Level 3 files to download.
     
     Returns a DataFrame with download information for all required L1000 Level 3
-    files from GEO and CLUE resources.
+    files from GEO.
     
     Parameters
     ----------
@@ -143,6 +137,13 @@ def get_download_manifest(data_root: Path, dataset: str = "l1000_phase1") -> pd.
                 "notes": "Perturbagen annotations"
             },
             {
+                "file": "GSE70138_Broad_LINCS_pert_info.txt.gz",
+                "kind": "metadata",
+                "size": "~5 MB",
+                "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE70nnn/GSE70138/suppl/GSE70138_Broad_LINCS_pert_info.txt.gz",
+                "notes": "Perturbagen metadata"
+            },
+            {
                 "file": "GSE92742_Broad_LINCS_gene_info.txt.gz",
                 "kind": "metadata",
                 "size": "<1 MB",
@@ -174,6 +175,13 @@ def get_download_manifest(data_root: Path, dataset: str = "l1000_phase1") -> pd.
                 "notes": "Cell line annotations"
             },
             {
+                "file": "GSE92742_Broad_LINCS_pert_info.txt.gz",
+                "kind": "metadata",
+                "size": "~5 MB",
+                "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE92nnn/GSE92742/suppl/GSE92742_Broad_LINCS_pert_info.txt.gz",
+                "notes": "Perturbagen annotations"
+            },
+            {
                 "file": "GSE70138_Broad_LINCS_pert_info.txt.gz",
                 "kind": "metadata",
                 "size": "~5 MB",
@@ -201,89 +209,184 @@ def get_download_manifest(data_root: Path, dataset: str = "l1000_phase1") -> pd.
     return manifest_df
 
 
-def download_l1000_files(data_root: Optional[str] = None, dataset: str = "l1000_phase1", skip_existing: bool = True) -> None:
+def get_compound_metadata_download_manifest(data_root: Path) -> pd.DataFrame:
     """
-    Download L1000 Level 3 data files from GEO and CLUE.
-    
-    Downloads all required L1000 Level 3 files including:
-    - GCTX expression file (48.8 GB)
-    - Instance metadata
-    - Cell line metadata
-    - Perturbagen metadata
-    - Gene annotations
-    
+    Get manifest of LINCS small molecule metadata files to download.
+
+    Returns a DataFrame with download information for:
+    - SampleTable_LincsID2FacilityID2CenterBatchID_LINCS_StandardizedCmpds_LSMIDs.txt
+    - DeprecatedSampleTableWxpg.txt
+
     Parameters
     ----------
-    data_root : str, optional
-        Root directory for data files. If None, uses default from define_paths()
-    dataset : str, default="l1000_phase1"
-        Dataset name: "l1000_phase1" or "l1000_phase2"
+    data_root : Path
+        Root directory where files will be downloaded
+
+    Returns
+    -------
+    pd.DataFrame
+        Download manifest with columns: file, kind, size, url, path, notes, curl_example
+    """
+    data_root = Path(data_root)
+    base_url = "https://lincsportal.ccs.miami.edu/dcic/api/download"
+    path_param = "LINCS_Data/Metadata/Small_Molecules/2020_06_16"
+    download_manifest = [
+        {
+            "file": "SampleTable_LincsID2FacilityID2CenterBatchID_LINCS_StandardizedCmpds_LSMIDs.txt",
+            "kind": "metadata",
+            "size": "~few MB",
+            "url": f"{base_url}?path={path_param}&file=SampleTable_LincsID2FacilityID2CenterBatchID_LINCS_StandardizedCmpds_LSMIDs.txt",
+            "notes": "LincsID to FacilityID/CenterBatchID, standardized compounds (LSMIDs)",
+        },
+        {
+            "file": "DeprecatedSampleTableWxpg.txt",
+            "kind": "metadata",
+            "size": "~few MB",
+            "url": f"{base_url}?path={path_param}&file=DeprecatedSampleTableWxpg.txt",
+            "notes": "Deprecated sample table",
+        },
+        {
+            "file": "CompoundTable_ExternalAnnotations_LSMIDs.txt",
+            "kind": "metadata",
+            "size": "~few MB",
+            "url": f"{base_url}?path={path_param}&file=CompoundTable_ExternalAnnotations_LSMIDs.txt",
+            "notes": "Compound table with external annotations",
+        },
+        {
+            "file": "CompoundTable_LINCS_StandardizedCmpds_LSMIDs.txt",
+            "kind": "metadata",
+            "size": "~few MB",
+            "url": f"{base_url}?path={path_param}&file=CompoundTable_LINCS_StandardizedCmpds_LSMIDs.txt",
+            "notes": "Compound table with LINCS standardized compounds",
+        },
+    ]
+    manifest_df = pd.DataFrame(download_manifest)
+    manifest_df["path"] = manifest_df["file"].apply(lambda f: data_root / f)
+    manifest_df["curl_example"] = manifest_df.apply(
+        lambda row: f"curl -L '{row['url']}' -o {row['path']}",
+        axis=1,
+    )
+    return manifest_df
+
+
+def download_from_manifest(
+    data_root: Union[str, Path],
+    manifest_fn: Callable[..., pd.DataFrame],
+    skip_existing: bool = True,
+    log_prefix: str = "Downloading",
+    **manifest_kwargs,
+) -> None:
+    """
+    Download files from a manifest function.
+
+    Calls manifest_fn(data_root, **manifest_kwargs) to get a DataFrame with columns:
+    file, path, url; optional: size, notes.
+
+    Parameters
+    ----------
+    data_root : str or Path
+        Root directory for downloads.
+    manifest_fn : callable
+        Called as manifest_fn(data_root, **manifest_kwargs) to produce manifest DataFrame.
     skip_existing : bool, default=True
-        If True, skips downloading files that already exist
-        
+        If True, skip files that already exist.
+    log_prefix : str, default="Downloading"
+        Prefix for the first log message (e.g. "Downloading L1000 Level 3 files to: ...").
+    **manifest_kwargs
+        Passed to manifest_fn.
+
     Raises
     ------
     subprocess.CalledProcessError
-        If download command fails
+        If download command fails.
     """
-    if data_root is None:
-        paths = define_paths(dataset=dataset)
-        data_root = Path(paths["level3_gctx"]).parent
-    else:
-        data_root = Path(data_root)
-    
+    data_root = Path(data_root)
     data_root.mkdir(parents=True, exist_ok=True)
-    
-    manifest_df = get_download_manifest(data_root, dataset=dataset)
-    
-    logger.info(f"Downloading L1000 Level 3 files to: {data_root}")
-    
+    manifest_df = manifest_fn(data_root, **manifest_kwargs)
+
+    logger.info(f"{log_prefix} to: {data_root}")
+
     for _, row in manifest_df.iterrows():
-        file_path = row["path"]
-        
+        file_path = Path(row["path"])
         if skip_existing and file_path.exists():
             logger.info(f"  {row['file']} already exists, skipping")
             continue
-        
-        logger.info(f"  Downloading {row['file']} ({row['size']})...")
+        size_str = row.get("size", "")
+        logger.info(f"  Downloading {row['file']} ({size_str})...")
         cmd = f"curl -L '{row['url']}' -o {file_path}"
-        
         try:
             subprocess.run(cmd, shell=True, check=True)
             logger.info(f"    Downloaded {row['file']}")
         except subprocess.CalledProcessError as e:
             logger.error(f"    Failed to download {row['file']}: {e}")
             raise
-    
+
     logger.info("All downloads complete")
 
 
-def decompress_l1000_files(data_root: Optional[str] = None, dataset: str = "l1000_phase1") -> None:
+def download_files(data_root: str, dataset: str = "l1000_phase1", skip_existing: bool = True) -> None:
     """
-    Decompress gzipped L1000 data files.
-    
-    Decompresses all .gz files in the data directory, including the large GCTX
-    expression file. The GCTX decompression may take several minutes.
-    
+    Download L1000 Level 3 data files from GEO and LINCS small molecule (compound) metadata tables.
+
+    Downloads all required L1000 Level 3 files including:
+    - GCTX expression file (48.8 GB)
+    - Instance metadata
+    - Cell line metadata
+    - Perturbagen metadata
+    - Gene annotations
+    - SampleTable_LincsID2FacilityID2CenterBatchID_LINCS_StandardizedCmpds_LSMIDs.txt
+    - DeprecatedSampleTableWxpg.txt
+
     Parameters
     ----------
     data_root : str, optional
-        Root directory containing compressed files. If None, uses default from define_paths()
+        Root directory for data files.
     dataset : str, default="l1000_phase1"
         Dataset name: "l1000_phase1" or "l1000_phase2"
-        
+    skip_existing : bool, default=True
+        If True, skips downloading files that already exist
+
+    Raises
+    ------
+    subprocess.CalledProcessError
+        If download command fails
+    """
+    
+    download_from_manifest(
+        data_root=data_root,
+        manifest_fn=get_download_manifest,
+        skip_existing=skip_existing,
+        log_prefix="Downloading L1000 Level 3 files",
+        dataset=dataset,
+    )
+
+    download_from_manifest(
+        data_root=data_root,
+        manifest_fn=get_compound_metadata_download_manifest,
+        skip_existing=skip_existing,
+        log_prefix="Downloading LINCS compound metadata",
+    )
+
+
+
+
+def decompress_l1000_files(paths: dict) -> None:
+    """
+    Decompress gzipped L1000 data files.
+
+    Decompresses all .gz files in the data directory, including the large GCTX
+    expression file. The GCTX decompression may take several minutes.
+
+    Parameters
+    ----------
+    paths : dict
+        Paths dict (e.g. from define_l1000_paths(data_root, dataset=dataset)).
+
     Raises
     ------
     FileNotFoundError
         If compressed files are not found
     """
-    if data_root is None:
-        paths = define_paths(dataset=dataset)
-        data_root = Path(paths["level3_gctx"]).parent
-    else:
-        data_root = Path(data_root)
-    
-    paths = define_paths(str(data_root), dataset=dataset)
     to_decompress = []
     already_done = []
     
@@ -318,38 +421,28 @@ def decompress_l1000_files(data_root: Optional[str] = None, dataset: str = "l100
         logger.info(f"All {len(to_decompress)} file(s) successfully decompressed")
     else:
         if not already_done:
-            logger.warning("No compressed files found. Download them first using download_l1000_files()")
+            logger.warning("No compressed files found. Download them first using download_files()")
         else:
             logger.info("All files are already decompressed")
 
 
-def check_l1000_files(data_root: Optional[str] = None, dataset: str = "l1000_phase1") -> dict:
+def check_l1000_files(paths: dict) -> dict:
     """
     Check status of L1000 data files.
-    
+
     Checks which files are missing, compressed, or ready to use.
-    
+
     Parameters
     ----------
-    data_root : str, optional
-        Root directory to check. If None, uses default from define_paths()
-    dataset : str, default="l1000_phase1"
-        Dataset name: "l1000_phase1" or "l1000_phase2"
-        
+    paths : dict
+        Paths dict (e.g. from define_l1000_paths(data_root, dataset=dataset)).
+
     Returns
     -------
     dict
         Dictionary with keys 'missing', 'compressed', 'ready' containing lists of
         (key, path) tuples for each category
     """
-    if data_root is None:
-        paths = define_paths(dataset=dataset)
-        data_root = Path(paths["level3_gctx"]).parent
-    else:
-        data_root = Path(data_root)
-    
-    paths = define_paths(str(data_root), dataset=dataset)
-    
     missing = []
     compressed = []
     ready = []
@@ -385,7 +478,7 @@ def check_l1000_files(data_root: Optional[str] = None, dataset: str = "l1000_pha
         logger.warning(f"{len(missing)} file(s) missing:")
         for key, path in missing:
             logger.warning(f"  - {key}: {path.name}")
-        logger.info("  Run download_l1000_files() to download them")
+        logger.info("  Run download_files() to download them")
     else:
         logger.info("All required files are present")
     
@@ -405,6 +498,54 @@ def check_l1000_files(data_root: Optional[str] = None, dataset: str = "l1000_pha
     }
 
 
+def ensure_l1000_data_available(
+    paths: dict,
+    data_root: str,
+    dataset: str,
+    download_if_missing: bool = True,
+    skip_existing: bool = True,
+) -> None:
+    """
+    Check L1000 data availability; download and decompress if needed; raise if still missing.
+
+    Parameters
+    ----------
+    paths : dict
+        Paths dict, example: from define_l1000_paths().
+    data_root : str
+        Root directory for data files.
+    dataset : str
+        Dataset name: "l1000_phase1" or "l1000_phase2".
+    download_if_missing : bool, default=True
+        If True, download missing files and decompress when needed.
+    skip_existing : bool, default=True
+        If True, skip downloading files that already exist.
+
+    Raises
+    ------
+    FileNotFoundError
+        If required files are still missing or compressed after download attempt.
+    """
+    if not download_if_missing:
+        return
+    logger.info("Checking data availability...")
+    status = check_l1000_files(paths)
+    if status["missing"]:
+        logger.info(f"Downloading {len(status['missing'])} missing file(s)...")
+        download_files(data_root, dataset=dataset, skip_existing=skip_existing)
+        status = check_l1000_files(paths)
+    if status["compressed"]:
+        logger.info(f"Decompressing {len(status['compressed'])} compressed file(s)...")
+        decompress_l1000_files(paths)
+    final_status = check_l1000_files(paths)
+    if final_status["missing"] or final_status["compressed"]:
+        raise FileNotFoundError(
+            "Required L1000 data files are still missing or compressed after download attempt. "
+            f"Missing: {len(final_status['missing'])}, Compressed: {len(final_status['compressed'])}"
+        )
+    logger.info("All required data files are available")
+
+
 def standardize_inst(inst: pd.DataFrame) -> pd.DataFrame:
     """
     Standardize instance metadata.
@@ -415,12 +556,18 @@ def standardize_inst(inst: pd.DataFrame) -> pd.DataFrame:
     Parameters
     ----------
     inst : pd.DataFrame
-        Instance metadata with inst_id, sample_id, or distil_id column
+        Instance metadata with inst_id column
         
     Returns
     -------
     pd.DataFrame
-        Standardized dataframe with 'lincs_inst_id' as index and column, and 'det_plate' column added if missing
+        Standardized dataframe with 'lincs_inst_id' as index and column, and
+        'det_plate' column added if missing (extracted from inst_id)
+        
+    Raises
+    ------
+    KeyError
+        If 'inst_id' column is missing from input dataframe
     """
     df = inst.copy()
     
@@ -476,14 +623,18 @@ def process_cellinfo(cellinfo: pd.DataFrame,
     df = df.rename(columns=rename_map).set_index(cellinfo_id).copy()
     return df
 
-def process_pert_metadata(pert: pd.DataFrame, inst: pd.DataFrame) -> pd.DataFrame:
+def process_pert_metadata(pert_phase1: pd.DataFrame, 
+                          pert_phase2: pd.DataFrame, 
+                          inst: pd.DataFrame) -> pd.DataFrame:
     """
-    Process perturbation metadata.
+    Process perturbation metadata by combining Phase 1 and Phase 2 data.
     
     Parameters
     ----------
-    pert : pd.DataFrame
-        Perturbation metadata
+    pert_phase1 : pd.DataFrame
+        Perturbagen metadata (Phase 1)
+    pert_phase2 : pd.DataFrame
+        Perturbagen metadata (Phase 2)
     inst : pd.DataFrame
         Instance metadata
         
@@ -492,7 +643,11 @@ def process_pert_metadata(pert: pd.DataFrame, inst: pd.DataFrame) -> pd.DataFram
     pd.DataFrame
         Processed perturbation metadata
     """
-    pert = pert.copy()
+    pert = (
+    pert_phase1.set_index("pert_id")
+       .combine_first(pert_phase2.set_index("pert_id"))
+       ).reset_index()[pert_phase1.columns].copy()
+
     inst = inst.copy()
 
     if 'pubchem_cid' not in pert.columns:
@@ -602,7 +757,7 @@ def process_gene_annotations(geneinfo: pd.DataFrame,
     full_gene_matrix : bool, default=False
         If False, restrict to landmark genes only
     paths : dict, optional
-        Dictionary from define_paths(). If provided and contains 'hgnc_cache',
+        Dictionary with the paths information. If provided and contains 'hgnc_cache',
         that path is used for Entrez→Ensembl cache (same pattern as pubchem_cache).
         Ensures cache is under data_root/processed and stable across runs/callers.
         
@@ -909,10 +1064,35 @@ def define_obs_schema() -> list:
     ]
 
 
-def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1") -> dict:
+def define_compound_metadata_paths(data_root: Optional[str] = None) -> dict:
+    """
+    Define file paths for LINCS small molecule (compound) metadata tables.
+
+    Parameters
+    ----------
+    data_root : str, optional
+        Root directory containing L1000 data files. Defaults to './lincs_data'
+
+    Returns
+    -------
+    dict
+        Dictionary with keys: compound_lsmids, compound_deprecated_sample_table
+    """
+    if data_root is None:
+        data_root = "./lincs_data"
+    data_root = Path(data_root)
+    return {
+        "compound_lsmids": data_root / "SampleTable_LincsID2FacilityID2CenterBatchID_LINCS_StandardizedCmpds_LSMIDs.txt",
+        "compound_deprecated_sample_table": data_root / "DeprecatedSampleTableWxpg.txt",
+        "compound_external_annotations": data_root / "CompoundTable_ExternalAnnotations_LSMIDs.txt",
+        "compound_lincs_standardized_cmpds": data_root / "CompoundTable_LINCS_StandardizedCmpds_LSMIDs.txt",
+    }
+
+
+def define_l1000_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1") -> dict:
     """
     Define file paths for L1000 Level 3 data.
-    
+
     Parameters
     ----------
     data_root : str, optional
@@ -920,7 +1100,7 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
         Defaults to './lincs_data'
     dataset : str, default="l1000_phase1"
         Dataset name: "l1000_phase1" or "l1000_phase2"
-        
+
     Returns
     -------
     dict
@@ -932,27 +1112,35 @@ def define_paths(data_root: Optional[str] = None, dataset: str = "l1000_phase1")
     data_root = Path(data_root)
     processed_dir = data_root / "processed"
     processed_dir.mkdir(exist_ok=True)
-    
-    if dataset == "l1000_phase1":
-        return {
-            "level3_gctx": data_root / "GSE92742_Broad_LINCS_Level3_INF_mlr12k_n1319138x12328.gctx",
-            "instinfo": data_root / "GSE92742_Broad_LINCS_inst_info.txt",
-            "cellinfo": data_root / "GSE92742_Broad_LINCS_cell_info.txt",
-            "pert_info": data_root / "GSE92742_Broad_LINCS_pert_info.txt",
-            "geneinfo_level3": data_root / "GSE92742_Broad_LINCS_gene_info.txt",
+
+    common_paths = {
             "pubchem_cache": processed_dir / "pubchem_cache.json",
             "hgnc_cache": processed_dir / "hgnc_cache.json",
+
+        }
+
+    if dataset == "l1000_phase1":
+
+        return {
+            **common_paths,
+            "level3_gctx": data_root / "GSE92742_Broad_LINCS_Level3_INF_mlr12k_n1319138x12328.gctx",
+            "level3_gctx_gz": data_root / "GSE92742_Broad_LINCS_Level3_INF_mlr12k_n1319138x12328.gctx.gz",
+            "instinfo": data_root / "GSE92742_Broad_LINCS_inst_info.txt",
+            "cellinfo": data_root / "GSE92742_Broad_LINCS_cell_info.txt",
+            "pert_info_phase1": data_root / "GSE92742_Broad_LINCS_pert_info.txt",
+            "pert_info_phase2": data_root / "GSE70138_Broad_LINCS_pert_info.txt",
+            "geneinfo_level3": data_root / "GSE92742_Broad_LINCS_gene_info.txt",
         }
     elif dataset == "l1000_phase2":
         return {
-                "level3_gctx": data_root / "GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx",
-                "level3_gctx_gz": data_root / "GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx.gz",
-                "instinfo": data_root / "GSE70138_Broad_LINCS_inst_info_2017-03-06.txt",
-                "cellinfo": data_root / "GSE70138_Broad_LINCS_cell_info_2017-04-28.txt",
-                "pert_info": data_root / "GSE70138_Broad_LINCS_pert_info.txt",
-                "geneinfo_level3": data_root / "GSE70138_Broad_LINCS_gene_info_2017-03-06.txt",
-                "pubchem_cache": processed_dir / "pubchem_cache.json",
-                "hgnc_cache": processed_dir / "hgnc_cache.json",
+            **common_paths,
+            "level3_gctx": data_root / "GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx",
+            "level3_gctx_gz": data_root / "GSE70138_Broad_LINCS_Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx.gz",
+            "instinfo": data_root / "GSE70138_Broad_LINCS_inst_info_2017-03-06.txt",
+            "cellinfo": data_root / "GSE70138_Broad_LINCS_cell_info_2017-04-28.txt",
+            "pert_info_phase1": data_root / "GSE92742_Broad_LINCS_pert_info.txt",
+            "pert_info_phase2": data_root / "GSE70138_Broad_LINCS_pert_info.txt",
+            "geneinfo_level3": data_root / "GSE70138_Broad_LINCS_gene_info_2017-03-06.txt",
         }
     else:
         raise ValueError(f"Invalid dataset: {dataset}")
@@ -973,8 +1161,59 @@ def add_alternative_identifiers(inst_raw: pd.DataFrame) -> pd.DataFrame:
 
     return inst
 
+def process_compound_metadata(compound_lsmids: pd.DataFrame,
+                              compound_external_annotations: pd.DataFrame,
+                              compound_lincs_standardized_cmpds: pd.DataFrame) -> pd.DataFrame:
+    """
+    Process compound metadata from LINCS Data Portal.
+    
+    Merges multiple compound metadata tables from LINCS Data Portal to create
+    a unified compound metadata dataframe with standardized column names.
+    Combines LINCS IDs, external annotations (PubChem CID, ChEMBL, ChEBI),
+    and standardized compound information (InChIKey, SMILES).
 
-def annotate_pubchem_cids(df: pd.DataFrame, paths: dict, config: dict = None) -> pd.DataFrame:
+    Parameters
+    ----------
+    compound_lsmids : pd.DataFrame
+        LINCS ID mapping table including columns: sm_center_batch_id,
+        sm_center_canonical_id, sm_lincs_id
+    compound_external_annotations : pd.DataFrame
+        External annotations table including columns: sm_lincs_id, sm_name,
+        sm_smiles_parent, sm_pubchem_cid, sm_chembl_id, sm_chebi_id
+    compound_lincs_standardized_cmpds : pd.DataFrame
+        Standardized compounds table including columns: sm_lincs_id,
+        sm_inchi_key_parent
+
+    Returns
+    -------
+    pd.DataFrame
+        Merged compound metadata with standardized columns:
+        - pert_id: Compound identifier (from sm_center_canonical_id)
+        - inchi_key: InChIKey (from sm_inchi_key_parent)
+        - canonical_smiles: SMILES string (from sm_smiles_parent)
+        - pubchem_cid: PubChem CID (from sm_pubchem_cid)
+        Duplicates are removed based on pert_id and sm_lincs_id
+    """
+    compound_merged = compound_lsmids[['sm_center_batch_id', 
+                 'sm_center_canonical_id', 
+                 'sm_lincs_id']]\
+                .merge(compound_external_annotations[['sm_lincs_id', 
+                                                      'sm_name', 
+                                                      'sm_smiles_parent', 
+                                                      'sm_pubchem_cid', 
+                                                      'sm_chembl_id', 
+                                                      'sm_chebi_id']], on='sm_lincs_id', how='left')\
+                .merge(compound_lincs_standardized_cmpds[['sm_lincs_id', 'sm_inchi_key_parent']], on='sm_lincs_id', how='left')\
+                .drop_duplicates(['sm_center_canonical_id', 'sm_lincs_id'])
+    
+    compound_merged = compound_merged.rename(columns={'sm_center_canonical_id': 'pert_id',
+                  'sm_inchi_key_parent': 'inchi_key',
+                  'sm_smiles_parent': 'canonical_smiles',
+                  'sm_pubchem_cid': 'pubchem_cid'})
+
+    return compound_merged
+
+def annotate_pubchem_cids(df: pd.DataFrame, metadata: pd.DataFrame, paths: dict, config: dict = None) -> pd.DataFrame:
     """
     Annotate metadata containing perturbation information with PubChem CIDs.
     
@@ -991,8 +1230,10 @@ def annotate_pubchem_cids(df: pd.DataFrame, paths: dict, config: dict = None) ->
         Metadata dataframe containing perturbation information (e.g., instance metadata
         enriched with perturbation data via merge). Must contain columns: pert_id, pert_type,
         pert_iname, and optionally inchi_key, canonical_smiles.
+    metadata : pd.DataFrame
+        Compound metadata dataframe.
     paths : dict
-        Dictionary of file paths from define_paths(), must include 'pubchem_cache'
+        Dictionary of file paths, must include 'pubchem_cache'
     config : dict, optional
         Configuration dictionary. If config["subsampling"] is True, annotates a sample
         of 1,000 compound rows.
@@ -1012,9 +1253,120 @@ def annotate_pubchem_cids(df: pd.DataFrame, paths: dict, config: dict = None) ->
             logger.warning(f"Error standardizing pubchem_cid: {e}")
             return None
 
+    def filter_duplicated_compounds(metadata: pd.DataFrame) -> pd.DataFrame:
+        """
+        Filter duplicated compounds by preferring parent InChIKey/SMILES.
+        
+        When multiple rows have the same pert_id, keeps only rows where
+        the InChIKey or SMILES matches the parent version, removing
+        variant/derivative entries.
+        
+        Parameters
+        ----------
+        metadata : pd.DataFrame
+            Metadata dataframe with potential pert_id duplicates
+            
+        Returns
+        -------
+        pd.DataFrame
+            Filtered metadata with duplicates removed
+            
+        Raises
+        ------
+        ValueError
+            If duplicates remain after filtering attempts
+        """
+        metadata = metadata.copy()
+        if metadata['pert_id'].duplicated(keep=False).any():
+            metadata = metadata[
+                ~metadata['pert_id'].duplicated(keep=False) |
+                (metadata['inchi_key'] == metadata['inchi_key_parent'])
+                ].copy()
+        if metadata['pert_id'].duplicated(keep=False).any():
+            metadata = metadata[
+                ~metadata['pert_id'].duplicated(keep=False) |
+                (metadata['canonical_smiles'] == metadata['canonical_smiles_parent'])
+                ].copy()
+        if not metadata['pert_id'].duplicated(keep=False).any():
+            return metadata
+        else:
+            raise ValueError('Duplicates in DataFrame')  
+
+    def process_metadata(df: pd.DataFrame, metadata: pd.DataFrame) -> pd.DataFrame:
+        """
+        Process metadata by merging with the dataframe and filtering out duplicated compounds.
+        
+        Merges compound metadata (InChIKey, SMILES, PubChem CID) with the
+        dataframe, then filters duplicates by preferring parent compound
+        structures over variants.
+        
+        Parameters
+        ----------
+        df : pd.DataFrame
+            Dataframe with pert_id column to merge on
+        metadata : pd.DataFrame
+            Compound metadata with pert_id, inchi_key, canonical_smiles,
+            pubchem_cid columns
+            
+        Returns
+        -------
+        pd.DataFrame
+            Merged metadata with duplicates filtered
+        """
+        metadata_merged = df[['pert_id', 
+                              'inchi_key', 
+                              'canonical_smiles']]\
+                        .merge(
+                        metadata[['pert_id', 
+                                  'inchi_key', 
+                                  'canonical_smiles', 
+                                  'pubchem_cid']], \
+                                on='pert_id', \
+                                how='left', \
+                                suffixes=('', '_parent')
+                                )
+
+        metadata_merged = filter_duplicated_compounds(metadata_merged)\
+                        .drop(columns=['inchi_key', 
+                                       'canonical_smiles'])\
+                        .rename(columns={'inchi_key_parent': 'inchi_key',
+                                         'canonical_smiles_parent': 'canonical_smiles'})
+        return metadata_merged
+
+    def create_pubchem_mapping(metadata: pd.DataFrame) -> dict:
+        """
+        Create a mapping of PubChem CIDs based on LSM_IDs from LINCS Data Portal
+        and the manual mapping from pubchem_imputation.py.
+        
+        Combines PubChem CIDs from LINCS metadata (where available) with
+        manual mappings for compounds that may not be found automatically.
+        Returns a dictionary mapping pert_id to PubChem CID.
+        
+        Parameters
+        ----------
+        metadata : pd.DataFrame
+            Compound metadata with pert_id and pubchem_cid columns
+            
+        Returns
+        -------
+        dict
+            Dictionary mapping pert_id to PubChem CID (int)
+        """
+        metadata['pubchem_cid'] = pd.to_numeric(metadata['pubchem_cid'], errors='coerce').fillna(-666).astype('int64')
+        lsm_mapping_df = metadata[metadata['pubchem_cid'] != -666].copy()
+
+        lsm_mapping = dict(zip(lsm_mapping_df['pert_id'], lsm_mapping_df['pubchem_cid']))
+        manual_mapping = pubchem_mapping_l1000()
+
+        mapping = {**lsm_mapping, **manual_mapping}
+        return mapping
+
+    
+
     # Filter to only compound perturbations (trt_cp and ctl_vehicle)
     # Other types (shRNA, CRISPR, etc.) don't have PubChem CIDs
     df = df.copy()
+    metadata = metadata.copy()
 
     if 'pubchem_cid' not in df.columns:
         df['pubchem_cid'] = None
@@ -1032,8 +1384,14 @@ def annotate_pubchem_cids(df: pd.DataFrame, paths: dict, config: dict = None) ->
     if config is not None and config.get("subsampling"):
         df_compounds = df_compounds.sample(n=1000, random_state=0)
     
+    metadata_processed = process_metadata(df_compounds, metadata)
+
+    df_compounds = (
+        df_compounds.set_index("pert_id")
+            .combine_first(metadata_processed.drop(columns=['pubchem_cid']).set_index("pert_id"))
+            ).reset_index().copy()
     
-    
+    create_pubchem_mapping_func = lambda metadata=metadata_processed: create_pubchem_mapping(metadata)
     
     pubchem_cache = {}
     cache_path = str(paths["pubchem_cache"])
@@ -1043,14 +1401,17 @@ def annotate_pubchem_cids(df: pd.DataFrame, paths: dict, config: dict = None) ->
         pert_id_col='pert_id',
         drug_col='pert_iname',
         cache_path=cache_path,
-        manual_mapping_func=pubchem_mapping_l1000,
+        manual_mapping_func=create_pubchem_mapping_func,
+        manual_mapping_by_drug_name=False,
         dataset_key='l1000'
     )
     
     df_compounds['pubchem_cid'] = pd.to_numeric(df_compounds['pubchem_cid'], errors='coerce').fillna(-666).astype("int64")
     
     # Update the original df with annotated CIDs
-    df.loc[df_compounds.index, "pubchem_cid"] = df_compounds["pubchem_cid"]
+    cid_mapping = df_compounds.set_index('pert_id')['pubchem_cid'].to_dict()
+    mask = df['pert_id'].isin(cid_mapping.keys())
+    df.loc[mask, 'pubchem_cid'] = df.loc[mask, 'pert_id'].map(cid_mapping)
     return df
 
 
@@ -1076,6 +1437,23 @@ def enrich_instance_metadata(inst: pd.DataFrame,
     """
 
     def fix_cell_line_annotation(inst: pd.DataFrame) -> pd.DataFrame:
+        """
+        Fix missing annotations for SNUC4 cell line.
+        
+        Manually adds missing cell line metadata for SNUC4 that may not
+        be present in the standard cell line annotations. Updates subtype,
+        donor age, sex, ethnicity, and Cellosaurus ID.
+        
+        Parameters
+        ----------
+        inst : pd.DataFrame
+            Instance metadata dataframe
+            
+        Returns
+        -------
+        pd.DataFrame
+            Instance metadata with SNUC4 annotations fixed
+        """
         mask = inst['cell_id'] == 'SNUC4'
         inst.loc[mask, 'cellinfo_subtype'] = 'colon adenocarcinoma'
         inst.loc[mask, 'cellinfo_donor_age'] = '35'
@@ -1129,6 +1507,11 @@ def process_instance_metadata(inst_raw: pd.DataFrame,
     -------
     pd.DataFrame
         Fully processed and filtered instance metadata
+        
+    Raises
+    ------
+    ValueError
+        If no cell lines are found with both controls and compounds
     """
     inst = add_alternative_identifiers(inst_raw)
     inst = enrich_instance_metadata(inst, cellinfo, pert_raw)
@@ -1160,14 +1543,14 @@ def process_instance_metadata(inst_raw: pd.DataFrame,
     return inst
 
 
-def load_metadata_tables(paths: dict) -> tuple:
+def load_l1000_tables(paths: dict) -> tuple:
     """
     Load L1000 metadata tables from files.
     
     Parameters
     ----------
     paths : dict
-        Dictionary of file paths from define_paths()
+        Dictionary of file paths
         
     Returns
     -------
@@ -1175,24 +1558,69 @@ def load_metadata_tables(paths: dict) -> tuple:
         (inst_raw, cellinfo_raw, pert_raw, geneinfo)
         - inst_raw: Instance/sample information
         - cellinfo_raw: Cell line information
-        - pert_raw: Perturbation information
+        - pert_raw_phase1: Perturbagen information (Phase 1)
+        - pert_raw_phase2: Perturbagen information (Phase 2)
         - geneinfo: Gene annotations (Level 3)
     """
-    logger.info('  Loading metadata tables')
+    logger.info('  Loading L1000 tables')
     
     inst_raw = _read_table(paths["instinfo"], sep="\t", low_memory=False)
     cellinfo_raw = _read_table(paths["cellinfo"], sep="\t")
-    pert_raw = _read_table(paths["pert_info"], sep="\t")
+    pert_raw_phase1 = _read_table(paths["pert_info_phase1"], sep="\t")
+    pert_raw_phase2 = _read_table(paths["pert_info_phase2"], sep="\t")
     geneinfo = _read_table(paths["geneinfo_level3"], sep="\t")
     
     # Log loaded table sizes
     logger.info(f"    Loaded {len(inst_raw):,} instances")
     logger.info(f"    Loaded {len(cellinfo_raw):,} cell lines")
-    logger.info(f"    Loaded {len(pert_raw):,} perturbations")
+    logger.info(f"    Loaded {len(pert_raw_phase1):,} perturbagens (Phase 1)")
+    logger.info(f"    Loaded {len(pert_raw_phase2):,} perturbagens (Phase 2)")
     logger.info(f"    Loaded {len(geneinfo):,} genes")
     
-    return inst_raw, cellinfo_raw, pert_raw, geneinfo
+    return inst_raw, cellinfo_raw, pert_raw_phase1, pert_raw_phase2, geneinfo
 
+
+def load_compound_metadata_tables(paths: dict) -> tuple:
+    """
+    Load LINCS compound metadata tables from files.
+    
+    Loads all required compound metadata tables from the LINCS Data Portal,
+    including LINCS ID mappings, external annotations, and standardized
+    compound information.
+    
+    Parameters
+    ----------
+    paths : dict
+        Dictionary of file paths containing keys:
+        - compound_lsmids: Path to LINCS ID mapping table
+        - compound_deprecated_sample_table: Path to deprecated sample table
+        - compound_external_annotations: Path to external annotations table
+        - compound_lincs_standardized_cmpds: Path to standardized compounds table
+        
+    Returns
+    -------
+    tuple
+        Tuple of four DataFrames:
+        - compound_lsmids: LINCS ID mapping table
+        - compound_deprecated_sample_table: Deprecated sample table
+        - compound_external_annotations: External annotations table
+        - compound_lincs_standardized_cmpds: Standardized compounds table
+        
+    Raises
+    ------
+    FileNotFoundError
+        If any of the required files are missing
+    """
+    logger.info('  Loading compound metadata tables')
+    compound_lsmids = _read_table(paths["compound_lsmids"], sep="\t")
+    compound_deprecated_sample_table = _read_table(paths["compound_deprecated_sample_table"], sep="\t")
+    compound_external_annotations = _read_table(paths["compound_external_annotations"], sep="\t", encoding="latin1")
+    compound_lincs_standardized_cmpds = _read_table(paths["compound_lincs_standardized_cmpds"], sep="\t")
+
+    return (compound_lsmids, 
+            compound_deprecated_sample_table, 
+            compound_external_annotations, 
+            compound_lincs_standardized_cmpds)
 
 def materialize_string_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -1508,50 +1936,47 @@ def assemble_l1000_dataset(data_root: Optional[str] = None,
     if not HAS_CMAPPY:
         raise ImportError("cmapPy is required for L1000 processing. Install via: pip install cmapPy")
     
+    if data_root is None:
+        data_root = './lincs_data'
+
     # Build configuration
     CONFIG = build_config(config)
     download_if_missing = CONFIG.get("download_if_missing", True)
     
     # Define file paths
-    PATHS = define_paths(data_root, dataset=CONFIG.get("dataset"))
+    PATHS = define_l1000_paths(data_root, dataset=CONFIG.get("dataset"))
+    PATHS = {**PATHS, **define_compound_metadata_paths(data_root)}.copy()
     
     # Check data availability and download if needed
-    if download_if_missing:
-        logger.info("Checking data availability...")
-        status = check_l1000_files(data_root, dataset=CONFIG.get("dataset"))
-        
-        if status['missing']:
-            logger.info(f"Downloading {len(status['missing'])} missing file(s)...")
-            download_l1000_files(data_root, dataset=CONFIG.get("dataset"), skip_existing=True)
-            status = check_l1000_files(data_root, dataset=CONFIG.get("dataset"))
-        
-        
-        if status['compressed']:
-            logger.info(f"Decompressing {len(status['compressed'])} compressed file(s)...")
-            decompress_l1000_files(data_root, dataset=CONFIG.get("dataset"))
-        
-        # Verify all files are ready
-        final_status = check_l1000_files(data_root, dataset=CONFIG.get("dataset"))
-        if final_status['missing'] or final_status['compressed']:
-            raise FileNotFoundError(
-                f"Required L1000 data files are still missing or compressed after download attempt. "
-                f"Missing: {len(final_status['missing'])}, Compressed: {len(final_status['compressed'])}"
-            )
-        logger.info("All required data files are available")
-        
+    ensure_l1000_data_available(
+        PATHS,
+        data_root,
+        CONFIG.get("dataset"),
+        download_if_missing=download_if_missing,
+        skip_existing=True,
+    )
+
     # Load metadata tables
-    inst_raw, cellinfo_raw, pert_raw, geneinfo = load_metadata_tables(PATHS)
+    inst_raw, cellinfo_raw, pert_raw_phase1, pert_raw_phase2, geneinfo = load_l1000_tables(PATHS)
+    compound_lsmids, \
+        compound_deprecated_sample_table, \
+        compound_external_annotations, \
+        compound_lincs_standardized_cmpds = load_compound_metadata_tables(PATHS)
     
     # Process cell info (includes Cellosaurus and donor annotations)
     cellinfo = process_cellinfo(cellinfo_raw)
 
     # Process perturbation metadata
-    pert_raw = process_pert_metadata(pert_raw, inst_raw)
+    pert_raw = process_pert_metadata(pert_raw_phase1, pert_raw_phase2, inst_raw)
 
     # Annotate compounds with PubChem CIDs (optional)
     if CONFIG.get("annotate_pubchem", False):
         logger.info("Mapping compounds to PubChem CIDs")
-        pert_raw = annotate_pubchem_cids(pert_raw, PATHS, config=CONFIG)
+        compound_metadata = process_compound_metadata(compound_lsmids, 
+                                                      compound_external_annotations, 
+                                                      compound_lincs_standardized_cmpds)
+        
+        pert_raw = annotate_pubchem_cids(pert_raw, compound_metadata, PATHS, config=CONFIG)
     
     # Process instance metadata
     inst = process_instance_metadata(inst_raw, cellinfo, pert_raw, CONFIG, PATHS)

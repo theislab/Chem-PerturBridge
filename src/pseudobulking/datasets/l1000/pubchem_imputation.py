@@ -13,10 +13,12 @@ def pubchem_mapping_l1000():
         Dictionary with 'l1000' key containing compound name to PubChem CID mappings
     """
     sm2pubchem = {
-        'l1000': {
-            # Add manual mappings here as needed
-            # Example:
-            # 'BRD-K12345678': 123456,
-        }
+            'l1000': {
+
+                        'BRD-U19872303': 5702243, 
+                        'GNF2': 5311510, 
+                        'CMAP-ERG-AZD2281': 23725625
+                        
+            }
     }
     return sm2pubchem

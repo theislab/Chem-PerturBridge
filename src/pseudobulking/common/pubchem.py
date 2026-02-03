@@ -288,17 +288,18 @@ def lookup_pubchem_cids(df: pd.DataFrame,
                            smiles_col: str = 'canonical_smiles',
                            cache_path: Optional[str] = None,
                            manual_mapping_func: Optional[Callable[[], Dict]] = None,
+                           manual_mapping_by_drug_name: bool = True,
                            dataset_key: Optional[str] = None,
                            request_delay_s: float = 0.2) -> pd.DataFrame:
     """
     Add or update 'pubchem_cid' column in a dataframe.
     
     Uses multiple strategies in order of preference:
-    1. Use existing valid pubchem_cid if present
-    2. Lookup by InChIKey if available and valid
-    3. Lookup by SMILES if available and valid
-    4. Lookup by drug name (perturbagen)
-    5. Use manual mapping from manual_mapping_func (if provided)
+    1. Use manual mapping from manual_mapping_func by pert id or drug name
+    2. Use existing valid pubchem_cid if present
+    3. Lookup by InChIKey if available and valid
+    4. Lookup by SMILES if available and valid
+    5. Lookup by drug name (perturbagen) 
     
     Uses universal cache keys (pert_id or perturbagen) to avoid redundant lookups
     when the same compound is identified by different methods.
@@ -404,7 +405,7 @@ def lookup_pubchem_cids(df: pd.DataFrame,
             cid = cache[universal_key]
             stored_cid = True
         
-        # Strategy 1: Use existing valid pubchem_cid
+        # Strategy 1: Use existing valid pubchem_cid (if CID not found yet)
         if cid is None and pubchem_cid_col in row and is_valid_pubchem_cid(row[pubchem_cid_col]):
             cid = int(row[pubchem_cid_col])
             # Store in universal cache
@@ -423,21 +424,33 @@ def lookup_pubchem_cids(df: pd.DataFrame,
             smiles = str(row[smiles_col]).strip()
             if is_valid_smiles(smiles):
                 cid = get_pubchem_cid_by_smiles(smiles, cache, universal_key)
+
+        # Strategy 4: Manual mapping:
+        if not manual_mapping_by_drug_name:
+            if cid is None and pert_id_col in row and pd.notna(row[pert_id_col]):
+                pert_id = str(row[pert_id_col]).strip()
+                if pert_id in manual_mapping:
+                    cid = manual_mapping[pert_id]
+                    # Store in universal cache
+                    if universal_key:
+                        cache[universal_key] = cid
+                    stored_cid = True
+
+        else:
+            if cid is None and drug_col in row and pd.notna(row[drug_col]):
+                drug_name = str(row[drug_col]).strip()
+                if drug_name in manual_mapping:
+                    cid = manual_mapping[drug_name]
+                    # Store in universal cache
+                    if universal_key:
+                        cache[universal_key] = cid
+                    stored_cid = True
         
-        # Strategy 4: Lookup by drug name (if CID not found yet)
+        # Strategy 5: Lookup by drug name (if CID not found yet)
         if cid is None and drug_col in row and pd.notna(row[drug_col]):
             drug_name = str(row[drug_col]).strip()
             cid = get_pubchem_cid_by_name(drug_name, cache, universal_key)
         
-        # Strategy 5: Manual mapping (if CID not found yet)
-        if cid is None and drug_col in row and pd.notna(row[drug_col]):
-            drug_name = str(row[drug_col]).strip()
-            if drug_name in manual_mapping:
-                cid = manual_mapping[drug_name]
-                # Store in universal cache
-                if universal_key:
-                    cache[universal_key] = cid
-                stored_cid = True
                 
         
         cids.append(cid)

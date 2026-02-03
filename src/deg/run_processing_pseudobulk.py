@@ -26,7 +26,9 @@ def create_perturbation_label(is_control: bool,
                               time: float,
                               well: str,
                               plate: str,
-                              design_param: str) -> str:
+                              design_param: str,
+                              pubchem_cid: Optional[Union[int, float, str]] = None,
+                              use_cid_in_label: bool = False) -> str:
     '''
     Create a perturbation label based on design parameters.
     
@@ -46,26 +48,35 @@ def create_perturbation_label(is_control: bool,
         Plate identifier
     design_param : str
         Design parameter determining label format ('group_all_replicates' or 'separate_replicates')
+    pubchem_cid : optional
+        PubChem CID; used in label only if use_cid_in_label is True and value is valid
+    use_cid_in_label : bool, default=False
+        If True and pubchem_cid is a valid positive integer, include it in the label
         
     Returns:
     --------
     str
         Formatted perturbation label
     '''
+    # Build CID suffix if enabled and valid
+    cid_suffix = ""
+    if use_cid_in_label and pubchem_cid is not None and pd.notna(pubchem_cid):
+        try:
+            # Handle category dtype: convert to underlying value if needed
+            cid_value = pubchem_cid if not hasattr(pubchem_cid, 'item') else pubchem_cid.item()
+            cid_int = int(float(cid_value))
+            if cid_int > 0:
+                cid_suffix = f"_CID{cid_int}"
+        except (ValueError, TypeError):
+            pass
+    
     if is_control:
-        return str(pert) \
-                + '_' + str(time) + 'h'
+        return f"{pert}{cid_suffix}_{time}h"
     else:
         if design_param == 'group_all_replicates':
-            return str(pert) \
-                + '_' + str(dose) \
-                + 'uM_' + str(time) + 'h'
+            return f"{pert}{cid_suffix}_{dose}uM_{time}h"
         elif design_param == 'separate_replicates':
-            return str(pert) \
-                + '_' + str(dose) \
-                + 'uM_' + str(time) + 'h' \
-                + '_' + str(well) \
-                + '_' + str(plate)
+            return f"{pert}{cid_suffix}_{dose}uM_{time}h_{well}_{plate}"
         else:
             raise ValueError(f'Invalid design parameter: {design_param}')
 
@@ -844,7 +855,8 @@ def add_perturbation_label_to_padata(file_input: str,
         file_input=file_input,
         dir_output=dir_output,
         design_param=design_param,
-        split_by_celltype=split_by_celltype
+        split_by_celltype=split_by_celltype,
+        use_pubchem_cid_in_label=False
     )
     processor.process()
 
@@ -896,6 +908,8 @@ class PseudobulkProcessor:
         Post-processing configuration with:
         - processing_functions: dict with 'path' (config file) and 'name' (function key)
         - var_parquet_path: path to var parquet file (dataset-specific)
+    use_pubchem_cid_in_label : bool, default=False
+        If True, includes PubChem CID in perturbation labels when available
     """
     
     def __init__(self,
@@ -904,13 +918,15 @@ class PseudobulkProcessor:
                  design_param: str,
                  split_by_celltype: bool = False,
                  dataset: Optional[str] = None,
-                 post_processing: Optional[dict] = None):
+                 post_processing: Optional[dict] = None,
+                 use_pubchem_cid_in_label: bool = False):
         self.file_input = file_input
         self.dir_output = dir_output
         self.design_param = design_param
         self.split_by_celltype = split_by_celltype
         self.dataset = dataset
         self.post_processing = post_processing or {}
+        self.use_pubchem_cid_in_label = use_pubchem_cid_in_label
         self.padata = None
     
     def read_data(self) -> None:
@@ -1018,6 +1034,8 @@ class PseudobulkProcessor:
         if obs['pert_dose_uM'].apply(lambda x: has_more_than_decimals(x)).any():
             obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: normalize_number(x))
 
+        has_cid = 'pubchem_cid' in obs.columns
+
         self.padata.obs['perturbation_label'] = obs.apply(
             lambda x: create_perturbation_label(
                 x.is_control,
@@ -1026,7 +1044,9 @@ class PseudobulkProcessor:
                 x.pert_time_h,
                 x.well,
                 x.plate,
-                self.design_param
+                self.design_param,
+                pubchem_cid=x.get('pubchem_cid', None) if has_cid else None,
+                use_cid_in_label=self.use_pubchem_cid_in_label,
             ), axis=1
         ).astype("category")
     
@@ -1082,6 +1102,9 @@ def main():
         Default: False
     --dataset : str, optional
         Dataset name for dataset-specific processing (e.g., 'l1000', 'tahoe')
+    --use_pubchem_cid_in_label : bool, optional
+        If set, includes PubChem CID in perturbation labels when available.
+        Default: False
     
     Configuration File:
     -------------------
@@ -1114,6 +1137,7 @@ def main():
                                                    'separate_replicates'])
     parser.add_argument('--split_by_celltype', action='store_true', default=False)
     parser.add_argument('--dataset', type=str, default=None)
+    parser.add_argument('--use_pubchem_cid_in_label', action='store_true', default=False)
     args = parser.parse_args()
     d_args = vars(args).copy()
     del d_args['config']
@@ -1134,7 +1158,8 @@ def main():
         design_param=d_args['design_param'],
         split_by_celltype=d_args.get('split_by_celltype', False),
         dataset=d_args.get('dataset'),
-        post_processing=d_args.get('post_processing')
+        post_processing=d_args.get('post_processing'),
+        use_pubchem_cid_in_label=d_args.get('use_pubchem_cid_in_label', False)
     )
     processor.process()
 
