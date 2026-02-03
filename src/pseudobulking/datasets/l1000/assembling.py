@@ -215,7 +215,8 @@ def get_compound_metadata_download_manifest(data_root: Path) -> pd.DataFrame:
 
     Returns a DataFrame with download information for:
     - SampleTable_LincsID2FacilityID2CenterBatchID_LINCS_StandardizedCmpds_LSMIDs.txt
-    - DeprecatedSampleTableWxpg.txt
+    - CompoundTable_ExternalAnnotations_LSMIDs.txt
+    - CompoundTable_LINCS_StandardizedCmpds_LSMIDs.txt
 
     Parameters
     ----------
@@ -237,13 +238,6 @@ def get_compound_metadata_download_manifest(data_root: Path) -> pd.DataFrame:
             "size": "~few MB",
             "url": f"{base_url}?path={path_param}&file=SampleTable_LincsID2FacilityID2CenterBatchID_LINCS_StandardizedCmpds_LSMIDs.txt",
             "notes": "LincsID to FacilityID/CenterBatchID, standardized compounds (LSMIDs)",
-        },
-        {
-            "file": "DeprecatedSampleTableWxpg.txt",
-            "kind": "metadata",
-            "size": "~few MB",
-            "url": f"{base_url}?path={path_param}&file=DeprecatedSampleTableWxpg.txt",
-            "notes": "Deprecated sample table",
         },
         {
             "file": "CompoundTable_ExternalAnnotations_LSMIDs.txt",
@@ -313,9 +307,8 @@ def download_from_manifest(
             continue
         size_str = row.get("size", "")
         logger.info(f"  Downloading {row['file']} ({size_str})...")
-        cmd = f"curl -L '{row['url']}' -o {file_path}"
         try:
-            subprocess.run(cmd, shell=True, check=True)
+            subprocess.run(["curl", "-L", row["url"], "-o", str(file_path)], check=True)
             logger.info(f"    Downloaded {row['file']}")
         except subprocess.CalledProcessError as e:
             logger.error(f"    Failed to download {row['file']}: {e}")
@@ -335,7 +328,8 @@ def download_files(data_root: str, dataset: str = "l1000_phase1", skip_existing:
     - Perturbagen metadata
     - Gene annotations
     - SampleTable_LincsID2FacilityID2CenterBatchID_LINCS_StandardizedCmpds_LSMIDs.txt
-    - DeprecatedSampleTableWxpg.txt
+    - CompoundTable_ExternalAnnotations_LSMIDs.txt
+    - CompoundTable_LINCS_StandardizedCmpds_LSMIDs.txt
 
     Parameters
     ----------
@@ -840,7 +834,12 @@ def build_obs_dataframe(inst: pd.DataFrame, dataset: str = "l1000_phase1") -> pd
     # Build standard obs columns
     obs["plate"] = inst.get("det_plate", None)
     obs["well"] = inst.get("rna_well", inst.get("det_well", None))
-    obs["cell_type"] = inst.get("cellinfo_cell_id_mixed", inst.get("cell_id", None)).fillna(inst.get("cell_id", None))
+    cell_id_series = inst.get("cell_id")
+    cell_mixed = inst.get("cellinfo_cell_id_mixed")
+    if cell_mixed is not None:
+        obs["cell_type"] = cell_mixed.fillna(cell_id_series)
+    else:
+        obs["cell_type"] = cell_id_series
     obs["perturbagen"] = inst.get("pert_iname", None)
     if 'pert_type' in inst.columns:
         obs["pert_type"] = inst["pert_type"].map(PERT_TYPE_MAP)
@@ -1076,14 +1075,14 @@ def define_compound_metadata_paths(data_root: Optional[str] = None) -> dict:
     Returns
     -------
     dict
-        Dictionary with keys: compound_lsmids, compound_deprecated_sample_table
+        Dictionary with keys: compound_lsmids, compound_external_annotations,
+        compound_lincs_standardized_cmpds
     """
     if data_root is None:
         data_root = "./lincs_data"
     data_root = Path(data_root)
     return {
         "compound_lsmids": data_root / "SampleTable_LincsID2FacilityID2CenterBatchID_LINCS_StandardizedCmpds_LSMIDs.txt",
-        "compound_deprecated_sample_table": data_root / "DeprecatedSampleTableWxpg.txt",
         "compound_external_annotations": data_root / "CompoundTable_ExternalAnnotations_LSMIDs.txt",
         "compound_lincs_standardized_cmpds": data_root / "CompoundTable_LINCS_StandardizedCmpds_LSMIDs.txt",
     }
@@ -1111,7 +1110,7 @@ def define_l1000_paths(data_root: Optional[str] = None, dataset: str = "l1000_ph
     
     data_root = Path(data_root)
     processed_dir = data_root / "processed"
-    processed_dir.mkdir(exist_ok=True)
+    processed_dir.mkdir(parents=True, exist_ok=True)
 
     common_paths = {
             "pubchem_cache": processed_dir / "pubchem_cache.json",

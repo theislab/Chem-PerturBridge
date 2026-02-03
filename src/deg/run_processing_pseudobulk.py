@@ -75,7 +75,8 @@ def create_dir_if_not_exists(file_output: str) -> None:
         Path to the output file
     '''
     dir_output = os.path.dirname(file_output)
-    os.makedirs(dir_output, exist_ok=True)
+    if dir_output:
+        os.makedirs(dir_output, exist_ok=True)
 
 
 def save_read(file_input: str, 
@@ -1045,11 +1046,11 @@ class PseudobulkProcessor:
 
         logger.info('Add perturbation label')
         obs = self.padata.obs.copy()
-        obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: format(x, ".15g"))
-        obs['pert_time_h'] = obs['pert_time_h'].apply(lambda x: format(x, ".15g"))
+        obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: format(x, ".15g") if pd.notna(x) else x)
+        obs['pert_time_h'] = obs['pert_time_h'].apply(lambda x: format(x, ".15g") if pd.notna(x) else x)
         
-        if obs['pert_dose_uM'].apply(lambda x: has_more_than_decimals(x)).any():
-            obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: normalize_number(x))
+        if obs['pert_dose_uM'].apply(lambda x: has_more_than_decimals(x) if pd.notna(x) else False).any():
+            obs['pert_dose_uM'] = obs['pert_dose_uM'].apply(lambda x: normalize_number(x) if pd.notna(x) else x)
 
         self.padata.obs.loc[:, 'perturbation_label'] = obs.apply(
             lambda x: create_perturbation_label(

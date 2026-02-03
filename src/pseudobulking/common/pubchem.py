@@ -295,11 +295,12 @@ def lookup_pubchem_cids(df: pd.DataFrame,
     Add or update 'pubchem_cid' column in a dataframe.
     
     Uses multiple strategies in order of preference:
-    1. Use manual mapping from manual_mapping_func by pert id or drug name
+    1. Use universal cache key (pert_id or perturbagen) if present
     2. Use existing valid pubchem_cid if present
     3. Lookup by InChIKey if available and valid
     4. Lookup by SMILES if available and valid
-    5. Lookup by drug name (perturbagen) 
+    5. Use manual mapping from manual_mapping_func by pert id or drug name
+    6. Lookup by drug name (perturbagen) 
     
     Uses universal cache keys (pert_id or perturbagen) to avoid redundant lookups
     when the same compound is identified by different methods.
@@ -332,7 +333,7 @@ def lookup_pubchem_cids(df: pd.DataFrame,
     dataset_key : Optional[str], default=None
         Key to extract from the dict returned by manual_mapping_func if it returns
         a nested dict structure. If None and manual_mapping_func returns a nested dict,
-        defaults to 'l1000' for backward compatibility.
+        uses the first dataset in that mapping.
     request_delay_s : float, default=0.2
         Delay in seconds at the end of each compound iteration (fair-use throttling).
         
@@ -341,17 +342,17 @@ def lookup_pubchem_cids(df: pd.DataFrame,
     pd.DataFrame
         DataFrame with updated pubchem_cid column
     """
-    df = df.copy()
-
+    
     if df is None:
         raise Exception("The pseudobulk dataset is empty")
     
-    
+    df = df.copy()
     # Load cache from file if path is provided
     if cache_path:
         file_cache = load_cache_from_json(cache_path)
-        # Merge file cache with provided cache (provided cache takes precedence)
-        cache.update(file_cache)
+        merged_cache = {**file_cache, **cache}.copy()
+        cache.clear()
+        cache.update(merged_cache)
     
     # Initialize pubchem_cid column if it doesn't exist
     if pubchem_cid_col not in df.columns:
@@ -367,7 +368,8 @@ def lookup_pubchem_cids(df: pd.DataFrame,
                 manual_mapping = sm2pubchem.get(dataset_key, {})
             elif len(sm2pubchem) == 1:
                 # If single key, use it automatically
-                manual_mapping = list(sm2pubchem.values())[0]
+                only_value = list(sm2pubchem.values())[0]
+                manual_mapping = only_value if isinstance(only_value, dict) else sm2pubchem
             else:
                 # Check if it's a nested dict (values are dicts) or flat dict (values are ints)
                 first_value = list(sm2pubchem.values())[0] if sm2pubchem else None
