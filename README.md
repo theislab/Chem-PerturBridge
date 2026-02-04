@@ -20,7 +20,7 @@ The licences of the datasets used in this project are provided by their source:
 
 - **Sci-Plex** – [scPerturb Single-Cell Perturbation Data](https://zenodo.org/records/13350497) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=scPerturb)
 - **Tahoe** - [Arc Virtual Cell Atlas](https://arcinstitute.org/tools/virtualcellatlas) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=Tahoe-100M)
-- **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS).
+- **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS); small-molecule annotations from the [LINCS Data Portal](https://lincsportal.ccs.miami.edu/dcic-portal/#/terms) were used.
 - **OP3** - [Open Problems Perturbation Prediction dataset](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945)
 
 # Quick start guide
@@ -139,6 +139,7 @@ You can execute it with following arguments:
 ```
 -s if this flag is included, then the script is executed for a subsample of a dataset, default=false
 -j if this flag is included, then the script is executed in parallel mode (array jobs per cell type), default=false
+-g Use GPU QOS/partition (gpu_normal/gpu_p), default=CPU
 -h if this flag is included, then the help is printed, default=false
 -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
 -q if this flag is included, then samples that did not pass quality control are filtered out, default=false
@@ -146,19 +147,25 @@ You can execute it with following arguments:
 -d it is a required flag specifying which dataset should be processed: sciplex | tahoe | l1000_phase1 | l1000_phase2
 -p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
 ```
+**NB!** The -g option was added to make it possible to distribute DEG calculations across a larger number of nodes.
 
-For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode you need to run:
+For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode on the CPU nodes you need to run:
 ```
 cd /op3_v2
 ./run_pipelines/run_deg.sh -s -j -d sciplex -p group_all_replicates
 ```
 
-For a normalized dataset (e.g. L1000) with separate_replicates parameter:
+For a **normalized dataset** (e.g. L1000) with separate_replicates parameter on the CPU nodes:
 ```
 cd /op3_v2
 ./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n
 ```
 
+For a **normalized dataset** (e.g. L1000) with separate_replicates parameter on the GPU nodes:
+```
+cd /op3_v2
+./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n -g
+```
 ### 4. Aggregate logs
 
 After running pipelines, aggregate scattered log files into combined logs for easier review.
