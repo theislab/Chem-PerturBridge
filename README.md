@@ -23,6 +23,16 @@ The licences of the datasets used in this project are provided by their source:
 - **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS); small-molecule annotations from the [LINCS Data Portal](https://lincsportal.ccs.miami.edu/dcic-portal/#/terms) were used.
 - **OP3** - [Open Problems Perturbation Prediction dataset](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945)
 
+The terms of use/license for each database used for annotations are defined by its original data provider:
+
+- **PubChem** - [NCBI](https://www.ncbi.nlm.nih.gov/home/about/policies/)
+- **NCBI datasets** - [NCBI](https://www.ncbi.nlm.nih.gov/home/about/policies/)
+- **Cellosaurus** - [Cellosaurus database](https://www.ncbi.nlm.nih.gov/home/about/policies/)
+- **OLS4** - [EMBL-EBI Data Resources and Tools](https://www.ebi.ac.uk/about/terms-of-use/)
+- **HGNC** - [HGNC resources](https://www.genenames.org/about/license/)
+- **Ensembl** - [Ensembl data](https://www.ensembl.org/info/about/legal/disclaimer.html)
+
+
 # Quick start guide
 You can run scripts on the HPC cluster with the workload manager (SLURM)
 
