@@ -997,33 +997,26 @@ class PseudobulkProcessor:
 
     def combine_perturbagen_pubchem_cid(self) -> None:
         """Step 4: Combine perturbagen and PubChem CID."""
-        def merge_columns_content(
-            perturbagen: Optional[str],
-            pubchem_cid: Optional[Union[int, float, str]]
-        ) -> str:
-            # Build CID suffix if enabled and valid
-            cid_suffix = ""
-            if pubchem_cid is not None and pd.notna(pubchem_cid):
-                try:
-                    # Handle category dtype: convert to underlying value if needed
-                    cid_value = pubchem_cid if not hasattr(pubchem_cid, 'item') else pubchem_cid.item()
-                    cid_int = int(float(cid_value))
-                    if cid_int > 0:
-                        cid_suffix = f"_CID{cid_int}"
-                except (ValueError, TypeError):
-                    pass
-            return str(perturbagen) + cid_suffix
 
         logger.info('Combine perturbagen and PubChem CID')
-        has_cid = 'pubchem_cid' in self.padata.obs.columns
         obs = self.padata.obs.copy()
-        combined = obs.apply(
-            lambda x: merge_columns_content(
-                x.perturbagen,
-                pubchem_cid=x.get('pubchem_cid', None) if has_cid else None
-            ), axis=1
-        )
-        self.padata.obs['perturbagen'] = pd.Categorical(combined)
+        obs['perturbagen_name'] = obs['perturbagen'].copy()
+        obs = obs.drop(columns=['perturbagen'])
+
+        pert_col = obs["perturbagen_name"]
+        cid_col = obs["pubchem_cid"]
+
+        if not pd.api.types.is_categorical_dtype(pert_col):
+            pert_col = pert_col.astype('category')
+        if not pd.api.types.is_categorical_dtype(cid_col):
+            cid_col = cid_col.astype('category')
+
+        pert_cid_cat = pert_col.cat.categories.union(cid_col.cat.categories)
+
+        obs["perturbagen"] = cid_col.cat.set_categories(pert_cid_cat).fillna(pert_col.cat.set_categories(pert_cid_cat))
+        
+        self.padata.obs['perturbagen'] = obs['perturbagen'].astype('category').copy()
+        self.padata.obs['perturbagen_name'] = obs['perturbagen_name'].astype('category').copy()
 
     def add_perturbation_labels(self) -> None:
         """Step 5: Add perturbation labels."""
