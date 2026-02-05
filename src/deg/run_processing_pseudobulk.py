@@ -1003,20 +1003,14 @@ class PseudobulkProcessor:
         obs['perturbagen_name'] = obs['perturbagen'].copy()
         obs = obs.drop(columns=['perturbagen'])
 
-        pert_col = obs["perturbagen_name"]
-        cid_col = obs["pubchem_cid"]
+        cid_col = obs["pubchem_cid"].astype(object).map(lambda x: str(int(x)) if pd.notna(x) and int(x) > 0 else x)
+        pert_col = obs["perturbagen_name"].astype(object)
+        obs["perturbagen"] = cid_col.fillna(pert_col).map(lambda x: str(x) if pd.notna(x) else x).astype('category')
 
-        if not pd.api.types.is_categorical_dtype(pert_col):
-            pert_col = pert_col.astype('category')
-        if not pd.api.types.is_categorical_dtype(cid_col):
-            cid_col = cid_col.astype('category')
-
-        pert_cid_cat = pert_col.cat.categories.union(cid_col.cat.categories)
-
-        obs["perturbagen"] = cid_col.cat.set_categories(pert_cid_cat).fillna(pert_col.cat.set_categories(pert_cid_cat))
+        # Categorical with string categories only (so h5ad write succeeds)
+        self.padata.obs['perturbagen_name'] = self.padata.obs['perturbagen'].copy()
+        self.padata.obs['perturbagen'] = obs['perturbagen']
         
-        self.padata.obs['perturbagen'] = obs['perturbagen'].astype('category').copy()
-        self.padata.obs['perturbagen_name'] = obs['perturbagen_name'].astype('category').copy()
 
     def add_perturbation_labels(self) -> None:
         """Step 5: Add perturbation labels."""
