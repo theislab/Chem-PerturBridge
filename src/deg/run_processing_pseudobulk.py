@@ -1,4 +1,5 @@
 import os
+import shutil
 import json
 import time
 import fcntl
@@ -19,6 +20,10 @@ MAX_ALLOWED_EXCESS = 200  # Maximum allowed excess over MAX_N_NON_CONTROL_OBS
 
 MIN_N_PERTURBAGENS = 500
 RANDOM_SEED = 0
+
+TMP_DIR = 'tmp'
+TMP_FILE = 'file_tmp.h5ad'
+BY_CELLTYPE_DIR = 'by_celltype'
 
 def create_perturbation_label(is_control: bool, 
                               pert: str, 
@@ -167,28 +172,6 @@ def calculate_perturbagen_info(non_controls: ad.AnnData,
             'data': pert_data
         }
     return perturbagen_info
-
-
-def get_control_info(controls: Optional[ad.AnnData]) -> Tuple[int, int]:
-    '''
-    Extract control observation and label counts.
-    
-    Parameters:
-    -----------
-    controls : Optional[ad.AnnData]
-        Control observations
-        
-    Returns:
-    --------
-    Tuple[int, int]
-        (ctl_n_obs, ctl_n_labels)
-    '''
-    if (controls is not None) and (controls.n_obs > 0):
-        return controls.n_obs, controls.obs['perturbation_label'].nunique()
-    return 0, 0
-
-
-
 
 
 
@@ -422,7 +405,6 @@ def pad_batches(batches: list,
     '''
     
     perturbagen_info = calculate_perturbagen_info(non_controls, unique_perturbagens)
-    ctl_n_obs, ctl_n_labels = get_control_info(controls)
     
     if len(batches) > 1:
         cnt = 0
@@ -716,17 +698,20 @@ def save_by_celltype(padata: ad.AnnData,
                      dir_output: str) -> None:
     '''
     Save pseudobulk data split by cell type.
-    
-    Splits the pseudobulk data by cell type and processes each cell type separately.
-    For each cell type, checks if matrix size exceeds limits and batches if necessary.
-    Files are saved in dir_output/by_celltype/ directory.
-    
+
+    Splits the pseudobulk data by cell type and processes each cell type
+    separately. For each cell type, checks if non-control n_obs exceeds
+    MAX_N_NON_CONTROL_OBS and, if so, batches using a Best Fit algorithm.
+    Files are written to dir_output/tmp/ (one subdir per cell type). The
+    caller is responsible for moving tmp/ to the final location (e.g. via
+    rename_tmps() to dir_output/by_celltype/).
+
     Parameters:
     -----------
     padata : ad.AnnData
-        Pseudobulk AnnData object
+        Pseudobulk AnnData object (must have obs['cell_type']).
     dir_output : str
-        Output directory path. Cell type files are saved in dir_output/by_celltype/
+        Output directory path. Cell type files are saved in dir_output/tmp/
         
     Returns:
     --------
@@ -737,14 +722,14 @@ def save_by_celltype(padata: ad.AnnData,
     Raises:
     -------
     ValueError
-        If no valid cell types are found for splitting
+        If no valid cell types are found for splitting.
     '''
 
-    celltype_dir = os.path.join(dir_output, 'by_celltype')
+    celltype_dir = os.path.join(dir_output, TMP_DIR)
     os.makedirs(celltype_dir, exist_ok=True)
     
     cell_types = padata.obs['cell_type'].unique()
-    cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) or not np.isnan(ct))]
+    cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) and not pd.isna(ct))]
     cell_types = sorted(cell_types)
     
     if len(cell_types) == 0:
@@ -764,10 +749,11 @@ def save_by_celltype(padata: ad.AnnData,
 
 def check_output_files_exist(file_input: str,
                              dir_output: str,
-                             split_by_celltype: bool = False) -> bool:
+                             split_by_celltype: bool = False,
+                             expected_celltype_subdir_names: Optional[set] = None) -> bool:
     '''
     Check if output files already exist.
-    
+
     Parameters:
     -----------
     file_input : str
@@ -776,7 +762,10 @@ def check_output_files_exist(file_input: str,
         Output directory path
     split_by_celltype : bool, default=False
         Whether output is split by cell type
-        
+    expected_celltype_subdir_names : set, optional
+        If provided and split_by_celltype is True, by_celltype subdir names must
+        match this set exactly and each subdir must contain at least one .h5ad file.
+
     Returns:
     --------
     bool
@@ -784,26 +773,98 @@ def check_output_files_exist(file_input: str,
     '''
     # Check main output file
     file_output = get_output_path_combined(file_input, dir_output)
-    if not os.path.exists(file_output):
+    if (not os.path.exists(file_output)):
         return False
     
-    # If split_by_celltype, check if by_celltype directory exists and has files
+    # If split_by_celltype, require non-empty per-celltype outputs
     if split_by_celltype:
-        celltype_dir = os.path.join(dir_output, 'by_celltype')
-        if not os.path.exists(celltype_dir):
+        if not has_valid_by_celltype_outputs(dir_output, expected_celltype_subdir_names):
             return False
-        
-        # Check if there are any .h5ad files in by_celltype subdirectories
-        h5ad_files = []
-        for item in os.listdir(celltype_dir):
-            item_path = os.path.join(celltype_dir, item)
-            if os.path.isdir(item_path):
-                h5ad_files.extend([f for f in os.listdir(item_path) if f.endswith('.h5ad')])
-        if len(h5ad_files) == 0:
-            return False
-        
-    
     return True
+
+
+def has_valid_by_celltype_outputs(dir_output: str,
+                                  expected_celltype_subdir_names: Optional[set] = None) -> bool:
+    """
+    Validate by-celltype output structure.
+
+    Requires:
+    - dir_output/by_celltype exists and is a directory
+    - if expected_celltype_subdir_names is provided, subdirectory names match it exactly
+    - each cell-type subdirectory contains at least one .h5ad file
+    """
+    celltype_dir = os.path.join(dir_output, BY_CELLTYPE_DIR)
+    if not os.path.isdir(celltype_dir):
+        return False
+
+    actual_dirs = {
+        name for name in os.listdir(celltype_dir)
+        if os.path.isdir(os.path.join(celltype_dir, name))
+    }
+    if (expected_celltype_subdir_names is not None) and (expected_celltype_subdir_names != actual_dirs):
+        return False
+
+    for dirname in actual_dirs:
+        subdir = os.path.join(celltype_dir, dirname)
+        has_h5ad = any(name.endswith('.h5ad') for name in os.listdir(subdir))
+        if not has_h5ad:
+            return False
+
+    return True
+
+
+def remove_tmps(dir_output: str) -> None:
+    '''
+    Remove temporary artifacts from dir_output: the tmp folder and file_tmp.h5ad.
+    Skips silently if either does not exist.
+
+    Parameters:
+    -----------
+    dir_output : str
+        Output directory path
+    '''
+    tmp_dir = os.path.join(dir_output, TMP_DIR)
+    if os.path.isdir(tmp_dir):
+        shutil.rmtree(tmp_dir)
+
+    tmp_file = os.path.join(dir_output, TMP_FILE)
+    if os.path.isfile(tmp_file):
+        os.remove(tmp_file)
+
+
+def rename_tmps(file_input: str,
+                dir_output: str,
+                split_by_celltype: bool = False) -> None:
+    '''
+    Move temporary artifacts to their final paths (like `mv`).
+
+    Moves dir_output/file_tmp.h5ad to dir_output/{basename}_processed.h5ad.
+    If split_by_celltype is True, moves dir_output/tmp to dir_output/by_celltype.
+    Uses shutil.move(); raises FileNotFoundError if a source does not exist.
+
+    Parameters:
+    -----------
+    file_input : str
+        Path to the input file (used to derive output basename)
+    dir_output : str
+        Output directory path
+    split_by_celltype : bool, default=False
+        If True, move tmp dir to by_celltype; otherwise only move the tmp file.
+    '''
+    tmp_file = os.path.join(dir_output, TMP_FILE)
+    if os.path.isfile(tmp_file):
+        dst_file = get_output_path_combined(file_input, dir_output)
+        shutil.move(tmp_file, dst_file)
+    else:
+        raise FileNotFoundError(f'Temporary file {tmp_file} not found')
+
+    if split_by_celltype:
+        tmp_dir = os.path.join(dir_output, TMP_DIR)
+        if os.path.isdir(tmp_dir):
+            celltype_dir = os.path.join(dir_output, BY_CELLTYPE_DIR)
+            shutil.move(tmp_dir, celltype_dir)
+        else:
+            raise FileNotFoundError(f'Temporary directory {tmp_dir} not found')
 
 
 def add_perturbation_label_to_padata(file_input: str,
@@ -967,7 +1028,11 @@ class PseudobulkProcessor:
         return processing_func
     
     def apply_dataset_processing(self) -> None:
-        """Step 2: Apply dataset-specific processing (if needed)."""
+        """
+        Step 2: Apply dataset-specific processing (if configured).
+
+        self.padata is replaced by the return value of the processing function.
+        """
         processing_funcs = self.post_processing.get('processing_functions')
         
         if not processing_funcs:
@@ -1052,22 +1117,45 @@ class PseudobulkProcessor:
     def save_data(self) -> None:
         """Step 6: Save processed data."""
         logger.info('Save data')
-        file_output = get_output_path_combined(self.file_input, self.dir_output)
+        file_output = os.path.join(self.dir_output, TMP_FILE)
         save_single_file(self.padata, file_output)
     
     def save_splitted_data(self) -> None:
         """Step 7: Split by cell type (if needed)."""
         if self.split_by_celltype:
             save_by_celltype(self.padata, self.dir_output)
+
+    def _check_output_files_exist(self,
+                                  expected_celltype_subdir_names: Optional[set] = None) -> bool:
+        """Check if output files already exist (delegates to module-level function)."""
+        return check_output_files_exist(self.file_input,
+                                        self.dir_output,
+                                        self.split_by_celltype,
+                                        expected_celltype_subdir_names)
+
+    def _remove_tmps(self) -> None:
+        """Remove temporary artifacts from dir_output (delegates to module-level function)."""
+        remove_tmps(self.dir_output)
+
+    def _rename_tmps(self) -> None:
+        """Move temporary artifacts to final paths (delegates to module-level function)."""
+        rename_tmps(self.file_input, self.dir_output, self.split_by_celltype)
     
     def process(self) -> None:
         """Run the complete processing pipeline sequentially."""
-        if check_output_files_exist(self.file_input, self.dir_output, 
-                                   self.split_by_celltype):
+        self._remove_tmps()
+        self.read_data()
+
+        expected_celltype_subdir_names = None
+        if self.split_by_celltype:
+            cell_types = self.padata.obs['cell_type'].unique()
+            cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) and not pd.isna(ct))]
+            expected_celltype_subdir_names = {sanitize_celltype_name(ct) for ct in sorted(cell_types)}
+
+        if self._check_output_files_exist(expected_celltype_subdir_names):
             logger.info('Output files already exist, skipping processing')
             return
-        
-        self.read_data()
+
         self.apply_dataset_processing()
         self.map_ensemble_ids()
         if self.use_pubchem_cid_in_label:
@@ -1075,6 +1163,7 @@ class PseudobulkProcessor:
         self.add_perturbation_labels()
         self.save_data()
         self.save_splitted_data()
+        self._rename_tmps()
 
 
 def main():
