@@ -178,9 +178,8 @@ def summarize_results(results: List[Dict[str, Any]],
             if len(item['possible_replacement']) != 0:
                 if verbose:
                     logger.warning(f"Warning, there are replacements {item['possible_replacement']} for existing ENS_ID {item['id']}")
-            else:
-                mapping[item['id']] = item['id']
-                cnt_current += 1
+            mapping[item['id']] = item['id']
+            cnt_current += 1
         else:
             reps = item['possible_replacement']
             if not reps:
