@@ -957,6 +957,11 @@ class PseudobulkProcessor:
         - var_parquet_path: path to var parquet file (dataset-specific)
     use_pubchem_cid_in_label : bool, default=False
         If True, includes PubChem CID in perturbation labels when available
+    check_by_celltype_content : bool, default=False
+        If True and split_by_celltype is True, validates that dir_output/by_celltype
+        subdirectory names match the current run's cell types (requires reading
+        input before the existence check). If False, only checks that by_celltype
+        exists and each subdir has at least one .h5ad.
     """
     
     def __init__(self,
@@ -966,7 +971,8 @@ class PseudobulkProcessor:
                  split_by_celltype: bool = False,
                  dataset: Optional[str] = None,
                  post_processing: Optional[dict] = None,
-                 use_pubchem_cid_in_label: bool = False):
+                 use_pubchem_cid_in_label: bool = False,
+                 check_by_celltype_content: bool = False):
         self.file_input = file_input
         self.dir_output = dir_output
         self.design_param = design_param
@@ -974,6 +980,7 @@ class PseudobulkProcessor:
         self.dataset = dataset
         self.post_processing = post_processing or {}
         self.use_pubchem_cid_in_label = use_pubchem_cid_in_label
+        self.check_by_celltype_content = check_by_celltype_content
         self.padata = None
     
     def read_data(self) -> None:
@@ -1055,9 +1062,9 @@ class PseudobulkProcessor:
             kwargs = {k: v for k, v in self.post_processing.items() if k != 'processing_functions'}
             self.padata = processing_func(self.padata, **kwargs)
     
-    def map_ensemble_ids(self) -> None:
+    def map_ensembl_ids(self) -> None:
         """Step 3: Map Ensembl IDs to current/replacement IDs."""
-        logger.info('Map ensemble IDs to current/replacement IDs')
+        logger.info('Map ensembl IDs to current/replacement IDs')
         self.padata = map_ensembl_ids_for_dataset(self.padata)
 
     def combine_perturbagen_pubchem_cid(self) -> None:
@@ -1144,10 +1151,10 @@ class PseudobulkProcessor:
     def process(self) -> None:
         """Run the complete processing pipeline sequentially."""
         self._remove_tmps()
-        self.read_data()
 
         expected_celltype_subdir_names = None
-        if self.split_by_celltype:
+        if self.split_by_celltype and self.check_by_celltype_content:
+            self.read_data()
             cell_types = self.padata.obs['cell_type'].unique()
             cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) and not pd.isna(ct))]
             expected_celltype_subdir_names = {sanitize_celltype_name(ct) for ct in sorted(cell_types)}
@@ -1156,8 +1163,10 @@ class PseudobulkProcessor:
             logger.info('Output files already exist, skipping processing')
             return
 
+        if not (self.split_by_celltype and self.check_by_celltype_content):
+            self.read_data()
         self.apply_dataset_processing()
-        self.map_ensemble_ids()
+        self.map_ensembl_ids()
         if self.use_pubchem_cid_in_label:
             self.combine_perturbagen_pubchem_cid()
         self.add_perturbation_labels()
@@ -1195,6 +1204,10 @@ def main():
     --use_pubchem_cid_in_label : bool, optional
         If set, includes PubChem CID in perturbation labels when available.
         Default: False
+    --check_by_celltype_content : bool, optional
+        If set and --split_by_celltype is used, validates that by_celltype
+        subdir names match the current run's cell types (reads input before
+        checking). Default: False.
     
     Configuration File:
     -------------------
@@ -1228,6 +1241,7 @@ def main():
     parser.add_argument('--split_by_celltype', action='store_true', default=False)
     parser.add_argument('--dataset', type=str, default=None)
     parser.add_argument('--use_pubchem_cid_in_label', action='store_true', default=False)
+    parser.add_argument('--check_by_celltype_content', action='store_true', default=False)
     args = parser.parse_args()
     d_args = vars(args).copy()
     del d_args['config']
@@ -1249,7 +1263,8 @@ def main():
         split_by_celltype=d_args.get('split_by_celltype', False),
         dataset=d_args.get('dataset'),
         post_processing=d_args.get('post_processing'),
-        use_pubchem_cid_in_label=d_args.get('use_pubchem_cid_in_label', False)
+        use_pubchem_cid_in_label=d_args.get('use_pubchem_cid_in_label', False),
+        check_by_celltype_content=d_args.get('check_by_celltype_content', False)
     )
     processor.process()
 
