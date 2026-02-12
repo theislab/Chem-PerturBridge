@@ -9,10 +9,14 @@
 		  "pubchem_mapping": {
 			  "module": "src.pseudobulking.datasets.tahoe.pubchem_imputation",
 			  "func": "pubchem_mapping_tahoe"
+		  	},
+		  "post_processing": {
+			  "module": "src.pseudobulking.datasets.tahoe.post_processing",
+			  "func": "process_tahoe_dataset"
 		  	}
 
 		 },
-        "sciplex": {
+    "sciplex": {
 		"standardize_dataset": {
                             "module": "src.pseudobulking.datasets.sciplex.standardization",
                             "func": "standardize_sciplex"

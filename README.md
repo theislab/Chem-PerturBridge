@@ -2,7 +2,7 @@
 
 **OP3_v2** is a set of pipelines for analyzing single-cell RNA sequencing data from perturbation experiments. 
 
-The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234) (**Sci-Plex3**) and [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full) datasets.
+The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234) (**Sci-Plex3**), [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full), and [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0) datasets.
 
 It consists of the following steps:
 
@@ -20,8 +20,18 @@ The licences of the datasets used in this project are provided by their source:
 
 - **Sci-Plex** – [scPerturb Single-Cell Perturbation Data](https://zenodo.org/records/13350497) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=scPerturb)
 - **Tahoe** - [Arc Virtual Cell Atlas](https://arcinstitute.org/tools/virtualcellatlas) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=Tahoe-100M)
-- **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS).
+- **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS); small-molecule annotations from the [LINCS Data Portal](https://lincsportal.ccs.miami.edu/dcic-portal/#/terms) were used.
 - **OP3** - [Open Problems Perturbation Prediction dataset](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945)
+
+The terms of use/license for each database used for annotations are defined by its original data provider:
+
+- **PubChem** - [NCBI](https://www.ncbi.nlm.nih.gov/home/about/policies/)
+- **NCBI datasets** - [NCBI](https://www.ncbi.nlm.nih.gov/home/about/policies/)
+- **Cellosaurus** - [Cellosaurus database](https://www.ncbi.nlm.nih.gov/home/about/policies/)
+- **OLS4** - [EMBL-EBI Data Resources and Tools](https://www.ebi.ac.uk/about/terms-of-use/)
+- **HGNC** - [HGNC resources](https://www.genenames.org/about/license/)
+- **Ensembl** - [Ensembl data](https://www.ensembl.org/info/about/legal/disclaimer.html)
+
 
 # Quick start guide
 You can run scripts on the HPC cluster with the workload manager (SLURM)
@@ -119,7 +129,7 @@ You can execute it with following arguments:
 ```
 -s if this flag is included, then the script is executed for a subsample of a dataset, default=false
 -h if this flag is included, then the help is printed, default=false
--d it is a required flag speifying which dataset should be processed: sciplex | tahoe ...
+-d it is a required flag speifying which dataset should be processed: sciplex | tahoe | l1000_phase1 | l1000_phase2
 ```
 
 For example, for subsample of Sci-Plex dataset, you need to run:
@@ -130,20 +140,70 @@ cd /op3_v2
 
 **3.2** To start a SLURM-based DGE (Differential Gene Expression) pipeline, you need to execute a wrapper script (`./run_pipelines/run_deg.sh`), which allows to run dataset-specific DGE pipelines:
 
+The DEG pipeline consists of three main steps:
+1. **Preprocessing**: Processes pseudobulk data and adds perturbation labels (`run_processing_pseudobulk.py`)
+2. **DGE Analysis**: Performs differential gene expression analysis using limma/edgeR (`run_deg.R`)
+3. **Aggregation**: Aggregates batched results into final output files (`aggregating_deg.py`)
+
 You can execute it with following arguments:
 ```
 -s if this flag is included, then the script is executed for a subsample of a dataset, default=false
 -j if this flag is included, then the script is executed in parallel mode (array jobs per cell type), default=false
+-g Use GPU QOS/partition (gpu_normal/gpu_p), default=CPU
 -h if this flag is included, then the help is printed, default=false
 -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
 -q if this flag is included, then samples that did not pass quality control are filtered out, default=false
--d it is a required flag specifying which dataset should be processed: sciplex | tahoe
+-n if this flag is included, then the dataset is already normalized and normalization steps are skipped, default=false
+-d it is a required flag specifying which dataset should be processed: sciplex | tahoe | l1000_phase1 | l1000_phase2
 -p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
 ```
-For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode you need to run:
+**NB!** The -g option was added to make it possible to distribute DEG calculations across a larger number of nodes.
+
+For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode on the CPU nodes you need to run:
 ```
 cd /op3_v2
 ./run_pipelines/run_deg.sh -s -j -d sciplex -p group_all_replicates
+```
+
+For a **normalized dataset** (e.g. L1000) with separate_replicates parameter on the CPU nodes:
+```
+cd /op3_v2
+./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n
+```
+
+For a **normalized dataset** (e.g. L1000) with separate_replicates parameter on the GPU nodes:
+```
+cd /op3_v2
+./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n -g
+```
+### 4. Aggregate logs
+
+After running pipelines, aggregate scattered log files into combined logs for easier review.
+
+**Recursive mode** (all datasets):
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -r -l logs
+```
+
+**Recursive mode** (single dataset):
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -r -l logs/tahoe/
+```
+
+**Targeted mode** (specific directory):
+
+Pseudobulk logs:
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -l logs/tahoe/full -t pseudobulk
+```
+
+DEG logs:
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -l logs/sciplex/full/deg/separate_replicates/qc_false/filter_min_cells_10 -t deg
 ```
 
 # Project structure:
@@ -152,6 +212,7 @@ The structure of the repo:
  tree .
 .
 ├── data -> /lustre/groups/ml01/workspace/olga.novitskaia/data
+├── docs
 ├── env.yaml
 ├── logs
 │   └── dataset_i
@@ -160,48 +221,81 @@ The structure of the repo:
 │       │       └── parameter_name (group_all_replicates or separate_replicates)
 │       │           └── qc_true (or qc_false)
 │       │               └── filter_min_cells_f
-│       │                   └── deg_*.out, deg_*.err
+│       │                   ├── preprocessing/
+│       │                   │   └── deg_processing_pseudobulk.*.out, *.err
+│       │                   ├── deg/
+│       │                   │   ├── celltype1/
+│       │                   │   │   └── deg_analysis.*.out, *.err
+│       │                   │   ├── celltype2/
+│       │                   │   │   └── deg_analysis.*.out, *.err
+│       │                   │   └── ...
+│       │                   └── aggregation/
+│       │                       └── deg_aggregation.*.out, *.err
 │       └── ...
 ├── pipelines
 │   ├── common
+|   |   ├── combining_logs.sh
 │   │   └── deg.sh
 │   ├── sciplex
 │   │   └─── configs/
 │   │       ├── deg/
 │   │       │   └── config.json
 │   │       └── sciplex_pseudobulking.sh
-│   └── tahoe
-│       └─── configs/
-│           ├── deg/
-│           │   └── config.json
-│           └── tahoe_pseudobulking_parallel.sh
+│   ├── tahoe
+│   │   └─── configs/
+│   │       ├── deg/
+│   │       │   └── config.json
+│   │       └── tahoe_pseudobulking_parallel.sh
+│   ├── l1000_phase1
+│   │   ├── configs/
+│   │   │   └── deg/
+│   │   │       └── config.json
+│   │   └── l1000_phase1_pseudobulking.sh
+│   └── l1000_phase2
+│       ├── configs/
+│       │   └── deg/
+│       │       └── config.json
+│       └── l1000_phase2_pseudobulking.sh
 ├── README.md
-├── requirements.txt
 ├── run_pipelines
-│   ├── run_pseudobulking.sh
-│   └── run_deg.sh
+│   ├── run_combining_logs.sh
+│   ├── run_deg.sh
+│   └── run_pseudobulking.sh
+├── LICENSE
 ├── src
-│   ├── configs
-│   │   └── datasets.json
+│   ├── configs
+│   │   └── datasets.json
 │   ├── deg
 │   │   ├── run_deg.R
 │   │   ├── run_processing_pseudobulk.py
+│   │   ├── aggregating_deg.py
+│   │   ├── ensembl_mapping.py
 │   │   └── subsampling.R
 │   ├── downloading
 │   │   └── run_downloading_datasets.py
 │   ├── pseudobulking
 │   │   ├── common
 │   │   │   ├── pseudobulk.py
+│   │   │   ├── pubchem.py
 │   │   │   ├── run_combining_datasets.py
 │   │   │   └── run_pseudobulking.py
 │   │   └── datasets
 │   │       ├── sciplex
 │   │       │   ├── pubchem_imputation.py
 │   │       │   └── standardization.py
-│   │       └── tahoe
+│   │       ├── tahoe
+│   │       │   ├── post_processing.py
+│   │       │   ├── pubchem_imputation.py
+│   │       │   └── standardization.py
+│   │       └── l1000
+│   │           ├── assembling.py
+│   │           ├── cellosaurus_annotation.py
+│   │           ├── donor_metadata_annotation.py
+│   │           ├── gene_annotation.py
 │   │           ├── pubchem_imputation.py
-│   │           └── standardization.py
+│   │           └── run_assembling.py
 │   └── utils
+│       ├──  aggregate_logs.py
 │       └─── parsing_utils.py
 └── venv -> /home/icb/olga.novitskaia/venv/
 ```
@@ -215,9 +309,18 @@ The structure of the `data` folder:
 │   │       ├──full
 │   │       │   ├──qc_true
 │   │       │   │   ├──filter_min_cells_0
-│   │       │   │   │   ├──celltype1_de.h5ad
-│   │       │   │   │   ├──celltype2_de.h5ad
-│   │       │   │   │   └──...
+│   │       │   │   │   ├──intermediate/
+│   │       │   │   │   │   ├──celltype1/
+│   │       │   │   │   │   │   ├──batch_1.h5ad
+│   │       │   │   │   │   │   ├──batch_2.h5ad
+│   │       │   │   │   │   │   └──...
+│   │       │   │   │   │   ├──celltype2/
+│   │       │   │   │   │   │   └──...
+│   │       │   │   │   │   └──...
+│   │       │   │   │   └──results/
+│   │       │   │   │       ├──celltype1_de.h5ad
+│   │       │   │   │       ├──celltype2_de.h5ad
+│   │       │   │   │       └──...
 │   │       │   │   ├──filter_min_cells_50
 │   │       │   │   │   └──...
 │   │       │   │   └──...
@@ -228,8 +331,11 @@ The structure of the `data` folder:
 │   │           │   └──...
 │   │           └──qc_false
 │   │               └──filter_min_cells_0
-│   │                   ├──celltype1_de.h5ad
-│   │                   └──...
+│   │                   ├──intermediate/
+│   │                   │   └──...
+│   │                   └──results/
+│   │                       ├──celltype1_de.h5ad
+│   │                       └──...
 │   ├──raw
 │   │   ├──dataset_i.h5ad
 │   │   ├──dataset_i_subsample.h5ad (optionally)
@@ -240,7 +346,7 @@ The structure of the `data` folder:
 │   │   │   └──dataset_i.h5ad
 │   │   └──subsample
 │   │       └──dataset_i_subsample.h5ad
-│   ├──pseudobulk_to_merge (optionally for tahoe)
+│   ├──pseudobulk_to_merge (optionally)
 │   │   ├──full
 │   │   │   └──dataset_i.h5ad
 │   │   └──subsample
@@ -255,5 +361,4 @@ The structure of the `data` folder:
 │       └──...
 └──...        
 
-```
-		
+```	
