@@ -855,6 +855,7 @@ def rename_tmps(file_input: str,
     if os.path.isfile(tmp_file):
         dst_file = get_output_path_combined(file_input, dir_output)
         shutil.move(tmp_file, dst_file)
+        logger.info(f'Moved temporary file {tmp_file} to {dst_file}')
     else:
         raise FileNotFoundError(f'Temporary file {tmp_file} not found')
 
@@ -863,6 +864,7 @@ def rename_tmps(file_input: str,
         if os.path.isdir(tmp_dir):
             celltype_dir = os.path.join(dir_output, BY_CELLTYPE_DIR)
             shutil.move(tmp_dir, celltype_dir)
+            logger.info(f'Moved temporary directory {tmp_dir} to {celltype_dir}')
         else:
             raise FileNotFoundError(f'Temporary directory {tmp_dir} not found')
 
@@ -957,7 +959,7 @@ class PseudobulkProcessor:
         - var_parquet_path: path to var parquet file (dataset-specific)
     use_pubchem_cid_in_label : bool, default=False
         If True, includes PubChem CID in perturbation labels when available
-    check_by_celltype_content : bool, default=False
+    check_by_celltype_content : bool, default=True
         If True and split_by_celltype is True, validates that dir_output/by_celltype
         subdirectory names match the current run's cell types (requires reading
         input before the existence check). If False, only checks that by_celltype
@@ -972,7 +974,7 @@ class PseudobulkProcessor:
                  dataset: Optional[str] = None,
                  post_processing: Optional[dict] = None,
                  use_pubchem_cid_in_label: bool = False,
-                 check_by_celltype_content: bool = False):
+                 check_by_celltype_content: bool = True):
         self.file_input = file_input
         self.dir_output = dir_output
         self.design_param = design_param
@@ -1151,10 +1153,10 @@ class PseudobulkProcessor:
     def process(self) -> None:
         """Run the complete processing pipeline sequentially."""
         self._remove_tmps()
-
+        self.read_data()
         expected_celltype_subdir_names = None
         if self.split_by_celltype and self.check_by_celltype_content:
-            self.read_data()
+            
             cell_types = self.padata.obs['cell_type'].unique()
             cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) and not pd.isna(ct))]
             expected_celltype_subdir_names = {sanitize_celltype_name(ct) for ct in sorted(cell_types)}
@@ -1163,8 +1165,7 @@ class PseudobulkProcessor:
             logger.info('Output files already exist, skipping processing')
             return
 
-        if not (self.split_by_celltype and self.check_by_celltype_content):
-            self.read_data()
+            
         self.apply_dataset_processing()
         self.map_ensembl_ids()
         if self.use_pubchem_cid_in_label:
@@ -1241,7 +1242,7 @@ def main():
     parser.add_argument('--split_by_celltype', action='store_true', default=False)
     parser.add_argument('--dataset', type=str, default=None)
     parser.add_argument('--use_pubchem_cid_in_label', action='store_true', default=False)
-    parser.add_argument('--check_by_celltype_content', action='store_true', default=False)
+    parser.add_argument('--check_by_celltype_content', action='store_true', default=True)
     args = parser.parse_args()
     d_args = vars(args).copy()
     del d_args['config']
@@ -1264,7 +1265,7 @@ def main():
         dataset=d_args.get('dataset'),
         post_processing=d_args.get('post_processing'),
         use_pubchem_cid_in_label=d_args.get('use_pubchem_cid_in_label', False),
-        check_by_celltype_content=d_args.get('check_by_celltype_content', False)
+        check_by_celltype_content=d_args.get('check_by_celltype_content', True)
     )
     processor.process()
 
