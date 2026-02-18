@@ -1,0 +1,273 @@
+deg_op3.PID3814772.out:> Do not filter samples that did not pass quality control
+deg_op3.PID3814772.out:> Work with a full version
+deg_op3.PID3814772.out:> Mode: PARALLEL BY CELL TYPE (array jobs per cell type)
+deg_op3.PID3814772.out:> Dataset is not normalized, running normalization steps
+deg_op3.PID3814772.out:> Using config: ./pipelines/op3/configs/deg/config.json
+deg_op3.PID3814772.out:> Preprocess pseudobulk with parameter: group_all_replicates
+deg_op3.PID3814772.out:> Running preprocessing pseudobulk
+deg_op3.PID3814772.out:Submitted batch job 34014885
+deg_op3.PID3814772.out:> Preprocessing completed
+deg_op3.PID3814772.out:> Starting DGE analysis with parameter: group_all_replicates
+deg_op3.PID3814772.out:  Found 4 file(s) to process
+deg_op3.PID3814772.out:
+deg_op3.PID3814772.out:============================================
+deg_op3.PID3814772.out:DGE ANALYSIS
+deg_op3.PID3814772.out:============================================
+deg_op3.PID3814772.out:  Processing 4 file(s)...
+deg_op3.PID3814772.out:
+deg_op3.PID3814772.out:
+deg_op3.PID3814772.out:============================================
+deg_op3.PID3814772.out:DEG ANALYSIS: Array Job Mode
+deg_op3.PID3814772.out:============================================
+deg_op3.PID3814772.out:  Processing 4 file(s) with array job...
+deg_op3.PID3814772.out:  Submitting array job [4 jobs, max 50 concurrent]...
+deg_op3.PID3814772.out:Submitted batch job 34014984
+deg_op3.PID3814772.out:> DEG array job completed
+deg_op3.PID3814772.out:
+deg_op3.PID3814772.out:============================================
+deg_op3.PID3814772.out:AGGREGATING BATCH FILES
+deg_op3.PID3814772.out:============================================
+deg_op3.PID3814772.out:  Found files in ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/intermediate and results directory is empty
+deg_op3.PID3814772.out:  Aggregating batch files from intermediate/ to results/...
+deg_op3.PID3814772.out:  Running aggregation...
+deg_op3.PID3814772.out:Submitted batch job 34015014
+deg_op3.PID3814772.out:> Aggregation completed
+deg_op3.PID3814772.out:
+deg_op3.PID3814772.out:============================================
+deg_op3.PID3814772.out:DGE PIPELINE COMPLETED
+deg_op3.PID3814772.out:============================================
+deg_op3.PID3814772.out:  Results saved to: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50
+deg_op3.PID3814772.out:    - intermediate/ for separate files
+deg_op3.PID3814772.out:    - results/ for combined
+deg_op3.PID3814772.out:
+deg_op3.PID3814772.out:> DGE pipeline is finished
+deg_op3.PID3814772.out:> Cleaning up temporary files...
+deg_op3.PID3814772.out:> Cleanup complete
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:00:15 | [INFO] Read pseudobulk file
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:00:16 | [INFO] Dataset "op3" specified but no processing_functions configured, skipping
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:00:16 | [INFO] Map ensembl IDs to current/replacement IDs
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:00:16 | [INFO] Mapping Ensembl IDs to current/replacement IDs
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:00:16 | [INFO]   Found 5317 genes with Ensembl IDs in var.index
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:00:16 | [INFO] Processing 5317 IDs in 6 queries
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:00:16 | [INFO]   Query 1/6: processing 1000 IDs
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:01:25 | [INFO]   Query 2/6: processing 1000 IDs
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:04:01 | [INFO]   Query 3/6: processing 1000 IDs
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:05:27 | [INFO]   Query 4/6: processing 1000 IDs
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:07:27 | [INFO]   Query 5/6: processing 1000 IDs
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:05 | [INFO]   Query 6/6: processing 317 IDs
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:42 | [INFO] Summary:
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:42 | [INFO]   Total results: 5289 out of 5317
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:42 | [INFO]   Current IDs: 5286
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:42 | [INFO]   Deprecated (no replacement): 1
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:42 | [INFO]   Single replacements: 2
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:42 | [INFO]   Multiple replacements: 0
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:42 | [INFO]   Unique target IDs with duplicates: 0
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:42 | [INFO]   Mapping size: 5288
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:44 | [INFO]   Result: 5317 → 5288 genes (reduced by 29)
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:44 | [INFO] Add perturbation label
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:44 | [INFO] Save data
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:49 | [INFO]   Saved: ./data/op3/pseudobulk_processed/group_rep/file_tmp.h5ad (1813 obs, 139 perturbagens)
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:49 | [INFO] Splitting into 4 cell types
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:50 | [INFO]   Saved: ./data/op3/pseudobulk_processed/group_rep/tmp/CL_0000084/CL_0000084_processed.h5ad (458 obs, 139 perturbagens)
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:50 | [INFO]   Saved: ./data/op3/pseudobulk_processed/group_rep/tmp/CL_0000236/CL_0000236_processed.h5ad (456 obs, 138 perturbagens)
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:51 | [INFO]   Saved: ./data/op3/pseudobulk_processed/group_rep/tmp/CL_0000623/CL_0000623_processed.h5ad (455 obs, 138 perturbagens)
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:54 | [INFO]   Saved: ./data/op3/pseudobulk_processed/group_rep/tmp/CL_0000763/CL_0000763_processed.h5ad (444 obs, 134 perturbagens)
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:54 | [INFO] Moved temporary file ./data/op3/pseudobulk_processed/group_rep/file_tmp.h5ad to ./data/op3/pseudobulk_processed/group_rep/op3_standardized_processed.h5ad
+deg_processing_pseudobulk.34014885.out:2026-02-18 21:08:54 | [INFO] Moved temporary directory ./data/op3/pseudobulk_processed/group_rep/tmp to ./data/op3/pseudobulk_processed/group_rep/by_celltype
+deg_processing_pseudobulk.34014885.err:2026-02-18 21:08:42 | [WARNING] Filtering out 29 genes that could not be mapped (deprecated with no replacement or multiple replacements)
+deg_analysis.34014985_0.out:
+deg_analysis.34014985_0.out:DE analysis started...
+deg_analysis.34014985_0.out:Loaded input file:  ./data/op3/pseudobulk_processed/group_rep/by_celltype/CL_0000084/CL_0000084_processed.h5ad
+deg_analysis.34014985_0.out:Initial dimensions:  458  samples ×  5288  genes
+deg_analysis.34014985_0.out:Filter samples with the low number of cells
+deg_analysis.34014985_0.out:    Filter threshold (min_cells):  50
+deg_analysis.34014985_0.out:    n_obs:  458 -->  458
+deg_analysis.34014985_0.out:
+deg_analysis.34014985_0.out:▶︎ Processing cell_type:  CL_0000084
+deg_analysis.34014985_0.out:    Filter controls by  pert_time_h  column
+deg_analysis.34014985_0.out:        n_obs:  458 -->  458
+deg_analysis.34014985_0.out:
+deg_analysis.34014985_0.out:    Constructing design matrix...
+deg_analysis.34014985_0.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.34014985_0.out:    Design matrix dimensions: 458 samples × 144 coefficients
+deg_analysis.34014985_0.out:    Filtering genes and normalizing counts...
+deg_analysis.34014985_0.out:    Genes are filtered and normalized in 2.0 seconds
+deg_analysis.34014985_0.out:    Running voom...
+deg_analysis.34014985_0.out:    Voom is completed in 1.3 seconds
+deg_analysis.34014985_0.out:    Running lmFit...
+deg_analysis.34014985_0.out:    LmFit is completed in 16.0 seconds
+deg_analysis.34014985_0.out:DGE fit is completed in 20.1 seconds
+deg_analysis.34014985_0.out:    Running contrasts...
+deg_analysis.34014985_0.out:    Running contrast 1/138
+deg_analysis.34014985_0.out:    Running contrast 51/138
+deg_analysis.34014985_0.out:    Running contrast 101/138
+deg_analysis.34014985_0.out:    Running contrast 138/138
+deg_analysis.34014985_0.out:Contrasts are completed in 16.6 seconds
+deg_analysis.34014985_0.out:
+deg_analysis.34014985_0.out:    Writing:  ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/intermediate/CL_0000084/CL_0000084_de.h5ad
+deg_analysis.34014985_0.out:
+deg_analysis.34014985_0.out:    Rewriting h5ad file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/intermediate/CL_0000084/CL_0000084_de.h5ad
+deg_analysis.34014985_0.out:    Removed X matrix
+deg_analysis.34014985_0.out:    Rewriting h5ad file is done!
+deg_analysis.34014985_0.out:✓ Cell line completed in 43.5 seconds
+deg_analysis.34014985_0.out:
+deg_analysis.34014985_0.out:DE analysis completed!
+deg_analysis.34014985_0.out:
+deg_analysis.34014985_0.out:Total runtime: 129.3 seconds
+deg_analysis.34014986_1.out:
+deg_analysis.34014986_1.out:DE analysis started...
+deg_analysis.34014986_1.out:Loaded input file:  ./data/op3/pseudobulk_processed/group_rep/by_celltype/CL_0000236/CL_0000236_processed.h5ad
+deg_analysis.34014986_1.out:Initial dimensions:  456  samples ×  5288  genes
+deg_analysis.34014986_1.out:Filter samples with the low number of cells
+deg_analysis.34014986_1.out:    Filter threshold (min_cells):  50
+deg_analysis.34014986_1.out:    n_obs:  456 -->  396
+deg_analysis.34014986_1.out:
+deg_analysis.34014986_1.out:▶︎ Processing cell_type:  CL_0000236
+deg_analysis.34014986_1.out:    Filter controls by  pert_time_h  column
+deg_analysis.34014986_1.out:        n_obs:  396 -->  396
+deg_analysis.34014986_1.out:
+deg_analysis.34014986_1.out:    Constructing design matrix...
+deg_analysis.34014986_1.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.34014986_1.out:    Design matrix dimensions: 396 samples × 139 coefficients
+deg_analysis.34014986_1.out:    Filtering genes and normalizing counts...
+deg_analysis.34014986_1.out:    Genes are filtered and normalized in 2.8 seconds
+deg_analysis.34014986_1.out:    Running voom...
+deg_analysis.34014986_1.out:    Voom is completed in 2.3 seconds
+deg_analysis.34014986_1.out:    Running lmFit...
+deg_analysis.34014986_1.out:    LmFit is completed in 27.6 seconds
+deg_analysis.34014986_1.out:DGE fit is completed in 33.9 seconds
+deg_analysis.34014986_1.out:    Running contrasts...
+deg_analysis.34014986_1.out:    Running contrast 1/133
+deg_analysis.34014986_1.out:    Running contrast 51/133
+deg_analysis.34014986_1.out:    Running contrast 101/133
+deg_analysis.34014986_1.out:    Running contrast 133/133
+deg_analysis.34014986_1.out:Contrasts are completed in 35.3 seconds
+deg_analysis.34014986_1.out:
+deg_analysis.34014986_1.out:    Writing:  ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/intermediate/CL_0000236/CL_0000236_de.h5ad
+deg_analysis.34014986_1.out:
+deg_analysis.34014986_1.out:    Rewriting h5ad file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/intermediate/CL_0000236/CL_0000236_de.h5ad
+deg_analysis.34014986_1.out:    Removed X matrix
+deg_analysis.34014986_1.out:    Rewriting h5ad file is done!
+deg_analysis.34014986_1.out:✓ Cell line completed in 80.7 seconds
+deg_analysis.34014986_1.out:
+deg_analysis.34014986_1.out:DE analysis completed!
+deg_analysis.34014986_1.out:
+deg_analysis.34014986_1.out:Total runtime: 166.5 seconds
+deg_analysis.34014986_1.err:During startup - Warning messages:
+deg_analysis.34014986_1.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.34014986_1.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.34014986_1.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.34014986_1.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.34014986_1.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.34014986_1.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.34014986_1.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.34014987_2.out:
+deg_analysis.34014987_2.out:DE analysis started...
+deg_analysis.34014987_2.out:Loaded input file:  ./data/op3/pseudobulk_processed/group_rep/by_celltype/CL_0000623/CL_0000623_processed.h5ad
+deg_analysis.34014987_2.out:Initial dimensions:  455  samples ×  5288  genes
+deg_analysis.34014987_2.out:Filter samples with the low number of cells
+deg_analysis.34014987_2.out:    Filter threshold (min_cells):  50
+deg_analysis.34014987_2.out:    n_obs:  455 -->  51
+deg_analysis.34014987_2.out:
+deg_analysis.34014987_2.out:▶︎ Processing cell_type:  CL_0000623
+deg_analysis.34014987_2.out:    Filter controls by  pert_time_h  column
+deg_analysis.34014987_2.out:        n_obs:  51 -->  51
+deg_analysis.34014987_2.out:
+deg_analysis.34014987_2.out:    Constructing design matrix...
+deg_analysis.34014987_2.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.34014987_2.out:    Design matrix dimensions: 51 samples × 46 coefficients
+deg_analysis.34014987_2.out:    Filtering genes and normalizing counts...
+deg_analysis.34014987_2.out:    Genes are filtered and normalized in 0.2 seconds
+deg_analysis.34014987_2.out:    Running voom...
+deg_analysis.34014987_2.out:    Voom is completed in 0.6 seconds
+deg_analysis.34014987_2.out:    Running lmFit...
+deg_analysis.34014987_2.out:    LmFit is completed in 1.9 seconds
+deg_analysis.34014987_2.out:DGE fit is completed in 2.9 seconds
+deg_analysis.34014987_2.out:    Running contrasts...
+deg_analysis.34014987_2.out:    Running contrast 1/40
+deg_analysis.34014987_2.out:    Running contrast 40/40
+deg_analysis.34014987_2.out:Contrasts are completed in 4.0 seconds
+deg_analysis.34014987_2.out:
+deg_analysis.34014987_2.out:    Writing:  ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/intermediate/CL_0000623/CL_0000623_de.h5ad
+deg_analysis.34014987_2.out:
+deg_analysis.34014987_2.out:    Rewriting h5ad file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/intermediate/CL_0000623/CL_0000623_de.h5ad
+deg_analysis.34014987_2.out:    Removed X matrix
+deg_analysis.34014987_2.out:    Rewriting h5ad file is done!
+deg_analysis.34014987_2.out:✓ Cell line completed in 10.5 seconds
+deg_analysis.34014987_2.out:
+deg_analysis.34014987_2.out:DE analysis completed!
+deg_analysis.34014987_2.out:
+deg_analysis.34014987_2.out:Total runtime: 96.3 seconds
+deg_analysis.34014984_3.out:
+deg_analysis.34014984_3.out:DE analysis started...
+deg_analysis.34014984_3.out:Loaded input file:  ./data/op3/pseudobulk_processed/group_rep/by_celltype/CL_0000763/CL_0000763_processed.h5ad
+deg_analysis.34014984_3.out:Initial dimensions:  444  samples ×  5288  genes
+deg_analysis.34014984_3.out:Filter samples with the low number of cells
+deg_analysis.34014984_3.out:    Filter threshold (min_cells):  50
+deg_analysis.34014984_3.out:    n_obs:  444 -->  345
+deg_analysis.34014984_3.out:
+deg_analysis.34014984_3.out:▶︎ Processing cell_type:  CL_0000763
+deg_analysis.34014984_3.out:    Filter controls by  pert_time_h  column
+deg_analysis.34014984_3.out:        n_obs:  345 -->  345
+deg_analysis.34014984_3.out:
+deg_analysis.34014984_3.out:    Constructing design matrix...
+deg_analysis.34014984_3.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.34014984_3.out:    Design matrix dimensions: 345 samples × 122 coefficients
+deg_analysis.34014984_3.out:    Filtering genes and normalizing counts...
+deg_analysis.34014984_3.out:    Genes are filtered and normalized in 1.8 seconds
+deg_analysis.34014984_3.out:    Running voom...
+deg_analysis.34014984_3.out:    Voom is completed in 1.0 seconds
+deg_analysis.34014984_3.out:    Running lmFit...
+deg_analysis.34014984_3.out:    LmFit is completed in 13.2 seconds
+deg_analysis.34014984_3.out:DGE fit is completed in 16.7 seconds
+deg_analysis.34014984_3.out:    Running contrasts...
+deg_analysis.34014984_3.out:    Running contrast 1/116
+deg_analysis.34014984_3.out:    Running contrast 51/116
+deg_analysis.34014984_3.out:    Running contrast 101/116
+deg_analysis.34014984_3.out:    Running contrast 116/116
+deg_analysis.34014984_3.out:Contrasts are completed in 15.4 seconds
+deg_analysis.34014984_3.out:
+deg_analysis.34014984_3.out:    Writing:  ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/intermediate/CL_0000763/CL_0000763_de.h5ad
+deg_analysis.34014984_3.out:
+deg_analysis.34014984_3.out:    Rewriting h5ad file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/intermediate/CL_0000763/CL_0000763_de.h5ad
+deg_analysis.34014984_3.out:    Removed X matrix
+deg_analysis.34014984_3.out:    Rewriting h5ad file is done!
+deg_analysis.34014984_3.out:✓ Cell line completed in 38.9 seconds
+deg_analysis.34014984_3.out:
+deg_analysis.34014984_3.out:DE analysis completed!
+deg_analysis.34014984_3.out:
+deg_analysis.34014984_3.out:Total runtime: 124.7 seconds
+deg_aggregation.34015014.out:2026-02-18 21:13:43 | [INFO] Found 4 cell type(s) to aggregate
+deg_aggregation.34015014.out:2026-02-18 21:13:43 | [INFO] Aggregating 1 batch files for CL_0000084
+deg_aggregation.34015014.out:2026-02-18 21:13:43 | [INFO]   Reading: CL_0000084_de.h5ad
+deg_aggregation.34015014.out:2026-02-18 21:13:44 | [INFO]   Concatenating 1 batches...
+deg_aggregation.34015014.out:2026-02-18 21:13:44 | [INFO]   Batch column added with 1
+deg_aggregation.34015014.out:2026-02-18 21:13:45 | [INFO]     Rewriting h5ad file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/results/CL_0000084_de.h5ad
+deg_aggregation.34015014.out:2026-02-18 21:13:45 | [INFO]     Removed X matrix
+deg_aggregation.34015014.out:2026-02-18 21:13:45 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.34015014.out:2026-02-18 21:13:45 | [INFO]   Saved aggregated file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/results/CL_0000084_de.h5ad (138 obs, 5288 vars)
+deg_aggregation.34015014.out:2026-02-18 21:13:45 | [INFO] Aggregating 1 batch files for CL_0000236
+deg_aggregation.34015014.out:2026-02-18 21:13:45 | [INFO]   Reading: CL_0000236_de.h5ad
+deg_aggregation.34015014.out:2026-02-18 21:13:46 | [INFO]   Concatenating 1 batches...
+deg_aggregation.34015014.out:2026-02-18 21:13:46 | [INFO]   Batch column added with 1
+deg_aggregation.34015014.out:2026-02-18 21:13:48 | [INFO]     Rewriting h5ad file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/results/CL_0000236_de.h5ad
+deg_aggregation.34015014.out:2026-02-18 21:13:48 | [INFO]     Removed X matrix
+deg_aggregation.34015014.out:2026-02-18 21:13:48 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.34015014.out:2026-02-18 21:13:48 | [INFO]   Saved aggregated file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/results/CL_0000236_de.h5ad (133 obs, 5271 vars)
+deg_aggregation.34015014.out:2026-02-18 21:13:48 | [INFO] Aggregating 1 batch files for CL_0000623
+deg_aggregation.34015014.out:2026-02-18 21:13:48 | [INFO]   Reading: CL_0000623_de.h5ad
+deg_aggregation.34015014.out:2026-02-18 21:13:48 | [INFO]   Concatenating 1 batches...
+deg_aggregation.34015014.out:2026-02-18 21:13:48 | [INFO]   Batch column added with 1
+deg_aggregation.34015014.out:2026-02-18 21:13:49 | [INFO]     Rewriting h5ad file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/results/CL_0000623_de.h5ad
+deg_aggregation.34015014.out:2026-02-18 21:13:49 | [INFO]     Removed X matrix
+deg_aggregation.34015014.out:2026-02-18 21:13:49 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.34015014.out:2026-02-18 21:13:49 | [INFO]   Saved aggregated file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/results/CL_0000623_de.h5ad (40 obs, 4828 vars)
+deg_aggregation.34015014.out:2026-02-18 21:13:49 | [INFO] Aggregating 1 batch files for CL_0000763
+deg_aggregation.34015014.out:2026-02-18 21:13:49 | [INFO]   Reading: CL_0000763_de.h5ad
+deg_aggregation.34015014.out:2026-02-18 21:13:50 | [INFO]   Concatenating 1 batches...
+deg_aggregation.34015014.out:2026-02-18 21:13:50 | [INFO]   Batch column added with 1
+deg_aggregation.34015014.out:2026-02-18 21:13:51 | [INFO]     Rewriting h5ad file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/results/CL_0000763_de.h5ad
+deg_aggregation.34015014.out:2026-02-18 21:13:51 | [INFO]     Removed X matrix
+deg_aggregation.34015014.out:2026-02-18 21:13:51 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.34015014.out:2026-02-18 21:13:51 | [INFO]   Saved aggregated file: ./data/op3/deg_data/group_rep/full/qc_false/filter_min_cells_50/results/CL_0000763_de.h5ad (116 obs, 5284 vars)
+deg_aggregation.34015014.out:2026-02-18 21:13:51 | [INFO] Aggregation completed
