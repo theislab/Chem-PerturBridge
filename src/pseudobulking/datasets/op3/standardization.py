@@ -11,6 +11,7 @@ import s3fs
 from src.utils.parsing_utils import *
 from src.pseudobulking.common.pubchem import lookup_pubchem_cids
 from src.pseudobulking.datasets.op3.pubchem_imputation import pubchem_mapping_op3
+from src.pseudobulking.datasets.op3.ensembl_imputation import ensembl_mapping_op3
 from src.pseudobulking.datasets.op3.gene_annotation import fetch_ensg_ids_from_symbols
 
 
@@ -34,6 +35,78 @@ def download_op3_pseudobulk(file_path: Union[str, Path]) -> None:
     fs = s3fs.S3FileSystem(anon=True)
     fs.get(url, str(file_path))
     logger.info("Download complete")
+
+
+def filter_controls(adata: ad.AnnData, 
+                    control_col: str = 'control',
+                    compound_col: str = 'sm_name',
+                    dmso_name: str = 'Dimethyl Sulfoxide') -> ad.AnnData:
+    """
+    Filter AnnData to keep non-control samples and DMSO controls only.
+    
+    Keeps observations where:
+    - is_control is False (not a control), OR
+    - is_control is True AND compound name is "Dimethyl Sulfoxide"
+    
+    This effectively removes all controls except DMSO (negative control).
+    
+    Parameters
+    ----------
+    adata : ad.AnnData
+        AnnData object to filter
+    control_col : str, default='control'
+        Column name indicating control status
+    compound_col : str, default='sm_name'
+        Column name containing compound/perturbagen name
+    dmso_name : str, default='Dimethyl Sulfoxide'
+        Name of DMSO control to keep
+        
+    Returns
+    -------
+    ad.AnnData
+        Filtered AnnData object
+    """
+    logger.info("Filtering control samples")
+    
+    adata = adata.copy()
+    
+    # Check if required columns exist
+    if control_col not in adata.obs.columns:
+        logger.warning(f"Column '{control_col}' not found in adata.obs. Skipping filter.")
+        return adata
+    
+    if compound_col not in adata.obs.columns:
+        logger.warning(f"Column '{compound_col}' not found in adata.obs. Skipping filter.")
+        return adata
+    
+    initial_n_obs = adata.n_obs
+    
+    # Create filter: not is_control OR (is_control AND sm_name == "Dimethyl Sulfoxide")
+    is_control = adata.obs[control_col].astype(str).str.lower().isin(['true', '1', 'yes'])
+    is_dmso = adata.obs[compound_col] == dmso_name
+    
+    mask = ~is_control | (is_control & is_dmso)
+    
+    # Apply filter
+    adata_filtered = adata[mask].copy()
+    
+    final_n_obs = adata_filtered.n_obs
+    n_removed = initial_n_obs - final_n_obs
+    
+    logger.info(f"  Initial observations: {initial_n_obs}")
+    logger.info(f"  Removed observations: {n_removed}")
+    logger.info(f"  Final observations: {final_n_obs}")
+    
+    # Log breakdown
+    n_controls = is_control.sum()
+    n_dmso_controls = (is_control & is_dmso).sum()
+    n_other_controls_removed = n_controls - n_dmso_controls
+    
+    logger.info(f"  Controls kept (DMSO): {n_dmso_controls}")
+    logger.info(f"  Other controls removed: {n_other_controls_removed}")
+    logger.info(f"  Non-controls kept: {(~is_control).sum()}")
+    
+    return adata_filtered
 
 
 def define_obs_schema() -> list:
@@ -115,10 +188,10 @@ def get_cell_type_ontology_map() -> dict:
         Dictionary mapping cell type names to CL (Cell Ontology) IDs
     """
     return {
-        'NK cells': 'CL:0000623',
-        'T cells': 'CL:0000084',
-        'Myeloid cells': 'CL:0000763',
-        'B cells': 'CL:0000236'
+        'NK cells': 'CL_0000623',
+        'T cells': 'CL_0000084',
+        'Myeloid cells': 'CL_0000763',
+        'B cells': 'CL_0000236'
     }
 
 
@@ -216,6 +289,13 @@ def add_fixed_metadata_columns(obs: pd.DataFrame) -> pd.DataFrame:
     obs["guide"] = None
     obs["dataset"] = "NeurIPS2023 scPerturb DGE"
     obs["assay"] = "10x 3' v3.1"
+    
+    # Fill dose_uM with 0 for control samples
+    is_control = obs['is_control'] == True
+    obs.loc[is_control, 'pert_dose_uM'] = 0.0
+
+    obs["plate"] = obs["plate"].astype(str).str.replace(" ", "", regex=False).str.replace("-", "_", regex=False)
+    obs["library"] = obs["library"].astype(str).str.replace(" ", "", regex=False).str.replace("-", "_", regex=False)
     
     # Initialize pubchem_cid if not present
     if 'pubchem_cid' not in obs.columns:
@@ -548,7 +628,10 @@ def process_gene_annotations(
     if annotate_genes:
         # Fetch Ensembl IDs from symbols
         cache_path = str(paths["ensembl_cache"])
-        ensg_ids = fetch_ensg_ids_from_symbols(gene_symbols, cache_path=cache_path)
+        ensg_ids = fetch_ensg_ids_from_symbols(gene_symbols,
+                                               cache_path=cache_path, 
+                                               manual_mapping_func=ensembl_mapping_op3,
+                                               dataset_key='op3')
         var_df['ensembl_id'] = ensg_ids
     else:
         # Initialize with None
@@ -582,10 +665,9 @@ def standardize_op3_dataset(
     This function:
     1. Downloads data from S3 if missing
     2. Loads AnnData object
-    3. Processes observations to match schema
+    3. Processes observations to match schema (includes optional PubChem CID annotation)
     4. Annotates genes with Ensembl IDs
-    5. Optionally annotates compounds with PubChem CIDs
-    6. Returns standardized AnnData
+    5. Returns standardized AnnData
     
     Parameters
     ----------
@@ -634,6 +716,8 @@ def standardize_op3_dataset(
     logger.info(f"Loading OP3 data from {file_path}")
     adata = ad.read_h5ad(file_path)
     logger.info(f"  Loaded AnnData: {adata.n_obs:,} × {adata.n_vars:,}")
+
+    adata = filter_controls(adata)
     
     # Process observations
     obs_standardized = process_obs_dataframe(adata, paths, annotate_pubchem=annotate_pubchem)

@@ -502,7 +502,7 @@ def save_single_file(adata: ad.AnnData, file_output: str) -> None:
     n_perturbagens = adata.obs['perturbagen'].nunique()
     create_dir_if_not_exists(file_output)
     adata.write_h5ad(file_output, compression='gzip')
-    logger.info(f'    Saved: {file_output} ({adata.n_obs} obs, {n_perturbagens} perturbagens)')
+    logger.info(f'  Saved: {file_output} ({adata.n_obs} obs, {n_perturbagens} perturbagens)')
 
 
 def check_and_save_if_small(adata_ct: ad.AnnData, 

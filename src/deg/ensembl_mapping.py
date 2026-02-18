@@ -80,7 +80,7 @@ class EnsemblArchiveClient:
         
         for i in range(self.n_retries):
             try:
-                response = requests.post(url, headers=headers, json=payload, timeout=30)
+                response = requests.post(url, headers=headers, json=payload)
                 response.raise_for_status()
                 self.req_count += 1
                 return response.json()

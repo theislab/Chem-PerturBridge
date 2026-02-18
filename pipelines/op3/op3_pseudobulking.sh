@@ -49,7 +49,7 @@ sbatch -W -J pseudobulk_${DATASET} \
        -o ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.%j.out \
        --wrap="${SBATCH_PREAMBLE} && \
 	       python3 -m src.pseudobulking.datasets.op3.run_standardization \
-	       --output_file ${OUTPUT_DIR}/${DATASET}_deg_ready${SUFFIX}.h5ad \
+	       --output_file ${OUTPUT_DIR}/${DATASET}_standardized${SUFFIX}.h5ad \
 	       --data_root ${DATA_ROOT} \
                --annotate-pubchem \
                ${ARG}"
