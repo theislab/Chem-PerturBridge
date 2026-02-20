@@ -70,6 +70,7 @@ The **executed code** could be divided into two parts:
 > **2.2.2** **scripts**
 > * Update `run_pipelines/run_deg.sh`:
 >   - Add the name of the dataset (`mynewdataset` in our case) to `VALID_CHOICES` variable.
+> * **NB!** If you already have the bulked/pseudobulked version of the data, you need to figure out if your data is already normalized or it has raw counts. Use `-n` option while executing `run_deg.sh` if your data is already nomalized, otherwise for raw counts skip setting `-n` option. Look at the example of [**L1000** case](https://github.com/theislab/op3_v2/tree/slurm_scripts_deg_dev?tab=readme-ov-file#3-run-scripts) in README.md for the details; it is still "under development" branch.
 >
 > **2.2.3** **configs**
 > * Create a file `op3_v2/pipelines/mynewdataset/configs/deg/config.json` which keeps the parameters for DEG analysis.
@@ -106,7 +107,7 @@ The **executed code** could be divided into two parts:
 
 **3.2** **Run on the full dataset...**
 
-For full command usage and examples, refer to [`../README.md`](https://github.com/theislab/op3_v2/blob/main/README.md)
+For full command usage and examples, refer to [`../README.md`](https://github.com/theislab/op3_v2/blob/main/README.md) in the `main` branch and [`../README.md`](https://github.com/theislab/op3_v2/blob/slurm_scripts_deg_dev/README.md) in `slurm_scripts_deg_dev` associated with **L1000** assembling, processing and **L1000** DEG running.
 
 ## Additional Resources
 
