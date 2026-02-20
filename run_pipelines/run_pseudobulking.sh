@@ -8,6 +8,8 @@ DATASET=""
 VALID_CHOICES=(
         "sciplex"
         "tahoe"
+        "l1000_phase1"
+        "l1000_phase2"
 )
 
 mkdir -p $LOGS_DIR
@@ -32,7 +34,8 @@ done
 
 
 if [[ " ${VALID_CHOICES[*]} " != *" $DATASET "* ]]; then
-        echo "Error: -d must be set up and one of: ${VALID_CHOICES[*]}"
+        echo "Error: -d must be set up and one of: ${VALID_CHOICES[*]}" >&2
+        exit 1
 fi
 
 if [[ "$ARG" == "subsampling" ]]; then
@@ -53,6 +56,12 @@ elif [[ "$DATASET" == "tahoe" ]]; then
     	./pipelines/tahoe/tahoe_pseudobulking_parallel.sh $ARG \
 		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_tahoe.out \
 		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_tahoe.err &
+		
+elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]]; then
+	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+    	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.err &
 else
     	echo "Invalid choice"
 fi

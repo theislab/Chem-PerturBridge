@@ -1,0 +1,252 @@
+deg_sciplex.PID2043332.out:> Do not filter samples that did not pass quality control
+deg_sciplex.PID2043332.out:> Work with a full version
+deg_sciplex.PID2043332.out:> Mode: PARALLEL BY CELL TYPE (array jobs per cell type)
+deg_sciplex.PID2043332.out:> Dataset is not normalized, running normalization steps
+deg_sciplex.PID2043332.out:> Using config: ./pipelines/sciplex/configs/deg/config.json
+deg_sciplex.PID2043332.out:> Preprocess pseudobulk with parameter: group_all_replicates
+deg_sciplex.PID2043332.out:> Running preprocessing pseudobulk
+deg_sciplex.PID2043332.out:Submitted batch job 33068070
+deg_sciplex.PID2043332.out:> Preprocessing completed
+deg_sciplex.PID2043332.out:> Starting DGE analysis with parameter: group_all_replicates
+deg_sciplex.PID2043332.out:  Found 3 file(s) to process
+deg_sciplex.PID2043332.out:
+deg_sciplex.PID2043332.out:============================================
+deg_sciplex.PID2043332.out:DGE ANALYSIS
+deg_sciplex.PID2043332.out:============================================
+deg_sciplex.PID2043332.out:  Processing 3 file(s)...
+deg_sciplex.PID2043332.out:
+deg_sciplex.PID2043332.out:
+deg_sciplex.PID2043332.out:============================================
+deg_sciplex.PID2043332.out:DEG ANALYSIS: Array Job Mode
+deg_sciplex.PID2043332.out:============================================
+deg_sciplex.PID2043332.out:  Processing 3 file(s) with array job...
+deg_sciplex.PID2043332.out:  Submitting array job [3 jobs, max 50 concurrent]...
+deg_sciplex.PID2043332.out:Submitted batch job 33068073
+deg_sciplex.PID2043332.out:> DEG array job completed
+deg_sciplex.PID2043332.out:
+deg_sciplex.PID2043332.out:============================================
+deg_sciplex.PID2043332.out:AGGREGATING BATCH FILES
+deg_sciplex.PID2043332.out:============================================
+deg_sciplex.PID2043332.out:  Found files in ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/intermediate and results directory is empty
+deg_sciplex.PID2043332.out:  Aggregating batch files from intermediate/ to results/...
+deg_sciplex.PID2043332.out:  Running aggregation...
+deg_sciplex.PID2043332.out:Submitted batch job 33068167
+deg_sciplex.PID2043332.out:> Aggregation completed
+deg_sciplex.PID2043332.out:
+deg_sciplex.PID2043332.out:============================================
+deg_sciplex.PID2043332.out:DGE PIPELINE COMPLETED
+deg_sciplex.PID2043332.out:============================================
+deg_sciplex.PID2043332.out:  Results saved to: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10
+deg_sciplex.PID2043332.out:    - intermediate/ for separate files
+deg_sciplex.PID2043332.out:    - results/ for combined
+deg_sciplex.PID2043332.out:
+deg_sciplex.PID2043332.out:> DGE pipeline is finished
+deg_sciplex.PID2043332.out:> Cleaning up temporary files...
+deg_sciplex.PID2043332.out:> Cleanup complete
+deg_processing_pseudobulk.33068070.out:2025-12-27 20:16:43 | [INFO] Output files already exist, skipping processing
+deg_analysis.33068074_0.out:
+deg_analysis.33068074_0.out:DE analysis started...
+deg_analysis.33068074_0.out:Loaded input file:  ./data/sciplex/pseudobulk_processed/group_rep/by_celltype/CVCL_0004/CVCL_0004_processed.h5ad
+deg_analysis.33068074_0.out:Initial dimensions:  1535  samples ×  56799  genes
+deg_analysis.33068074_0.out:Filter samples with the low number of cells
+deg_analysis.33068074_0.out:    Filter threshold (min_cells):  10
+deg_analysis.33068074_0.out:    n_obs:  1535 -->  1523
+deg_analysis.33068074_0.out:
+deg_analysis.33068074_0.out:▶︎ Processing cell_type:  CVCL_0004
+deg_analysis.33068074_0.out:    Filter controls by  pert_time_h  column
+deg_analysis.33068074_0.out:        n_obs:  1523 -->  1523
+deg_analysis.33068074_0.out:
+deg_analysis.33068074_0.out:    Constructing design matrix...
+deg_analysis.33068074_0.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.33068074_0.out:    Design matrix dimensions: 1523 samples × 761 coefficients
+deg_analysis.33068074_0.out:    Filtering genes and normalizing counts...
+deg_analysis.33068074_0.out:    Genes are filtered and normalized in 13.5 seconds
+deg_analysis.33068074_0.out:    Running voom...
+deg_analysis.33068074_0.out:    Voom is completed in 14.7 seconds
+deg_analysis.33068074_0.out:    Running lmFit...
+deg_analysis.33068074_0.out:    LmFit is completed in 1589.0 seconds
+deg_analysis.33068074_0.out:DGE fit is completed in 1621.1 seconds
+deg_analysis.33068074_0.out:    Running contrasts...
+deg_analysis.33068074_0.out:    Running contrast 1/745
+deg_analysis.33068074_0.out:    Running contrast 51/745
+deg_analysis.33068074_0.out:    Running contrast 101/745
+deg_analysis.33068074_0.out:    Running contrast 151/745
+deg_analysis.33068074_0.out:    Running contrast 201/745
+deg_analysis.33068074_0.out:    Running contrast 251/745
+deg_analysis.33068074_0.out:    Running contrast 301/745
+deg_analysis.33068074_0.out:    Running contrast 351/745
+deg_analysis.33068074_0.out:    Running contrast 401/745
+deg_analysis.33068074_0.out:    Running contrast 451/745
+deg_analysis.33068074_0.out:    Running contrast 501/745
+deg_analysis.33068074_0.out:    Running contrast 551/745
+deg_analysis.33068074_0.out:    Running contrast 601/745
+deg_analysis.33068074_0.out:    Running contrast 651/745
+deg_analysis.33068074_0.out:    Running contrast 701/745
+deg_analysis.33068074_0.out:    Running contrast 745/745
+deg_analysis.33068074_0.out:Contrasts are completed in 218.8 seconds
+deg_analysis.33068074_0.out:
+deg_analysis.33068074_0.out:    Writing:  ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/intermediate/CVCL_0004/CVCL_0004_de.h5ad
+deg_analysis.33068074_0.out:
+deg_analysis.33068074_0.out:    Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/intermediate/CVCL_0004/CVCL_0004_de.h5ad
+deg_analysis.33068074_0.out:    Removed X matrix
+deg_analysis.33068074_0.out:    Rewriting h5ad file is done!
+deg_analysis.33068074_0.out:✓ Cell line completed in 1905.8 seconds
+deg_analysis.33068074_0.out:
+deg_analysis.33068074_0.out:DE analysis completed!
+deg_analysis.33068074_0.out:
+deg_analysis.33068074_0.out:Total runtime: 1932.8 seconds
+deg_analysis.33068075_1.out:
+deg_analysis.33068075_1.out:DE analysis started...
+deg_analysis.33068075_1.out:Loaded input file:  ./data/sciplex/pseudobulk_processed/group_rep/by_celltype/CVCL_0023/CVCL_0023_processed.h5ad
+deg_analysis.33068075_1.out:Initial dimensions:  1910  samples ×  56799  genes
+deg_analysis.33068075_1.out:Filter samples with the low number of cells
+deg_analysis.33068075_1.out:    Filter threshold (min_cells):  10
+deg_analysis.33068075_1.out:    n_obs:  1910 -->  1706
+deg_analysis.33068075_1.out:
+deg_analysis.33068075_1.out:▶︎ Processing cell_type:  CVCL_0023
+deg_analysis.33068075_1.out:    Filter controls by  pert_time_h  column
+deg_analysis.33068075_1.out:        n_obs:  1706 -->  1706
+deg_analysis.33068075_1.out:
+deg_analysis.33068075_1.out:    Constructing design matrix...
+deg_analysis.33068075_1.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.33068075_1.out:    Design matrix dimensions: 1706 samples × 935 coefficients
+deg_analysis.33068075_1.out:    Filtering genes and normalizing counts...
+deg_analysis.33068075_1.out:    Genes are filtered and normalized in 11.3 seconds
+deg_analysis.33068075_1.out:    Running voom...
+deg_analysis.33068075_1.out:Coefficients not estimable: plateplate52
+deg_analysis.33068075_1.out:    Voom is completed in 13.2 seconds
+deg_analysis.33068075_1.out:    Running lmFit...
+deg_analysis.33068075_1.out:Coefficients not estimable: plateplate52
+deg_analysis.33068075_1.out:    LmFit is completed in 1837.2 seconds
+deg_analysis.33068075_1.out:DGE fit is completed in 1866.4 seconds
+deg_analysis.33068075_1.out:    Running contrasts...
+deg_analysis.33068075_1.out:    Running contrast 1/914
+deg_analysis.33068075_1.out:    Running contrast 51/914
+deg_analysis.33068075_1.out:    Running contrast 101/914
+deg_analysis.33068075_1.out:    Running contrast 151/914
+deg_analysis.33068075_1.out:    Running contrast 201/914
+deg_analysis.33068075_1.out:    Running contrast 251/914
+deg_analysis.33068075_1.out:    Running contrast 301/914
+deg_analysis.33068075_1.out:    Running contrast 351/914
+deg_analysis.33068075_1.out:    Running contrast 401/914
+deg_analysis.33068075_1.out:    Running contrast 451/914
+deg_analysis.33068075_1.out:    Running contrast 501/914
+deg_analysis.33068075_1.out:    Running contrast 551/914
+deg_analysis.33068075_1.out:    Running contrast 601/914
+deg_analysis.33068075_1.out:    Running contrast 651/914
+deg_analysis.33068075_1.out:    Running contrast 701/914
+deg_analysis.33068075_1.out:    Running contrast 751/914
+deg_analysis.33068075_1.out:    Running contrast 801/914
+deg_analysis.33068075_1.out:    Running contrast 851/914
+deg_analysis.33068075_1.out:    Running contrast 901/914
+deg_analysis.33068075_1.out:    Running contrast 914/914
+deg_analysis.33068075_1.out:Contrasts are completed in 293.5 seconds
+deg_analysis.33068075_1.out:
+deg_analysis.33068075_1.out:    Writing:  ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/intermediate/CVCL_0023/CVCL_0023_de.h5ad
+deg_analysis.33068075_1.out:
+deg_analysis.33068075_1.out:    Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/intermediate/CVCL_0023/CVCL_0023_de.h5ad
+deg_analysis.33068075_1.out:    Removed X matrix
+deg_analysis.33068075_1.out:    Rewriting h5ad file is done!
+deg_analysis.33068075_1.out:✓ Cell line completed in 2208.8 seconds
+deg_analysis.33068075_1.out:
+deg_analysis.33068075_1.out:DE analysis completed!
+deg_analysis.33068075_1.out:
+deg_analysis.33068075_1.out:Total runtime: 2220.7 seconds
+deg_analysis.33068075_1.err:During startup - Warning messages:
+deg_analysis.33068075_1.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.33068075_1.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.33068075_1.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.33068075_1.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.33068075_1.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.33068075_1.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.33068075_1.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.33068075_1.err:
+deg_analysis.33068075_1.err:=== 2 Warnings encountered ===
+deg_analysis.33068075_1.err:
+deg_analysis.33068075_1.err:1. Partial NA coefficients for 7199 probe(s)
+deg_analysis.33068075_1.err:2. Partial NA coefficients for 7199 probe(s)
+deg_analysis.33068073_2.out:
+deg_analysis.33068073_2.out:DE analysis started...
+deg_analysis.33068073_2.out:Loaded input file:  ./data/sciplex/pseudobulk_processed/group_rep/by_celltype/CVCL_0031/CVCL_0031_processed.h5ad
+deg_analysis.33068073_2.out:Initial dimensions:  1529  samples ×  56799  genes
+deg_analysis.33068073_2.out:Filter samples with the low number of cells
+deg_analysis.33068073_2.out:    Filter threshold (min_cells):  10
+deg_analysis.33068073_2.out:    n_obs:  1529 -->  1518
+deg_analysis.33068073_2.out:
+deg_analysis.33068073_2.out:▶︎ Processing cell_type:  CVCL_0031
+deg_analysis.33068073_2.out:    Filter controls by  pert_time_h  column
+deg_analysis.33068073_2.out:        n_obs:  1518 -->  1518
+deg_analysis.33068073_2.out:
+deg_analysis.33068073_2.out:    Constructing design matrix...
+deg_analysis.33068073_2.out:    Design matrix is constructed in 0.0 seconds
+deg_analysis.33068073_2.out:    Design matrix dimensions: 1518 samples × 756 coefficients
+deg_analysis.33068073_2.out:    Filtering genes and normalizing counts...
+deg_analysis.33068073_2.out:    Genes are filtered and normalized in 19.3 seconds
+deg_analysis.33068073_2.out:    Running voom...
+deg_analysis.33068073_2.out:    Voom is completed in 22.0 seconds
+deg_analysis.33068073_2.out:    Running lmFit...
+deg_analysis.33068073_2.out:    LmFit is completed in 2155.7 seconds
+deg_analysis.33068073_2.out:DGE fit is completed in 2202.4 seconds
+deg_analysis.33068073_2.out:    Running contrasts...
+deg_analysis.33068073_2.out:    Running contrast 1/740
+deg_analysis.33068073_2.out:    Running contrast 51/740
+deg_analysis.33068073_2.out:    Running contrast 101/740
+deg_analysis.33068073_2.out:    Running contrast 151/740
+deg_analysis.33068073_2.out:    Running contrast 201/740
+deg_analysis.33068073_2.out:    Running contrast 251/740
+deg_analysis.33068073_2.out:    Running contrast 301/740
+deg_analysis.33068073_2.out:    Running contrast 351/740
+deg_analysis.33068073_2.out:    Running contrast 401/740
+deg_analysis.33068073_2.out:    Running contrast 451/740
+deg_analysis.33068073_2.out:    Running contrast 501/740
+deg_analysis.33068073_2.out:    Running contrast 551/740
+deg_analysis.33068073_2.out:    Running contrast 601/740
+deg_analysis.33068073_2.out:    Running contrast 651/740
+deg_analysis.33068073_2.out:    Running contrast 701/740
+deg_analysis.33068073_2.out:    Running contrast 740/740
+deg_analysis.33068073_2.out:Contrasts are completed in 241.8 seconds
+deg_analysis.33068073_2.out:
+deg_analysis.33068073_2.out:    Writing:  ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/intermediate/CVCL_0031/CVCL_0031_de.h5ad
+deg_analysis.33068073_2.out:
+deg_analysis.33068073_2.out:    Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/intermediate/CVCL_0031/CVCL_0031_de.h5ad
+deg_analysis.33068073_2.out:    Removed X matrix
+deg_analysis.33068073_2.out:    Rewriting h5ad file is done!
+deg_analysis.33068073_2.out:✓ Cell line completed in 2524.0 seconds
+deg_analysis.33068073_2.out:
+deg_analysis.33068073_2.out:DE analysis completed!
+deg_analysis.33068073_2.out:
+deg_analysis.33068073_2.out:Total runtime: 2535.8 seconds
+deg_analysis.33068073_2.err:During startup - Warning messages:
+deg_analysis.33068073_2.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.33068073_2.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.33068073_2.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.33068073_2.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.33068073_2.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.33068073_2.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.33068073_2.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_aggregation.33068167.out:2025-12-28 03:37:12 | [INFO] Found 3 cell type(s) to aggregate
+deg_aggregation.33068167.out:2025-12-28 03:37:12 | [INFO] Aggregating 1 batch files for CVCL_0004
+deg_aggregation.33068167.out:2025-12-28 03:37:12 | [INFO]   Reading: CVCL_0004_de.h5ad
+deg_aggregation.33068167.out:2025-12-28 03:37:19 | [INFO]   Concatenating 1 batches...
+deg_aggregation.33068167.out:2025-12-28 03:37:19 | [INFO]   Batch column added with 1
+deg_aggregation.33068167.out:2025-12-28 03:37:42 | [INFO]     Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/results/CVCL_0004_de.h5ad
+deg_aggregation.33068167.out:2025-12-28 03:37:42 | [INFO]     Removed X matrix
+deg_aggregation.33068167.out:2025-12-28 03:37:42 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.33068167.out:2025-12-28 03:37:42 | [INFO]   Saved aggregated file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/results/CVCL_0004_de.h5ad (745 obs, 10234 vars)
+deg_aggregation.33068167.out:2025-12-28 03:37:42 | [INFO] Aggregating 1 batch files for CVCL_0023
+deg_aggregation.33068167.out:2025-12-28 03:37:42 | [INFO]   Reading: CVCL_0023_de.h5ad
+deg_aggregation.33068167.out:2025-12-28 03:37:48 | [INFO]   Concatenating 1 batches...
+deg_aggregation.33068167.out:2025-12-28 03:37:48 | [INFO]   Batch column added with 1
+deg_aggregation.33068167.out:2025-12-28 03:38:06 | [INFO]     Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/results/CVCL_0023_de.h5ad
+deg_aggregation.33068167.out:2025-12-28 03:38:06 | [INFO]     Removed X matrix
+deg_aggregation.33068167.out:2025-12-28 03:38:06 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.33068167.out:2025-12-28 03:38:06 | [INFO]   Saved aggregated file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/results/CVCL_0023_de.h5ad (914 obs, 7199 vars)
+deg_aggregation.33068167.out:2025-12-28 03:38:06 | [INFO] Aggregating 1 batch files for CVCL_0031
+deg_aggregation.33068167.out:2025-12-28 03:38:06 | [INFO]   Reading: CVCL_0031_de.h5ad
+deg_aggregation.33068167.out:2025-12-28 03:38:15 | [INFO]   Concatenating 1 batches...
+deg_aggregation.33068167.out:2025-12-28 03:38:15 | [INFO]   Batch column added with 1
+deg_aggregation.33068167.out:2025-12-28 03:38:48 | [INFO]     Rewriting h5ad file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/results/CVCL_0031_de.h5ad
+deg_aggregation.33068167.out:2025-12-28 03:38:48 | [INFO]     Removed X matrix
+deg_aggregation.33068167.out:2025-12-28 03:38:48 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.33068167.out:2025-12-28 03:38:48 | [INFO]   Saved aggregated file: ./data/sciplex/deg_data/group_rep/full/qc_false/filter_min_cells_10/results/CVCL_0031_de.h5ad (740 obs, 14317 vars)
+deg_aggregation.33068167.out:2025-12-28 03:38:48 | [INFO] Aggregation completed

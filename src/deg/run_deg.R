@@ -91,7 +91,17 @@ filter_cells <- function(adata,
   n_obs_prev <- adata$n_obs
   cat("Filter samples with the low number of cells\n")
   cat("    Filter threshold (min_cells): ", min_cells, "\n")
-  adata <- adata[adata$obs$psbulk_cells >= min_cells]
+  
+  # Handle -666 as a sentinel value meaning "keep this sample regardless of threshold"
+  # Samples with -666 are kept, others are filtered by min_cells threshold
+  keep_mask <- (adata$obs$psbulk_cells == -666) | (adata$obs$psbulk_cells >= min_cells)
+  n_sentinel <- sum(adata$obs$psbulk_cells == -666, na.rm = TRUE)
+  
+  if (n_sentinel > 0) {
+    cat("    Found ", n_sentinel, " samples with sentinel value (-666), keeping all\n")
+  }
+  
+  adata <- adata[keep_mask]
   cat("    n_obs: ", n_obs_prev, "--> ", adata$n_obs, "\n")
   return(adata)
 }
@@ -240,7 +250,8 @@ derive_top_table <- function(fit,
                              perturbagen,
                              pert_dose_uM,
                              pert_time_h,
-                             subsampling) {
+                             subsampling,
+                             normalized = FALSE) {
   # Parameter validation
   stopifnot(!missing(fit),
             !missing(raw_control),
@@ -252,9 +263,9 @@ derive_top_table <- function(fit,
     contrast <- paste0("cond", clean(raw_cond), " - cond", clean(raw_control))
     tryCatch({
         ctr <- makeContrasts(contrasts = contrast, levels = colnames(coef(fit)))
-        
+
         fit2 <- contrasts.fit(fit, ctr) %>% 
-          eBayes(robust = !isTRUE(subsampling))  # Skip robust for speed in subsampling mode
+          eBayes(robust = !isTRUE(subsampling), trend = isTRUE(normalized))  # Skip robust for speed in subsampling mode
         
         top_table <- topTable(fit2, number = Inf, sort = "none", adjust.method="BH", confint=TRUE) %>%
           rownames_to_column("gene") %>%
@@ -309,7 +320,7 @@ run_contrasts <- function(fit,
     
     de_res <- pmap_dfr(treated_obs, function(cond, perturbagen, pert_dose_uM, pert_time_h, plate, raw_cond, ...) {
       contrast_num <<- contrast_num + 1
-      if (contrast_num %% 5 == 1 || contrast_num == n_contrasts) {
+      if (contrast_num %% 50 == 1 || contrast_num == n_contrasts) {
         cat(sprintf("    Running contrast %d/%d\n", contrast_num, n_contrasts))
       }
 
@@ -330,7 +341,8 @@ run_contrasts <- function(fit,
                                   perturbagen,
                                   pert_dose_uM,
                                   pert_time_h,
-                                  par$subsampling)
+                                  par$subsampling,
+                                  par$normalized)
         }
       top_tables <- compact(top_tables)
       if (length(top_tables) > 0) {
@@ -354,30 +366,79 @@ run_contrasts <- function(fit,
 #' 
 #' @param ad AnnData object
 #' @param obs Observations dataframe
+#' @param par Parameters list
 #' @return Linear model fit object
 run_dge <- function(ad,
-                    obs) {
+                    obs,
+                    par) {
   # Parameter validation
   stopifnot(!missing(ad),
             !missing(obs),
+            !missing(par),
             "cond" %in% names(obs),
             "plate" %in% names(obs),
-            !is.null(ad$X))
+            !is.null(ad$X),
+            is.list(par))
   
-  # build DGEList + design
+  
   counts <- Matrix::t(ad$X)
-  dge    <- DGEList(counts=counts)
-  design <- model.matrix(
-    ~ 0 + cond + plate,
-    data = obs
-    )
-  # filter genes and normalize
-  keep <- filterByExpr(dge, design)
-  dge  <- dge[keep, , keep.lib.sizes=FALSE] %>% calcNormFactors()
+
+  cat("    Constructing design matrix...\n")
+  start_time <- Sys.time()
+
+  # build design matrix
+  plates_to_process <- unique(obs$plate)
+  n_plates <- length(plates_to_process)
+
+  if (n_plates > 1) {
+    design <- model.matrix(
+      ~ 0 + cond + plate,
+      data = obs
+      )
+  } else {
+    design <- model.matrix(
+      ~ 0 + cond,
+      data = obs
+      )
+  }
+
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("    Design matrix is constructed in %.1f seconds\n", diff_time))
+  cat("    Design matrix dimensions:", nrow(design), "samples ×", ncol(design), "coefficients\n")
+
+  # filter genes and normalize (skip if already normalized)
+  if (is.null(par$normalized) || !par$normalized) {
+    cat("    Filtering genes and normalizing counts...\n")
+    start_time <- Sys.time()
+    # build DGEList
+    dge    <- DGEList(counts=counts)
+    keep <- filterByExpr(dge, design)
+    dge  <- dge[keep, , keep.lib.sizes=FALSE] %>% calcNormFactors()
+    diff_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("    Genes are filtered and normalized in %.1f seconds\n", diff_time))
+    cat("    Running voom...\n")
+    start_time <- Sys.time()
+    v   <- voom(dge, design, plot=FALSE)
+    diff_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("    Voom is completed in %.1f seconds\n", diff_time))
+  } else {
+    cat("    Skipping filtering and normalization (dataset is already normalized)\n")
+    cat("    Skipping voom transformation (dataset is already normalized)\n")
+    cat("    Using as.matrix() directly for lmFit (data assumed to be normalized and log-transformed)...\n")
+    start_time <- Sys.time()
+    # lmFit can work with as.matrix() directly via getEAWP() -> as.matrix(counts)
+    # This extracts counts which should contain normalized log-transformed values
+    v <- as.matrix(counts)
+    diff_time <- difftime(Sys.time(), start_time, units = "secs")
+    cat(sprintf("    as.matrix() prepared in %.1f seconds\n", diff_time))
+  }
   
-  # voom + lmFit
-  v   <- voom(dge, design, plot=FALSE)
+
+  cat("    Running lmFit...\n")
+  start_time <- Sys.time()
   fit <- lmFit(v, design)
+  diff_time <- difftime(Sys.time(), start_time, units = "secs")
+  cat(sprintf("    LmFit is completed in %.1f seconds\n", diff_time))
   return(fit)
 }
 
@@ -540,9 +601,9 @@ run_dge_pipeline <- function(par) {
   # Parameter validation
   stopifnot(!missing(par),
             is.list(par),
-            "input" %in% names(par), !is.null(par$input),
+            "input_file" %in% names(par), !is.null(par$input_file),
             "output_dir" %in% names(par), !is.null(par$output_dir),
-            is.character(par$input), file.exists(par$input),
+            is.character(par$input_file), file.exists(par$input_file),
             is.character(par$output_dir))
   
   # Set default min_cells if not provided
@@ -557,10 +618,14 @@ run_dge_pipeline <- function(par) {
   }
   stopifnot(is.logical(par$qc))
   
+
   # load the full pseudobulk AnnData
-  adata <- anndata::read_h5ad(par$input)
-  cat("Loaded input file: ", par$input, "\n")
+  adata <- anndata::read_h5ad(par$input_file)
+  cat("Loaded input file: ", par$input_file, "\n")
   cat("Initial dimensions: ", adata$n_obs, " samples × ", adata$n_vars, " genes\n")
+  
+  # Capture warnings during processing
+  warning_messages <- list()
   
   adata <- filter_cells(adata, par$min_cells)
   adata <- filter_qc(adata, par$qc)
@@ -572,106 +637,139 @@ run_dge_pipeline <- function(par) {
   for (cl in cell_types_to_process) {
     cl_num <- cl_num + 1
     cl_start <- Sys.time()
-    cat("\n▶︎ Processing cell_type ", cl_num, "/", n_cell_types, ": ", cl, "\n")
+    if (n_cell_types > 1) {
+      cat("\n▶︎ Processing cell_type ", cl_num, "/", n_cell_types, ": ", cl, "\n")
+      cl_basename <- cl
+    } else {
+      cat("\n▶︎ Processing cell_type: ", cl, "\n")
+      # Get basename of input file (without extension) for intermediate file naming
+      # Remove "_processed" from the basename if present (handles both "_processed" at end or followed by underscore)
+      cl_basename <- tools::file_path_sans_ext(basename(par$input_file))
+      cl_basename <- gsub("_processed_", "_", cl_basename)  # Replace "_processed_" with "_"
+      cl_basename <- gsub("_processed$", "", cl_basename)   # Remove "_processed" at the end
+    }
   
-    # subset to this cell_type
-    ad  <- adata[adata$obs$cell_type == cl, ]
-    ad <- filter_controls(ad, "pert_time_h")
+    # Process this cell type with warning capture
+    skip_cell_type <- FALSE
+    withCallingHandlers({
+      # subset to this cell_type
+      ad  <- adata[adata$obs$cell_type == cl, ]
+      ad <- filter_controls(ad, "pert_time_h")
+      
+      obs <- ad$obs %>%
+        mutate(
+        raw_cond = perturbation_label,
+        cond = factor(clean(perturbation_label)),  # sanitize values here!
+        )
+      
+      # Check for required controls
+      check_for_controls(obs, "pert_time_h")
     
-    obs <- ad$obs %>%
-      mutate(
-      raw_cond = perturbation_label,
-      cond = factor(clean(perturbation_label)),  # sanitize values here!
+      cond <- obs$cond
+      start_time <- Sys.time()
+      fit <- run_dge(ad,
+              obs,
+              par)
+      delta_time <- difftime(Sys.time(), start_time, units = "secs")
+      cat(sprintf("DGE fit is completed in %.1f seconds\n", delta_time))
+
+      
+      # separate the control and treated conds (we won't DE on control-vs-control)
+      control_obs <- obs %>%
+          distinct(cond, .keep_all = TRUE) %>%
+          filter(is_control==TRUE)
+      
+      treated_obs <- obs %>%
+          distinct(cond, .keep_all = TRUE) %>%
+          filter(is_control!=TRUE)
+      
+
+      cat("    Running contrasts...\n")
+      start_time <- Sys.time()
+      de_res <- run_contrasts(fit,
+                            control_obs,
+                            treated_obs,
+                            par)
+      
+      delta_time <- difftime(Sys.time(), start_time, units = "secs")
+      cat(sprintf("Contrasts are completed in %.1f seconds\n", delta_time))
+      # Skip if no valid DE results
+      if (is.null(de_res) || nrow(de_res) == 0) {
+        warning("No valid DE results for cell line ", cl)
+        skip_cell_type <<- TRUE
+        return(invisible(NULL))
+      }
+    
+      # adjust p-values globally across all contrasts
+      de_df <- de_res %>%
+        mutate(
+          adj.P.Value.across_all_contrasts = p.adjust(P.Value, method="BH")
+        )  %>%
+        rename(adj.P.Value.within_one_contrast = adj.P.Val)
+    
+      obs_out <- get_obs(de_df, treated_obs)
+      var_out <- get_var(de_df, ad)
+      layers <- get_layers(de_df, obs_out)
+      
+      # Get uns metadata before subsetting to avoid ImplicitModificationWarning
+      # Access uns early while adata is still a proper object (not a view)
+      if (!is.null(adata$uns) && length(adata$uns) > 0) {
+        new_uns <- as.list(adata$uns)  # Create a copy
+      } else {
+        new_uns <- list()
+      }
+    
+      new_uns$threshold_filter_cells <- par$min_cells
+      new_uns$qc_filtering_enabled <- par$qc
+      
+
+      
+      # assemble and write
+      out_adata <- anndata::AnnData(
+        obs    = obs_out,
+        var    = var_out,
+        layers = layers,
+        uns    = new_uns
       )
+      
+      # Create output file path
+      outfile <- file.path(par$output_dir, paste0(cl_basename, "_de.h5ad"))
     
-    # Check for required controls
-    check_for_controls(obs, "pert_time_h")
-  
-    cond <- obs$cond
-    fit <- run_dge(ad,
-            obs)
-  
-    # separate the control and treated conds (we won't DE on control-vs-control)
-    control_obs <- obs %>%
-        distinct(cond, .keep_all = TRUE) %>%
-        filter(is_control==TRUE)
+      # Create output directory if it doesn't exist
+      output_dir <- dirname(outfile)
+      if (!dir.exists(output_dir)) {
+        dir.create(output_dir, recursive = TRUE)
+      }
     
-    treated_obs <- obs %>%
-        distinct(cond, .keep_all = TRUE) %>%
-        filter(is_control!=TRUE)
+      # Write output file
+      cat("\n    Writing: ", outfile, "\n")
+      out_adata$write_h5ad(outfile, compression = "gzip")
 
-    de_res <- run_contrasts(fit,
-                          control_obs,
-                          treated_obs,
-                          par)
-
-    # Skip if no valid DE results
-    if (is.null(de_res) || nrow(de_res) == 0) {
-      warning("No valid DE results for cell line ", cl)
+      # Remove X matrix for compatibility with older Python anndata versions
+      rewrite_h5ad(outfile)
+    
+      # Show time for this cell line
+      cl_time <- difftime(Sys.time(), cl_start, units = "secs")
+      cat(sprintf("✓ Cell line completed in %.1f seconds\n", cl_time))
+    }, warning = function(w) {
+      warning_messages[[length(warning_messages) + 1]] <<- conditionMessage(w)
+      invokeRestart("muffleWarning")
+    })
+    
+    # Skip to next cell type if no valid results
+    if (skip_cell_type) {
       next
     }
+  }
   
-    # adjust p-values globally across all contrasts
-    de_df <- de_res %>%
-      mutate(
-        adj.P.Value.across_all_contrasts = p.adjust(P.Value, method="BH")
-      )  %>%
-      rename(adj.P.Value.within_one_contrast = adj.P.Val)
-  
-    obs_out <- get_obs(de_df, treated_obs)
-    var_out <- get_var(de_df, ad)
-    layers <- get_layers(de_df, obs_out)
-    
-    # Get uns metadata before subsetting to avoid ImplicitModificationWarning
-    # Access uns early while adata is still a proper object (not a view)
-    if (!is.null(adata$uns) && length(adata$uns) > 0) {
-      new_uns <- as.list(adata$uns)  # Create a copy
-    } else {
-      new_uns <- list()
+  # Print any warnings that occurred (to stderr)
+  if (length(warning_messages) > 0) {
+    message(sprintf("\n=== %d Warnings encountered ===\n", length(warning_messages)))
+    # Print all warnings
+    all_warns <- unlist(warning_messages)
+    for (i in 1:length(all_warns)) {
+      message(sprintf("%d. %s", i, all_warns[i]))
     }
-  
-    new_uns$threshold_filter_cells <- par$min_cells
-    new_uns$qc_filtering_enabled <- par$qc
-    
-
-    
-    # assemble and write
-    out_adata <- anndata::AnnData(
-      obs    = obs_out,
-      var    = var_out,
-      layers = layers,
-      uns    = new_uns
-    )
-  
-    # Create output directory if it doesn't exist
-    if (!is.null(par$subsampling) && par$subsampling) {
-      output_dir <- file.path(par$output_dir, "subsampling")
-    }
-    else {
-      output_dir <- file.path(par$output_dir, "full")
-    }
-    # Add QC folder based on whether QC filtering is enabled
-    qc_folder <- if (par$qc) "qc_true" else "qc_false"
-    output_dir <- file.path(output_dir, qc_folder)
-    
-    # Add filter folder based on min_cells threshold
-    filter_folder <- paste0("filter_min_cells_", par$min_cells)
-    output_dir <- file.path(output_dir, filter_folder)
-    
-    if (!dir.exists(output_dir)) {
-      dir.create(output_dir, recursive = TRUE)
-    }
-  
-    outfile <- file.path(output_dir, paste0(cl, "_de.h5ad"))
-    cat("\n    Writing: ", outfile, "\n")
-    out_adata$write_h5ad(outfile, compression = "gzip")
-    
-    # Remove X matrix for compatibility with older Python anndata versions
-    rewrite_h5ad(outfile)
-  
-    # Show time for this cell line
-    cl_time <- difftime(Sys.time(), cl_start, units = "secs")
-    cat(sprintf("✓ Cell line completed in %.1f seconds\n", cl_time))
   }
 }
 
@@ -699,9 +797,9 @@ merge_config <- function(args, config) {
 #' 
 #' Processes command line arguments and runs the complete DGE pipeline
 #' @return NULL (saves results to files)
-main <- function() {
+main <- function() {  
   parser <- ArgumentParser()
-  parser$add_argument("--input", type="character")
+  parser$add_argument("--input_file", type="character")
   parser$add_argument("--output_dir", type="character")
   parser$add_argument("--subsampling", action="store_true")
   parser$add_argument("--max_cell_types", type="integer")
@@ -711,14 +809,15 @@ main <- function() {
   parser$add_argument("--specific_perturbagens", type="character", default=NULL)
   parser$add_argument("--min_cells", type="integer", default=0)
   parser$add_argument("--qc", action="store_true")
+  parser$add_argument("--normalized", action="store_true")
   parser$add_argument("--config", default="{}")
 
   args <- parser$parse_args()
   config <- jsonlite::fromJSON(args$config)
-  args$config = NULL
+  args$config <- NULL
   args <- merge_config(args, config)  
   # Start timer
-  start_time <- Sys.time()
+  deg_start <- Sys.time()
   cat("\nDE analysis started...\n")
 	
   tryCatch({
@@ -726,15 +825,20 @@ main <- function() {
       cat("\nDE analysis completed!\n")
   }, error = function(e) {
     	message("Error in running DGE: ", e$message)
-  	message("Stack trace:")
-	traceback()
+  	message("\nFull error details:")
+	message("  Class: ", class(e))
+	message("  Call: ", deparse(e$call))
+	message("\nStack trace (sys.calls):")
+	calls <- sys.calls()
+	for (i in seq_along(calls)) {
+	  message(sprintf("  %d: %s", i, deparse(calls[[i]])[1]))
+	}
 	stop("DGE pipeline failed")
   })
   
 	# Show runtime
-  end_time <- Sys.time()
-  runtime <- difftime(end_time, start_time, units = "secs")
-  cat(sprintf("\nTotal runtime: %.1f seconds\n", runtime))
+  deg_time <- difftime(Sys.time(), deg_start, units = "secs")
+  cat(sprintf("\nTotal runtime: %.1f seconds\n", deg_time))
 
   if (!is.null(args$subsampling) && args$subsampling) {
   	cat("\n📝 Note: This was a TEST RUN with reduced data.\n")
