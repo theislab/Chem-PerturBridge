@@ -207,6 +207,9 @@ cd /op3_v2
 ./run_pipelines/run_combining_logs.sh -l logs/sciplex/full/deg/separate_replicates/qc_false/filter_min_cells_10 -t deg
 ```
 
+### 5. Add datasets
+To add a new dataset to the pipeline, follow the instructions in [`./docs/README.md`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/docs/README.md)
+
 # Project structure:
 The structure of the repo:
 ```
