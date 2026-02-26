@@ -660,6 +660,7 @@ run_dge_pipeline <- function(par) {
         mutate(
         raw_cond = perturbation_label,
         cond = factor(clean(perturbation_label)),  # sanitize values here!
+        plate = factor(clean(plate)), # sanitize plates here!
         )
       
       # Check for required controls
@@ -695,8 +696,15 @@ run_dge_pipeline <- function(par) {
       cat(sprintf("Contrasts are completed in %.1f seconds\n", delta_time))
       # Skip if no valid DE results
       if (is.null(de_res) || nrow(de_res) == 0) {
-        warning("No valid DE results for cell line ", cl)
         skip_cell_type <<- TRUE
+        if (length(warning_messages) > 0) {
+          message(sprintf("\n=== %d Warnings encountered (no DE results for %s) ===\n", length(warning_messages), cl))
+          all_warns <- unlist(warning_messages)
+          for (i in 1:length(all_warns)) {
+            message(sprintf("%d. %s", i, all_warns[i]))
+          }
+        }
+        message("No valid DE results for cell line ", cl)
         return(invisible(NULL))
       }
     

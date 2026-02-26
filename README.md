@@ -2,7 +2,8 @@
 
 **OP3_v2** is a set of pipelines for analyzing single-cell RNA sequencing data from perturbation experiments. 
 
-The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234) (**Sci-Plex3**), [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full), and [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0) datasets.
+The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234) (**Sci-Plex3**), [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full), [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0), and  
+[**OP3**](https://openreview.net/forum?id=WTI4RJYSVm) datasets.
 
 It consists of the following steps:
 
@@ -129,7 +130,7 @@ You can execute it with following arguments:
 ```
 -s if this flag is included, then the script is executed for a subsample of a dataset, default=false
 -h if this flag is included, then the help is printed, default=false
--d it is a required flag speifying which dataset should be processed: sciplex | tahoe | l1000_phase1 | l1000_phase2
+-d it is a required flag speifying which dataset should be processed: e.g. sciplex | tahoe | ...
 ```
 
 For example, for subsample of Sci-Plex dataset, you need to run:
@@ -154,7 +155,7 @@ You can execute it with following arguments:
 -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
 -q if this flag is included, then samples that did not pass quality control are filtered out, default=false
 -n if this flag is included, then the dataset is already normalized and normalization steps are skipped, default=false
--d it is a required flag specifying which dataset should be processed: sciplex | tahoe | l1000_phase1 | l1000_phase2
+-d it is a required flag specifying which dataset should be processed: sciplex | tahoe | ...
 -p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
 ```
 **NB!** The -g option was added to make it possible to distribute DEG calculations across a larger number of nodes.
@@ -236,26 +237,12 @@ The structure of the repo:
 │   ├── common
 |   |   ├── combining_logs.sh
 │   │   └── deg.sh
-│   ├── sciplex
+│   ├── dataset_i
 │   │   └─── configs/
 │   │       ├── deg/
 │   │       │   └── config.json
-│   │       └── sciplex_pseudobulking.sh
-│   ├── tahoe
-│   │   └─── configs/
-│   │       ├── deg/
-│   │       │   └── config.json
-│   │       └── tahoe_pseudobulking_parallel.sh
-│   ├── l1000_phase1
-│   │   ├── configs/
-│   │   │   └── deg/
-│   │   │       └── config.json
-│   │   └── l1000_phase1_pseudobulking.sh
-│   └── l1000_phase2
-│       ├── configs/
-│       │   └── deg/
-│       │       └── config.json
-│       └── l1000_phase2_pseudobulking.sh
+│   │       └── dataset_i_pseudobulking.sh
+│   └── ...
 ├── README.md
 ├── run_pipelines
 │   ├── run_combining_logs.sh
@@ -280,20 +267,10 @@ The structure of the repo:
 │   │   │   ├── run_combining_datasets.py
 │   │   │   └── run_pseudobulking.py
 │   │   └── datasets
-│   │       ├── sciplex
+│   │       ├── dataset_i
 │   │       │   ├── pubchem_imputation.py
-│   │       │   └── standardization.py
-│   │       ├── tahoe
-│   │       │   ├── post_processing.py
-│   │       │   ├── pubchem_imputation.py
-│   │       │   └── standardization.py
-│   │       └── l1000
-│   │           ├── assembling.py
-│   │           ├── cellosaurus_annotation.py
-│   │           ├── donor_metadata_annotation.py
-│   │           ├── gene_annotation.py
-│   │           ├── pubchem_imputation.py
-│   │           └── run_assembling.py
+│   │       │   └── ...
+│   │       └── ...
 │   └── utils
 │       ├──  aggregate_logs.py
 │       └─── parsing_utils.py

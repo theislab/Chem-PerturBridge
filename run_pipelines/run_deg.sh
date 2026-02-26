@@ -22,6 +22,7 @@ VALID_CHOICES=(
         "tahoe"
         "l1000_phase1"
         "l1000_phase2"
+		"op3"
 )
 
 DEG_PARAMETERS=(
