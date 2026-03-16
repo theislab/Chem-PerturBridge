@@ -1,0 +1,36 @@
+{
+  "group_all_replicates": {
+    "par_process": {
+      "input_file": "./data/dilimap_train_val/pseudobulk/full/dilimap_train_val_assembled.h5ad",
+      "output_dir": "./data/dilimap_train_val/pseudobulk_processed/group_rep",
+      "design_param": "group_all_replicates"
+    },
+    "par_deg": {
+      "input_dir": "./data/dilimap_train_val/pseudobulk_processed/group_rep",
+      "output_dir": "./data/dilimap_train_val/deg_data/group_rep",
+      "design_param": "group_all_replicates",
+      "max_cell_types": 1,
+      "max_perturbations": 3,
+      "max_genes": 1000,
+      "specific_times": null,
+      "specific_perturbagens": null
+    }
+  },
+  "separate_replicates": {
+    "par_process": {
+      "input_file": "./data/dilimap_train_val/pseudobulk/full/dilimap_train_val_assembled.h5ad",
+      "output_dir": "./data/dilimap_train_val/pseudobulk_processed/sep_rep",
+      "design_param": "separate_replicates"
+    },
+    "par_deg": {
+      "input_dir": "./data/dilimap_train_val/pseudobulk_processed/sep_rep",
+      "output_dir": "./data/dilimap_train_val/deg_data/sep_rep",
+      "design_param": "separate_replicates",
+      "max_cell_types": 1,
+      "max_perturbations": 3,
+      "max_genes": 1000,
+      "specific_times": null,
+      "specific_perturbagens": null
+    }
+  }
+}

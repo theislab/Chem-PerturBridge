@@ -16,6 +16,8 @@ FILT=""
 VALID_CHOICES=(
         "sciplex"
         "tahoe"
+        "dilimap_train"
+        "dilimap_train_val"
 )
 
 DEG_PARAMETERS=(

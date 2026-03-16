@@ -1,5 +1,4 @@
 {
-
 	"tahoe": {
 		"standardize_dataset": {
                           "module": "src.pseudobulking.datasets.tahoe.standardization",
@@ -10,7 +9,6 @@
 			  "module": "src.pseudobulking.datasets.tahoe.pubchem_imputation",
 			  "func": "pubchem_mapping_tahoe"
 		  	}
-
 		 },
         "sciplex": {
 		"standardize_dataset": {
@@ -21,6 +19,25 @@
 			  "module": "src.pseudobulking.datasets.sciplex.pubchem_imputation",
                           "func": "pubchem_mapping_sciplex"
                   	}
-
+		 },
+        "dilimap_train": {
+		"standardize_dataset": {
+                            "module": "src.pseudobulking.datasets.dilimap_train.standardization",
+                            "func": "standardize_dilimap_train"
+                        },
+		  "pubchem_mapping": {
+			  "module": "src.pseudobulking.datasets.dilimap_train.pubchem_imputation",
+                          "func": "pubchem_mapping_dilimap_train"
+                  	}
+		 },
+        "dilimap_train_val": {
+		"standardize_dataset": {
+                            "module": "src.pseudobulking.datasets.dilimap_train.standardization",
+                            "func": "standardize_dilimap_train_val"
+                        },
+		  "pubchem_mapping": {
+			  "module": "src.pseudobulking.datasets.dilimap_train.pubchem_imputation",
+                          "func": "pubchem_mapping_dilimap_train_val"
+                  	}
 		 }
 }
