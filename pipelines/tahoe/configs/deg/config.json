@@ -3,7 +3,15 @@
     "par_process": {
       "input_file": "./data/tahoe/pseudobulk/full/tahoe.h5ad",
       "output_dir": "./data/tahoe/pseudobulk_processed/group_rep",
-      "design_param": "group_all_replicates"
+      "design_param": "group_all_replicates",
+      "dataset": "tahoe",
+      "post_processing": {
+        "var_lamindb_path": "./data/tahoe/raw/var.parquet",
+        "processing_functions": {
+          "path": "./src/configs/datasets.json",
+          "name": "post_processing"
+        }
+      }
     },
     "par_deg": {
       "input_dir": "./data/tahoe/pseudobulk_processed/group_rep",
@@ -20,7 +28,15 @@
     "par_process": {
       "input_file": "./data/tahoe/pseudobulk/full/tahoe.h5ad",
       "output_dir": "./data/tahoe/pseudobulk_processed/sep_rep",
-      "design_param": "separate_replicates"
+      "design_param": "separate_replicates",
+      "dataset": "tahoe",
+      "post_processing": {
+        "var_lamindb_path": "./data/tahoe/raw/var.parquet",
+        "processing_functions": {
+          "path": "./src/configs/datasets.json",
+          "name": "post_processing"
+        }
+      }
     },
     "par_deg": {
       "input_dir": "./data/tahoe/pseudobulk_processed/sep_rep",

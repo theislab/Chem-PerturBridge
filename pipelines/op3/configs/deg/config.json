@@ -1,0 +1,39 @@
+{
+  "group_all_replicates": {
+    "par_process": {
+      "input_file": "./data/op3/pseudobulk/full/op3_standardized.h5ad",
+      "output_dir": "./data/op3/pseudobulk_processed/group_rep",
+      "design_param": "group_all_replicates",
+      "dataset": "op3"
+    },
+    "par_deg": {
+      "input_dir": "./data/op3/pseudobulk_processed/group_rep",
+      "output_dir": "./data/op3/deg_data/group_rep",
+      "design_param": "group_all_replicates",
+      "max_cell_types": 3,
+      "max_perturbations": 3,
+      "max_genes": 1000,
+      "specific_times": 24,
+      "specific_perturbagens": null
+    }
+  },
+  "separate_replicates": {
+    "par_process": {
+      "input_file": "./data/op3/pseudobulk/full/op3_standardized.h5ad",
+      "output_dir": "./data/op3/pseudobulk_processed/sep_rep",
+      "design_param": "separate_replicates",
+      "dataset": "op3"
+    },
+    "par_deg": {
+      "input_dir": "./data/op3/pseudobulk_processed/sep_rep",
+      "output_dir": "./data/op3/deg_data/sep_rep",
+      "design_param": "separate_replicates",
+      "max_cell_types": 3,
+      "max_perturbations": 3,
+      "max_genes": 1000,
+      "specific_times": 24,
+      "specific_perturbagens": null
+    }
+  }
+}
+
