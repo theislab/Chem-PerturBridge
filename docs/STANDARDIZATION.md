@@ -3,14 +3,14 @@
 You might have some questions on how to standardize diverse datasets.
 Therefore, we added some comments on potential issues to help you avoid them.
 
-To standardize you just need to convert dataset column content or column names to the specific schema described [here](https://github.com/theislab/op3_v2/blob/readme_new_dataset/docs/Format_Pseudobulk.ipynb).
+To standardize you just need to convert dataset column content or column names to the specific schema described [here](https://github.com/theislab/op3_v2/blob/main/docs/Format_Pseudobulk.ipynb).
 
 * For example, your dataset probably has columns `PLATE_ID` and `PLATE_NAME`, both could be converted to `plate` column from our schema. How to choose? Probably, take a look if authors of the dataset have some preferences by using content of `PLATE_ID` and `PLATE_NAME` in other columns or looking at content readability (could numbers in `PLATE_ID` be confused with other IDs, e.g. `pubchem_cid`?).
 
 * Additionally, pay attention to differences in units between the original version and the standardized one, just to convert them correctly.
 
 ## Which columns are important?
-The most important columns to keep an eye on are `plate`, `well`, `cell_type`, `perturbagen`, `pert_type`, `is_control`, `pert_dose_uM`, `pert_time_h`, `pubchem_cid`. Description of them is located [here](https://github.com/theislab/op3_v2/blob/readme_new_dataset/docs/Format_Pseudobulk.ipynb).
+The most important columns to keep an eye on are `plate`, `well`, `cell_type`, `perturbagen`, `pert_type`, `is_control`, `pert_dose_uM`, `pert_time_h`, `pubchem_cid`. Description of them is located [here](https://github.com/theislab/op3_v2/blob/main/docs/Format_Pseudobulk.ipynb).
 
 **NB!** Some cell types are not represented as cell lines. It is ok to leave them with the original names/ids, but also if you have a chance it would be great to map them to `CL:` IDs via [Cell Ontology](https://www.ebi.ac.uk/ols4/ontologies/cl).
 
