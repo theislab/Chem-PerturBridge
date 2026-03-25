@@ -21,7 +21,7 @@ The most important columns to keep an eye on are `plate`, `well`, `cell_type`, `
 Some columns, especially related to the information regarding donors, might not be so highly important for future analysis and therefore not included in the original dataset, but we included this information into our schema to store details as well. Donor information connected to the specific cell line could be found on `www.cellosaurus.org` website, or in the publication associated with the dataset release.
 
 ## Data
-### 1.1 Single-Cell data
+### Single-Cell data
 Examples: `sciplex3`, `tahoe`
 
 For Single-Cell data pseudobulk aggregation is needed to run. Dataset-specific standardization is executed during [`pseudobulk.py`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/src/pseudobulking/common/pseudobulk.py) script running. To include standardization scripts into `pseudobulk.py` pipeline, and make them imported you need to:
@@ -30,7 +30,7 @@ For Single-Cell data pseudobulk aggregation is needed to run. Dataset-specific s
 * add the path to `standardization` module in the `config` file: `/op3_v2/blob/readme_new_dataset/src/configs/datasets.json`
 * Additionally, `pseudobulk.py` includes `pubchem_cid` enrichment function to map drug names to PubChem CIDs. Note that automatic enrichment of CIDs does not always find CIDs for drug names, therefore it might be worth adding a dictionary of manual mappings for unmapped drug names (see [`pubchem_imputation.py`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/src/pseudobulking/datasets/sciplex/pubchem_imputation.py) for **Sci-Plex**) and specify it in the mentioned `config` file: `/op3_v2/blob/readme_new_dataset/src/configs/datasets.json`.
 
-### 1.2 Bulk data
+### Bulk data
 Bulk data also might include both normalized values and raw counts.
 Examples: `l1000`, `op3`
 
