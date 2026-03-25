@@ -24,19 +24,19 @@ Some columns, especially related to the information regarding **donors**, might 
 ### Single-Cell data
 Examples: `sciplex3`, `tahoe`
 
-For Single-Cell data pseudobulk aggregation is needed to run. Dataset-specific standardization is executed during [`pseudobulk.py`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/src/pseudobulking/common/pseudobulk.py) script running. To include standardization scripts into `pseudobulk.py` pipeline, and make them imported you need to:
+For Single-Cell data pseudobulk aggregation is needed to run. Dataset-specific standardization is executed during [`pseudobulk.py`](https://github.com/theislab/op3_v2/blob/main/src/pseudobulking/common/pseudobulk.py) script running. To include standardization scripts into `pseudobulk.py` pipeline, and make them imported you need to:
 
 * include `standardization.py` scripts in dataset-specific directory `op3_v2/src/pseudobulking/datasets/mynewdataset`
-* add the path to `standardization` module in the `config` file: `/op3_v2/blob/readme_new_dataset/src/configs/datasets.json`
-* Additionally, `pseudobulk.py` includes `pubchem_cid` enrichment function to map drug names to PubChem CIDs. Note that automatic enrichment of CIDs does not always find CIDs for drug names, therefore it might be worth adding a dictionary of manual mappings for unmapped drug names (see [`pubchem_imputation.py`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/src/pseudobulking/datasets/sciplex/pubchem_imputation.py) for **Sci-Plex**) and specify it in the mentioned `config` file: `/op3_v2/blob/readme_new_dataset/src/configs/datasets.json`.
+* add the path to `standardization` module in the `config` file: `/op3_v2/src/configs/datasets.json`
+* Additionally, `pseudobulk.py` includes `pubchem_cid` enrichment function to map drug names to PubChem CIDs. Note that automatic enrichment of CIDs does not always find CIDs for drug names, therefore it might be worth adding a dictionary of manual mappings for unmapped drug names (see [`pubchem_imputation.py`](https://github.com/theislab/op3_v2/blob/main/src/pseudobulking/datasets/sciplex/pubchem_imputation.py) for **Sci-Plex**) and specify it in the mentioned `config` file: `/op3_v2/src/configs/datasets.json`.
 
 ### Bulk data
 Bulk data also might include both normalized values and raw counts.
 Examples: `l1000`, `op3`
 
-For bulk data you probably have more space for creating different scripts with different namings inside the dataset-specific directory, e.g. [L1000](https://github.com/theislab/op3_v2/tree/readme_new_dataset/src/pseudobulking/datasets/l1000). But the resulting dataset schema should be similar to the one described [here](https://github.com/theislab/op3_v2/blob/readme_new_dataset/docs/Format_Pseudobulk.ipynb), slight differences might be possible.
+For bulk data you probably have more space for creating different scripts with different namings inside the dataset-specific directory, e.g. [L1000](https://github.com/theislab/op3_v2/tree/main/src/pseudobulking/datasets/l1000). But the resulting dataset schema should be similar to the one described [here](https://github.com/theislab/op3_v2/blob/main/docs/Format_Pseudobulk.ipynb), slight differences might be possible.
 
-Note, to look up `pubchem_cid` for bulk data you can include `lookup_pubchem_cids` from [`pubchem.py`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/src/pseudobulking/common/pubchem.py) module into your processing/assembling pipeline.
+Note, to look up `pubchem_cid` for bulk data you can include `lookup_pubchem_cids` from [`pubchem.py`](https://github.com/theislab/op3_v2/blob/main/src/pseudobulking/common/pubchem.py) module into your processing/assembling pipeline.
 
 **NB!** Some columns that might be represented in pseudobulk data are outputs of the `decoupler` library, such as `psbulk_cells` and `psbulk_counts`. If we do not know information on the number of cells or counts in the bulk sample - it is better to fill these columns with `None`. For intensities or normalized data we cannot determine the number of counts in the sample, therefore `psbulk_counts` should probably be filled with `None`; for bulk data with raw counts we can calculate the values for this column as `.X.sum(1)`.
 
