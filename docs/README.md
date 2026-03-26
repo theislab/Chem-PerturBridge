@@ -21,7 +21,7 @@ The **executed code** could be divided into two parts:
 
 **NB!** Use `sciplex` or `tahoe` as reference examples by replacing `mynewdataset` in the scripts and directories.
 
-### 1. Update a pseudobulking step:
+### 1 Update a pseudobulking step:
 
 **1.1** **`.py` scripts and config**
 
@@ -110,9 +110,9 @@ The **executed code** could be divided into two parts:
 
 For full command usage and examples, refer to [`../README.md`](https://github.com/theislab/op3_v2/blob/main/README.md) in the `main` branch.
 
-**4** **Optionally...**
+### **4** **Optionally...**
 
-If you are a contributor, it would be great to update `README.md` file by adding information on the dataset which you processed (url link to dataset paper, a license of a processed dataset, and a license for additional sources used in dataset processing). Just follow our sample dataset descriptions in main `../README.md`(https://github.com/theislab/op3_v2/blob/main/README.md).
+If you are a contributor, it would be great to update `README.md` file by adding information on the dataset which you processed (url link to dataset paper, a license of a processed dataset, and a license for additional sources used in dataset processing). Just follow our sample dataset descriptions in main [`../README.md`](https://github.com/theislab/op3_v2/blob/main/README.md).
 
 ## Additional Resources
 
