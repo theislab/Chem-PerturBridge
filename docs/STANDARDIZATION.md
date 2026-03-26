@@ -32,7 +32,8 @@ For Single-Cell data pseudobulk aggregation is needed to run. Dataset-specific s
 
 ### Bulk data
 Bulk data also might include both normalized values and raw counts.
-Examples: `l1000`, `op3`
+Examples: `l1000`, `op3`* 
+*originally `op3` is single cell dataset, but we took prepared pseudobulk version for the current pipeline.
 
 For bulk data you probably have more space for creating different scripts with different namings inside the dataset-specific directory, e.g. [L1000](https://github.com/theislab/op3_v2/tree/main/src/pseudobulking/datasets/l1000). But the resulting dataset schema should be similar to the one described [here](https://github.com/theislab/op3_v2/blob/main/docs/Format_Pseudobulk.ipynb), slight differences might be possible.
 
