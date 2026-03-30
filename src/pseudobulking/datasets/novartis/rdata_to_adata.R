@@ -15,19 +15,19 @@ suppressPackageStartupMessages({
 
 #' Convert a single plate entry to a sparse count matrix and obs data.frame
 #'
-#' @param plate_data List with elements UMI.counts (genes x cells) and
-#'   Annotation (cells x metadata)
+#' @param plate_data List with elements UMI.counts (genes x samples) and
+#'   Annotation (samples x metadata)
 #' @return List with:
-#'   \item{X}{sparse Matrix of shape (n_cells x n_genes)}
-#'   \item{obs}{data.frame of shape (n_cells x 18), rownames = cell barcodes}
+#'   \item{X}{sparse Matrix of shape (n_samples x n_genes)}
+#'   \item{obs}{data.frame of shape (n_samples x 18), rownames = sample barcodes}
 plate_to_parts <- function(plate_data) {
-  counts <- plate_data$UMI.counts   # genes x cells dense matrix
-  obs    <- plate_data$Annotation   # cells x metadata
+  counts <- plate_data$UMI.counts   # genes x samples dense matrix
+  obs    <- plate_data$Annotation   # samples x metadata
 
   # Reorder Annotation rows to match the column order of UMI.counts
   obs <- obs[colnames(counts), , drop = FALSE]
 
-  # Transpose to cells x genes and convert to sparse format
+  # Transpose to samples x genes and convert to sparse format
   X_sparse <- Matrix(t(counts), sparse = TRUE)
 
   list(X = X_sparse, obs = obs)
@@ -37,12 +37,12 @@ plate_to_parts <- function(plate_data) {
 #' Build a combined AnnData from the full Exp list
 #'
 #' Exp structure:
-#'   Exp[[batch_id]][[plate_barcode]]$UMI.counts  # genes x cells
-#'   Exp[[batch_id]][[plate_barcode]]$Annotation  # cells x 18 metadata cols
+#'   Exp[[batch_id]][[plate_barcode]]$UMI.counts  # genes x samples
+#'   Exp[[batch_id]][[plate_barcode]]$Annotation  # samples x 18 metadata cols
 #'
 #' @param Exp Named list of batches, each containing named plates
 #' @param output_path Optional path to write the .h5ad file
-#' @return AnnData object (cells x genes)
+#' @return AnnData object (samples x genes)
 exp_to_anndata <- function(Exp, output_path = NULL) {
 
   X_list    <- list()
@@ -74,9 +74,9 @@ exp_to_anndata <- function(Exp, output_path = NULL) {
     }
   }
 
-  # Stack all cells
-  X_combined   <- do.call(rbind, X_list)    # total_cells x genes
-  obs_combined <- do.call(rbind, obs_list)  # total_cells x 18
+  # Stack all samples
+  X_combined   <- do.call(rbind, X_list)    # total_samples x genes
+  obs_combined <- do.call(rbind, obs_list)  # total_samples x 18
 
   var_df <- data.frame(row.names = var_names)
 
@@ -122,7 +122,7 @@ main <- function() {
 
     adata <- exp_to_anndata(Exp, output_path = args$output_file)
 
-    cat(sprintf("obs : %d cells x %d metadata columns\n",
+    cat(sprintf("obs : %d samples x %d metadata columns\n",
                 nrow(adata$obs), ncol(adata$obs)))
     cat(sprintf("var : %d genes\n", nrow(adata$var)))
     cat("\nConversion completed!\n")

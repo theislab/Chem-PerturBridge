@@ -157,7 +157,7 @@ def standardize_var(adata: ad.AnnData, var_filtered: pd.DataFrame) -> ad.AnnData
 
 def filter_samples(adata: ad.AnnData, robust_dmso: pd.DataFrame) -> ad.AnnData:
     """
-    Filter cells from the Novartis dataset.
+    Filter samples from the Novartis dataset.
 
     Removes:
     1. Cells with an empty well_type.
@@ -175,32 +175,32 @@ def filter_samples(adata: ad.AnnData, robust_dmso: pd.DataFrame) -> ad.AnnData:
     -------
     Filtered AnnData.
     """
-    logger.info('Original: %d cells', adata.shape[0])
+    logger.info('Original: %d samples', adata.shape[0])
 
     robust_ext_biosample_ids = robust_dmso['external_biosample_id'].astype(str)
     is_outlier = pd.Series(np.zeros(adata.obs.shape[0], dtype=bool), index=adata.obs.index)
 
     mask_empty_well_type = adata.obs['well_type'] == 'EMPTY'
-    logger.info('Empty well_type: %d cells', mask_empty_well_type.sum())
+    logger.info('Empty well_type: %d samples', mask_empty_well_type.sum())
     is_outlier = is_outlier | mask_empty_well_type
 
     mask_rc_not_in_dmso = (
         (adata.obs['well_type'] == 'RC')
         & ~adata.obs['external_biosample_id'].astype(str).isin(robust_ext_biosample_ids)
     )
-    logger.info('RC not in robust_dmso: %d cells', mask_rc_not_in_dmso.sum())
+    logger.info('RC not in robust_dmso: %d samples', mask_rc_not_in_dmso.sum())
     is_outlier = is_outlier | mask_rc_not_in_dmso
 
     mask_sa_poscon = (
         (adata.obs['well_type'] == 'SA')
         & adata.obs['cmpd_sample_id'].isin(POS_CTL)
     )
-    logger.info('SA in POS_CTL: %d cells', mask_sa_poscon.sum())
+    logger.info('SA in POS_CTL: %d samples', mask_sa_poscon.sum())
     is_outlier = is_outlier | mask_sa_poscon
 
     logger.info('Total outliers: %d / %d', is_outlier.sum(), adata.obs.shape[0])
     adata = adata[~is_outlier]
-    logger.info('Remaining: %d cells', adata.shape[0])
+    logger.info('Remaining: %d samples', adata.shape[0])
     return adata
 
 
@@ -610,7 +610,7 @@ def standardize_novartis_dataset(
     -----
     1. Load raw AnnData, gene annotation, compound metadata, robust DMSO table.
     2. Filter and map .var geneIDs → ensembl_ids; aggregate counts where needed.
-    3. Filter outlier cells (empty wells, non-robust RC wells, positive controls).
+    3. Filter outlier samples (empty wells, non-robust RC wells, positive controls).
     4. Optionally annotate compounds with PubChem CIDs (annotate_pubchem).
     5. Optionally look up drug synonym names by CID (annotate_pubchem_names).
     6. Build unified .obs conforming to the pseudobulk schema.
@@ -642,7 +642,7 @@ def standardize_novartis_dataset(
     var_filtered = filter_var(adata, genes)
     adata = standardize_var(adata, var_filtered)
 
-    logger.info("Filtering cells ...")
+    logger.info("Filtering samples ...")
     adata = filter_samples(adata, robust_dmso)
 
     if annotate_pubchem:
