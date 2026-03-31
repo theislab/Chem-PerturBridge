@@ -697,7 +697,7 @@ def standardize_novartis_dataset(
 
     logger.info("Creating standardized AnnData object ...")
     adata_standardized = ad.AnnData(
-        X=adata.X.astype(np.int64),
+        X=adata.X.astype("int64"),
         obs=obs_standardized,
         var=var_standardized,
     )
