@@ -282,7 +282,7 @@ The structure of the repo:
 │   └── utils
 │       ├──  aggregate_logs.py
 │       └─── parsing_utils.py
-└── venv -> /home/icb/olga.novitskaia/venv/
+└── venv -> /lustre/groups/ml01/workspace/olga.novitskaia/venv
 ```
 
 # Data
