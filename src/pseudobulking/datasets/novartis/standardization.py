@@ -160,9 +160,10 @@ def filter_samples(adata: ad.AnnData, robust_dmso: pd.DataFrame) -> ad.AnnData:
     Filter samples from the Novartis dataset.
 
     Removes:
-    1. Cells with an empty well_type.
-    2. RC wells whose external_biosample_id is not listed in robust_dmso.
-    3. SA wells whose cmpd_sample_id is a positive control (POS_CTL).
+    1. Samples with total counts ``adata.X.sum(axis=1) <= 0`` (empty library).
+    2. Cells with an empty well_type.
+    3. RC wells whose external_biosample_id is not listed in robust_dmso.
+    4. SA wells whose cmpd_sample_id is a positive control (POS_CTL).
 
     Parameters
     ----------
@@ -179,6 +180,11 @@ def filter_samples(adata: ad.AnnData, robust_dmso: pd.DataFrame) -> ad.AnnData:
 
     robust_ext_biosample_ids = robust_dmso['external_biosample_id'].astype(str)
     is_outlier = pd.Series(np.zeros(adata.obs.shape[0], dtype=bool), index=adata.obs.index)
+
+    lib_sum = np.asarray(adata.X.sum(axis=1)).ravel().astype(np.int64)
+    mask_zero_library = pd.Series(lib_sum <= 0, index=adata.obs.index)
+    logger.info('Zero or negative library size (sum X <= 0): %d samples', mask_zero_library.sum())
+    is_outlier = is_outlier | mask_zero_library
 
     mask_empty_well_type = adata.obs['well_type'] == 'EMPTY'
     logger.info('Empty well_type: %d samples', mask_empty_well_type.sum())

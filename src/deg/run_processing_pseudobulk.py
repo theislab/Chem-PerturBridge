@@ -1069,6 +1069,13 @@ class PseudobulkProcessor:
         logger.info('Map ensembl IDs to current/replacement IDs')
         self.padata = map_ensembl_ids_for_dataset(self.padata)
 
+    def check_total_counts(self) -> None:
+        """Check if total counts are greater than 0."""
+        logger.info('Check total counts')
+        if self.padata.X.sum(axis=1).min() <= 0:
+            raise ValueError('Total counts are less than or equal to 0')
+        logger.info('Total counts are greater than 0')
+
     def combine_perturbagen_pubchem_cid(self) -> None:
         """Step 4: Combine perturbagen and PubChem CID."""
 
@@ -1168,6 +1175,7 @@ class PseudobulkProcessor:
             
         self.apply_dataset_processing()
         self.map_ensembl_ids()
+        self.check_total_counts()
         if self.use_pubchem_cid_in_label:
             self.combine_perturbagen_pubchem_cid()
         self.add_perturbation_labels()
