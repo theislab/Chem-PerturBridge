@@ -1,17 +1,21 @@
 # Description
 
-**OP3_v2** is a set of pipelines for analyzing single-cell RNA sequencing data from perturbation experiments. 
+**OP3_v2** is a set of pipelines for analyzing single-cell/bulk RNA sequencing data from perturbation experiments. 
 
-The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234) (**Sci-Plex3**), [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full), [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0), and  
-[**OP3**](https://openreview.net/forum?id=WTI4RJYSVm) datasets.
+The current version of OP3_v2 includes the scripts for processing and analyzing following datasets: 
+- [**Sci-Plex3**](https://www.science.org/doi/10.1126/science.aax6234)
+- [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full)
+- [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0)
+- [**OP3**](https://openreview.net/forum?id=WTI4RJYSVm)
+- [**Novartis**](https://www.nature.com/articles/s41467-018-06500-x)
 
 It consists of the following steps:
 
 * **Pseudobulking**: 
-Aggregates raw single-cell RNA sequencing data to pseudobulk samples for downstream analysis
+Aggregates raw single-cell RNA-seq counts into pseudobulk samples, or standardizes bulk RNA-seq count data and enriches them with metadata for downstream analysis.
 
 * **DEG Analysis**: 
-Identifies differentially expressed genes between treatment and control conditions in pseudobulk samples
+Identifies differentially expressed genes between treatment and control conditions in pseudobulk/bulk samples
 
 # License
 
@@ -23,6 +27,7 @@ The licences of the datasets used in this project are provided by their source:
 - **Tahoe** - [Arc Virtual Cell Atlas](https://arcinstitute.org/tools/virtualcellatlas) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=Tahoe-100M)
 - **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS); small-molecule annotations from the [LINCS Data Portal](https://lincsportal.ccs.miami.edu/dcic-portal/#/terms) were used.
 - **OP3** - [Open Problems Perturbation Prediction dataset](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945)
+- **Novartis** - [Novartis DRUG-seq MoABox Dataset](https://zenodo.org/records/14291446)
 
 The terms of use/license for each database used for annotations are defined by its original data provider:
 
