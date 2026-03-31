@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import time
+import urllib.error
 from pathlib import Path
 from typing import Dict, Optional
 
@@ -274,8 +275,19 @@ def _fetch_drug_name_by_cid(
             cache[cid] = name
             return name
         except Exception as e:
-            if isinstance(e, (pcp.PubChemHTTPError, pcp.TimeoutError,
-                               pcp.ServerError, pcp.ServerBusyError)):
+            # ConnectionError covers http.client.RemoteDisconnected ("Remote end closed
+            # connection without response"). URLError wraps many urllib failures.
+            if isinstance(
+                e,
+                (
+                    pcp.PubChemHTTPError,
+                    pcp.TimeoutError,
+                    pcp.ServerError,
+                    pcp.ServerBusyError,
+                    ConnectionError,
+                    urllib.error.URLError,
+                ),
+            ):
                 logger.warning('PubChem lookup failed for CID %d: %s. Retry %d.', cid, e, cnt)
                 cnt += 1
                 time.sleep(5)

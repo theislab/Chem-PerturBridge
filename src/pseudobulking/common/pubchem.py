@@ -2,6 +2,7 @@ import re
 import time
 import json
 import os
+import urllib.error
 import pandas as pd
 from typing import Any, Optional, Dict, Callable
 import pubchempy as pcp
@@ -137,15 +138,35 @@ def _fetch_pubchem_cid_with_retry(identifier: str,
             logger.debug("CID for %s '%s': %s", identifier_label, identifier, cid)
             break
         except Exception as e:
-            if (isinstance(e, pcp.PubChemHTTPError) or isinstance(e, pcp.TimeoutError) or
-                isinstance(e, pcp.ServerError) or isinstance(e, pcp.ServerBusyError)):
-                logger.warning("PubChem lookup failed for %s '%s': %s. Retry %d.", 
-                             identifier_label, identifier, str(e), cnt)
+            # ConnectionError covers http.client.RemoteDisconnected ("Remote end closed
+            # connection without response"). URLError wraps many urllib failures.
+            if isinstance(
+                e,
+                (
+                    pcp.PubChemHTTPError,
+                    pcp.TimeoutError,
+                    pcp.ServerError,
+                    pcp.ServerBusyError,
+                    ConnectionError,
+                    urllib.error.URLError,
+                ),
+            ):
+                logger.warning(
+                    "PubChem lookup failed for %s '%s': %s. Retry %d.",
+                    identifier_label,
+                    identifier,
+                    str(e),
+                    cnt,
+                )
                 cnt += 1
                 time.sleep(5)
             else:
-                logger.warning("PubChem lookup failed for %s '%s': %s", 
-                             identifier_label, identifier, str(e))
+                logger.warning(
+                    "PubChem lookup failed for %s '%s': %s",
+                    identifier_label,
+                    identifier,
+                    str(e),
+                )
                 break
     
     # Store in both method-specific and universal cache keys (only if cid is not None)
