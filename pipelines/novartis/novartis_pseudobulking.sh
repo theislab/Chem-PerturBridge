@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+DATASET=novartis
+
 if [ "$1" = "subsampling" ]; then
 	echo "> Warning: subsampling mode is not supported for ${DATASET}, running full version"
 fi
@@ -8,8 +10,6 @@ fi
 SUFFIX=""
 SUBDIR="full"
 MEM="500G"
-
-DATASET=novartis
 
 DATA_ROOT=./data/${DATASET}
 RAW_DIR=${DATA_ROOT}/raw
