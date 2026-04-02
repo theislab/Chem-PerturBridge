@@ -62,7 +62,7 @@ while getopts ":sjd:p:f:qnhg" opt; do
 			FILT=$OPTARG
 			;;
 		q)
-			MODE_Q=Trues
+			MODE_Q=True
 			;;
     		d)
         		DATASET=$OPTARG
