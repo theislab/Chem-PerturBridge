@@ -71,7 +71,8 @@ elif [[ "$DATASET" == "dilimap_train_val" ]]; then
         ./pipelines/dilimap_train_val/dilimap_train_val_pseudobulking.sh $ARG \
                 >  ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train_val.out \
                 2> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train_val.err &
-		
+
+
 elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]] || [[ "$DATASET" == "op3" ]]; then
 	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
     	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \
