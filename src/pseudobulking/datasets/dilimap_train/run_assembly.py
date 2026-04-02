@@ -10,6 +10,7 @@ import argparse
 import numpy as np
 
 from src.utils.parsing_utils import logger
+from src.pseudobulking.common.pubchem import lookup_pubchem_cids
 from src.pseudobulking.datasets.dilimap_train.assembling import (
     assemble_dilimap_train_dataset,
     assemble_dilimap_train_val_dataset,
@@ -17,6 +18,10 @@ from src.pseudobulking.datasets.dilimap_train.assembling import (
 from src.pseudobulking.datasets.dilimap_train.standardization import (
     standardize_dilimap_train,
     standardize_dilimap_train_val,
+)
+from src.pseudobulking.datasets.dilimap_train.pubchem_imputation import (
+    pubchem_mapping_dilimap_train,
+    pubchem_mapping_dilimap_train_val,
 )
 
 
@@ -105,8 +110,21 @@ def main():
     logger.info(f"Standardizing {dataset_label} dataset")
     if args.mode == "train":
         assembled_adata = standardize_dilimap_train(assembled_adata)
+        manual_mapping_func = pubchem_mapping_dilimap_train
     else:
         assembled_adata = standardize_dilimap_train_val(assembled_adata)
+        manual_mapping_func = pubchem_mapping_dilimap_train_val
+
+    # Enrich pubchem_cid via automatic PubChem lookup + manual fallback mappings
+    logger.info(f"Looking up PubChem CIDs for {dataset_label}")
+    assembled_adata.obs = lookup_pubchem_cids(
+        assembled_adata.obs,
+        cache={},
+        pert_id_col=None,
+        drug_col="perturbagen",
+        manual_mapping_func=manual_mapping_func,
+        dataset_key=dataset_label,
+    )
 
     # Save to the pipeline-expected output location
     os.makedirs(os.path.dirname(args.output_file) or ".", exist_ok=True)
