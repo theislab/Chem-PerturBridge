@@ -93,7 +93,7 @@ def standardize_obs_dilimap(adata: AnnData) -> AnnData:
     adata.obs["sex"] = _SEX
     adata.obs["self_reported_ethnicity"] = "unknown"
     adata.obs["pubchem_cid"] = None
-    adata.obs["psbulk_cells"] = None
+    adata.obs["psbulk_cells"] = -666  # sentinel: bulk data, cell count not available
     adata.obs["psbulk_counts"] = np.round(np.asarray(adata.X.sum(axis=1)).flatten()).astype(int)
 
     # ── sample_id (composite key) ─────────────────────────────────────
@@ -117,6 +117,7 @@ def standardize_obs_dilimap(adata: AnnData) -> AnnData:
 
     adata.obs["pert_dose_uM"] = adata.obs["pert_dose_uM"].astype("float64")
     adata.obs["pert_time_h"] = adata.obs["pert_time_h"].astype("float64")
+    adata.obs["psbulk_cells"] = adata.obs["psbulk_cells"].astype("int64")
     adata.obs["psbulk_counts"] = adata.obs["psbulk_counts"].astype("int64")
 
     return adata

@@ -1,0 +1,149 @@
+pseudobulk_op3.PID2155744.out:> Work with a full version
+pseudobulk_op3.PID2155744.out:> Running op3 standardization
+pseudobulk_op3.PID2155744.out:Submitted batch job 34014693
+pseudobulk_op3.PID2155744.out:> op3 standardization is done
+pseudobulk_op3.34014693.out:2026-02-18 20:33:24 | [INFO] Standardizing OP3 dataset
+pseudobulk_op3.34014693.out:2026-02-18 20:33:24 | [INFO] Applying OP3-specific processing
+pseudobulk_op3.34014693.out:2026-02-18 20:33:24 | [INFO] Data file not found at data/op3/raw/pseudobulk_filtered_with_uns.h5ad
+pseudobulk_op3.34014693.out:2026-02-18 20:33:24 | [INFO] Downloading OP3 data from S3 to data/op3/raw/pseudobulk_filtered_with_uns.h5ad
+pseudobulk_op3.34014693.out:2026-02-18 20:33:54 | [INFO] Download complete
+pseudobulk_op3.34014693.out:2026-02-18 20:33:54 | [INFO] Loading OP3 data from data/op3/raw/pseudobulk_filtered_with_uns.h5ad
+pseudobulk_op3.34014693.out:2026-02-18 20:33:56 | [INFO]   Loaded AnnData: 2,197 × 5,317
+pseudobulk_op3.34014693.out:2026-02-18 20:33:56 | [INFO] Filtering control samples
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO]   Initial observations: 2197
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO]   Removed observations: 384
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO]   Final observations: 1813
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO]   Controls kept (DMSO): 192
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO]   Other controls removed: 384
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO]   Non-controls kept: 1621
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO] Processing OP3 observations dataframe
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO]   Extracting compound metadata
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO]   Extracted 139 unique compounds
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO] Annotating compounds with PubChem CIDs
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO] Cache file data/op3/raw/processed/pubchem_cache.json not found. Starting with empty cache.
+pseudobulk_op3.34014693.out:2026-02-18 20:33:57 | [INFO] Processing 139 compounds
+pseudobulk_op3.34014693.out:2026-02-18 20:34:47 | [INFO] Processed 50/139 compounds (50 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:35:33 | [INFO] Processed 100/139 compounds (100 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO] Mapped 139 out of 139 compounds to PubChem CIDs
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO]   Merging PubChem annotations
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO]   Renaming columns
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO]   Adding fixed metadata columns and sample_id
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO]   Mapping cell types to ontology IDs
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO]   Merging donor metadata
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO]   Calculating pseudobulk counts
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO]   Enforcing strict obs schema
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO]   Processed 1,813 observations
+pseudobulk_op3.34014693.out:2026-02-18 20:36:23 | [INFO] Processing gene annotations
+pseudobulk_op3.34014693.out:2026-02-18 20:36:32 | [INFO] Processed 50/5317 gene symbols (40 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:36:41 | [INFO] Processed 100/5317 gene symbols (85 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:36:52 | [INFO] Processed 150/5317 gene symbols (135 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:37:03 | [INFO] Processed 200/5317 gene symbols (176 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:37:14 | [INFO] Processed 250/5317 gene symbols (224 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:37:24 | [INFO] Processed 300/5317 gene symbols (274 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:37:35 | [INFO] Processed 350/5317 gene symbols (324 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:37:45 | [INFO] Processed 400/5317 gene symbols (374 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:37:55 | [INFO] Processed 450/5317 gene symbols (424 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:38:05 | [INFO] Processed 500/5317 gene symbols (474 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:38:16 | [INFO] Processed 550/5317 gene symbols (524 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:38:30 | [INFO] Processed 600/5317 gene symbols (574 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:38:40 | [INFO] Processed 650/5317 gene symbols (624 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:38:51 | [INFO] Processed 700/5317 gene symbols (674 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:39:01 | [INFO] Processed 750/5317 gene symbols (724 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:39:11 | [INFO] Processed 800/5317 gene symbols (774 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:39:21 | [INFO] Processed 850/5317 gene symbols (824 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:39:31 | [INFO] Processed 900/5317 gene symbols (874 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:39:42 | [INFO] Processed 950/5317 gene symbols (924 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:39:53 | [INFO] Processed 1000/5317 gene symbols (974 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:40:03 | [INFO] Processed 1050/5317 gene symbols (1024 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:40:13 | [INFO] Processed 1100/5317 gene symbols (1074 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:40:23 | [INFO] Processed 1150/5317 gene symbols (1124 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:40:33 | [INFO] Processed 1200/5317 gene symbols (1174 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:40:43 | [INFO] Processed 1250/5317 gene symbols (1224 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:40:53 | [INFO] Processed 1300/5317 gene symbols (1274 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:41:03 | [INFO] Processed 1350/5317 gene symbols (1324 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:41:13 | [INFO] Processed 1400/5317 gene symbols (1374 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:41:23 | [INFO] Processed 1450/5317 gene symbols (1424 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:41:35 | [INFO] Processed 1500/5317 gene symbols (1474 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:41:46 | [INFO] Processed 1550/5317 gene symbols (1524 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:41:57 | [INFO] Processed 1600/5317 gene symbols (1574 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:42:08 | [INFO] Processed 1650/5317 gene symbols (1624 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:42:18 | [INFO] Processed 1700/5317 gene symbols (1674 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:42:28 | [INFO] Processed 1750/5317 gene symbols (1724 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:42:38 | [INFO] Processed 1800/5317 gene symbols (1774 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:42:50 | [INFO] Processed 1850/5317 gene symbols (1824 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:43:01 | [INFO] Processed 1900/5317 gene symbols (1874 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:43:12 | [INFO] Processed 1950/5317 gene symbols (1924 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:43:23 | [INFO] Processed 2000/5317 gene symbols (1974 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:43:33 | [INFO] Processed 2050/5317 gene symbols (2024 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:43:43 | [INFO] Processed 2100/5317 gene symbols (2074 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:43:53 | [INFO] Processed 2150/5317 gene symbols (2124 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:44:05 | [INFO] Processed 2200/5317 gene symbols (2174 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:44:15 | [INFO] Processed 2250/5317 gene symbols (2224 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:44:25 | [INFO] Processed 2300/5317 gene symbols (2274 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:44:36 | [INFO] Processed 2350/5317 gene symbols (2324 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:44:46 | [INFO] Processed 2400/5317 gene symbols (2374 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:44:58 | [INFO] Processed 2450/5317 gene symbols (2424 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:45:07 | [INFO] Processed 2500/5317 gene symbols (2474 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:45:18 | [INFO] Processed 2550/5317 gene symbols (2524 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:45:29 | [INFO] Processed 2600/5317 gene symbols (2574 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:45:39 | [INFO] Processed 2650/5317 gene symbols (2624 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:45:49 | [INFO] Processed 2700/5317 gene symbols (2674 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:46:00 | [INFO] Processed 2750/5317 gene symbols (2723 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:46:10 | [INFO] Processed 2800/5317 gene symbols (2773 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:46:20 | [INFO] Processed 2850/5317 gene symbols (2823 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:46:30 | [INFO] Processed 2900/5317 gene symbols (2873 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:46:40 | [INFO] Processed 2950/5317 gene symbols (2923 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:46:51 | [INFO] Processed 3000/5317 gene symbols (2973 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:47:01 | [INFO] Processed 3050/5317 gene symbols (3023 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:47:11 | [INFO] Processed 3100/5317 gene symbols (3073 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:47:21 | [INFO] Processed 3150/5317 gene symbols (3123 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:47:31 | [INFO] Processed 3200/5317 gene symbols (3173 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:47:41 | [INFO] Processed 3250/5317 gene symbols (3223 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:47:51 | [INFO] Processed 3300/5317 gene symbols (3272 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:48:01 | [INFO] Processed 3350/5317 gene symbols (3322 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:48:12 | [INFO] Processed 3400/5317 gene symbols (3372 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:48:22 | [INFO] Processed 3450/5317 gene symbols (3422 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:48:32 | [INFO] Processed 3500/5317 gene symbols (3472 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:48:43 | [INFO] Processed 3550/5317 gene symbols (3522 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:48:53 | [INFO] Processed 3600/5317 gene symbols (3572 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:49:03 | [INFO] Processed 3650/5317 gene symbols (3622 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:49:13 | [INFO] Processed 3700/5317 gene symbols (3672 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:49:23 | [INFO] Processed 3750/5317 gene symbols (3722 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:49:33 | [INFO] Processed 3800/5317 gene symbols (3772 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:49:43 | [INFO] Processed 3850/5317 gene symbols (3822 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:49:53 | [INFO] Processed 3900/5317 gene symbols (3872 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:50:04 | [INFO] Processed 3950/5317 gene symbols (3922 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:50:13 | [INFO] Processed 4000/5317 gene symbols (3972 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:50:25 | [INFO] Processed 4050/5317 gene symbols (4022 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:50:35 | [INFO] Processed 4100/5317 gene symbols (4072 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:50:45 | [INFO] Processed 4150/5317 gene symbols (4122 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:50:55 | [INFO] Processed 4200/5317 gene symbols (4172 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:51:05 | [INFO] Processed 4250/5317 gene symbols (4222 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:51:15 | [INFO] Processed 4300/5317 gene symbols (4272 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:51:26 | [INFO] Processed 4350/5317 gene symbols (4322 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:51:36 | [INFO] Processed 4400/5317 gene symbols (4372 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:51:46 | [INFO] Processed 4450/5317 gene symbols (4422 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:51:56 | [INFO] Processed 4500/5317 gene symbols (4472 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:52:06 | [INFO] Processed 4550/5317 gene symbols (4522 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:52:16 | [INFO] Processed 4600/5317 gene symbols (4572 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:52:27 | [INFO] Processed 4650/5317 gene symbols (4622 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:52:37 | [INFO] Processed 4700/5317 gene symbols (4672 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:52:47 | [INFO] Processed 4750/5317 gene symbols (4722 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:52:57 | [INFO] Processed 4800/5317 gene symbols (4772 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:53:08 | [INFO] Processed 4850/5317 gene symbols (4822 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:53:18 | [INFO] Processed 4900/5317 gene symbols (4872 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:53:28 | [INFO] Processed 4950/5317 gene symbols (4922 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:53:38 | [INFO] Processed 5000/5317 gene symbols (4972 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:53:48 | [INFO] Processed 5050/5317 gene symbols (5022 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:53:58 | [INFO] Processed 5100/5317 gene symbols (5072 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:54:09 | [INFO] Processed 5150/5317 gene symbols (5122 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:54:19 | [INFO] Processed 5200/5317 gene symbols (5172 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:54:29 | [INFO] Processed 5250/5317 gene symbols (5222 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:54:39 | [INFO] Processed 5300/5317 gene symbols (5272 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:54:43 | [INFO] Processed 5317/5317 gene symbols (5289 mapped so far)
+pseudobulk_op3.34014693.out:2026-02-18 20:54:45 | [INFO] Creating standardized AnnData object
+pseudobulk_op3.34014693.out:2026-02-18 20:54:45 | [INFO] Standardized AnnData: 1,813 × 5,317
+pseudobulk_op3.34014693.out:2026-02-18 20:54:45 | [INFO] OP3-specific processing completed
+pseudobulk_op3.34014693.out:2026-02-18 20:54:45 | [INFO] Saving standardized dataset to: ./data/op3/pseudobulk/full/op3_standardized.h5ad
+pseudobulk_op3.34014693.out:2026-02-18 20:54:52 | [INFO] OP3 standardization complete
+pseudobulk_op3.34014693.err:2026-02-18 20:45:54 | [WARNING] Multiple HGNC records found for symbol MUM1. Returning None.

@@ -10,6 +10,9 @@ VALID_CHOICES=(
         "tahoe"
 		"dilimap_train"
 		"dilimap_train_val"
+        "l1000_phase1"
+        "l1000_phase2"
+        "op3"
 )
 
 mkdir -p $LOGS_DIR
@@ -34,7 +37,8 @@ done
 
 
 if [[ " ${VALID_CHOICES[*]} " != *" $DATASET "* ]]; then
-        echo "Error: -d must be set up and one of: ${VALID_CHOICES[*]}"
+        echo "Error: -d must be set up and one of: ${VALID_CHOICES[*]}" >&2
+        exit 1
 fi
 
 if [[ "$ARG" == "subsampling" ]]; then
@@ -67,7 +71,12 @@ elif [[ "$DATASET" == "dilimap_train_val" ]]; then
         ./pipelines/dilimap_train_val/dilimap_train_val_pseudobulking.sh $ARG \
                 >  ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train_val.out \
                 2> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train_val.err &
-
+		
+elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]] || [[ "$DATASET" == "op3" ]]; then
+	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+    	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.err &
 else
     	echo "Invalid choice"
 fi
