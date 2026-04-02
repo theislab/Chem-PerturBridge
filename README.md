@@ -17,6 +17,9 @@ Aggregates raw single-cell RNA-seq counts into pseudobulk samples, or standardiz
 * **DEG Analysis**: 
 Identifies differentially expressed genes between treatment and control conditions in pseudobulk/bulk samples
 
+* **Enrich DEG `.var` (optional)**: 
+After DEG, some `*_de.h5ad` objects may lose gene metadata (`symbol`, `is_merged`) when concatenated or re-saved. This step left-joins those columns from the processed pseudobulk reference and rewrites files in a form compatible with **aggregation** (`aggregating_deg.py`). Run only for the DEG output tree you care about (e.g. `results/` and matching `intermediate/`).
+
 # License
 
 This repository is a collection; each component retains its original license; our processed integration is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt).
@@ -182,6 +185,31 @@ For a **normalized dataset** (e.g. L1000) with separate_replicates parameter on 
 cd /op3_v2
 ./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n -g
 ```
+
+**3.3** **Enrich pseudobulk `.var` on DEG outputs (optional)**
+
+Use `./run_pipelines/run_enrich_pseudobulk_var.sh` when you need `symbol` / `is_merged` back on `*_de.h5ad` before aggregation or downstream Python. It submits `./pipelines/common/enrich_pseudobulk_var.sh`, which runs **`sbatch -W`** (Slurm) and scans all `*_de.h5ad` under `-i` recursively.
+
+Arguments:
+```
+-d  required: dataset name (sciplex | tahoe | l1000_phase1 | l1000_phase2 | op3 | novartis)
+-i  required: root directory containing DEG *_de.h5ad files (e.g. .../deg_data/.../results or a parent tree)
+-r  required: processed pseudobulk .h5ad used as reference (must contain .var columns symbol and is_merged)
+--dry-run  log only; no file writes
+-h  help
+```
+
+Example (paths depend on your layout and `group_rep` / `sep_rep`):
+```
+cd /op3_v2
+./run_pipelines/run_enrich_pseudobulk_var.sh \
+  -d novartis \
+  -i ./data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results \
+  -r ./data/novartis/pseudobulk_processed/group_rep/novartis_standardized_processed.h5ad
+```
+
+Logs: `./logs/<dataset>/full/enrich_pseudobulk_var/` — launcher `enrich_<dataset>.PID*.out|.err` and Slurm `enrich_<dataset>.<jobid>.out|.err`.
+
 ### 4. Aggregate logs
 
 After running pipelines, aggregate scattered log files into combined logs for easier review.
@@ -212,6 +240,12 @@ cd /op3_v2
 ./run_pipelines/run_combining_logs.sh -l logs/sciplex/full/deg/separate_replicates/qc_false/filter_min_cells_10 -t deg
 ```
 
+Enrich (pseudobulk `.var`) logs:
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -l logs/novartis/full/enrich_pseudobulk_var -t enrich
+```
+
 ### 5. Add datasets
 To add a new dataset to the pipeline, follow the instructions in [`./docs/README.md`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/docs/README.md)
 
@@ -226,6 +260,8 @@ The structure of the repo:
 ├── logs
 │   └── dataset_i
 │       ├── full (or subsample)
+│       │   ├── enrich_pseudobulk_var/
+│       │   │   └── enrich_<dataset>.*.out, *.err
 │       │   └── deg
 │       │       └── parameter_name (group_all_replicates or separate_replicates)
 │       │           └── qc_true (or qc_false)
@@ -244,7 +280,8 @@ The structure of the repo:
 ├── pipelines
 │   ├── common
 |   |   ├── combining_logs.sh
-│   │   └── deg.sh
+│   │   ├── deg.sh
+│   │   └── enrich_pseudobulk_var.sh
 │   ├── dataset_i
 │   │   └─── configs/
 │   │       ├── deg/
@@ -255,6 +292,7 @@ The structure of the repo:
 ├── run_pipelines
 │   ├── run_combining_logs.sh
 │   ├── run_deg.sh
+│   ├── run_enrich_pseudobulk_var.sh
 │   └── run_pseudobulking.sh
 ├── LICENSE
 ├── src
@@ -264,6 +302,7 @@ The structure of the repo:
 │   │   ├── run_deg.R
 │   │   ├── run_processing_pseudobulk.py
 │   │   ├── aggregating_deg.py
+│   │   ├── enrich_pseudobulk_var_metadata.py
 │   │   ├── ensembl_mapping.py
 │   │   └── subsampling.R
 │   ├── downloading
