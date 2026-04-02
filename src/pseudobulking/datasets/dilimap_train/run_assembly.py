@@ -14,7 +14,10 @@ from src.pseudobulking.datasets.dilimap_train.assembling import (
     assemble_dilimap_train_dataset,
     assemble_dilimap_train_val_dataset,
 )
-from src.pseudobulking.datasets.dilimap_train.standardization import standardize_dilimap
+from src.pseudobulking.datasets.dilimap_train.standardization import (
+    standardize_dilimap_train,
+    standardize_dilimap_train_val,
+)
 
 
 SUBSAMPLE_SIZE = 500
@@ -100,10 +103,10 @@ def main():
 
     # Standardize columns to the common pipeline schema
     logger.info(f"Standardizing {dataset_label} dataset")
-    assembled_adata = standardize_dilimap(assembled_adata)
-
-    # Override the dataset label (standardize_dilimap sets it to "dilimap")
-    assembled_adata.obs["dataset"] = dataset_label
+    if args.mode == "train":
+        assembled_adata = standardize_dilimap_train(assembled_adata)
+    else:
+        assembled_adata = standardize_dilimap_train_val(assembled_adata)
 
     # Save to the pipeline-expected output location
     os.makedirs(os.path.dirname(args.output_file) or ".", exist_ok=True)

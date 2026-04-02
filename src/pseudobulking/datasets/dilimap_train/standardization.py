@@ -3,6 +3,8 @@ DILImap training dataset standardization.
 
 Converts the DILImap AnnData to the common pseudobulk schema used by
 the rest of the pipeline, mirroring standardize_sciplex in structure.
+
+Schema reference: docs/Format_Pseudobulk.ipynb
 """
 from anndata import AnnData
 import pandas as pd
@@ -10,7 +12,14 @@ import numpy as np
 
 
 # Compounds that are vehicle controls
-_CONTROL_COMPOUNDS = {"DMSO", "DMSO_replaced"}
+_CONTROL_COMPOUNDS = {"DMSO"}
+
+# DILImap uses primary human hepatocytes (PHH)
+# Source: https://www.nature.com/articles/s41467-025-65690-3
+# Cell culture: cryopreserved primary human hepatocytes from multiple adult donors
+_CELL_TYPE = "CL:0000182"  # hepatocyte (Cell Ontology)
+_DEVELOPMENT_STAGE = "adult"
+_SEX = "unknown"  # mixed donors, not specified per sample
 
 
 def standardize_obs_dilimap(adata: AnnData) -> AnnData:
@@ -37,24 +46,27 @@ def standardize_obs_dilimap(adata: AnnData) -> AnnData:
         "COMPOUND": "perturbagen",
         "CONCENTRATION_UM": "pert_dose_uM",
         "TIMEPOINT_HOURS": "pert_time_h",
-        "PLATE_ID": "plate",
+        "PLATE_NAME": "plate",
         "WELL_ID": "well",
-        "LIBRARY_ID": "library_id",
+        "LIBRARY_ID": "library",
         "SPECIES": "organism",
         "BATCH_ID": "batch",
     }
     adata.obs.rename(columns=rename_cols, inplace=True)
+
+    # ── filter DMSO_replaced rows (QC flag per DILImap pipeline) ─────
+    # DMSO_replaced marks wells that failed viability QC
+    # Ref: https://www.dilimap.org/tutorials/1_Compute_Pathway_Signatures.html
+    dmso_replaced_mask = adata.obs["perturbagen"] == "DMSO_replaced"
+    if dmso_replaced_mask.any():
+        n_dropped = dmso_replaced_mask.sum()
+        adata = adata[~dmso_replaced_mask].copy()
 
     # ── controls ──────────────────────────────────────────────────────
     adata.obs["is_control"] = (
         adata.obs["perturbagen"].isin(_CONTROL_COMPOUNDS)
         | (adata.obs["DOSE_LEVEL"] == "Control")
     )
-
-    # Normalise control compound name to 'DMSO'
-    adata.obs.loc[
-        adata.obs["perturbagen"] == "DMSO_replaced", "perturbagen"
-    ] = "DMSO"
 
     # Zero out dose for controls
     adata.obs.loc[adata.obs["is_control"], "pert_dose_uM"] = 0.0
@@ -64,29 +76,25 @@ def standardize_obs_dilimap(adata: AnnData) -> AnnData:
         adata.obs["organism"]
         .str.strip()
         .str.lower()
-        .replace({"human": "human"})      # already lowercase after strip
     )
 
     # ── columns expected by the common schema ─────────────────────────
-    adata.obs["cell_type"] = "hepatocyte"  # bulk primary hepatocytes
-    adata.obs["pert_type"] = np.where(
-        adata.obs["is_control"], "ctl_vehicle", "trt_cp"
-    )
+    adata.obs["cell_type"] = _CELL_TYPE
+    adata.obs["pert_type"] = "compound"
     adata.obs["suspension_type"] = "cell"
     adata.obs["tissue"] = "liver"
     adata.obs["tissue_type"] = "cell culture"
     adata.obs["disease"] = "normal"
-    adata.obs["library"] = pd.Categorical([None] * len(adata))
-    adata.obs["stimulation"] = pd.Categorical([None] * len(adata))
-    adata.obs["guide"] = pd.Categorical([None] * len(adata))
+    adata.obs["stimulation"] = None
+    adata.obs["guide"] = None
     adata.obs["dataset"] = "dilimap"
     adata.obs["assay"] = "SMARTSeq bulk RNA-seq"
-    adata.obs["development_stage"] = "unknown"
-    adata.obs["sex"] = "unknown"
+    adata.obs["development_stage"] = _DEVELOPMENT_STAGE
+    adata.obs["sex"] = _SEX
     adata.obs["self_reported_ethnicity"] = "unknown"
-    adata.obs["pubchem_cid"] = pd.array([pd.NA] * len(adata), dtype="Int64")
-    adata.obs["psbulk_cells"] = 1
-    adata.obs["psbulk_counts"] = 1
+    adata.obs["pubchem_cid"] = None
+    adata.obs["psbulk_cells"] = None
+    adata.obs["psbulk_counts"] = np.round(np.asarray(adata.X.sum(axis=1)).flatten()).astype(int)
 
     # ── sample_id (composite key) ─────────────────────────────────────
     adata.obs["sample_id"] = (
@@ -95,6 +103,21 @@ def standardize_obs_dilimap(adata: AnnData) -> AnnData:
         + adata.obs["perturbagen"].astype(str).str.replace(" ", "_", regex=False) + "_"
         + adata.obs["pert_dose_uM"].astype(str)
     )
+
+    # ── enforce dtypes per Format_Pseudobulk.ipynb schema ─────────────
+    _category_cols = [
+        "plate", "well", "cell_type", "perturbagen", "pert_type",
+        "is_control", "suspension_type", "tissue", "tissue_type",
+        "disease", "library", "stimulation", "guide", "dataset",
+        "assay", "development_stage", "organism", "sex",
+        "self_reported_ethnicity", "pubchem_cid",
+    ]
+    for col in _category_cols:
+        adata.obs[col] = adata.obs[col].astype("category")
+
+    adata.obs["pert_dose_uM"] = adata.obs["pert_dose_uM"].astype("float64")
+    adata.obs["pert_time_h"] = adata.obs["pert_time_h"].astype("float64")
+    adata.obs["psbulk_counts"] = adata.obs["psbulk_counts"].astype("int64")
 
     return adata
 
@@ -160,6 +183,7 @@ def standardize_dilimap_train(adata: AnnData) -> AnnData:
     """
     adata = standardize_dilimap(adata)
     adata.obs["dataset"] = "dilimap_train"
+    adata.obs["dataset"] = adata.obs["dataset"].astype("category")
     return adata
 
 
@@ -172,4 +196,5 @@ def standardize_dilimap_train_val(adata: AnnData) -> AnnData:
     """
     adata = standardize_dilimap(adata)
     adata.obs["dataset"] = "dilimap_train_val"
+    adata.obs["dataset"] = adata.obs["dataset"].astype("category")
     return adata
