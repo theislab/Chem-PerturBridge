@@ -67,7 +67,8 @@ while getopts ":sjqp:f:c:d:nhg" opt; do
                         echo "  -g  Use GPU QOS/partition (gpu_normal/gpu_p); default is CPU (cpu_normal/cpu_p)"
                         echo "  -f  VALUE - Filter: minimum cells per sample (e.g., -f 50)"
                         echo "  -q  Quality control filter - remove samples that failed QC"
-                        echo "  -n  Skip normalization - dataset is already normalized"
+                        echo "  -n  Normalized dataset: pass --normalized to preprocessing (Ensembl: drop ambiguous"
+                        echo "      targets, no count aggregation) and to R DEG (skip voom/normalization)"
                         echo "  -h  Show this help message"
                         exit 0
                         ;;
@@ -255,7 +256,7 @@ sbatch -W -J deg_processing_pseudobulk \
     --output="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.out" \
     --error="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.err" \
     --wrap="${SBATCH_PREAMBLE} && \
-            python3 -m src.deg.run_processing_pseudobulk ${ARG_J} \
+            python3 -m src.deg.run_processing_pseudobulk ${ARG_J} ${ARG_N} \
             --config ${preprocess_config}"
 
 echo "> Preprocessing completed"

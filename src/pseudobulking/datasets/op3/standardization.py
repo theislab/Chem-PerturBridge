@@ -301,9 +301,10 @@ def add_fixed_metadata_columns(obs: pd.DataFrame) -> pd.DataFrame:
     if 'pubchem_cid' not in obs.columns:
         obs["pubchem_cid"] = None
 
-    if 'pubchem_cid' in obs.columns:
-        obs['pubchem_cid'] = pd.to_numeric(obs['pubchem_cid'], errors='coerce').fillna(-666).astype('int64')
-    
+    obs['pubchem_cid'] = pd.to_numeric(obs['pubchem_cid'], errors='coerce').fillna(-666).astype('int64')
+    obs['pubchem_cid'] = obs['pubchem_cid'].replace({-666: None, '-666': None, 'None': None, 'nan': None, '<NA>': None})
+    obs['pubchem_cid'] = obs['pubchem_cid'].astype(object).astype('category')
+
     # Create composite sample_id
     obs["sample_id"] = (
         obs["plate"].astype(str).str.replace(" ", "", regex=False) + "_" +
@@ -564,15 +565,13 @@ def process_obs_dataframe(
     col_rename_map = get_column_rename_map()
     obs = obs.rename(columns=col_rename_map)
     
-    # Add fixed metadata columns and sample_id
-    logger.info("  Adding fixed metadata columns and sample_id")
-    obs = add_fixed_metadata_columns(obs)
-    
     # Map cell types to ontology IDs
     logger.info("  Mapping cell types to ontology IDs")
     obs = process_cell_types(obs)
     
-    
+    # Add fixed metadata columns and sample_id
+    logger.info("  Adding fixed metadata columns and sample_id")
+    obs = add_fixed_metadata_columns(obs)
     
     # Merge donor metadata
     logger.info("  Merging donor metadata")
@@ -728,7 +727,7 @@ def standardize_op3_dataset(
     # Create new AnnData with standardized obs and var
     logger.info("Creating standardized AnnData object")
     adata_standardized = ad.AnnData(
-        X=adata.X,
+        X=adata.X.astype("int64"),
         obs=obs_standardized.set_index("sample_id"),
         var=var_standardized
     )

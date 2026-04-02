@@ -42,7 +42,7 @@ while getopts ":sjd:p:f:qnhg" opt; do
                         echo "  -h Help option"
 			echo "  -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number"
 			echo "  -q Filter samples that did not pass quality control"
-			echo "  -n Dataset is already normalized, skip normalization steps, default=false"
+			echo "  -n Normalized data: preprocessing + R skip expression normalization; Ensembl drops ambiguous targets"
 			echo "  -d (dataset <str>) Name of dataset to process, required"
 			echo "  -p (parameter <str>) Parameter for DEG pipeline, required"
                         exit 0
