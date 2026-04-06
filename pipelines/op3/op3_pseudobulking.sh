@@ -1,21 +1,15 @@
 #!/bin/bash
 set -e
 
+DATASET=op3
+
 if [ "$1" = "subsampling" ]; then
-        echo "> Work with a subsample"
-	SUFFIX="_subsample"
-        SUBDIR="subsample"
-	ARG="--subsampling"
-	MEM="50G"
-else
-	echo "> Work with a full version"
-        SUFFIX=""
-        SUBDIR="full"
-	ARG=""
-	MEM="100G"
+	echo "> Warning: subsampling mode is not supported for ${DATASET}, running full version"
 fi
 
-DATASET=op3
+SUFFIX=""
+SUBDIR="full"
+MEM="100G"
 
 DATA_ROOT=./data/${DATASET}/raw/
 OUTPUT_DIR=./data/${DATASET}/pseudobulk/${SUBDIR}
@@ -51,7 +45,6 @@ sbatch -W -J pseudobulk_${DATASET} \
 	       python3 -m src.pseudobulking.datasets.op3.run_standardization \
 	       --output_file ${OUTPUT_DIR}/${DATASET}_standardized${SUFFIX}.h5ad \
 	       --data_root ${DATA_ROOT} \
-               --annotate-pubchem \
-               ${ARG}"
+               --annotate-pubchem"
 
 echo "> ${DATASET} standardization is done"

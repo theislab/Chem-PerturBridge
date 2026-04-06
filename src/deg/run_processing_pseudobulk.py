@@ -873,6 +873,7 @@ def add_perturbation_label_to_padata(file_input: str,
                                      dir_output: str,
                                      design_param: str,
                                      split_by_celltype: bool = False,
+                                     is_normalized: bool = False,
                                      ) -> None:
     '''
     Add perturbation labels to pseudobulk data and save processed files.
@@ -891,7 +892,9 @@ def add_perturbation_label_to_padata(file_input: str,
     split_by_celltype : bool, default=False
         If True, splits output by cell type and processes each separately.
         Large cell types are automatically batched if matrix size exceeds limits.
-        
+    is_normalized : bool, default=False
+        Passed to Ensembl mapping: ambiguous targets drop all source genes instead of summing.
+
     Returns:
     --------
     None
@@ -904,11 +907,10 @@ def add_perturbation_label_to_padata(file_input: str,
         dir_output=dir_output,
         design_param=design_param,
         split_by_celltype=split_by_celltype,
-        use_pubchem_cid_in_label=False
+        use_pubchem_cid_in_label=False,
+        is_normalized=is_normalized,
     )
     processor.process()
-
-    
 
 
 def sanitize_celltype_name(celltype: str) -> str:
@@ -964,6 +966,9 @@ class PseudobulkProcessor:
         subdirectory names match the current run's cell types (requires reading
         input before the existence check). If False, only checks that by_celltype
         exists and each subdir has at least one .h5ad.
+    is_normalized : bool, default=False
+        If True, Ensembl ID mapping removes every gene whose target ID is ambiguous
+        (multiple old IDs map to the same target); counts are not summed.
     """
     
     def __init__(self,
@@ -974,7 +979,8 @@ class PseudobulkProcessor:
                  dataset: Optional[str] = None,
                  post_processing: Optional[dict] = None,
                  use_pubchem_cid_in_label: bool = False,
-                 check_by_celltype_content: bool = True):
+                 check_by_celltype_content: bool = True,
+                 is_normalized: bool = False):
         self.file_input = file_input
         self.dir_output = dir_output
         self.design_param = design_param
@@ -983,6 +989,7 @@ class PseudobulkProcessor:
         self.post_processing = post_processing or {}
         self.use_pubchem_cid_in_label = use_pubchem_cid_in_label
         self.check_by_celltype_content = check_by_celltype_content
+        self.is_normalized = is_normalized
         self.padata = None
     
     def read_data(self) -> None:
@@ -1067,7 +1074,8 @@ class PseudobulkProcessor:
     def map_ensembl_ids(self) -> None:
         """Step 3: Map Ensembl IDs to current/replacement IDs."""
         logger.info('Map ensembl IDs to current/replacement IDs')
-        self.padata = map_ensembl_ids_for_dataset(self.padata)
+        self.padata = map_ensembl_ids_for_dataset(
+            self.padata, is_normalized=self.is_normalized)
 
     def check_total_counts(self) -> None:
         """Check if total counts are greater than 0."""
@@ -1248,6 +1256,7 @@ def main():
     parser.add_argument('--design_param', choices=['group_all_replicates',
                                                    'separate_replicates'])
     parser.add_argument('--split_by_celltype', action='store_true', default=False)
+    parser.add_argument('--normalized', action='store_true', default=False)
     parser.add_argument('--dataset', type=str, default=None)
     parser.add_argument('--use_pubchem_cid_in_label', action='store_true', default=False)
     parser.add_argument('--check_by_celltype_content', action='store_true', default=True)
@@ -1273,7 +1282,8 @@ def main():
         dataset=d_args.get('dataset'),
         post_processing=d_args.get('post_processing'),
         use_pubchem_cid_in_label=d_args.get('use_pubchem_cid_in_label', False),
-        check_by_celltype_content=d_args.get('check_by_celltype_content', True)
+        check_by_celltype_content=d_args.get('check_by_celltype_content', True),
+        is_normalized=d_args.get('normalized', False),
     )
     processor.process()
 
