@@ -67,6 +67,13 @@ PIPELINE_CONFIGS = {
             'aggregat': 3,
         }
     ),
+    # run_enrich_pseudobulk_var / enrich_pseudobulk_var.sh: launcher .PID* + Slurm .%j
+    'enrich': PipelineConfig(
+        name='enrich',
+        main_pattern_template=r'^enrich_{dataset}(\.pid\d+|\.\d+)?\.(out|err)$',
+        main_pattern_generic=r'^enrich_\w+(\.pid\d+|\.\d+)?\.(out|err)$',
+        keyword_priorities={},
+    ),
 }
 
 
@@ -177,7 +184,7 @@ def sort_log_files(files: List[str], pipeline_type: str, log_dir: Optional[str] 
     
     Args:
         files: List of log file paths
-        pipeline_type: Type of pipeline ('deg' or 'pseudobulk')
+        pipeline_type: Type of pipeline ('deg', 'pseudobulk', or 'enrich')
         log_dir: Optional log directory for dataset extraction
         
     Returns:
@@ -235,6 +242,12 @@ def collect_logs(log_dir: str, pipeline_type: str) -> List[str]:
             if pipeline_lower == 'pseudobulk' and 'deg' in filename_lower:
                 continue
             if pipeline_lower == 'deg' and filename_lower.startswith('pseudobulk'):
+                continue
+            if pipeline_lower == 'deg' and filename_lower.startswith('enrich_'):
+                continue
+            if pipeline_lower == 'pseudobulk' and filename_lower.startswith('enrich_'):
+                continue
+            if pipeline_lower == 'enrich' and not filename_lower.startswith('enrich_'):
                 continue
             
             results.append(os.path.join(root, filename))
@@ -413,6 +426,18 @@ def process_version_directory(version_dir: Path, dataset_name: str) -> List[str]
     if deg_root.is_dir():
         created.extend(process_deg_logs(str(deg_root), dataset_name))
     
+    # Process enrich_pseudobulk_var logs (flat: launcher PID + Slurm job id)
+    enrich_root = version_dir / 'enrich_pseudobulk_var'
+    if enrich_root.is_dir():
+        enrich_files = collect_logs(str(enrich_root), 'enrich')
+        if enrich_files:
+            output_path = enrich_root / f'enrich_{dataset_name}_combined.log'
+            result = write_combined_log(
+                enrich_files, str(output_path), 'enrich', str(enrich_root)
+            )
+            if result:
+                created.append(result)
+    
     return created
 
 
@@ -466,7 +491,7 @@ def aggregate_target(
     
     Args:
         log_dir: Directory containing logs to aggregate
-        pipeline_type: Type of pipeline ('deg' or 'pseudobulk')
+        pipeline_type: Type of pipeline ('deg', 'pseudobulk', or 'enrich')
         output_name: Optional custom output filename
         
     Returns:
@@ -511,6 +536,8 @@ Examples:
   
   # Target mode with custom output name
   %(prog)s --log_dir ./logs/deg/param1 --pipeline_type deg --output_name my_log.txt
+  
+  %(prog)s --log_dir ./logs/novartis/full/enrich_pseudobulk_var --pipeline_type enrich
         """
     )
     parser.add_argument(

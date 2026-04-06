@@ -14,6 +14,7 @@ cd "$PROJECT_ROOT"
 VALID_TYPES=(
     "pseudobulk"
     "deg"
+    "enrich"
 )
 
 # Show help
@@ -25,7 +26,7 @@ show_help() {
     echo "Options:"
     echo "  -r              Recursive mode: aggregate all logs under ./logs"
     echo "  -l LOG_DIR      Log directory path (relative to project root)"
-    echo "  -t TYPE         Pipeline type: 'pseudobulk' or 'deg'"
+    echo "  -t TYPE         Pipeline type: 'pseudobulk', 'deg', or 'enrich'"
     echo "  -o OUTPUT       Custom output filename (default: combined.log)"
     echo "  -h              Show this help"
     echo ""
@@ -33,6 +34,7 @@ show_help() {
     echo "  $0 -r                                                # Aggregate all logs"
     echo "  $0 -l logs/tahoe/full -t pseudobulk                 # Specific dataset"
     echo "  $0 -l logs/sciplex/full/deg/.../filter_min_cells_10 -t deg  # Specific DEG config"
+    echo "  $0 -l logs/novartis/full/enrich_pseudobulk_var -t enrich              # Enrich .var logs"
     echo ""
 }
 

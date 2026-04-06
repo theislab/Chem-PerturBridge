@@ -31,7 +31,7 @@ show_help() {
     echo "Options:"
     echo "  -r              Recursive mode: aggregate all logs"
     echo "  -l LOG_DIR      Log directory path"
-    echo "  -t TYPE         Pipeline type: 'pseudobulk' or 'deg'"
+    echo "  -t TYPE         Pipeline type: 'pseudobulk', 'deg', or 'enrich'"
     echo "  -o OUTPUT       Custom output filename"
     echo "  -h              Show this help"
     echo ""
@@ -109,8 +109,8 @@ else
     fi
     
     # Validate pipeline type
-    if [ "$PIPELINE_TYPE" != "pseudobulk" ] && [ "$PIPELINE_TYPE" != "deg" ]; then
-        echo "Error: Pipeline type must be 'pseudobulk' or 'deg'" >&2
+    if [ "$PIPELINE_TYPE" != "pseudobulk" ] && [ "$PIPELINE_TYPE" != "deg" ] && [ "$PIPELINE_TYPE" != "enrich" ]; then
+        echo "Error: Pipeline type must be 'pseudobulk', 'deg', or 'enrich'" >&2
         exit 1
     fi
     
