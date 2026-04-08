@@ -68,20 +68,13 @@ def standardize_var(adata: ad.AnnData) -> ad.AnnData:
 # Sample filtering
 # ---------------------------------------------------------------------------
 
-# Not applied for VCPI Ginkgo bulk exports.
-
-
-# ---------------------------------------------------------------------------
-# Sample filtering
-# ---------------------------------------------------------------------------
-
 def filter_samples(adata: ad.AnnData) -> ad.AnnData:
     """
     Filter samples from the VCPI Ginkgo dataset.
 
     Removes:
     1. Samples with total counts ``adata.X.sum(axis=1) <= 0`` (empty library).
-    2. Positive control samples: ``is_control == "True"`` but
+    2. Positive control samples: ``is_control == True`` but
        ``user_compound_id != "DMSO"`` (non-DMSO controls).
 
     Parameters
@@ -102,8 +95,8 @@ def filter_samples(adata: ad.AnnData) -> ad.AnnData:
     is_outlier = is_outlier | mask_zero_library
 
     mask_pos_control = (
-        (adata.obs["is_control"] == "True")
-        & (adata.obs["user_compound_id"].astype(str).str.strip().str.upper() != "DMSO")
+        (adata.obs["is_control"] == True)
+        & (adata.obs["user_compound_id"] != "DMSO")
     )
     logger.info("Positive controls (non-DMSO is_control): %d samples", mask_pos_control.sum())
     is_outlier = is_outlier | mask_pos_control
@@ -126,7 +119,7 @@ def annotate_vcpi_ginkgo_pubchem_cids(
     Annotate VCPI Ginkgo compound metadata with PubChem CIDs.
 
     Lookup order for each compound:
-    1. Universal cache keyed by user_compound_id
+    1. Universal cache keyed by compound
     2. Lookup by inchi_key
     3. Lookup by canonical_smiles
     4. Lookup by compound name
@@ -354,7 +347,7 @@ def define_obs_schema() -> list:
         ("cell_type",              "category", "Cell type with ontology ID"),
         ("perturbagen",            "category", "Perturbagen name"),
         ("pert_type",              "category", "Perturbation type"),
-        ("is_control",             "category", "True/False for controls"),
+        ("is_control",             "category", "bool categories: [False, True]"),
         ("pert_dose_uM",           "float64",  "Dose in micromolar"),
         ("pert_time_h",            "float64",  "Exposure time in hours"),
         ("suspension_type",        "category", "Type of biological material that was isolated into suspension and used for profiling"),
@@ -403,7 +396,7 @@ def add_fixed_metadata_columns(obs: pd.DataFrame, dataset_title: str) -> pd.Data
     obs = obs.copy()
     cell_type_map = get_cell_type_ontology_map()
 
-    obs["well"] = "r" + obs["row_id"].astype(str) + "_c" + obs["column_id"].astype(str)
+    obs["well"] = "row" + obs["row_id"].astype(str) + "_col" + obs["column_id"].astype(str)
 
     obs["pert_dose_uM"] = _apply_concentration_unit_to_um(
         obs["compound_concentration"],
@@ -412,8 +405,13 @@ def add_fixed_metadata_columns(obs: pd.DataFrame, dataset_title: str) -> pd.Data
     obs["pert_time_h"] = _parse_timepoint_hours(obs["timepoint"])
 
     obs["cell_type"]  = obs["cell_line"].astype(str).str.strip().map(cell_type_map)
-    obs["is_control"] = _is_control_column(obs)
-    obs.loc[obs["is_control"] == "True", "pert_dose_uM"] = 0.0
+    obs["is_control"] = obs["is_control"].astype(bool).astype("category")
+
+    non_dmso = (obs["is_control"] == True) & (obs["user_compound_id"] != "DMSO")
+    if non_dmso.any():
+        logger.warning("%d control samples have non-DMSO user_compound_id — check filter_samples", non_dmso.sum())
+
+    obs.loc[obs["is_control"] == True, "pert_dose_uM"] = 0.0
 
     obs["pert_type"]               = "compound"
     obs["organism"]                = "human"
@@ -467,7 +465,10 @@ def enforce_obs_schema(obs: pd.DataFrame) -> pd.DataFrame:
     for col, dtype in dtype_map.items():
         if col not in obs_out.columns:
             obs_out[col] = np.nan
-        if dtype == "category":
+        if col == "is_control":
+            # preserve bool category: Categories (2, bool): [False, True]
+            obs_out[col] = obs_out[col].astype(bool).astype("category")
+        elif dtype == "category":
             obs_out[col] = obs_out[col].astype(object).astype("category")
         elif dtype == "float64":
             obs_out[col] = pd.to_numeric(obs_out[col], errors="coerce")
@@ -483,7 +484,7 @@ def process_obs_dataframe(adata: ad.AnnData, compound_df: pd.DataFrame, dataset_
     Process VCPI observations to match the unified pseudobulk schema.
 
     Steps:
-    1. Merge perturbagen and pubchem_cid from compound_df (on user_compound_id)
+    1. Merge perturbagen and pubchem_cid from compound_df (on compound)
     2. Rename columns to schema names
     3. Add fixed metadata columns and sample_id
     4. Set psbulk_cells = -666 (not available for bulk); compute psbulk_counts from X
@@ -494,7 +495,8 @@ def process_obs_dataframe(adata: ad.AnnData, compound_df: pd.DataFrame, dataset_
     adata:
         VCPI AnnData (obs indexed by sequenced_id).
     compound_df:
-        Compound annotation table with at least user_compound_id, perturbagen, pubchem_cid.
+        Compound annotation table with at least compound, perturbagen, pubchem_cid.
+        user_compound_id is used internally for perturbagen fallback but not as the merge key.
     dataset_title:
         Value for the ``dataset`` obs column (varies per VCPI experiment).
 
@@ -507,13 +509,14 @@ def process_obs_dataframe(adata: ad.AnnData, compound_df: pd.DataFrame, dataset_
         obs = obs.rename(columns={obs.columns[0]: "sequenced_id"})
 
     # bring processed perturbagen and pubchem_cid from compound_df
-    merge_cols = [c for c in ["user_compound_id", "perturbagen", "pubchem_cid"]
+    # merge on 'compound'; user_compound_id stays in compound_df for intermediate use only
+    merge_cols = [c for c in ["compound", "user_compound_id", "perturbagen", "pubchem_cid"]
                   if c in compound_df.columns]
     drop_cols  = [c for c in ["perturbagen", "pubchem_cid"] if c in obs.columns]
     obs = obs.drop(columns=drop_cols, errors="ignore")
     obs = obs.merge(
-        compound_df[merge_cols].drop_duplicates("user_compound_id"),
-        on="user_compound_id", how="left",
+        compound_df[merge_cols].drop_duplicates("compound"),
+        on="compound", how="left",
     )
 
     obs = obs.rename(columns=get_column_rename_map())
@@ -567,6 +570,8 @@ def standardize_vcpi_ginkgo_dataset(
     logger.info("Loading raw data ...")
     adata       = ad.read_h5ad(paths["raw_h5ad"])
     compound_df = pd.read_csv(paths["compound_csv"])
+
+    adata.obs["is_control"] = adata.obs["is_control"].astype(bool)
 
     logger.info("Standardizing .var ...")
     adata = standardize_var(adata)
@@ -632,26 +637,6 @@ def _is_numeric_string(value: object) -> bool:
     except (ValueError, TypeError):
         return False
 
-
-def _is_control_column(obs: pd.DataFrame) -> pd.Series:
-    """
-    Control sample iff VCPI flags the well as control AND ``user_compound_id`` is DMSO.
-
-    Handles bool, numeric, and string ``is_control`` columns (VCPI metadata is often
-    cast to str upstream via ``.astype(str)``).
-    """
-    ic  = obs["is_control"]
-    uid = obs["user_compound_id"].astype(str).str.strip().str.upper()
-
-    if pd.api.types.is_bool_dtype(ic):
-        flag_true = ic.fillna(False)
-    elif pd.api.types.is_numeric_dtype(ic):
-        flag_true = ic.fillna(0).astype(bool)
-    else:
-        flag_true = ic.astype(str).str.strip().str.lower().isin(("true", "1", "yes"))
-
-    is_ctrl = flag_true & (uid == "DMSO")
-    return pd.Series(np.where(is_ctrl, "True", "False"), index=obs.index, dtype=str).astype("category")
 
 
 def _parse_timepoint_hours(series: pd.Series) -> pd.Series:
