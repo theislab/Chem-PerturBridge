@@ -1,5 +1,11 @@
 .idea/
 data/
+venv/
+venv/**
+~/venv/**
 .DS_Store
 .ipynb_checkpoints/
 *__pycache__*
+key.txt
+~/key.txt
+./key.txt
