@@ -90,6 +90,31 @@ fi
 cd /op3_v2
 mamba create -f env.yaml -p path_to_env/venv --yes
 ```
+
+**1.2.2** If you need to add environment variable (e.g. API_TOKEN), you can enter environment and then run:
+
+```
+mamba activate path_to_env/venv # Enter environment
+conda env config vars set MY_API_KEY="SECRET_KEY" 
+```
+Or (which is better to hide key information)
+
+```
+mamba activate path_to_env/venv # Enter environment
+conda env config vars set MY_API_KEY=$(cat secret_key.txt) #secret_key.txt contains your SECRET_KEY
+```
+
+To make your changes take effect please reactivate your environment:
+
+```
+mamba deactivate
+mamba activate path_to_env/venv
+echo $MY_API_KEY #If you want to print your MY_API_KEY
+mamba deactivate
+```
+
+**NB!** Make sure that a path to your environment (as well as a path to your secret_key.txt file) is included in .gitignore, .cursorignore, .cursorindexingignore, .codexignore and .codexindexingignor to try not to allow to read/index API KEYS by Cursor/Codex. But still, there might be a leak of KEYS to AI-agents.
+
 **1.3** **Create symlinks**
 
 In order to organize directories for scripts' outputs, you need to create folders in the desired locations for **data**; and then link **data** and **venv** folders to a script. 
