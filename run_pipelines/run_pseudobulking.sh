@@ -12,6 +12,8 @@ VALID_CHOICES=(
         "l1000_phase2"
         "op3"
         "novartis"
+        "vcpi_0001"
+        "vcpi_0002"
 )
 
 mkdir -p $LOGS_DIR
@@ -59,7 +61,8 @@ elif [[ "$DATASET" == "tahoe" ]]; then
 		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_tahoe.out \
 		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_tahoe.err &
 		
-elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]] || [[ "$DATASET" == "op3" ]]; then
+elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]] || [[ "$DATASET" == "op3" ]] \
+	|| [[ "$DATASET" == "vcpi_0001" ]] || [[ "$DATASET" == "vcpi_0002" ]]; then
 	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
     	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \
 		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.out \
