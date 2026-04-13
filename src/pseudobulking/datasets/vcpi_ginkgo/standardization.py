@@ -18,6 +18,9 @@ import pubchempy as pcp
 
 from src.pseudobulking.common.pubchem import is_valid_pubchem_cid, lookup_pubchem_cids
 from src.pseudobulking.datasets.vcpi_ginkgo.pubchem_imputation import pubchem_mapping_vcpi_ginkgo
+from src.pseudobulking.datasets.vcpi_ginkgo.ensembl_symbol_lookup import (
+    fetch_symbols_for_ensembl_ids,
+)
 from src.utils.parsing_utils import logger
 
 
@@ -30,7 +33,53 @@ from src.utils.parsing_utils import logger
 # .var standardization
 # ---------------------------------------------------------------------------
 
-def standardize_var(adata: ad.AnnData) -> ad.AnnData:
+def add_symbols_to_adata_var(
+    adata: ad.AnnData,
+    symbol_map: Dict[str, Optional[str]],
+    symbol_col: str = "symbol",
+    fallback_to_ensembl_id: bool = False,
+) -> ad.AnnData:
+    """
+    Add a ``symbol`` column to ``adata.var`` from a pre-fetched symbol map.
+
+    Parameters
+    ----------
+    adata:
+        AnnData whose ``var.index`` contains Ensembl gene IDs.
+    symbol_map:
+        dict mapping Ensembl ID → gene symbol (as returned by
+        ``fetch_symbols_for_ensembl_ids``).
+    symbol_col:
+        Name of the output column in ``adata.var``.
+    fallback_to_ensembl_id:
+        If True, fill missing symbols with the Ensembl ID itself.
+
+    Returns
+    -------
+    AnnData with ``adata.var[symbol_col]`` populated (dtype: category).
+    """
+    adata = adata.copy()
+    symbols = pd.Series(adata.var_names, index=adata.var_names).map(symbol_map)
+
+    n_mapped   = symbols.notna().sum()
+    n_unmapped = symbols.isna().sum()
+    logger.info(
+        "Symbol mapping: %d mapped, %d unmapped out of %d genes",
+        n_mapped, n_unmapped, len(symbols),
+    )
+
+    if fallback_to_ensembl_id and n_unmapped > 0:
+        logger.info("Filling %d unmapped genes with their Ensembl ID", n_unmapped)
+        symbols = symbols.fillna(pd.Series(adata.var_names, index=adata.var_names))
+
+    adata.var[symbol_col] = symbols.astype("category")
+    return adata
+
+
+def standardize_var(
+    adata: ad.AnnData,
+    ensembl_symbol_cache: Optional[str] = None,
+) -> ad.AnnData:
     """
     Drop ERCC spike-ins and set the unified var schema.
 
@@ -42,6 +91,10 @@ def standardize_var(adata: ad.AnnData) -> ad.AnnData:
     ----------
     adata:
         AnnData with var.index = Ensembl gene IDs (possibly with version suffix).
+    ensembl_symbol_cache:
+        Optional path to a JSON cache file for Ensembl → symbol lookups.
+        Results are cached for reuse across runs. When None, lookups are still
+        performed but results are not persisted to disk.
 
     Returns
     -------
@@ -57,8 +110,14 @@ def standardize_var(adata: ad.AnnData) -> ad.AnnData:
         logger.info("Dropping %d ERCC spike-in genes", n_ercc)
 
     adata = adata[:, ~ercc].copy()
-    adata.var["symbol"] = adata.var.index.astype(str).str.replace(r"\.\d+$", "", regex=True)
-    adata.var["symbol"] = adata.var["symbol"].astype("category")
+    adata.var.index.name = "ensembl_id"
+
+    logger.info("Fetching gene symbols from Ensembl REST API ...")
+    symbol_map = fetch_symbols_for_ensembl_ids(
+        list(adata.var_names),
+        cache_path=ensembl_symbol_cache,
+    )
+    adata = add_symbols_to_adata_var(adata, symbol_map)
 
     logger.info("Genes after ERCC removal: %d", adata.n_vars)
     return adata
@@ -471,7 +530,7 @@ def enforce_obs_schema(obs: pd.DataFrame) -> pd.DataFrame:
         elif dtype == "category":
             obs_out[col] = obs_out[col].astype(object).astype("category")
         elif dtype == "float64":
-            obs_out[col] = pd.to_numeric(obs_out[col], errors="coerce")
+            obs_out[col] = pd.to_numeric(obs_out[col], errors="coerce").astype("float64")
         elif dtype == "int64":
             obs_out[col] = pd.to_numeric(obs_out[col], errors="coerce").astype("int64")
 
@@ -512,7 +571,7 @@ def process_obs_dataframe(adata: ad.AnnData, compound_df: pd.DataFrame, dataset_
     # merge on 'compound'; user_compound_id stays in compound_df for intermediate use only
     merge_cols = [c for c in ["compound", "user_compound_id", "perturbagen", "pubchem_cid"]
                   if c in compound_df.columns]
-    drop_cols  = [c for c in ["perturbagen", "pubchem_cid"] if c in obs.columns]
+    drop_cols  = [c for c in ["perturbagen", "pubchem_cid", "user_compound_id"] if c in obs.columns]
     obs = obs.drop(columns=drop_cols, errors="ignore")
     obs = obs.merge(
         compound_df[merge_cols].drop_duplicates("compound"),
@@ -545,7 +604,7 @@ def standardize_vcpi_ginkgo_dataset(
     Steps
     -----
     1. Load raw AnnData and compound metadata.
-    2. Standardize .var (drop ERCC, set ensembl_id index).
+    2. Standardize .var (drop ERCC, set ensembl_id index, fetch gene symbols).
     3. Filter outlier samples (empty libraries, positive controls).
     4. Optionally annotate compounds with PubChem CIDs (annotate_pubchem).
     5. Optionally look up drug synonym names by CID (annotate_pubchem_names).
@@ -556,7 +615,8 @@ def standardize_vcpi_ginkgo_dataset(
     ----------
     paths:
         Dictionary of file paths as returned by get_vcpi_ginkgo_paths(). Expected keys:
-        raw_h5ad, compound_csv, dataset_title, pubchem_cid_cache, pubchem_names_cache.
+        raw_h5ad, compound_csv, dataset_title, pubchem_cid_cache, pubchem_names_cache,
+        ensembl_symbol_cache.
     annotate_pubchem:
         If True, run PubChem CID lookups (requires network access).
     annotate_pubchem_names:
@@ -571,10 +631,10 @@ def standardize_vcpi_ginkgo_dataset(
     adata       = ad.read_h5ad(paths["raw_h5ad"])
     compound_df = pd.read_csv(paths["compound_csv"])
 
-    adata.obs["is_control"] = adata.obs["is_control"].astype(bool)
+    adata.obs["is_control"] = adata.obs["is_control"].astype(str).str.strip().str.lower() == "true"
 
     logger.info("Standardizing .var ...")
-    adata = standardize_var(adata)
+    adata = standardize_var(adata, ensembl_symbol_cache=str(paths["ensembl_symbol_cache"]))
 
     logger.info("Filtering samples ...")
     adata = filter_samples(adata)

@@ -74,7 +74,7 @@ def load_vcpi_experiment(
 # Step 2 — convert experiments payload → raw h5ad
 # ---------------------------------------------------------------------------
 
-def pkl_to_adata(
+def convert_experiments_to_adata(
     experiments: dict,
     paths: dict,
     force: bool = False,
@@ -186,5 +186,5 @@ def load_vcpi_ginkgo(
         Re-extract ``df_compounds.csv`` even if it already exists.
     """
     experiments = load_vcpi_experiment(paths, experiment_id, force=force_download)
-    pkl_to_adata(experiments, paths, force=force_convert)
+    convert_experiments_to_adata(experiments, paths, force=force_convert)
     format_compound_df(experiments, paths, force=force_compounds)

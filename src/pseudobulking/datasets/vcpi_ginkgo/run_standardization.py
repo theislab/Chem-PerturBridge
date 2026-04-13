@@ -54,6 +54,8 @@ def get_vcpi_ginkgo_paths(data_root: str | Path, experiment_id: str) -> dict:
         # PubChem caches
         "pubchem_cid_cache":  raw_dir / "vcpi_ginkgo_pubchem_cache.json",
         "pubchem_names_cache": raw_dir / "vcpi_ginkgo_pubchem_names_cache.json",
+        # Ensembl symbol cache
+        "ensembl_symbol_cache": raw_dir / "vcpi_ginkgo_ensembl_symbol_cache.json",
         # experiment metadata
         "dataset_title":      EXPERIMENT_TITLES[experiment_id],
     }
@@ -100,7 +102,6 @@ def main():
                         help='Annotate compounds with PubChem CIDs (may involve API calls)')
     parser.add_argument('--annotate-pubchem-names', action='store_true',
                         help='Look up drug synonym names by PubChem CID (requires --annotate-pubchem or pre-existing pubchem_cid column)')
-
     args = parser.parse_args()
 
     if os.path.isfile(args.output_file):
