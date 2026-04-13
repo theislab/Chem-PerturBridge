@@ -14,6 +14,7 @@ VALID_CHOICES=(
         "novartis"
         "vcpi_0001"
         "vcpi_0002"
+        "gdpx2"
 )
 
 mkdir -p $LOGS_DIR
@@ -69,6 +70,12 @@ elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]] ||
 		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.err &
 
 elif [[ "$DATASET" == "novartis" ]]; then
+	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.err &
+
+elif [[ "$DATASET" == "gdpx2" ]]; then
 	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
 	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \
 		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.out \
