@@ -1,0 +1,176 @@
+pseudobulk_vcpi_0002.PID1956434.out:> Running vcpi_0002 VCPI standardization (vcpi-0002)
+pseudobulk_vcpi_0002.PID1956434.out:Submitted batch job 35128167
+pseudobulk_vcpi_0002.PID1956434.out:> vcpi_0002 standardization job finished
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:38:48 | [INFO] Loading and converting VCPI Ginkgo raw data
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:38:48 | [INFO] Loading VCPI payload from pickle: data/vcpi_0002/raw/experiments.pkl
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:39:12 | [INFO] Converting VCPI payload to AnnData ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:39:21 | [INFO] Expression matrix shape (samples × genes): (19010, 78778)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:40:53 | [INFO] Saved raw AnnData: data/vcpi_0002/raw/vcpi_ginkgo_raw.h5ad
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:40:53 | [INFO] Extracting compound metadata from experiments['chemistry'] ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:40:54 | [INFO] Saved compound metadata: data/vcpi_0002/raw/df_compounds.csv (1498 rows)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:40:54 | [INFO] Standardizing VCPI Ginkgo dataset
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:40:54 | [INFO] Loading raw data ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:04 | [INFO] Standardizing .var ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:04 | [INFO] Dropping 92 ERCC spike-in genes
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:09 | [INFO] Fetching gene symbols from Ensembl REST API ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:09 | [INFO] Ensembl symbol lookup: 78686 unique IDs total, 0 already cached, 78686 to fetch
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:09 | [INFO]   Batch 1/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:14 | [INFO]   Batch 2/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:21 | [INFO]   Batch 3/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:30 | [INFO]   Batch 4/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:36 | [INFO]   Batch 5/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:45 | [INFO]   Batch 6/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:49 | [INFO]   Batch 7/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:41:54 | [INFO]   Batch 8/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:00 | [INFO]   Batch 9/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:06 | [INFO]   Batch 10/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:12 | [INFO]   Batch 11/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:18 | [INFO]   Batch 12/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:22 | [INFO]   Batch 13/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:28 | [INFO]   Batch 14/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:32 | [INFO]   Batch 15/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:37 | [INFO]   Batch 16/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:41 | [INFO]   Batch 17/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:46 | [INFO]   Batch 18/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:53 | [INFO]   Batch 19/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:42:58 | [INFO]   Batch 20/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:05 | [INFO]   Batch 21/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:11 | [INFO]   Batch 22/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:16 | [INFO]   Batch 23/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:20 | [INFO]   Batch 24/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:24 | [INFO]   Batch 25/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:30 | [INFO]   Batch 26/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:34 | [INFO]   Batch 27/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:38 | [INFO]   Batch 28/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:42 | [INFO]   Batch 29/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:49 | [INFO]   Batch 30/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:43:55 | [INFO]   Batch 31/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:03 | [INFO]   Batch 32/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:08 | [INFO]   Batch 33/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:17 | [INFO]   Batch 34/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:24 | [INFO]   Batch 35/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:33 | [INFO]   Batch 36/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:38 | [INFO]   Batch 37/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:42 | [INFO]   Batch 38/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:47 | [INFO]   Batch 39/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:51 | [INFO]   Batch 40/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:44:57 | [INFO]   Batch 41/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:04 | [INFO]   Batch 42/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:09 | [INFO]   Batch 43/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:15 | [INFO]   Batch 44/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:21 | [INFO]   Batch 45/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:26 | [INFO]   Batch 46/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:30 | [INFO]   Batch 47/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:35 | [INFO]   Batch 48/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:42 | [INFO]   Batch 49/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:50 | [INFO]   Batch 50/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:45:56 | [INFO]   Batch 51/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:46:05 | [INFO]   Batch 52/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:46:15 | [INFO]   Batch 53/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:46:21 | [INFO]   Batch 54/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:46:25 | [INFO]   Batch 55/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:46:33 | [INFO]   Batch 56/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:46:40 | [INFO]   Batch 57/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:46:47 | [INFO]   Batch 58/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:46:52 | [INFO]   Batch 59/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:46:57 | [INFO]   Batch 60/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:47:05 | [INFO]   Batch 61/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:47:13 | [INFO]   Batch 62/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:47:19 | [INFO]   Batch 63/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:47:23 | [INFO]   Batch 64/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:47:33 | [INFO]   Batch 65/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:47:40 | [INFO]   Batch 66/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:47:48 | [INFO]   Batch 67/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:47:53 | [INFO]   Batch 68/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:02 | [INFO]   Batch 69/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:08 | [INFO]   Batch 70/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:14 | [INFO]   Batch 71/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:22 | [INFO]   Batch 72/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:26 | [INFO]   Batch 73/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:33 | [INFO]   Batch 74/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:38 | [INFO]   Batch 75/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:42 | [INFO]   Batch 76/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:47 | [INFO]   Batch 77/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:53 | [INFO]   Batch 78/79: querying 1000 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:48:58 | [INFO]   Batch 79/79: querying 686 IDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:02 | [INFO] Saved Ensembl symbol cache: 78686 entries to data/vcpi_0002/raw/vcpi_ginkgo_ensembl_symbol_cache.json
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:05 | [INFO] Symbol mapping: 43028 mapped, 35658 unmapped out of 78686 genes
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:05 | [INFO] Genes after ERCC removal: 78686
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:05 | [INFO] Filtering samples ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:05 | [INFO] Original: 19010 samples
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:05 | [INFO] Zero or negative library size (sum X <= 0): 0 samples
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:05 | [INFO] Positive controls (non-DMSO is_control): 813 samples
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:05 | [INFO] Total outliers: 813 / 19010
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:09 | [INFO] Remaining: 18197 samples
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:09 | [INFO] Annotating compounds with PubChem CIDs ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:09 | [INFO] Cache file data/vcpi_0002/raw/vcpi_ginkgo_pubchem_cache.json not found. Starting with empty cache.
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:09 | [INFO] Processing 1498 compounds
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:49:42 | [INFO] Processed 50/1498 compounds (50 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:50:14 | [INFO] Processed 100/1498 compounds (100 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:50:46 | [INFO] Processed 150/1498 compounds (150 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:51:18 | [INFO] Processed 200/1498 compounds (200 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:51:49 | [INFO] Processed 250/1498 compounds (248 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:52:21 | [INFO] Processed 300/1498 compounds (298 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:52:54 | [INFO] Processed 350/1498 compounds (348 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:53:26 | [INFO] Processed 400/1498 compounds (397 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:53:58 | [INFO] Processed 450/1498 compounds (447 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:54:30 | [INFO] Processed 500/1498 compounds (497 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:55:02 | [INFO] Processed 550/1498 compounds (547 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:55:34 | [INFO] Processed 600/1498 compounds (597 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:56:06 | [INFO] Processed 650/1498 compounds (647 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:56:38 | [INFO] Processed 700/1498 compounds (697 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:57:10 | [INFO] Processed 750/1498 compounds (747 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:57:42 | [INFO] Processed 800/1498 compounds (797 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:58:14 | [INFO] Processed 850/1498 compounds (847 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:58:46 | [INFO] Processed 900/1498 compounds (897 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:59:18 | [INFO] Processed 950/1498 compounds (947 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-12 23:59:50 | [INFO] Processed 1000/1498 compounds (997 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:00:22 | [INFO] Processed 1050/1498 compounds (1047 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:00:55 | [INFO] Processed 1100/1498 compounds (1097 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:01:27 | [INFO] Processed 1150/1498 compounds (1147 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:01:59 | [INFO] Processed 1200/1498 compounds (1197 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:02:32 | [INFO] Processed 1250/1498 compounds (1247 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:03:03 | [INFO] Processed 1300/1498 compounds (1297 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:03:37 | [INFO] Processed 1350/1498 compounds (1347 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:04:08 | [INFO] Processed 1400/1498 compounds (1397 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:04:40 | [INFO] Processed 1450/1498 compounds (1446 mapped so far)
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:05:11 | [INFO] Mapped 1493 out of 1498 compounds to PubChem CIDs
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:05:12 | [INFO] Looking up drug synonym names by PubChem CID ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:05:12 | [INFO] Unique valid CIDs: 1493, to fetch: 1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:06:02 | [INFO] Fetched 50/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:06:54 | [INFO] Fetched 100/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:07:44 | [INFO] Fetched 150/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:08:35 | [INFO] Fetched 200/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:09:26 | [INFO] Fetched 250/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:10:17 | [INFO] Fetched 300/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:11:08 | [INFO] Fetched 350/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:11:59 | [INFO] Fetched 400/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:12:51 | [INFO] Fetched 450/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:13:43 | [INFO] Fetched 500/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:14:33 | [INFO] Fetched 550/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:15:25 | [INFO] Fetched 600/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:16:15 | [INFO] Fetched 650/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:17:06 | [INFO] Fetched 700/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:17:57 | [INFO] Fetched 750/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:18:48 | [INFO] Fetched 800/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:19:38 | [INFO] Fetched 850/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:20:30 | [INFO] Fetched 900/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:21:22 | [INFO] Fetched 950/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:22:13 | [INFO] Fetched 1000/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:23:04 | [INFO] Fetched 1050/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:23:55 | [INFO] Fetched 1100/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:24:45 | [INFO] Fetched 1150/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:25:37 | [INFO] Fetched 1200/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:26:29 | [INFO] Fetched 1250/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:27:20 | [INFO] Fetched 1300/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:28:11 | [INFO] Fetched 1350/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:29:02 | [INFO] Fetched 1400/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:29:53 | [INFO] Fetched 1450/1492
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:30:38 | [INFO] Mapped 1474/1498 rows to drug names
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:30:38 | [INFO] perturbagen: 1474 from pubchem_name, 24 NaN -> user_compound_id, 0 duplicated -> user_compound_id
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:30:38 | [INFO] Standardizing .obs ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:30:39 | [INFO]   Processed 18,197 observations
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:30:39 | [INFO] Creating standardized AnnData object ...
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:30:40 | [INFO] Standardization complete: 18197 observations x 78686 genes
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:30:40 | [INFO] Saving standardized dataset to: ./data/vcpi_0002/pseudobulk/full/vcpi_0002_standardized.h5ad
+pseudobulk_vcpi_0002.35128167.out:2026-04-13 00:31:51 | [INFO] VCPI Ginkgo standardization complete
