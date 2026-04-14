@@ -1,0 +1,275 @@
+pseudobulk_novartis.PID1566649.out:> Running novartis standardization
+pseudobulk_novartis.PID1566649.out:Submitted batch job 34925152
+pseudobulk_novartis.PID1566649.out:> novartis standardization is done
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:30 | [INFO] Downloading and converting Novartis raw data
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:30 | [INFO] Downloading MoABox_compounds_metadata.txt ...
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:31 | [INFO]   -> saved to data/novartis/raw/MoABox_compounds_metadata.txt
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:31 | [INFO] Downloading robust_RC_ReferenceControl_DMSO_wells.txt ...
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:31 | [INFO]   -> saved to data/novartis/raw/robust_RC_ReferenceControl_DMSO_wells.txt
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:31 | [INFO] Downloading drugseq_ensembl_v98_annotation_and_entrez_mapping.RData ...
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:33 | [INFO]   -> saved to data/novartis/raw/drugseq_ensembl_v98_annotation_and_entrez_mapping.RData
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:33 | [INFO] Downloading Exp_gzip.RData ...
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:51 | [INFO]   -> saved to data/novartis/raw/Exp_gzip.RData
+pseudobulk_novartis.34925152.out:2026-03-31 15:07:52 | [INFO] Decompressing data/novartis/raw/Exp_gzip.RData -> data/novartis/raw/Exp.RData (this may take a few minutes) ...
+pseudobulk_novartis.34925152.out:2026-03-31 15:10:10 | [INFO] Decompression complete.
+pseudobulk_novartis.34925152.out:2026-03-31 15:10:10 | [INFO] Running rdata_to_adata.R ...
+pseudobulk_novartis.34925152.out:
+pseudobulk_novartis.34925152.out:RData -> AnnData conversion started...
+pseudobulk_novartis.34925152.out:obs : 59904 samples x 18 metadata columns
+pseudobulk_novartis.34925152.out:var : 59594 genes
+pseudobulk_novartis.34925152.out:
+pseudobulk_novartis.34925152.out:Conversion completed!
+pseudobulk_novartis.34925152.out:
+pseudobulk_novartis.34925152.out:Total runtime: 664.8 seconds
+pseudobulk_novartis.34925152.out:2026-03-31 15:21:31 | [INFO] R conversion finished.
+pseudobulk_novartis.34925152.out:2026-03-31 15:21:31 | [INFO] Loading data/novartis/raw/novartis_raw.h5ad
+pseudobulk_novartis.34925152.out:2026-03-31 15:21:54 | [INFO] Standardizing Novartis dataset
+pseudobulk_novartis.34925152.out:2026-03-31 15:21:54 | [INFO] Loading raw data ...
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:17 | [INFO] Standardizing .var ...
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:18 | [INFO] Genes before filtration: 59594
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:18 | [INFO] Genes after filtration:  56080 (3514 removed)
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:23 | [INFO] AnnData subset to filtered geneIDs: 56080 vars
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:23 | [INFO] ensembl_gene_ids with >1 geneID (will be merged): 0
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:23 | [INFO] No aggregation needed — reindexing var to ensembl_id
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:24 | [INFO] Filtering samples ...
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:24 | [INFO] Original: 59904 samples
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:25 | [INFO] Zero or negative library size (sum X <= 0): 4 samples
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:25 | [INFO] Empty well_type: 3276 samples
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:25 | [INFO] RC not in robust_dmso: 2184 samples
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:25 | [INFO] SA in POS_CTL: 1428 samples
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:25 | [INFO] Total outliers: 6892 / 59904
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:25 | [INFO] Remaining: 53012 samples
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:25 | [INFO] Annotating compounds with PubChem CIDs ...
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:25 | [INFO] Cache file data/novartis/raw/novartis_pubchem_cache.json not found. Starting with empty cache.
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:25 | [INFO] Processing 4345 compounds
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:35 | [INFO] Processed 50/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:45 | [INFO] Processed 100/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:22:55 | [INFO] Processed 150/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:23:05 | [INFO] Processed 200/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:23:15 | [INFO] Processed 250/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:23:25 | [INFO] Processed 300/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:23:35 | [INFO] Processed 350/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:23:45 | [INFO] Processed 400/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:23:55 | [INFO] Processed 450/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:24:05 | [INFO] Processed 500/4345 compounds (0 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:24:40 | [INFO] Processed 550/4345 compounds (47 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:25:16 | [INFO] Processed 600/4345 compounds (97 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:25:49 | [INFO] Processed 650/4345 compounds (147 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:26:21 | [INFO] Processed 700/4345 compounds (197 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:26:53 | [INFO] Processed 750/4345 compounds (247 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:27:28 | [INFO] Processed 800/4345 compounds (297 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:28:03 | [INFO] Processed 850/4345 compounds (347 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:28:37 | [INFO] Processed 900/4345 compounds (397 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:29:09 | [INFO] Processed 950/4345 compounds (447 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:29:42 | [INFO] Processed 1000/4345 compounds (497 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:30:17 | [INFO] Processed 1050/4345 compounds (547 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:30:51 | [INFO] Processed 1100/4345 compounds (596 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:31:26 | [INFO] Processed 1150/4345 compounds (646 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:31:59 | [INFO] Processed 1200/4345 compounds (696 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:32:32 | [INFO] Processed 1250/4345 compounds (746 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:33:07 | [INFO] Processed 1300/4345 compounds (796 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:33:40 | [INFO] Processed 1350/4345 compounds (846 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:34:13 | [INFO] Processed 1400/4345 compounds (896 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:34:47 | [INFO] Processed 1450/4345 compounds (946 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:35:20 | [INFO] Processed 1500/4345 compounds (996 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:35:54 | [INFO] Processed 1550/4345 compounds (1045 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:36:27 | [INFO] Processed 1600/4345 compounds (1095 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:37:02 | [INFO] Processed 1650/4345 compounds (1145 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:37:35 | [INFO] Processed 1700/4345 compounds (1195 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:38:10 | [INFO] Processed 1750/4345 compounds (1244 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:38:45 | [INFO] Processed 1800/4345 compounds (1294 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:39:19 | [INFO] Processed 1850/4345 compounds (1344 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:39:53 | [INFO] Processed 1900/4345 compounds (1394 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:40:28 | [INFO] Processed 1950/4345 compounds (1444 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:41:00 | [INFO] Processed 2000/4345 compounds (1494 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:41:34 | [INFO] Processed 2050/4345 compounds (1544 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:42:13 | [INFO] Processed 2100/4345 compounds (1593 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:42:46 | [INFO] Processed 2150/4345 compounds (1641 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:43:20 | [INFO] Processed 2200/4345 compounds (1691 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:43:55 | [INFO] Processed 2250/4345 compounds (1741 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:44:28 | [INFO] Processed 2300/4345 compounds (1791 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:45:01 | [INFO] Processed 2350/4345 compounds (1841 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:45:34 | [INFO] Processed 2400/4345 compounds (1891 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:46:07 | [INFO] Processed 2450/4345 compounds (1941 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:46:40 | [INFO] Processed 2500/4345 compounds (1991 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:47:13 | [INFO] Processed 2550/4345 compounds (2041 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:47:48 | [INFO] Processed 2600/4345 compounds (2091 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:48:20 | [INFO] Processed 2650/4345 compounds (2141 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:48:52 | [INFO] Processed 2700/4345 compounds (2191 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:49:27 | [INFO] Processed 2750/4345 compounds (2240 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:50:01 | [INFO] Processed 2800/4345 compounds (2288 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:50:34 | [INFO] Processed 2850/4345 compounds (2338 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:51:07 | [INFO] Processed 2900/4345 compounds (2388 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:51:41 | [INFO] Processed 2950/4345 compounds (2438 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:52:15 | [INFO] Processed 3000/4345 compounds (2487 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:52:48 | [INFO] Processed 3050/4345 compounds (2537 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:53:21 | [INFO] Processed 3100/4345 compounds (2587 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:53:54 | [INFO] Processed 3150/4345 compounds (2637 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:54:29 | [INFO] Processed 3200/4345 compounds (2687 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:55:03 | [INFO] Processed 3250/4345 compounds (2737 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:55:40 | [INFO] Processed 3300/4345 compounds (2785 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:56:14 | [INFO] Processed 3350/4345 compounds (2835 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:56:47 | [INFO] Processed 3400/4345 compounds (2884 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:57:18 | [INFO] Processed 3450/4345 compounds (2934 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:57:53 | [INFO] Processed 3500/4345 compounds (2984 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:58:27 | [INFO] Processed 3550/4345 compounds (3034 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:59:01 | [INFO] Processed 3600/4345 compounds (3082 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 15:59:33 | [INFO] Processed 3650/4345 compounds (3131 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:00:05 | [INFO] Processed 3700/4345 compounds (3181 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:00:38 | [INFO] Processed 3750/4345 compounds (3231 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:01:10 | [INFO] Processed 3800/4345 compounds (3281 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:01:45 | [INFO] Processed 3850/4345 compounds (3331 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:02:20 | [INFO] Processed 3900/4345 compounds (3381 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:02:53 | [INFO] Processed 3950/4345 compounds (3431 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:03:25 | [INFO] Processed 4000/4345 compounds (3481 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:03:58 | [INFO] Processed 4050/4345 compounds (3531 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:04:33 | [INFO] Processed 4100/4345 compounds (3580 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:05:05 | [INFO] Processed 4150/4345 compounds (3630 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:05:41 | [INFO] Processed 4200/4345 compounds (3680 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:06:12 | [INFO] Processed 4250/4345 compounds (3730 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:06:46 | [INFO] Processed 4300/4345 compounds (3780 mapped so far)
+pseudobulk_novartis.34925152.out:2026-03-31 16:07:16 | [INFO] Mapped 3824 out of 4345 compounds to PubChem CIDs
+pseudobulk_novartis.34925152.out:2026-03-31 16:07:16 | [INFO] Looking up drug synonym names by PubChem CID ...
+pseudobulk_novartis.34925152.out:2026-03-31 16:07:16 | [INFO] Unique valid CIDs: 3823, to fetch: 3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:08:09 | [INFO] Fetched 50/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:09:04 | [INFO] Fetched 100/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:10:03 | [INFO] Fetched 150/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:10:55 | [INFO] Fetched 200/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:11:51 | [INFO] Fetched 250/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:12:46 | [INFO] Fetched 300/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:13:42 | [INFO] Fetched 350/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:14:38 | [INFO] Fetched 400/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:15:33 | [INFO] Fetched 450/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:16:28 | [INFO] Fetched 500/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:17:22 | [INFO] Fetched 550/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:18:16 | [INFO] Fetched 600/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:19:12 | [INFO] Fetched 650/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:20:06 | [INFO] Fetched 700/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:21:01 | [INFO] Fetched 750/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:21:56 | [INFO] Fetched 800/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:22:51 | [INFO] Fetched 850/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:23:46 | [INFO] Fetched 900/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:24:40 | [INFO] Fetched 950/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:25:35 | [INFO] Fetched 1000/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:26:29 | [INFO] Fetched 1050/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:27:24 | [INFO] Fetched 1100/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:28:20 | [INFO] Fetched 1150/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:29:13 | [INFO] Fetched 1200/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:30:07 | [INFO] Fetched 1250/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:31:01 | [INFO] Fetched 1300/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:31:55 | [INFO] Fetched 1350/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:32:49 | [INFO] Fetched 1400/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:33:43 | [INFO] Fetched 1450/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:34:37 | [INFO] Fetched 1500/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:35:31 | [INFO] Fetched 1550/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:36:25 | [INFO] Fetched 1600/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:37:20 | [INFO] Fetched 1650/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:38:15 | [INFO] Fetched 1700/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:39:08 | [INFO] Fetched 1750/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:40:01 | [INFO] Fetched 1800/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:40:55 | [INFO] Fetched 1850/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:41:49 | [INFO] Fetched 1900/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:42:43 | [INFO] Fetched 1950/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:43:35 | [INFO] Fetched 2000/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:44:30 | [INFO] Fetched 2050/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:45:23 | [INFO] Fetched 2100/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:46:16 | [INFO] Fetched 2150/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:47:10 | [INFO] Fetched 2200/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:48:04 | [INFO] Fetched 2250/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:48:57 | [INFO] Fetched 2300/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:49:52 | [INFO] Fetched 2350/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:50:45 | [INFO] Fetched 2400/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:51:38 | [INFO] Fetched 2450/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:52:32 | [INFO] Fetched 2500/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:53:25 | [INFO] Fetched 2550/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:54:20 | [INFO] Fetched 2600/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:55:14 | [INFO] Fetched 2650/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:56:09 | [INFO] Fetched 2700/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:57:02 | [INFO] Fetched 2750/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:57:56 | [INFO] Fetched 2800/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:58:50 | [INFO] Fetched 2850/3822
+pseudobulk_novartis.34925152.out:2026-03-31 16:59:43 | [INFO] Fetched 2900/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:00:38 | [INFO] Fetched 2950/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:01:31 | [INFO] Fetched 3000/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:02:26 | [INFO] Fetched 3050/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:03:19 | [INFO] Fetched 3100/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:04:13 | [INFO] Fetched 3150/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:05:06 | [INFO] Fetched 3200/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:05:59 | [INFO] Fetched 3250/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:06:52 | [INFO] Fetched 3300/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:07:46 | [INFO] Fetched 3350/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:08:40 | [INFO] Fetched 3400/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:09:33 | [INFO] Fetched 3450/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:10:28 | [INFO] Fetched 3500/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:11:23 | [INFO] Fetched 3550/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:12:16 | [INFO] Fetched 3600/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:13:10 | [INFO] Fetched 3650/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:14:06 | [INFO] Fetched 3700/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:15:00 | [INFO] Fetched 3750/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:15:54 | [INFO] Fetched 3800/3822
+pseudobulk_novartis.34925152.out:2026-03-31 17:16:19 | [INFO] Mapped 3746/4345 rows to drug names
+pseudobulk_novartis.34925152.out:2026-03-31 17:16:20 | [INFO] perturbagen: 3744 from pubchem_name, 599 NaN -> cmpd_sample_id, 2 duplicated -> cmpd_sample_id
+pseudobulk_novartis.34925152.out:2026-03-31 17:16:20 | [INFO] Standardizing .obs ...
+pseudobulk_novartis.34925152.out:2026-03-31 17:16:27 | [INFO]   Processed 53,012 observations
+pseudobulk_novartis.34925152.out:2026-03-31 17:16:27 | [INFO] Creating standardized AnnData object ...
+pseudobulk_novartis.34925152.out:2026-03-31 17:16:37 | [INFO] Standardization complete: 53012 observations x 56080 genes
+pseudobulk_novartis.34925152.out:2026-03-31 17:16:37 | [INFO] Saving standardized dataset to: ./data/novartis/pseudobulk/full/novartis_standardized.h5ad
+pseudobulk_novartis.34925152.out:2026-03-31 17:19:00 | [INFO] Novartis standardization complete
+pseudobulk_novartis.34925152.err:Loading data/novartis/raw/Exp.RData
+pseudobulk_novartis.34925152.err:[1/52] batch 13
+pseudobulk_novartis.34925152.err:[2/52] batch 44
+pseudobulk_novartis.34925152.err:[3/52] batch 10
+pseudobulk_novartis.34925152.err:[4/52] batch 23
+pseudobulk_novartis.34925152.err:[5/52] batch 17
+pseudobulk_novartis.34925152.err:[6/52] batch 43
+pseudobulk_novartis.34925152.err:[7/52] batch 46
+pseudobulk_novartis.34925152.err:[8/52] batch 32
+pseudobulk_novartis.34925152.err:[9/52] batch 28
+pseudobulk_novartis.34925152.err:[10/52] batch 1
+pseudobulk_novartis.34925152.err:[11/52] batch 36
+pseudobulk_novartis.34925152.err:[12/52] batch 2
+pseudobulk_novartis.34925152.err:[13/52] batch 8
+pseudobulk_novartis.34925152.err:[14/52] batch 39
+pseudobulk_novartis.34925152.err:[15/52] batch 34
+pseudobulk_novartis.34925152.err:[16/52] batch 49
+pseudobulk_novartis.34925152.err:[17/52] batch 25
+pseudobulk_novartis.34925152.err:[18/52] batch 41
+pseudobulk_novartis.34925152.err:[19/52] batch 16
+pseudobulk_novartis.34925152.err:[20/52] batch 21
+pseudobulk_novartis.34925152.err:[21/52] batch 38
+pseudobulk_novartis.34925152.err:[22/52] batch 18
+pseudobulk_novartis.34925152.err:[23/52] batch 5
+pseudobulk_novartis.34925152.err:[24/52] batch 47
+pseudobulk_novartis.34925152.err:[25/52] batch 6
+pseudobulk_novartis.34925152.err:[26/52] batch 50
+pseudobulk_novartis.34925152.err:[27/52] batch 12
+pseudobulk_novartis.34925152.err:[28/52] batch 52
+pseudobulk_novartis.34925152.err:[29/52] batch 42
+pseudobulk_novartis.34925152.err:[30/52] batch 14
+pseudobulk_novartis.34925152.err:[31/52] batch 24
+pseudobulk_novartis.34925152.err:[32/52] batch 37
+pseudobulk_novartis.34925152.err:[33/52] batch 11
+pseudobulk_novartis.34925152.err:[34/52] batch 19
+pseudobulk_novartis.34925152.err:[35/52] batch 9
+pseudobulk_novartis.34925152.err:[36/52] batch 40
+pseudobulk_novartis.34925152.err:[37/52] batch 3
+pseudobulk_novartis.34925152.err:[38/52] batch 48
+pseudobulk_novartis.34925152.err:[39/52] batch 35
+pseudobulk_novartis.34925152.err:[40/52] batch 27
+pseudobulk_novartis.34925152.err:[41/52] batch 4
+pseudobulk_novartis.34925152.err:[42/52] batch 33
+pseudobulk_novartis.34925152.err:[43/52] batch 20
+pseudobulk_novartis.34925152.err:[44/52] batch 22
+pseudobulk_novartis.34925152.err:[45/52] batch 15
+pseudobulk_novartis.34925152.err:[46/52] batch 31
+pseudobulk_novartis.34925152.err:[47/52] batch 26
+pseudobulk_novartis.34925152.err:[48/52] batch 30
+pseudobulk_novartis.34925152.err:[49/52] batch 51
+pseudobulk_novartis.34925152.err:[50/52] batch 29
+pseudobulk_novartis.34925152.err:[51/52] batch 7
+pseudobulk_novartis.34925152.err:[52/52] batch 45
+pseudobulk_novartis.34925152.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/legacy_api_wrap/__init__.py:88: FutureWarning: The dtype argument is deprecated and will be removed in late 2024.
+pseudobulk_novartis.34925152.err:  return fn(*args_all, **kw)
+pseudobulk_novartis.34925152.err:Saved AnnData to data/novartis/raw/novartis_raw.h5ad
+pseudobulk_novartis.34925152.err:Loading gene annotation from data/novartis/raw/drugseq_ensembl_v98_annotation_and_entrez_mapping.RData
+pseudobulk_novartis.34925152.err:Saved gene annotation CSV to data/novartis/raw/drugseq_ensg_v98.csv

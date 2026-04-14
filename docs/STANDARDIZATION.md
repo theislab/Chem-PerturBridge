@@ -12,7 +12,7 @@ To standardize you just need to convert dataset column content or column names t
 ## Which columns are important?
 The most important columns to keep an eye on are `plate`, `well`, `cell_type`, `perturbagen`, `pert_type`, `is_control`, `pert_dose_uM`, `pert_time_h`, `pubchem_cid`. Description of them is located [here](https://github.com/theislab/op3_v2/blob/main/docs/Format_Pseudobulk.ipynb).
 
-**NB!** Some cell types are not represented as cell lines. It is ok to leave them with the original names/ids, but also if you have a chance it would be great to map them to `CL:` IDs via [Cell Ontology](https://www.ebi.ac.uk/ols4/ontologies/cl).
+**NB!** Some cell types are not represented as cell lines. It is ok to leave them with the original names/ids, but also if you have a chance it would be great to map them to **CL:** IDs via [Cell Ontology](https://www.ebi.ac.uk/ols4/ontologies/cl). In our columns we keep it in the format: `CL_` instead of `CL:`.
 
 **NB!** Additionally, check that the `perturbagen` column has no duplicates in compound names with slightly different chemical structures. If so, this case should be analysed individually, but it is similar to the further preprocessing run for the L1000 dataset before DEG (we added [`combine_perturbagen_pubchem_cid` option](https://github.com/theislab/op3_v2/blob/44ad730e8a8341d0be6d4838922e5529ca4be403/src/deg/run_processing_pseudobulk.py#L1171) to distinguish compounds with the same names but different structures in DEG analysis).
 

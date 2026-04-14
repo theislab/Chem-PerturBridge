@@ -3,7 +3,7 @@ import time
 import pandas as pd
 import numpy as np
 from collections import Counter
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Any, Dict, List, Optional, Tuple
 from requests.exceptions import HTTPError
 from anndata import AnnData
 from scipy import sparse
@@ -318,10 +318,11 @@ def map_and_aggregate_duplicated_genes(adata: AnnData,
     X_agg = _aggregate_matrix(adata.X, groups, new_id_to_index, adata.var.index)
     
     # Create new var dataframe with first occurrence of each new_id group
+    _var_idx_name = var_index_col if var_index_col else 'ensembl_id'
     new_var = pd.DataFrame({
         col: [adata.var.loc[groups.get_group(new_id).index[0], col] for new_id in unique_new_ids]
         for col in adata.var.columns if col != var_index_col
-    }, index=unique_new_ids)
+    }, index=pd.Index(unique_new_ids, name=_var_idx_name))
     
     # Create new AnnData with aggregated data
     adata_mapped = AnnData(
@@ -337,17 +338,51 @@ def map_and_aggregate_duplicated_genes(adata: AnnData,
     return adata_mapped
 
 
+def _trim_mapping_duplicate_targets(
+    mapping: Dict[str, str],
+    duplicates: Dict[str, int],
+) -> Tuple[Dict[str, str], int]:
+    """
+    Drop every source gene whose target is in ``duplicates`` (target ID -> count, each > 1).
+    """
+    trimmed = {k: v for k, v in mapping.items() if v not in duplicates}
+    n_drop = len(mapping) - len(trimmed)
+    return trimmed, n_drop
+
+
+def _simple_ensembl_relabel(
+    padata: AnnData,
+    mapping: Dict[str, str],
+    id_source: str,
+    ensembl_id_col: str,
+) -> AnnData:
+    """Subset to mapped genes and replace IDs with targets (no duplicate targets in ``mapping``)."""
+    out = padata.copy()
+    if id_source == 'index':
+        keep = [oid for oid in out.var_names if oid in mapping]
+        out = out[:, keep].copy()
+        out.var.index = pd.Index([mapping[oid] for oid in out.var_names], name='ensembl_id')
+    else:
+        out.var[ensembl_id_col] = out.var[ensembl_id_col].map(mapping)
+        out = out[:, out.var[ensembl_id_col].notna()].copy()
+        if out.var.index.name != ensembl_id_col:
+            out.var.set_index(ensembl_id_col, inplace=True)
+    return out
+
+
 def map_ensembl_ids_for_dataset(padata: AnnData,
                                 ensembl_id_col: str = 'ensembl_id',
                                 query_size: int = 1000,
-                                verbose: bool = True) -> AnnData:
+                                verbose: bool = True,
+                                is_normalized: bool = False) -> AnnData:
     """
     Map Ensembl gene IDs in AnnData object to current/replacement IDs.
     
     This function:
     1. Extracts Ensembl IDs from var.index or var column
     2. Queries Ensembl Archive API to find current/replacement IDs
-    3. Aggregates counts for duplicated genes
+    3. If several old IDs map to the same target: aggregates counts when
+       ``is_normalized`` is False, otherwise removes all genes involved in those targets
     4. Filters out genes that couldn't be mapped (deprecated with no replacement or multiple replacements)
     
     Parameters:
@@ -360,7 +395,10 @@ def map_ensembl_ids_for_dataset(padata: AnnData,
         Number of IDs to query per batch
     verbose : bool, default=True
         Show progress and summary statistics
-        
+    is_normalized : bool, default=False
+        If False, duplicate targets are count-aggregated; if True, every source gene
+        mapping to a non-unique target is dropped (no representative kept).
+
     Returns:
     --------
     AnnData
@@ -400,29 +438,28 @@ def map_ensembl_ids_for_dataset(padata: AnnData,
     var_index_col = None if id_source == 'index' else ensembl_id_col
     
     if len(duplicates) > 0:
-        logger.warning(f'Found {len(duplicates)} target IDs with duplicates - will aggregate counts')
-        logger.info(f'Aggregating running...')
-        logger.info(f"  The layer containing 'psbulk_props' will be deprecated.")
-        padata_mapped = map_and_aggregate_duplicated_genes(
-            padata, mapping, var_index_col=var_index_col, keep_unmapped=False, verbose=verbose)
-        if id_source != 'index' and padata_mapped.var.index.name != ensembl_id_col:
-            padata_mapped.var.set_index(ensembl_id_col, inplace=True)
-        # Add is_merged column: True for genes that resulted from merging multiple old IDs
-        padata_mapped.var['is_merged'] = padata_mapped.var.index.isin(duplicates.keys())
-        
-    else:
-        # No duplicates - simple mapping without aggregation
-        padata_mapped = padata.copy()
-        if id_source == 'index':
-            mapped_ids = [old_id for old_id in padata_mapped.var_names if old_id in mapping]
-            padata_mapped = padata_mapped[:, mapped_ids].copy()
-            padata_mapped.var.index = pd.Index([mapping[old_id] for old_id in padata_mapped.var_names], name='ensembl_id')
-        else:
-            padata_mapped.var[ensembl_id_col] = padata_mapped.var[ensembl_id_col].map(mapping)
-            padata_mapped = padata_mapped[:, padata_mapped.var[ensembl_id_col].notna()].copy()
-            if padata_mapped.var.index.name != ensembl_id_col:
+        if not is_normalized:
+            logger.warning(f'Found {len(duplicates)} target IDs with duplicates - will aggregate counts')
+            logger.info(f'Aggregating running...')
+            logger.info(f"  The layer containing 'psbulk_props' will be deprecated.")
+            padata_mapped = map_and_aggregate_duplicated_genes(
+                padata, mapping, var_index_col=var_index_col, keep_unmapped=False, verbose=verbose)
+            if id_source != 'index' and padata_mapped.var.index.name != ensembl_id_col:
                 padata_mapped.var.set_index(ensembl_id_col, inplace=True)
-        # Add is_merged column (all False since no duplicates)
+            # Add is_merged column: True for genes that resulted from merging multiple old IDs
+            padata_mapped.var['is_merged'] = padata_mapped.var.index.isin(duplicates.keys())
+        else:
+            logger.warning(
+                f'Found {len(duplicates)} target IDs with duplicates - '
+                f'normalized data: dropping all {sum(duplicates.values())} source genes for those targets'
+            )
+            mapping_use, n_drop = _trim_mapping_duplicate_targets(mapping, duplicates)
+            if n_drop > 0:
+                logger.info(f"  Removed {n_drop} source gene ID(s) (all columns for ambiguous targets)")
+            padata_mapped = _simple_ensembl_relabel(padata, mapping_use, id_source, ensembl_id_col)
+            padata_mapped.var['is_merged'] = False
+    else:
+        padata_mapped = _simple_ensembl_relabel(padata, mapping, id_source, ensembl_id_col)
         padata_mapped.var['is_merged'] = False
     if verbose:
         logger.info(f"  Result: {padata.n_vars} → {padata_mapped.n_vars} genes (reduced by {padata.n_vars - padata_mapped.n_vars})")

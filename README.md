@@ -1,16 +1,25 @@
 # Description
 
-**OP3_v2** is a set of pipelines for analyzing single-cell RNA sequencing data from perturbation experiments. 
+**OP3_v2** is a set of pipelines for analyzing single-cell/bulk RNA sequencing data from perturbation experiments. 
 
-The current version of OP3_v2 includes the scripts for processing and analyzing [**Sci-Plex**](https://www.science.org/doi/10.1126/science.aax6234) (**Sci-Plex3**), [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full), [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0), [**OP3**](https://openreview.net/forum?id=WTI4RJYSVm), and [**DILImap**](https://www.nature.com/articles/s41467-025-65690-3) datasets.
+The current version of OP3_v2 includes the scripts for processing and analyzing following datasets: 
+- [**Sci-Plex3**](https://www.science.org/doi/10.1126/science.aax6234)
+- [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full)
+- [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0)
+- [**OP3**](https://openreview.net/forum?id=WTI4RJYSVm)
+- [**DILImap**](https://www.nature.com/articles/s41467-025-65690-3)
+- [**Novartis**](https://www.nature.com/articles/s41467-018-06500-x)
 
 It consists of the following steps:
 
 * **Pseudobulking**: 
-Aggregates raw single-cell RNA sequencing data to pseudobulk samples for downstream analysis
+Aggregates raw single-cell RNA-seq counts into pseudobulk samples, or standardizes bulk RNA-seq count data and enriches them with metadata for downstream analysis.
 
 * **DEG Analysis**: 
-Identifies differentially expressed genes between treatment and control conditions in pseudobulk samples
+Identifies differentially expressed genes between treatment and control conditions in pseudobulk/bulk samples
+
+* **Enrich DEG `.var` (optional)**: 
+After DEG, some `*_de.h5ad` objects may lose gene metadata (`symbol`, `is_merged`) when concatenated or re-saved. This step left-joins those columns from the processed pseudobulk reference and rewrites files in a form compatible with **aggregation** (`aggregating_deg.py`). Run only for the DEG output tree you care about (e.g. `results/` and matching `intermediate/`).
 
 # License
 
@@ -23,6 +32,7 @@ The licences of the datasets used in this project are provided by their source:
 - **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS); small-molecule annotations from the [LINCS Data Portal](https://lincsportal.ccs.miami.edu/dcic-portal/#/terms) were used.
 - **OP3** - [Open Problems Perturbation Prediction dataset](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945)
 - **DILImap** - [DILImap: Drug-Induced Liver Injury map](https://www.nature.com/articles/s41467-025-65690-3). Validation data is publicly available via the [DILImap S3 bucket](https://www.dilimap.org/); training data is available by request from the authors.
+- **Novartis** - [Novartis DRUG-seq MoABox Dataset](https://zenodo.org/records/14291446)
 
 The terms of use/license for each database used for annotations are defined by its original data provider:
 
@@ -177,6 +187,31 @@ For a **normalized dataset** (e.g. L1000) with separate_replicates parameter on 
 cd /op3_v2
 ./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n -g
 ```
+
+**3.3** **Enrich pseudobulk `.var` on DEG outputs (optional)**
+
+Use `./run_pipelines/run_enrich_pseudobulk_var.sh` when you need `symbol` / `is_merged` back on `*_de.h5ad` before aggregation or downstream Python. It submits `./pipelines/common/enrich_pseudobulk_var.sh`, which runs **`sbatch -W`** (Slurm) and scans all `*_de.h5ad` under `-i` recursively.
+
+Arguments:
+```
+-d  required: dataset name (sciplex | tahoe | l1000_phase1 | l1000_phase2 | op3 | novartis)
+-i  required: root directory containing DEG *_de.h5ad files (e.g. .../deg_data/.../results or a parent tree)
+-r  required: processed pseudobulk .h5ad used as reference (must contain .var columns symbol and is_merged)
+--dry-run  log only; no file writes
+-h  help
+```
+
+Example (paths depend on your layout and `group_rep` / `sep_rep`):
+```
+cd /op3_v2
+./run_pipelines/run_enrich_pseudobulk_var.sh \
+  -d novartis \
+  -i ./data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results \
+  -r ./data/novartis/pseudobulk_processed/group_rep/novartis_standardized_processed.h5ad
+```
+
+Logs: `./logs/<dataset>/full/enrich_pseudobulk_var/` — launcher `enrich_<dataset>.PID*.out|.err` and Slurm `enrich_<dataset>.<jobid>.out|.err`.
+
 ### 4. Aggregate logs
 
 After running pipelines, aggregate scattered log files into combined logs for easier review.
@@ -207,6 +242,12 @@ cd /op3_v2
 ./run_pipelines/run_combining_logs.sh -l logs/sciplex/full/deg/separate_replicates/qc_false/filter_min_cells_10 -t deg
 ```
 
+Enrich (pseudobulk `.var`) logs:
+```
+cd /op3_v2
+./run_pipelines/run_combining_logs.sh -l logs/novartis/full/enrich_pseudobulk_var -t enrich
+```
+
 ### 5. Add datasets
 To add a new dataset to the pipeline, follow the instructions in [`./docs/README.md`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/docs/README.md)
 
@@ -221,6 +262,8 @@ The structure of the repo:
 ├── logs
 │   └── dataset_i
 │       ├── full (or subsample)
+│       │   ├── enrich_pseudobulk_var/
+│       │   │   └── enrich_<dataset>.*.out, *.err
 │       │   └── deg
 │       │       └── parameter_name (group_all_replicates or separate_replicates)
 │       │           └── qc_true (or qc_false)
@@ -239,7 +282,8 @@ The structure of the repo:
 ├── pipelines
 │   ├── common
 |   |   ├── combining_logs.sh
-│   │   └── deg.sh
+│   │   ├── deg.sh
+│   │   └── enrich_pseudobulk_var.sh
 │   ├── dataset_i
 │   │   └─── configs/
 │   │       ├── deg/
@@ -264,6 +308,7 @@ The structure of the repo:
 ├── run_pipelines
 │   ├── run_combining_logs.sh
 │   ├── run_deg.sh
+│   ├── run_enrich_pseudobulk_var.sh
 │   └── run_pseudobulking.sh
 ├── LICENSE
 ├── src
@@ -273,6 +318,7 @@ The structure of the repo:
 │   │   ├── run_deg.R
 │   │   ├── run_processing_pseudobulk.py
 │   │   ├── aggregating_deg.py
+│   │   ├── enrich_pseudobulk_var_metadata.py
 │   │   ├── ensembl_mapping.py
 │   │   └── subsampling.R
 │   ├── downloading
@@ -298,7 +344,7 @@ The structure of the repo:
 │   └── utils
 │       ├──  aggregate_logs.py
 │       └─── parsing_utils.py
-└── venv -> /home/icb/olga.novitskaia/venv/
+└── venv -> /lustre/groups/ml01/workspace/olga.novitskaia/venv
 ```
 
 # Data

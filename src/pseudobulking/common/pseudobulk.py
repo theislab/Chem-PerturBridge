@@ -705,7 +705,7 @@ class Pseudobulk:
         min_ngenes : int
             A threshold for min number of genes detected in a observation. 
         min_ncounts : int
-            A threshold for min number of counts detected in a obsevation.
+            A threshold for min number of counts detected in a observation.
         max_pcnt_mito : float
             A threshold for the estimated fraction of mitochondrial reads.
         '''

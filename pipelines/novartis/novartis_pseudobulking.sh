@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-DATASET=op3
+DATASET=novartis
 
 if [ "$1" = "subsampling" ]; then
 	echo "> Warning: subsampling mode is not supported for ${DATASET}, running full version"
@@ -9,10 +9,11 @@ fi
 
 SUFFIX=""
 SUBDIR="full"
-MEM="100G"
+MEM="500G"
 
-DATA_ROOT=./data/${DATASET}/raw/
-OUTPUT_DIR=./data/${DATASET}/pseudobulk/${SUBDIR}
+DATA_ROOT=./data/${DATASET}
+RAW_DIR=${DATA_ROOT}/raw
+OUTPUT_DIR=${DATA_ROOT}/pseudobulk/${SUBDIR}
 LOGS_DIR=./logs
 ENV_DIR=./venv
 
@@ -25,16 +26,15 @@ SBATCH_PREAMBLE="export PATH=\${HOME}/miniforge3/bin:\${PATH} && cd ${PROJECT_RO
 QOS=cpu_normal
 PARTITION=cpu_p
 
-
-mkdir -p ${DATA_ROOT}
+mkdir -p ${RAW_DIR}
 mkdir -p ${OUTPUT_DIR}
 mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
 
 echo "> Running ${DATASET} standardization"
 
 sbatch -W -J pseudobulk_${DATASET} \
-       -t 5:00:00 \
-       -n 1 \
+       -t 10:00:00 \
+       -n 2 \
        --qos=${QOS} \
        --mem=${MEM} \
        --partition=${PARTITION} \
@@ -42,9 +42,10 @@ sbatch -W -J pseudobulk_${DATASET} \
        -e ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.%j.err \
        -o ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.%j.out \
        --wrap="${SBATCH_PREAMBLE} && \
-	       python3 -m src.pseudobulking.datasets.op3.run_standardization \
-	       --output_file ${OUTPUT_DIR}/${DATASET}_standardized${SUFFIX}.h5ad \
-	       --data_root ${DATA_ROOT} \
-               --annotate-pubchem"
+               python3 -m src.pseudobulking.datasets.novartis.run_standardization \
+               --output_file ${OUTPUT_DIR}/${DATASET}_standardized${SUFFIX}.h5ad \
+               --data_root ${DATA_ROOT} \
+               --annotate-pubchem \
+               --annotate-pubchem-names"
 
 echo "> ${DATASET} standardization is done"
