@@ -8,6 +8,8 @@ The current version of OP3_v2 includes the scripts for processing and analyzing 
 - [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0)
 - [**OP3**](https://openreview.net/forum?id=WTI4RJYSVm)
 - [**Novartis**](https://www.nature.com/articles/s41467-018-06500-x)
+- [**VCPI-0001 / VCPI-0002**](https://thevirtualcell.com/)
+- [**GDPx2**](https://www.biorxiv.org/content/10.1101/2025.06.03.657593v1.full)
 
 It consists of the following steps:
 
@@ -26,11 +28,13 @@ This repository is a collection; each component retains its original license; ou
 
 The licences of the datasets used in this project are provided by their source:
 
-- **Sci-Plex** – [scPerturb Single-Cell Perturbation Data](https://zenodo.org/records/13350497) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=scPerturb)
+- **Sci-Plex** - [scPerturb Single-Cell Perturbation Data](https://zenodo.org/records/13350497) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=scPerturb)
 - **Tahoe** - [Arc Virtual Cell Atlas](https://arcinstitute.org/tools/virtualcellatlas) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=Tahoe-100M)
 - **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS); small-molecule annotations from the [LINCS Data Portal](https://lincsportal.ccs.miami.edu/dcic-portal/#/terms) were used.
 - **OP3** - [Open Problems Perturbation Prediction dataset](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945)
 - **Novartis** - [Novartis DRUG-seq MoABox Dataset](https://zenodo.org/records/14291446)
+- **VCPI-0001 / VCPI-0002** - [The Virtual Cell Pharmacology Initiative](https://thevirtualcell.com/): "All validated data will be made publicly available to the research community. Contributors who submit compounds or engage the community in other ways will receive priority access to results. Academic researchers, industry partners, and citizen scientists are all welcome to access and utilize the data for their research and even commercial use."
+- **GDPx2** - [Ginkgo Datapoints](https://datapoints.ginkgo.bio/dataset-access) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=ginkgo-datapoints)
 
 The terms of use/license for each database used for annotations are defined by its original data provider:
 
@@ -90,6 +94,31 @@ fi
 cd /op3_v2
 mamba create -f env.yaml -p path_to_env/venv --yes
 ```
+
+**1.2.2** If you need to add environment variable (e.g. API_TOKEN), you can enter environment and then run:
+
+```
+mamba activate path_to_env/venv # Enter environment
+conda env config vars set MY_API_KEY="SECRET_KEY" 
+```
+Or (which is better to hide key information)
+
+```
+mamba activate path_to_env/venv # Enter environment
+conda env config vars set MY_API_KEY=$(cat secret_key.txt) #secret_key.txt contains your SECRET_KEY
+```
+
+To make your changes take effect please reactivate your environment:
+
+```
+mamba deactivate
+mamba activate path_to_env/venv
+echo $MY_API_KEY #If you want to print your MY_API_KEY
+mamba deactivate
+```
+
+**NB!** Make sure that a path to your environment (as well as a path to your secret_key.txt file) is included in .gitignore, .cursorignore, .cursorindexingignore, .codexignore and .codexindexingignor to try not to allow to read/index API KEYS by Cursor/Codex. But still, there might be a leak of KEYS to AI-agents.
+
 **1.3** **Create symlinks**
 
 In order to organize directories for scripts' outputs, you need to create folders in the desired locations for **data**; and then link **data** and **venv** folders to a script. 
@@ -159,6 +188,7 @@ You can execute it with following arguments:
 -s if this flag is included, then the script is executed for a subsample of a dataset, default=false
 -j if this flag is included, then the script is executed in parallel mode (array jobs per cell type), default=false
 -g Use GPU QOS/partition (gpu_normal/gpu_p), default=CPU
+-P Use preemptible QOS for the DEG step only (cpu_preemptible by default; gpu_preemptible combined with with -g); 100G mem, 48h, 10 CPUs, default=false
 -h if this flag is included, then the help is printed, default=false
 -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
 -q if this flag is included, then samples that did not pass quality control are filtered out, default=false
@@ -166,7 +196,7 @@ You can execute it with following arguments:
 -d it is a required flag specifying which dataset should be processed: sciplex | tahoe | ...
 -p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
 ```
-**NB!** The -g option was added to make it possible to distribute DEG calculations across a larger number of nodes.
+**NB!** The `-g` option distributes DEG calculations across GPU nodes. The `-P` option uses the preemptible queue for the DEG step: `cpu_preemptible` by default, or `gpu_preemptible` when combined with `-g`.
 
 For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode on the CPU nodes you need to run:
 ```
@@ -192,7 +222,7 @@ Use `./run_pipelines/run_enrich_pseudobulk_var.sh` when you need `symbol` / `is_
 
 Arguments:
 ```
--d  required: dataset name (sciplex | tahoe | l1000_phase1 | l1000_phase2 | op3 | novartis)
+-d  required: dataset name (sciplex | tahoe | ...)
 -i  required: root directory containing DEG *_de.h5ad files (e.g. .../deg_data/.../results or a parent tree)
 -r  required: processed pseudobulk .h5ad used as reference (must contain .var columns symbol and is_merged)
 --dry-run  log only; no file writes

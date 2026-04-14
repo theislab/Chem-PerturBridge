@@ -1,0 +1,34 @@
+enrich_vcpi_0002.PID1111304.out:> DEG directory (scan *_de.h5ad): ./data/vcpi_0002/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/
+enrich_vcpi_0002.PID1111304.out:> Reference pseudobulk: ./data/vcpi_0002/pseudobulk_processed/group_rep/vcpi_0002_standardized_processed.h5ad
+enrich_vcpi_0002.PID1111304.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
+enrich_vcpi_0002.PID1111304.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2_ginkgo/logs/vcpi_0002/full/enrich_pseudobulk_var/enrich_vcpi_0002.%j.out / /home/icb/olga.novitskaia/op3_v2_ginkgo/logs/vcpi_0002/full/enrich_pseudobulk_var/enrich_vcpi_0002.%j.err
+enrich_vcpi_0002.PID1111304.out:Submitted batch job 35149217
+enrich_vcpi_0002.PID1111304.out:> enrich_pseudobulk_var Slurm job finished
+enrich_vcpi_0002.PID1278914.out:> DEG directory (scan *_de.h5ad): ./data/vcpi_0002/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/
+enrich_vcpi_0002.PID1278914.out:> Reference pseudobulk: ./data/vcpi_0002/pseudobulk_processed/sep_rep/vcpi_0002_standardized_processed.h5ad
+enrich_vcpi_0002.PID1278914.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
+enrich_vcpi_0002.PID1278914.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2_ginkgo/logs/vcpi_0002/full/enrich_pseudobulk_var/enrich_vcpi_0002.%j.out / /home/icb/olga.novitskaia/op3_v2_ginkgo/logs/vcpi_0002/full/enrich_pseudobulk_var/enrich_vcpi_0002.%j.err
+enrich_vcpi_0002.PID1278914.out:Submitted batch job 35149232
+enrich_vcpi_0002.PID1278914.out:> enrich_pseudobulk_var Slurm job finished
+enrich_vcpi_0002.35149217.out:2026-04-14 01:47:15 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2_ginkgo/data/vcpi_0002/deg_data/group_rep/full/qc_false/filter_min_cells_0/results
+enrich_vcpi_0002.35149217.out:2026-04-14 01:47:15 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2_ginkgo/data/vcpi_0002/pseudobulk_processed/group_rep/vcpi_0002_standardized_processed.h5ad
+enrich_vcpi_0002.35149217.out:2026-04-14 01:48:58 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2_ginkgo/data/vcpi_0002/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0006_de.h5ad
+enrich_vcpi_0002.35149217.out:2026-04-14 01:55:48 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2_ginkgo/data/vcpi_0002/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0006_de.h5ad
+enrich_vcpi_0002.35149217.out:2026-04-14 01:55:48 | [INFO]     Removed X matrix
+enrich_vcpi_0002.35149217.out:2026-04-14 01:55:48 | [INFO]     Rewriting h5ad file is done!
+enrich_vcpi_0002.35149217.out:2026-04-14 01:55:48 | [INFO] Done: scanned=1, need_enrichment=1, written=1 (dry_run=False)
+enrich_vcpi_0002.35149217.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_vcpi_0002.35149217.err:  utils.warn_names_duplicates("obs")
+enrich_vcpi_0002.35149217.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_vcpi_0002.35149217.err:  utils.warn_names_duplicates("obs")
+enrich_vcpi_0002.35149232.out:2026-04-14 01:49:52 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2_ginkgo/data/vcpi_0002/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results
+enrich_vcpi_0002.35149232.out:2026-04-14 01:49:52 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2_ginkgo/data/vcpi_0002/pseudobulk_processed/sep_rep/vcpi_0002_standardized_processed.h5ad
+enrich_vcpi_0002.35149232.out:2026-04-14 01:52:28 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2_ginkgo/data/vcpi_0002/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0006_de.h5ad
+enrich_vcpi_0002.35149232.out:2026-04-14 02:04:14 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2_ginkgo/data/vcpi_0002/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0006_de.h5ad
+enrich_vcpi_0002.35149232.out:2026-04-14 02:04:14 | [INFO]     Removed X matrix
+enrich_vcpi_0002.35149232.out:2026-04-14 02:04:14 | [INFO]     Rewriting h5ad file is done!
+enrich_vcpi_0002.35149232.out:2026-04-14 02:04:14 | [INFO] Done: scanned=1, need_enrichment=1, written=1 (dry_run=False)
+enrich_vcpi_0002.35149232.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_vcpi_0002.35149232.err:  utils.warn_names_duplicates("obs")
+enrich_vcpi_0002.35149232.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_vcpi_0002.35149232.err:  utils.warn_names_duplicates("obs")

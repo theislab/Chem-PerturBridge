@@ -35,6 +35,7 @@ MODE_J=False
 MODE_Q=False
 MODE_N=False
 MODE_G=False
+MODE_P=False
 PAR=""
 FILT=""
 CONFIG=""
@@ -50,10 +51,10 @@ DEG_PARAMETERS=(
     "separate_replicates"
 )
 
-while getopts ":sjqp:f:c:d:nhg" opt; do
+while getopts ":sjqp:f:c:d:nhgP" opt; do
         case $opt in
                 h)
-                        echo "Run: $0 [-s] [-j] [-h] [-g] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
+                        echo "Run: $0 [-s] [-j] [-h] [-g] [-P] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
                         echo ""
                         echo "Required arguments:"
                         echo "  -d  Dataset name (sciplex, tahoe, l1000_phase1, l1000_phase2)"
@@ -65,6 +66,7 @@ while getopts ":sjqp:f:c:d:nhg" opt; do
                         echo "      NOTE: Does NOT change input files (those are defined in config)"
                         echo "  -j  Parallel mode - run array jobs per cell type (faster)"
                         echo "  -g  Use GPU QOS/partition (gpu_normal/gpu_p); default is CPU (cpu_normal/cpu_p)"
+                        echo "  -P  Use cpu_preemptible QOS for DEG step only (100G mem, 48h, 10 CPUs); partition stays cpu_p"
                         echo "  -f  VALUE - Filter: minimum cells per sample (e.g., -f 50)"
                         echo "  -q  Quality control filter - remove samples that failed QC"
                         echo "  -n  Normalized dataset: pass --normalized to preprocessing (Ensembl: drop ambiguous"
@@ -99,12 +101,19 @@ while getopts ":sjqp:f:c:d:nhg" opt; do
                 g)
                         MODE_G=True
                         ;;
+                P)
+                        MODE_P=True
+                        ;;
         esac
 done
 
 if [ "$MODE_G" = True ]; then
     QOS=gpu_normal
     PARTITION=gpu_p
+fi
+
+if [ "$MODE_P" = True ]; then
+    echo "> Using cpu_preemptible QOS for DEG step (100G, 48h, 10 CPUs)"
 fi
 
 # ============================================================================
@@ -285,6 +294,21 @@ else
     MEM=250G
 fi
 
+# DEG step time/cpus defaults; overridden by -P (preemptible)
+DEG_QOS=${QOS}
+DEG_TIME=24:00:00
+DEG_CPUS=2
+if [ "$MODE_P" = True ]; then
+    if [ "$MODE_G" = True ]; then
+        DEG_QOS=gpu_preemptible
+    else
+        DEG_QOS=cpu_preemptible
+    fi
+    MEM=100G
+    DEG_TIME=48:00:00
+    DEG_CPUS=10
+fi
+
 # Validate search directory
 if [ ! -d "$SEARCH_DIR" ]; then
     echo "Error: Directory not found: $SEARCH_DIR" >&2
@@ -368,10 +392,10 @@ run_deg() {
         -J deg_analysis \
         --array=0-$((N_FILES-1))%${MAX_CONCURRENT} \
         --partition=${PARTITION} \
-        --qos=${QOS} \
+        --qos=${DEG_QOS} \
         --mem=${MEM} \
-        --time=10:00:00 \
-        --cpus-per-task=2 \
+        --time=${DEG_TIME} \
+        --cpus-per-task=${DEG_CPUS} \
         --exclude=supercpu01,gpusrv36,gpusrv56,gpusrv60,gpusrv45 \
         --output=/dev/null \
         --error=/dev/null \

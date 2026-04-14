@@ -1,0 +1,48 @@
+pseudobulk_gdpx2.PID2725687.out:> Running gdpx2 standardization
+pseudobulk_gdpx2.PID2725687.out:Submitted batch job 35141144
+pseudobulk_gdpx2.PID2725687.out:> gdpx2 standardization job finished
+pseudobulk_gdpx2.35141144.out:> Downloading GDPx2
+pseudobulk_gdpx2.35141144.out:2026-04-13 16:57:07 | [INFO] Download and save an anndata file to ./data/gdpx2/raw/gdpx2_raw.h5ad
+pseudobulk_gdpx2.35141144.out:[92m→[0m connected lamindb: laminlabs/pertdata
+pseudobulk_gdpx2.35141144.out:[93m![0m connected in read-only mode, please use ln.DB("laminlabs/pertdata") instead
+pseudobulk_gdpx2.35141144.out:2026-04-13 16:59:27 | [INFO] Download and save an .obs file to ./data/gdpx2/raw/gdpx2_obs.parquet
+pseudobulk_gdpx2.35141144.out:[92m→[0m connected lamindb: laminlabs/pertdata
+pseudobulk_gdpx2.35141144.out:[93m![0m connected in read-only mode, please use ln.DB("laminlabs/pertdata") instead
+pseudobulk_gdpx2.35141144.out:2026-04-13 16:59:33 | [INFO] Download and save a .var file to ./data/gdpx2/raw/gdpx2_var.parquet
+pseudobulk_gdpx2.35141144.out:[92m→[0m connected lamindb: laminlabs/pertdata
+pseudobulk_gdpx2.35141144.out:[93m![0m connected in read-only mode, please use ln.DB("laminlabs/pertdata") instead
+pseudobulk_gdpx2.35141144.out:2026-04-13 16:59:37 | [INFO] All data is saved
+pseudobulk_gdpx2.35141144.out:> Standardizing GDPx2 dataset
+pseudobulk_gdpx2.35141144.out:2026-04-13 16:59:48 | [INFO] Downloading GDPx2 compound metadata
+pseudobulk_gdpx2.35141144.out:[92m→[0m connected lamindb: laminlabs/pertdata
+pseudobulk_gdpx2.35141144.out:[93m![0m connected in read-only mode, please use ln.DB("laminlabs/pertdata") instead
+pseudobulk_gdpx2.35141144.out:2026-04-13 16:59:54 | [INFO] Downloading compound CSV from LaminLabs: ginkgo-datapoints/vcpi/compounds-GDPx2-2026-02-09.csv
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:01 | [INFO] Saved compound CSV: data/gdpx2/raw/gdpx2_compounds.csv (90 rows)
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:01 | [INFO] Standardizing GDPx2 dataset
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:01 | [INFO] Loading count matrix from data/gdpx2/raw/gdpx2_raw.h5ad
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:06 | [INFO] Loading obs from data/gdpx2/raw/gdpx2_obs.parquet
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:07 | [INFO] Loading var from data/gdpx2/raw/gdpx2_var.parquet
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:07 | [INFO] Standardizing .var ...
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:09 | [INFO] Filling 20310 NA index values with symbol
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:09 | [INFO] Filling 2 duplicate index values with symbol
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:09 | [INFO] Genes after ERCC removal: 59427
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:09 | [INFO] Filtering samples ...
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:09 | [INFO] Original: 11808 samples
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:09 | [INFO] Zero or negative library size: 0 samples
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:09 | [INFO] Positive controls (sample_type starts with 'Ginkgo Pos Control'): 2304 samples
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:09 | [INFO] Total outliers: 2304 / 11808
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:10 | [INFO] Remaining: 9504 samples
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:10 | [INFO] Loading compound metadata from data/gdpx2/raw/gdpx2_compounds.csv
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:10 | [INFO] Compound CSV: 90 rows total
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:10 | [INFO] Compounds after filtering to obs: 90 / 90
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:10 | [INFO] Annotating compounds with PubChem CIDs ...
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:10 | [INFO] Cache file data/gdpx2/raw/gdpx2_pubchem_cache.json not found. Starting with empty cache.
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:10 | [INFO] Processing 90 compounds
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:00:59 | [INFO] Processed 50/90 compounds (50 mapped so far)
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:01:40 | [INFO] Mapped 90 out of 90 compounds to PubChem CIDs
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:01:40 | [INFO] Standardizing .obs ...
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:01:41 | [INFO] Processed 9504 observations
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:01:41 | [INFO] Creating standardized AnnData ...
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:01:41 | [INFO] Standardization complete: 9504 observations × 59427 genes
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:01:41 | [INFO] Saving standardized dataset to: ./data/gdpx2/pseudobulk/full/gdpx2_standardized.h5ad
+pseudobulk_gdpx2.35141144.out:2026-04-13 17:02:13 | [INFO] GDPx2 standardization complete
