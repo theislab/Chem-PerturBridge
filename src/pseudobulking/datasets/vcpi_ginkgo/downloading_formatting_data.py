@@ -120,9 +120,8 @@ def format_compound_df(
     force: bool = False,
 ) -> pd.DataFrame:
     """
-    Extract the compound metadata table from ``experiments['chemistry']``,
-    normalise column names, fill optional chemistry columns, and deduplicate
-    by ``user_compound_id``.
+    Extract the compound metadata table from ``experiments['chemistry']``
+    and deduplicate on all columns.
 
     The result is saved to ``raw/df_compounds.csv``.
 

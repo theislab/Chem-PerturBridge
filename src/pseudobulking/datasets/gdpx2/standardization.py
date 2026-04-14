@@ -149,7 +149,7 @@ def annotate_gdpx2_pubchem_cids(
     Annotate GDPx2 compound metadata with PubChem CIDs.
 
     compound_df is keyed on 'compound' (internal UUID from obs/CSV).
-    pert_name is used for name-based lookups; perturbagen is taken from obs directly.
+    pert_name is used for name-based lookups.
     Lookup order: inchi_key → smiles → drug name (pert_name) → manual mapping.
     """
     compound_df = compound_df.copy()
@@ -226,12 +226,6 @@ def _parse_pert_dose_uM(pert_dose: pd.Series) -> pd.Series:
     """
     Parse the lamindb pert_dose string column (e.g. '1000.0nM', '3.0uM', '0.15%')
     into a float µM value.
-
-    Rules:
-      - nM → divide by 1000
-      - uM / µM / um → as-is
-      - % → 0.0 (DMSO vehicle; overridden to 0 later anyway)
-      - plain number → assumed µM
     """
     def _convert(val):
         if pd.isna(val):
@@ -272,25 +266,6 @@ def build_obs_columns(obs: pd.DataFrame) -> pd.DataFrame:
     Already present from lamindb (left untouched):
       pert_name, pert_type, pert_compound, pert_dose, pert_time,
       organism, tissue_type, assay, suspension_type, cell_type (text).
-
-    Added here:
-      plate          — from container_id
-      well           — from row_id + column_id
-      perturbagen    — directly from pert_name (already curated by lamindb)
-      is_control     — pert_name == 'DMSO'
-      pert_dose_uM          — parsed from pert_dose string
-      pert_time_h           — parsed from pert_time string
-      percent_volume_dmso   — passed through from obs (lamindb column)
-      cell_type      — remapped from text to CL ontology IDs
-      tissue         — 'unknown' (not curated)
-      disease        — 'unknown' (not curated)
-      sex            — 'unknown' (not curated)
-      development_stage       — 'unknown' (not curated)
-      self_reported_ethnicity — 'unknown' (not curated)
-      library, stimulation, guide — None
-      dataset        — 'Ginkgo GDPx2'
-      pubchem_cid    — filled later by PubChem annotation step
-      sample_id      — plate_well_perturbagen_cell_type
     """
     obs = obs.copy()
 
@@ -362,7 +337,7 @@ def build_obs_columns(obs: pd.DataFrame) -> pd.DataFrame:
     #   CL_0000515  HSkMM          Cat. A11440  — Caucasian male donor
     #
     # All cells are from healthy donors → disease = "normal" for all cell types.
-    # Tissues use UBERON IDs (underscore format); ethnicity unknown for all.
+    # Tissues use UBERON IDs (underscore format); ethnicity is "Caucasian" for HSkMM, unknown for others.
 
     _tissue_map = {
         "CL_0002539": "aorta",                  # UBERON_0000947
@@ -505,8 +480,8 @@ def standardize_gdpx2_dataset(
     2. Attach the curated obs/var from parquets (overriding the embedded ones).
     3. Standardize .var (drop ERCC, set ensembl_id index).
     4. Filter outlier samples (empty libraries, positive controls).
-    5. Load compound_df from compound_csv (downloaded from LaminLabs); falls
-       back to deriving it from obs if the file is absent.
+    5. Load compound_df from compound_csv (downloaded from LaminLabs);
+       raises FileNotFoundError if the file is absent.
     6. Optionally annotate PubChem CIDs (annotate_pubchem).
     7. Build unified .obs conforming to the pseudobulk schema.
        perturbagen is set directly from lamindb-curated pert_name.
@@ -516,7 +491,7 @@ def standardize_gdpx2_dataset(
     ----------
     paths:
         Dictionary from get_gdpx2_paths(). Expected keys:
-        raw_h5ad, raw_obs, raw_var, pubchem_cid_cache.
+        raw_h5ad, raw_obs, raw_var, compound_csv, pubchem_cid_cache.
     annotate_pubchem:
         If True, run PubChem CID lookups (requires network access).
 
@@ -550,7 +525,6 @@ def standardize_gdpx2_dataset(
 
     # Load compound_df from the dedicated compound CSV, then restrict it to the
     # compounds present in adata.obs (left join: obs compounds → CSV rows).
-    # Falls back to deriving compound_df from obs if the file was not downloaded.
     if paths.get("compound_csv") and Path(paths["compound_csv"]).is_file():
         logger.info("Loading compound metadata from %s", paths["compound_csv"])
         compound_df_full = pd.read_csv(paths["compound_csv"])

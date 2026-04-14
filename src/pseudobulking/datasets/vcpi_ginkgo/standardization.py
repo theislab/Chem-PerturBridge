@@ -25,11 +25,6 @@ from src.utils.parsing_utils import logger
 
 
 # ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
-
-
-# ---------------------------------------------------------------------------
 # .var standardization
 # ---------------------------------------------------------------------------
 
@@ -446,7 +441,8 @@ def add_fixed_metadata_columns(obs: pd.DataFrame, dataset_title: str) -> pd.Data
     """
     Add VCPI-specific fixed metadata and build sample_id.
 
-    - is_control: VCPI ``is_control`` flag AND ``user_compound_id`` == DMSO
+    - is_control: cast directly from the VCPI ``is_control`` flag (non-DMSO controls
+      are already removed upstream by filter_samples)
     - pert_dose_uM set to 0 for controls
     - well derived from row_id / column_id
     - Fixed dataset-level fields: organism, tissue, assay, etc.
@@ -700,11 +696,21 @@ def _is_numeric_string(value: object) -> bool:
 
 
 def _parse_timepoint_hours(series: pd.Series) -> pd.Series:
+    """Parse a timepoint string column (e.g. '24h', '6.0 H') into float hours.
+
+    Values that do not match the pattern ``<number>h`` (case-insensitive) are
+    returned as NaN.
+    """
     s = series.astype(str).str.strip()
     return pd.to_numeric(s.str.extract(r"(?i)^([\d.]+)\s*h$", expand=False), errors="coerce")
 
 
 def _apply_concentration_unit_to_um(dose: pd.Series, unit: pd.Series) -> pd.Series:
+    """Convert compound concentration to µM.
+
+    Only nM → µM (÷ 1000) is handled explicitly; all other unit strings are
+    assumed to already be in µM and are returned as-is.
+    """
     out = pd.to_numeric(dose, errors="coerce")
     u   = unit.astype(str).str.strip().str.lower()
     nm  = u == "nm"
