@@ -13,6 +13,7 @@ adata.var  : DataFrame, index = ensembl_id (category), columns = ["symbol"]
 adata.X    : int64 counts
 adata.uns  : {}
 """
+from collections import Counter
 from pathlib import Path
 from typing import Callable, Dict, Optional
 
@@ -211,6 +212,90 @@ def filter_samples(adata: AnnData) -> AnnData:
     return adata
 
 
+# ── Dose standardization ──────────────────────────────────────────────────────
+
+def _decimal_places(v: float) -> int:
+    """Number of decimal digits in the shortest ``g``-formatted representation."""
+    s = f"{v:g}"
+    return len(s.split(".")[1]) if "." in s else 0
+
+
+def standardize_doses(
+    doses,
+    log_tol: float = 0.01,
+) -> dict:
+    """
+    Map raw dose values to canonical representatives in two steps:
+
+    1. **Log-scale clustering** — greedy, count-aware: unique doses are
+       processed highest-count first so the most frequent value becomes the
+       cluster anchor.  Any dose within ``log_tol`` (|log10(a/b)|) of an
+       existing anchor is merged into it.
+
+    2. **Simplest-member selection** — within each cluster the member with the
+       fewest decimal places in its ``g``-formatted string is chosen as the
+       final representative (e.g. ``10.0`` beats ``10.003``).  Ties are broken
+       by proximity to the cluster anchor.
+
+    Doses ≤ 0 (controls zeroed beforehand) are passed through unchanged.
+
+    Parameters
+    ----------
+    doses : array-like of float
+        Raw per-sample dose values (µM).
+    log_tol : float
+        Maximum |log10(a/b)| distance for two doses to be considered the same.
+
+    Returns
+    -------
+    dict[float, float]
+        Mapping from every unique raw dose to its canonical representative.
+        Apply with ``series.map(standardize_doses(series.values))``.
+    """
+    doses = np.asarray(doses, dtype=float)
+    counts = Counter(doses.tolist())
+
+    # Step 1 — greedy log-scale clustering (high-count values become anchors)
+    unique_doses = sorted(counts.keys(), key=lambda v: -counts[v])
+    anchors: list[tuple[float, float]] = []  # (log10_value, anchor_float)
+    raw_to_anchor: dict[float, float] = {}
+
+    for dose in unique_doses:
+        if dose <= 0:
+            raw_to_anchor[dose] = dose
+            continue
+
+        log_dose = np.log10(dose)
+
+        if not anchors:
+            anchors.append((log_dose, dose))
+            raw_to_anchor[dose] = dose
+            continue
+
+        nearest_dist, nearest_rep = min(
+            ((abs(log_dose - la), rep) for la, rep in anchors),
+            key=lambda t: t[0],
+        )
+        if nearest_dist <= log_tol:
+            raw_to_anchor[dose] = nearest_rep
+        else:
+            anchors.append((log_dose, dose))
+            raw_to_anchor[dose] = dose
+
+    # Step 2 — per cluster, pick the member with the fewest decimal places
+    clusters: dict[float, set[float]] = {}
+    for raw, anchor in raw_to_anchor.items():
+        clusters.setdefault(anchor, set()).add(raw)
+
+    anchor_to_simplest: dict[float, float] = {}
+    for anchor, members in clusters.items():
+        min_places = min(_decimal_places(d) for d in members)
+        candidates = [d for d in members if _decimal_places(d) == min_places]
+        anchor_to_simplest[anchor] = min(candidates, key=lambda d: abs(d - anchor))
+
+    return {raw: anchor_to_simplest[anchor] for raw, anchor in raw_to_anchor.items()}
+
+
 # ── obs / var processing ──────────────────────────────────────────────────────
 
 def standardize_obs_dilimap(adata: AnnData, dataset: str) -> pd.DataFrame:
@@ -235,7 +320,6 @@ def standardize_obs_dilimap(adata: AnnData, dataset: str) -> pd.DataFrame:
     # ── rename to standard names ──────────────────────────────────────
     rename_cols = {
         "COMPOUND":          "perturbagen",
-        "CONCENTRATION_UM":  "pert_dose_uM",
         "TIMEPOINT_HOURS":   "pert_time_h",
         "PLATE_NAME":        "plate",
         "WELL_ID":           "well",
@@ -247,6 +331,14 @@ def standardize_obs_dilimap(adata: AnnData, dataset: str) -> pd.DataFrame:
 
     # ── controls ──────────────────────────────────────────────────────
     obs["is_control"] = obs["perturbagen"].isin(_CONTROL_COMPOUNDS)
+
+    # ── dose standardization (cluster near-identical doses, keep simplest) ─
+    # Build the map only from non-control rows (controls may have NaN/junk concentration)
+    dose_map = standardize_doses(
+        obs.loc[~obs["is_control"], "CONCENTRATION_UM"].values,
+        log_tol=0.015,
+    )
+    obs.loc[~obs["is_control"], "pert_dose_uM"] = obs.loc[~obs["is_control"], "CONCENTRATION_UM"].map(dose_map)
     obs.loc[obs["is_control"], "pert_dose_uM"] = 0.0
 
     # ── organism label ────────────────────────────────────────────────
