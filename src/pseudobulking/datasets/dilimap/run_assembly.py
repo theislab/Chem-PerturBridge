@@ -108,7 +108,7 @@ def main():
 
     # Standardize columns to the common pipeline schema and annotate PubChem CIDs
     logger.info(f"Standardizing {dataset_label} dataset")
-    assembled_adata = standardize_dilimap(
+    standardized_adata = standardize_dilimap(
         assembled_adata,
         dataset=dataset_label,
         paths=paths,
@@ -117,8 +117,8 @@ def main():
 
     # Save to the pipeline-expected output location
     os.makedirs(os.path.dirname(args.output_file) or ".", exist_ok=True)
-    logger.info(f"Saving assembled dataset to: {args.output_file}")
-    assembled_adata.write_h5ad(args.output_file, compression="gzip")
+    logger.info(f"Saving standardized dataset to: {args.output_file}")
+    standardized_adata.write_h5ad(args.output_file, compression="gzip")
     logger.info(f"{dataset_label} assembly complete")
 
 
