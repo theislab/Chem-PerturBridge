@@ -108,6 +108,9 @@ def check_files(paths: dict) -> dict:
 def ensure_data_available(paths: dict) -> None:
     """
     Verify that all source H5AD files exist; raise if not.
+    
+    How to download the data please see the README.md file:
+    ./src/pseudobulking/datasets/dilimap/README.md
 
     Parameters
     ----------
@@ -202,7 +205,7 @@ def assemble_dilimap_train_val_dataset(
     )
 
     logger.info("  Concatenating training + validation")
-    adata = ad.concat([adata_train, adata_val], join="inner")
+    adata = ad.concat([adata_train, adata_val], join="inner", merge="same", uns_merge="same")
     adata.obs_names_make_unique()
     logger.info(
         f"  Combined: {adata.n_obs:,} observations × {adata.n_vars:,} variables"
