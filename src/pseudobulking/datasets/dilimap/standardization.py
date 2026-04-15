@@ -126,7 +126,7 @@ def enforce_obs_schema(obs: pd.DataFrame) -> pd.DataFrame:
 
     for col, dtype in dtype_map.items():
         if col not in obs.columns:
-            obs[col] = np.nan
+            raise ValueError(f"Required column {col!r} is missing from obs")
         if dtype == "category":
             obs[col] = obs[col].astype(object).astype("category")
         elif dtype == "float64":
@@ -213,7 +213,7 @@ def filter_samples(adata: AnnData) -> AnnData:
 
 # ── obs / var processing ──────────────────────────────────────────────────────
 
-def standardize_obs_dilimap(adata: AnnData) -> pd.DataFrame:
+def standardize_obs_dilimap(adata: AnnData, dataset: str) -> pd.DataFrame:
     """
     Process DILImap observations into a schema-conformant DataFrame.
 
@@ -221,6 +221,8 @@ def standardize_obs_dilimap(adata: AnnData) -> pd.DataFrame:
     ----------
     adata : AnnData
         Raw (or QC-filtered) DILImap dataset.
+    dataset : str
+        Dataset label written to ``obs["dataset"]`` (e.g. ``"dilimap_train"``).
 
     Returns
     -------
@@ -244,9 +246,7 @@ def standardize_obs_dilimap(adata: AnnData) -> pd.DataFrame:
     obs.rename(columns=rename_cols, inplace=True)
 
     # ── controls ──────────────────────────────────────────────────────
-    obs["is_control"] = obs["perturbagen"].isin(_CONTROL_COMPOUNDS) | (
-        obs["DOSE_LEVEL"] == "Control"
-    )
+    obs["is_control"] = obs["perturbagen"].isin(_CONTROL_COMPOUNDS)
     obs.loc[obs["is_control"], "pert_dose_uM"] = 0.0
 
     # ── organism label ────────────────────────────────────────────────
@@ -267,6 +267,7 @@ def standardize_obs_dilimap(adata: AnnData) -> pd.DataFrame:
     obs["self_reported_ethnicity"] = _ETHNICITY
     if "pubchem_cid" not in obs.columns:
         obs["pubchem_cid"]         = None
+    obs["dataset"]                 = dataset
     obs["split"]                   = obs["SPLIT"]
     obs["psbulk_cells"]            = -666  # sentinel: bulk data, cell count not available
     obs["psbulk_counts"]           = (
@@ -461,10 +462,8 @@ def standardize_dilimap(
             drug_col="COMPOUND",
         )
 
-    obs = standardize_obs_dilimap(adata)
+    obs = standardize_obs_dilimap(adata, dataset=dataset)
     var = standardize_var_dilimap(adata)
-
-    obs["dataset"] = pd.Categorical([dataset] * len(obs))
 
     # Cast X to int64
     X = adata.X
