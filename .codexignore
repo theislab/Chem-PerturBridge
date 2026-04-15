@@ -1,0 +1,11 @@
+.env
+env/**
+.venv/
+venv/**
+~/.env
+~/env/**
+~/.venv
+~/venv/**
+key.txt
+~/key.txt
+./key.txt

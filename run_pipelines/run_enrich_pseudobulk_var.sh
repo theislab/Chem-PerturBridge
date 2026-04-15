@@ -17,6 +17,9 @@ VALID_CHOICES=(
     "l1000_phase2"
     "op3"
     "novartis"
+    "vcpi_0001"
+    "vcpi_0002"
+    "gdpx2"
 )
 
 mkdir -p "$LOGS_DIR"

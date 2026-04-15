@@ -695,54 +695,65 @@ def batch_celltype(adata_ct: ad.AnnData,
 
 
 def save_by_celltype(padata: ad.AnnData,
-                     dir_output: str) -> None:
+                     dir_output: str,
+                     groupby_fields: Optional[list] = None) -> None:
     '''
-    Save pseudobulk data split by cell type.
+    Save pseudobulk data split by one or more groupby fields.
 
-    Splits the pseudobulk data by cell type and processes each cell type
-    separately. For each cell type, checks if non-control n_obs exceeds
-    MAX_N_NON_CONTROL_OBS and, if so, batches using a Best Fit algorithm.
-    Files are written to dir_output/tmp/ (one subdir per cell type). The
-    caller is responsible for moving tmp/ to the final location (e.g. via
+    Iterates over unique combinations of groupby_fields in padata.obs and
+    processes each group separately. For each group, checks if non-control
+    n_obs exceeds MAX_N_NON_CONTROL_OBS and, if so, batches using Best Fit.
+    Files are written to dir_output/tmp/ (one subdir per group). The caller
+    is responsible for moving tmp/ to the final location (e.g. via
     rename_tmps() to dir_output/by_celltype/).
 
     Parameters:
     -----------
     padata : ad.AnnData
-        Pseudobulk AnnData object (must have obs['cell_type']).
+        Pseudobulk AnnData object.
     dir_output : str
-        Output directory path. Cell type files are saved in dir_output/tmp/
-        
+        Output directory path. Group files are saved in dir_output/tmp/.
+    groupby_fields : list of str, optional
+        Fields in padata.obs to group by. Defaults to ["cell_type"].
+        For multiple fields (e.g. ["cell_type", "percent_volume_dmso"]),
+        one subdir is created per unique combination.
+
     Returns:
     --------
     None
-        Saves processed files to disk. Each cell type is saved as
-        '{celltype_clean}_processed.h5ad' or batched files if n_obs is too large.
-        
+        Saves processed files to disk. Each group is saved as
+        '{group_label}_processed.h5ad' or batched files if n_obs is too large.
+
     Raises:
     -------
     ValueError
-        If no valid cell types are found for splitting.
+        If no valid groups are found for splitting.
     '''
+    if groupby_fields is None:
+        groupby_fields = ["cell_type"]
 
     celltype_dir = os.path.join(dir_output, TMP_DIR)
     os.makedirs(celltype_dir, exist_ok=True)
-    
-    cell_types = padata.obs['cell_type'].unique()
-    cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) and not pd.isna(ct))]
-    cell_types = sorted(cell_types)
-    
-    if len(cell_types) == 0:
-        raise ValueError('No valid cell types found for splitting')
-    
-    logger.info(f'Splitting into {len(cell_types)} cell types')
 
-    for ct in cell_types:
-        ct_clean = sanitize_celltype_name(ct)
-        ct_dir = os.path.join(celltype_dir, ct_clean)
-        os.makedirs(ct_dir, exist_ok=True)
-        adata_ct = padata[padata.obs['cell_type'] == ct].copy()
-        batch_celltype(adata_ct, ct_dir, ct_clean)
+    group_df = padata.obs[groupby_fields].drop_duplicates().dropna()
+    groups = sorted([tuple(row) for row in group_df.itertuples(index=False, name=None)])
+
+    if len(groups) == 0:
+        raise ValueError(f'No valid groups found for splitting by {groupby_fields}')
+
+    logger.info(f'Splitting into {len(groups)} groups by {groupby_fields}')
+
+    for group_values in groups:
+        label = get_group_label(group_values, groupby_fields)
+        group_dir = os.path.join(celltype_dir, label)
+        os.makedirs(group_dir, exist_ok=True)
+
+        mask = pd.Series(True, index=padata.obs.index)
+        for field, value in zip(groupby_fields, group_values):
+            mask = mask & (padata.obs[field] == value)
+
+        adata_group = padata[mask].copy()
+        batch_celltype(adata_group, group_dir, label)
         
 
 
@@ -930,6 +941,36 @@ def sanitize_celltype_name(celltype: str) -> str:
     return celltype.replace(' ', '_').replace('/', '-').replace('(', '').replace(')', '')
 
 
+def get_group_label(values: tuple, fields: list) -> str:
+    '''
+    Build a sanitized group label from a combination of groupby field values.
+
+    For a single field this is equivalent to sanitize_celltype_name on that value.
+    For multiple fields the per-value sanitized strings are joined with '_'.
+    Floats are formatted with %g to avoid trailing zeros or scientific notation.
+
+    Parameters:
+    -----------
+    values : tuple
+        Field values for this group, in the same order as fields.
+    fields : list
+        Field names (used for context only; not included in the label).
+
+    Returns:
+    --------
+    str
+        Sanitized label safe for use as a directory name.
+    '''
+    parts = []
+    for v in values:
+        if isinstance(v, float):
+            s = f"{v:g}"
+        else:
+            s = str(v)
+        parts.append(sanitize_celltype_name(s))
+    return "_".join(parts)
+
+
 class PseudobulkProcessor:
     """
     Sequential processor for pseudobulk data.
@@ -969,6 +1010,11 @@ class PseudobulkProcessor:
     is_normalized : bool, default=False
         If True, Ensembl ID mapping removes every gene whose target ID is ambiguous
         (multiple old IDs map to the same target); counts are not summed.
+    groupby_fields : list of str, optional
+        Fields in adata.obs to group by when split_by_celltype is True.
+        Defaults to ["cell_type"]. For multiple fields (e.g. ["cell_type",
+        "percent_volume_dmso"]), one subdirectory is created per unique
+        combination, named by joining sanitized values with '_'.
     """
     
     def __init__(self,
@@ -980,7 +1026,8 @@ class PseudobulkProcessor:
                  post_processing: Optional[dict] = None,
                  use_pubchem_cid_in_label: bool = False,
                  check_by_celltype_content: bool = True,
-                 is_normalized: bool = False):
+                 is_normalized: bool = False,
+                 groupby_fields: Optional[list] = None):
         self.file_input = file_input
         self.dir_output = dir_output
         self.design_param = design_param
@@ -990,6 +1037,7 @@ class PseudobulkProcessor:
         self.use_pubchem_cid_in_label = use_pubchem_cid_in_label
         self.check_by_celltype_content = check_by_celltype_content
         self.is_normalized = is_normalized
+        self.groupby_fields = groupby_fields if groupby_fields is not None else ["cell_type"]
         self.padata = None
     
     def read_data(self) -> None:
@@ -1145,9 +1193,9 @@ class PseudobulkProcessor:
         save_single_file(self.padata, file_output)
     
     def save_splitted_data(self) -> None:
-        """Step 7: Split by cell type (if needed)."""
+        """Step 7: Split by groupby_fields (if needed)."""
         if self.split_by_celltype:
-            save_by_celltype(self.padata, self.dir_output)
+            save_by_celltype(self.padata, self.dir_output, self.groupby_fields)
 
     def _check_output_files_exist(self,
                                   expected_celltype_subdir_names: Optional[set] = None) -> bool:
@@ -1169,12 +1217,17 @@ class PseudobulkProcessor:
         """Run the complete processing pipeline sequentially."""
         self._remove_tmps()
         self.read_data()
+
+        if self.split_by_celltype:
+            missing = [f for f in self.groupby_fields if f not in self.padata.obs.columns]
+            if missing:
+                raise ValueError(f"groupby_fields columns not found in adata.obs: {missing}")
+
         expected_celltype_subdir_names = None
         if self.split_by_celltype and self.check_by_celltype_content:
-            
-            cell_types = self.padata.obs['cell_type'].unique()
-            cell_types = [ct for ct in cell_types if ct is not None and (isinstance(ct, str) and not pd.isna(ct))]
-            expected_celltype_subdir_names = {sanitize_celltype_name(ct) for ct in sorted(cell_types)}
+            group_df = self.padata.obs[self.groupby_fields].drop_duplicates().dropna()
+            groups = sorted([tuple(row) for row in group_df.itertuples(index=False, name=None)])
+            expected_celltype_subdir_names = {get_group_label(g, self.groupby_fields) for g in groups}
 
         if self._check_output_files_exist(expected_celltype_subdir_names):
             logger.info('Output files already exist, skipping processing')
@@ -1260,6 +1313,9 @@ def main():
     parser.add_argument('--dataset', type=str, default=None)
     parser.add_argument('--use_pubchem_cid_in_label', action='store_true', default=False)
     parser.add_argument('--check_by_celltype_content', action='store_true', default=True)
+    parser.add_argument('--groupby_fields', nargs='+', default=None,
+                        help='Fields in obs to group by when splitting (default: cell_type). '
+                             'E.g. --groupby_fields cell_type percent_volume_dmso')
     args = parser.parse_args()
     d_args = vars(args).copy()
     del d_args['config']
@@ -1284,6 +1340,7 @@ def main():
         use_pubchem_cid_in_label=d_args.get('use_pubchem_cid_in_label', False),
         check_by_celltype_content=d_args.get('check_by_celltype_content', True),
         is_normalized=d_args.get('normalized', False),
+        groupby_fields=d_args.get('groupby_fields'),
     )
     processor.process()
 

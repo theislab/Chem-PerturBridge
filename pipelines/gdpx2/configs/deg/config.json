@@ -1,0 +1,40 @@
+{
+  "group_all_replicates": {
+    "par_process": {
+      "input_file": "./data/gdpx2/pseudobulk/full/gdpx2_standardized.h5ad",
+      "output_dir": "./data/gdpx2/pseudobulk_processed/group_rep",
+      "design_param": "group_all_replicates",
+      "dataset": "gdpx2",
+      "groupby_fields": ["cell_type", "percent_volume_dmso"]
+    },
+    "par_deg": {
+      "input_dir": "./data/gdpx2/pseudobulk_processed/group_rep",
+      "output_dir": "./data/gdpx2/deg_data/group_rep",
+      "design_param": "group_all_replicates",
+      "max_cell_types": 1,
+      "max_perturbations": 3,
+      "max_genes": 1000,
+      "specific_times": null,
+      "specific_perturbagens": null
+    }
+  },
+  "separate_replicates": {
+    "par_process": {
+      "input_file": "./data/gdpx2/pseudobulk/full/gdpx2_standardized.h5ad",
+      "output_dir": "./data/gdpx2/pseudobulk_processed/sep_rep",
+      "design_param": "separate_replicates",
+      "dataset": "gdpx2",
+      "groupby_fields": ["cell_type", "percent_volume_dmso"]
+    },
+    "par_deg": {
+      "input_dir": "./data/gdpx2/pseudobulk_processed/sep_rep",
+      "output_dir": "./data/gdpx2/deg_data/sep_rep",
+      "design_param": "separate_replicates",
+      "max_cell_types": 1,
+      "max_perturbations": 3,
+      "max_genes": 1000,
+      "specific_times": null,
+      "specific_perturbagens": null
+    }
+  }
+}

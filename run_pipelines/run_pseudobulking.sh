@@ -14,6 +14,9 @@ VALID_CHOICES=(
         "l1000_phase2"
         "op3"
         "novartis"
+        "vcpi_0001"
+        "vcpi_0002"
+        "gdpx2"
 )
 
 mkdir -p $LOGS_DIR
@@ -72,15 +75,21 @@ elif [[ "$DATASET" == "dilimap_train_val" ]]; then
         ./pipelines/dilimap_train_val/dilimap_train_val_pseudobulking.sh $ARG \
                 >  ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train_val.out \
                 2> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train_val.err &
-
-
-elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]] || [[ "$DATASET" == "op3" ]]; then
+		
+elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]] || [[ "$DATASET" == "op3" ]] \
+	|| [[ "$DATASET" == "vcpi_0001" ]] || [[ "$DATASET" == "vcpi_0002" ]]; then
 	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
     	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \
 		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.out \
 		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.err &
 
 elif [[ "$DATASET" == "novartis" ]]; then
+	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.err &
+
+elif [[ "$DATASET" == "gdpx2" ]]; then
 	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
 	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \
 		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.PID$$.out \

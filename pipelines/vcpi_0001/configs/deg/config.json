@@ -1,0 +1,38 @@
+{
+  "group_all_replicates": {
+    "par_process": {
+      "input_file": "./data/vcpi_0001/pseudobulk/full/vcpi_0001_standardized.h5ad",
+      "output_dir": "./data/vcpi_0001/pseudobulk_processed/group_rep",
+      "design_param": "group_all_replicates",
+      "dataset": "vcpi_0001"
+    },
+    "par_deg": {
+      "input_dir": "./data/vcpi_0001/pseudobulk_processed/group_rep",
+      "output_dir": "./data/vcpi_0001/deg_data/group_rep",
+      "design_param": "group_all_replicates",
+      "max_cell_types": 1,
+      "max_perturbations": 3,
+      "max_genes": 1000,
+      "specific_times": null,
+      "specific_perturbagens": null
+    }
+  },
+  "separate_replicates": {
+    "par_process": {
+      "input_file": "./data/vcpi_0001/pseudobulk/full/vcpi_0001_standardized.h5ad",
+      "output_dir": "./data/vcpi_0001/pseudobulk_processed/sep_rep",
+      "design_param": "separate_replicates",
+      "dataset": "vcpi_0001"
+    },
+    "par_deg": {
+      "input_dir": "./data/vcpi_0001/pseudobulk_processed/sep_rep",
+      "output_dir": "./data/vcpi_0001/deg_data/sep_rep",
+      "design_param": "separate_replicates",
+      "max_cell_types": 1,
+      "max_perturbations": 3,
+      "max_genes": 1000,
+      "specific_times": null,
+      "specific_perturbagens": null
+    }
+  }
+}
