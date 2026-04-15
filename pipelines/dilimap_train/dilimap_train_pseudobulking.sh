@@ -1,21 +1,14 @@
 #!/bin/bash
 set -e
 
+DATASET=dilimap_train
+
 if [ "$1" = "subsampling" ]; then
-	echo "> Work with a subsample"
-	SUFFIX="_subsample"
-	SUBDIR="subsample"
-	ARG="--subsampling"
-else
-	echo "> Work with a full version"
-	SUFFIX=""
-	SUBDIR="full"
-	ARG=""
+	echo "> Warning: subsampling mode is not supported for ${DATASET}, running full version"
 fi
 
-DATASET=dilimap_train
 DATA_ROOT=./data/${DATASET}/raw/
-OUTPUT_DIR=./data/${DATASET}/pseudobulk/${SUBDIR}
+OUTPUT_DIR=./data/${DATASET}/pseudobulk/full
 LOGS_DIR=./logs
 ENV_DIR=./venv
 
@@ -31,7 +24,7 @@ PARTITION=cpu_p
 
 mkdir -p ${DATA_ROOT}
 mkdir -p ${OUTPUT_DIR}
-mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+mkdir -p ${LOGS_DIR}/${DATASET}/full
 
 echo "> Running ${DATASET} assembly"
 sbatch -W -J pseudobulk_${DATASET} \
@@ -41,12 +34,12 @@ sbatch -W -J pseudobulk_${DATASET} \
        --mem=100G \
        --partition=${PARTITION} \
        --cpus-per-task=2 \
-       -e ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.%j.err \
-       -o ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_${DATASET}.%j.out \
+       -e ${LOGS_DIR}/${DATASET}/full/pseudobulk_${DATASET}.%j.err \
+       -o ${LOGS_DIR}/${DATASET}/full/pseudobulk_${DATASET}.%j.out \
        --wrap="${SBATCH_PREAMBLE} && \
-               python3 -m src.pseudobulking.datasets.dilimap_train.run_assembly \
+               python3 -m src.pseudobulking.datasets.dilimap.run_assembly \
                --mode train \
-               --output_file ${OUTPUT_DIR}/${DATASET}_assembled${SUFFIX}.h5ad \
-               --data_root ${DATA_ROOT} ${ARG}"
+               --output_file ${OUTPUT_DIR}/${DATASET}_assembled.h5ad \
+               --data_root ${DATA_ROOT} --annotate_pubchem"
 
 echo "> ${DATASET} assembly is done"
