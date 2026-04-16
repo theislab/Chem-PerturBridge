@@ -223,19 +223,23 @@ def _decimal_places(v: float) -> int:
 def standardize_doses(
     doses,
     log_tol: float = 0.01,
+    train_doses=None,
 ) -> dict:
     """
     Map raw dose values to canonical representatives in two steps:
 
-    1. **Log-scale clustering** — greedy, count-aware: unique doses are
-       processed highest-count first so the most frequent value becomes the
-       cluster anchor.  Any dose within ``log_tol`` (|log10(a/b)|) of an
-       existing anchor is merged into it.
+    1. **Log-scale clustering** — greedy, split- and count-aware: unique doses
+       are processed train-first (within each split, highest-count first) so
+       that train doses preferentially become cluster anchors.  Any dose within
+       ``log_tol`` (|log10(a/b)|) of an existing anchor is merged into it.
+       When ``train_doses`` is ``None`` the original count-only order is used.
 
     2. **Simplest-member selection** — within each cluster the member with the
        fewest decimal places in its ``g``-formatted string is chosen as the
        final representative (e.g. ``10.0`` beats ``10.003``).  Ties are broken
-       by proximity to the cluster anchor.
+       by proximity to the cluster anchor.  When ``train_doses`` is provided,
+       the search is restricted to train members first; the full member set is
+       used only for clusters that contain no train doses.
 
     Doses ≤ 0 (controls zeroed beforehand) are passed through unchanged.
 
@@ -245,6 +249,11 @@ def standardize_doses(
         Raw per-sample dose values (µM).
     log_tol : float
         Maximum |log10(a/b)| distance for two doses to be considered the same.
+    train_doses : array-like of float or None
+        Subset of ``doses`` that belong to the train split.  When given,
+        train doses are processed first in Step 1 (becoming anchors
+        preferentially) and are preferred as the canonical representative in
+        Step 2, falling back to all members only for val/test-only clusters.
 
     Returns
     -------
@@ -254,9 +263,11 @@ def standardize_doses(
     """
     doses = np.asarray(doses, dtype=float)
     counts = Counter(doses.tolist())
+    train_set: set[float] = set(np.asarray(train_doses, dtype=float).tolist()) if train_doses is not None else set()
 
-    # Step 1 — greedy log-scale clustering (high-count values become anchors)
-    unique_doses = sorted(counts.keys(), key=lambda v: -counts[v])
+    # Step 1 — greedy log-scale clustering
+    # Sort: train doses first (is_val=0 < 1), then by descending count within each group.
+    unique_doses = sorted(counts.keys(), key=lambda v: (v not in train_set, -counts[v]))
     anchors: list[tuple[float, float]] = []  # (log10_value, anchor_float)
     raw_to_anchor: dict[float, float] = {}
 
@@ -282,16 +293,23 @@ def standardize_doses(
             anchors.append((log_dose, dose))
             raw_to_anchor[dose] = dose
 
-    # Step 2 — per cluster, pick the member with the fewest decimal places
+    # Step 2 — per cluster, pick the member with the fewest decimal places.
+    # Restrict to train members when available; fall back to all members for
+    # clusters that contain no train doses.
     clusters: dict[float, set[float]] = {}
     for raw, anchor in raw_to_anchor.items():
         clusters.setdefault(anchor, set()).add(raw)
 
-    anchor_to_simplest: dict[float, float] = {}
-    for anchor, members in clusters.items():
+    def _simplest(members: set[float], anchor: float) -> float:
         min_places = min(_decimal_places(d) for d in members)
         candidates = [d for d in members if _decimal_places(d) == min_places]
-        anchor_to_simplest[anchor] = min(candidates, key=lambda d: abs(d - anchor))
+        return min(candidates, key=lambda d: abs(d - anchor))
+
+    anchor_to_simplest: dict[float, float] = {}
+    for anchor, members in clusters.items():
+        train_members = members & train_set
+        pool = train_members if train_members else members
+        anchor_to_simplest[anchor] = _simplest(pool, anchor)
 
     return {raw: anchor_to_simplest[anchor] for raw, anchor in raw_to_anchor.items()}
 
@@ -326,6 +344,7 @@ def standardize_obs_dilimap(adata: AnnData, dataset: str) -> pd.DataFrame:
         "LIBRARY_ID":        "library",
         "SPECIES":           "organism",
         "BATCH_ID":          "batch",
+        "SPLIT":             "split",
     }
     obs.rename(columns=rename_cols, inplace=True)
 
@@ -333,10 +352,15 @@ def standardize_obs_dilimap(adata: AnnData, dataset: str) -> pd.DataFrame:
     obs["is_control"] = obs["perturbagen"].isin(_CONTROL_COMPOUNDS)
 
     # ── dose standardization (cluster near-identical doses, keep simplest) ─
-    # Build the map only from non-control rows (controls may have NaN/junk concentration)
+    # Build the map only from non-control rows (controls may have NaN/junk concentration).
+    # Train doses are preferred as cluster anchors and representatives; val/test doses
+    # are used only for clusters that contain no train member.
+    non_ctrl = ~obs["is_control"]
+    is_train = obs["split"].str.lower() == "training"
     dose_map = standardize_doses(
-        obs.loc[~obs["is_control"], "CONCENTRATION_UM"].values,
+        obs.loc[non_ctrl, "CONCENTRATION_UM"].values,
         log_tol=0.015,
+        train_doses=obs.loc[non_ctrl & is_train, "CONCENTRATION_UM"].values,
     )
     obs.loc[~obs["is_control"], "pert_dose_uM"] = obs.loc[~obs["is_control"], "CONCENTRATION_UM"].map(dose_map)
     obs.loc[obs["is_control"], "pert_dose_uM"] = 0.0
@@ -360,7 +384,6 @@ def standardize_obs_dilimap(adata: AnnData, dataset: str) -> pd.DataFrame:
     if "pubchem_cid" not in obs.columns:
         obs["pubchem_cid"]         = None
     obs["dataset"]                 = dataset
-    obs["split"]                   = obs["SPLIT"]
     obs["psbulk_cells"]            = -666  # sentinel: bulk data, cell count not available
     obs["psbulk_counts"]           = (
         np.round(np.asarray(adata.X.sum(axis=1)).flatten()).astype(int)
