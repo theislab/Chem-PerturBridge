@@ -1,0 +1,288 @@
+deg_dilimap_train_val.PID1445957.out:> Do not filter samples that did not pass quality control
+deg_dilimap_train_val.PID1445957.out:> Work with a full version
+deg_dilimap_train_val.PID1445957.out:> Mode: PARALLEL BY CELL TYPE (array jobs per cell type)
+deg_dilimap_train_val.PID1445957.out:> Dataset is not normalized, running normalization steps
+deg_dilimap_train_val.PID1445957.out:> Using config: ./pipelines/dilimap_train_val/configs/deg/config.json
+deg_dilimap_train_val.PID1445957.out:> Preprocess pseudobulk with parameter: group_all_replicates
+deg_dilimap_train_val.PID1445957.out:> Running preprocessing pseudobulk
+deg_dilimap_train_val.PID1445957.out:Submitted batch job 35290308
+deg_dilimap_train_val.PID1445957.out:> Preprocessing completed
+deg_dilimap_train_val.PID1445957.out:> Starting DGE analysis with parameter: group_all_replicates
+deg_dilimap_train_val.PID1445957.out:  Found 2 file(s) to process
+deg_dilimap_train_val.PID1445957.out:
+deg_dilimap_train_val.PID1445957.out:============================================
+deg_dilimap_train_val.PID1445957.out:DGE ANALYSIS
+deg_dilimap_train_val.PID1445957.out:============================================
+deg_dilimap_train_val.PID1445957.out:  Processing 2 file(s)...
+deg_dilimap_train_val.PID1445957.out:
+deg_dilimap_train_val.PID1445957.out:
+deg_dilimap_train_val.PID1445957.out:============================================
+deg_dilimap_train_val.PID1445957.out:DEG ANALYSIS: Array Job Mode
+deg_dilimap_train_val.PID1445957.out:============================================
+deg_dilimap_train_val.PID1445957.out:  Processing 2 file(s) with array job...
+deg_dilimap_train_val.PID1445957.out:  Submitting array job [2 jobs, max 50 concurrent]...
+deg_dilimap_train_val.PID1445957.out:Submitted batch job 35290334
+deg_dilimap_train_val.PID1445957.out:> DEG array job completed
+deg_dilimap_train_val.PID1445957.out:
+deg_dilimap_train_val.PID1445957.out:============================================
+deg_dilimap_train_val.PID1445957.out:AGGREGATING BATCH FILES
+deg_dilimap_train_val.PID1445957.out:============================================
+deg_dilimap_train_val.PID1445957.out:  Found files in ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/intermediate and results directory is empty
+deg_dilimap_train_val.PID1445957.out:  Aggregating batch files from intermediate/ to results/...
+deg_dilimap_train_val.PID1445957.out:  Running aggregation...
+deg_dilimap_train_val.PID1445957.out:Submitted batch job 35290943
+deg_dilimap_train_val.PID1445957.out:> Aggregation completed
+deg_dilimap_train_val.PID1445957.out:
+deg_dilimap_train_val.PID1445957.out:============================================
+deg_dilimap_train_val.PID1445957.out:DGE PIPELINE COMPLETED
+deg_dilimap_train_val.PID1445957.out:============================================
+deg_dilimap_train_val.PID1445957.out:  Results saved to: ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0
+deg_dilimap_train_val.PID1445957.out:    - intermediate/ for separate files
+deg_dilimap_train_val.PID1445957.out:    - results/ for combined
+deg_dilimap_train_val.PID1445957.out:
+deg_dilimap_train_val.PID1445957.out:> DGE pipeline is finished
+deg_dilimap_train_val.PID1445957.out:> Cleaning up temporary files...
+deg_dilimap_train_val.PID1445957.out:> Cleanup complete
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:19 | [INFO] Read pseudobulk file
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:22 | [INFO] Map ensembl IDs to current/replacement IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:22 | [INFO] Mapping Ensembl IDs to current/replacement IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:22 | [INFO]   Found 58676 genes with Ensembl IDs in var.index
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:22 | [INFO] Processing 58676 IDs in 59 queries
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:22 | [INFO]   Query 1/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:28 | [INFO]   Query 2/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:31 | [INFO]   Query 3/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:34 | [INFO]   Query 4/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:36 | [INFO]   Query 5/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:38 | [INFO]   Query 6/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:40 | [INFO]   Query 7/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:42 | [INFO]   Query 8/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:45 | [INFO]   Query 9/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:48 | [INFO]   Query 10/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:50 | [INFO]   Query 11/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:52 | [INFO]   Query 12/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:55 | [INFO]   Query 13/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:28:57 | [INFO]   Query 14/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:00 | [INFO]   Query 15/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:04 | [INFO]   Query 16/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:07 | [INFO]   Query 17/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:09 | [INFO]   Query 18/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:12 | [INFO]   Query 19/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:14 | [INFO]   Query 20/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:16 | [INFO]   Query 21/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:20 | [INFO]   Query 22/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:21 | [INFO]   Query 23/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:24 | [INFO]   Query 24/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:28 | [INFO]   Query 25/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:30 | [INFO]   Query 26/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:33 | [INFO]   Query 27/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:35 | [INFO]   Query 28/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:38 | [INFO]   Query 29/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:43 | [INFO]   Query 30/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:45 | [INFO]   Query 31/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:47 | [INFO]   Query 32/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:49 | [INFO]   Query 33/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:53 | [INFO]   Query 34/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:56 | [INFO]   Query 35/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:29:59 | [INFO]   Query 36/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:02 | [INFO]   Query 37/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:04 | [INFO]   Query 38/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:06 | [INFO]   Query 39/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:09 | [INFO]   Query 40/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:11 | [INFO]   Query 41/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:13 | [INFO]   Query 42/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:17 | [INFO]   Query 43/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:19 | [INFO]   Query 44/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:21 | [INFO]   Query 45/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:24 | [INFO]   Query 46/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:27 | [INFO]   Query 47/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:31 | [INFO]   Query 48/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:34 | [INFO]   Query 49/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:37 | [INFO]   Query 50/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:40 | [INFO]   Query 51/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:42 | [INFO]   Query 52/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:45 | [INFO]   Query 53/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:47 | [INFO]   Query 54/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:49 | [INFO]   Query 55/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:52 | [INFO]   Query 56/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:54 | [INFO]   Query 57/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:57 | [INFO]   Query 58/59: processing 1000 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:30:59 | [INFO]   Query 59/59: processing 676 IDs
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO] Summary:
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO]   Total results: 58672 out of 58676
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO]   Current IDs: 57284
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO]   Deprecated (no replacement): 534
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO]   Single replacements: 840
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO]   Multiple replacements: 14
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO]   Unique target IDs with duplicates: 626
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO]   Mapping size: 58124
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO] Aggregating running...
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:01 | [INFO]   The layer containing 'psbulk_props' will be deprecated.
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:11 | [INFO]   Result: 58676 → 57385 genes (reduced by 1291)
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:11 | [INFO] Check total counts
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:11 | [INFO] Total counts are greater than 0
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:11 | [INFO] Add perturbation label
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:11 | [INFO] Save data
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:29 | [INFO]   Saved: ./data/dilimap_train_val/pseudobulk_processed/group_rep/file_tmp.h5ad (4148 obs, 302 perturbagens)
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:29 | [INFO] Splitting into 1 groups by ['cell_type']
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:30 | [INFO] Splitting CL_0000182: 4148 obs, 1193 perturbation labels
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:30 | [INFO]   After separation: 301 perturbagens, 3691 non-control obs, 1192 non-control labels
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:30 | [INFO]   Create batches
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:33 | [INFO]   Pad batches
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:35 | [INFO]   1 batches need to be padded
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:35 | [INFO]   After padding before adding controls: 2 batches, batch sizes: ['2500 x 858', '2500 x 785']
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:35 | [INFO]   Add controls to batches
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:35 | [INFO]   Save batches:
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:47 | [INFO]   Saved: ./data/dilimap_train_val/pseudobulk_processed/group_rep/tmp/CL_0000182/CL_0000182_processed_batch_1.h5ad (2957 obs, 217 perturbagens)
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:58 | [INFO]   Saved: ./data/dilimap_train_val/pseudobulk_processed/group_rep/tmp/CL_0000182/CL_0000182_processed_batch_2.h5ad (2957 obs, 200 perturbagens)
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:58 | [INFO] Splitting CL_0000182 is done
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:58 | [INFO] Moved temporary file ./data/dilimap_train_val/pseudobulk_processed/group_rep/file_tmp.h5ad to ./data/dilimap_train_val/pseudobulk_processed/group_rep/dilimap_train_val_assembled_processed.h5ad
+deg_processing_pseudobulk.35290308.out:2026-04-16 23:31:58 | [INFO] Moved temporary directory ./data/dilimap_train_val/pseudobulk_processed/group_rep/tmp to ./data/dilimap_train_val/pseudobulk_processed/group_rep/by_celltype
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000183791 has more than one replacements: [{'score': 0.865191, 'stable_id': 'ENSG00000288631'}, {'score': 0.865191, 'stable_id': 'ENSG00000288616'}, {'score': 0.865191, 'stable_id': 'ENSG00000288607'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000203812 has more than one replacements: [{'score': 0.958449, 'stable_id': 'ENSG00000288859'}, {'score': 0.959544, 'stable_id': 'ENSG00000288825'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000225932 has more than one replacements: [{'stable_id': 'ENSG00000288784', 'score': 0.994837}, {'score': 0.994811, 'stable_id': 'ENSG00000289604'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000233776 has more than one replacements: [{'score': 0.99, 'stable_id': 'ENSG00000235481'}, {'score': 0.99, 'stable_id': 'ENSG00000173575'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000240224 has more than one replacements: [{'stable_id': 'ENSG00000288702', 'score': 0.981993}, {'stable_id': 'ENSG00000288705', 'score': 0.982788}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000243135 has more than one replacements: [{'stable_id': 'ENSG00000288702', 'score': 0.986504}, {'score': 0.986027, 'stable_id': 'ENSG00000288705'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000244693 has more than one replacements: [{'stable_id': 'ENSG00000288784', 'score': 0.994811}, {'stable_id': 'ENSG00000289604', 'score': 0.994837}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000256374 has more than one replacements: [{'stable_id': 'ENSG00000288867', 'score': 0.788845}, {'stable_id': 'ENSG00000289549', 'score': 0.788845}, {'score': 0.788845, 'stable_id': 'ENSG00000289022'}, {'stable_id': 'ENSG00000289240', 'score': 0.788845}, {'stable_id': 'ENSG00000289542', 'score': 0.788845}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000263464 has more than one replacements: [{'score': 0.882353, 'stable_id': 'ENSG00000289549'}, {'stable_id': 'ENSG00000288867', 'score': 0.894737}, {'score': 0.882353, 'stable_id': 'ENSG00000289022'}, {'stable_id': 'ENSG00000289240', 'score': 0.882353}, {'score': 0.882353, 'stable_id': 'ENSG00000289542'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000272196 has more than one replacements: [{'score': 0.971741, 'stable_id': 'ENSG00000288825'}, {'score': 0.973404, 'stable_id': 'ENSG00000288859'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000274267 has more than one replacements: [{'stable_id': 'ENSG00000287080', 'score': 0.944828}, {'stable_id': 'ENSG00000286522', 'score': 0.896401}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000274791 has more than one replacements: [{'score': 0.790648, 'stable_id': 'ENSG00000288709'}, {'score': 0.790648, 'stable_id': 'ENSG00000288722'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000277203 has more than one replacements: [{'score': 0.998249, 'stable_id': 'ENSG00000288722'}, {'score': 0.998246, 'stable_id': 'ENSG00000288709'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Warning, the gene ENSG00000278272 has more than one replacements: [{'stable_id': 'ENSG00000286522', 'score': 0.896401}, {'score': 0.947712, 'stable_id': 'ENSG00000287080'}]
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Filtering out 552 genes that could not be mapped (deprecated with no replacement or multiple replacements)
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:01 | [WARNING] Found 626 target IDs with duplicates - will aggregate counts
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:30 | [WARNING]   Non-control n_obs (3691) exceeds 2500, creating batches
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:35 | [WARNING]   Batch 1 has only 217 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35290308.err:2026-04-16 23:31:35 | [WARNING]   Batch 2 has only 200 perturbagens, which is below the minimum of 500
+deg_analysis.35290335_0.out:
+deg_analysis.35290335_0.out:DE analysis started...
+deg_analysis.35290335_0.out:Loaded input file:  ./data/dilimap_train_val/pseudobulk_processed/group_rep/by_celltype/CL_0000182/CL_0000182_processed_batch_1.h5ad
+deg_analysis.35290335_0.out:Initial dimensions:  2957  samples ×  57385  genes
+deg_analysis.35290335_0.out:Filter samples with the low number of cells
+deg_analysis.35290335_0.out:    Filter threshold (min_cells):  0
+deg_analysis.35290335_0.out:    Found  2957  samples with sentinel value (-666), keeping all
+deg_analysis.35290335_0.out:    n_obs:  2957 -->  2957
+deg_analysis.35290335_0.out:
+deg_analysis.35290335_0.out:▶︎ Processing cell_type:  CL_0000182
+deg_analysis.35290335_0.out:    Filter controls by  pert_time_h  column
+deg_analysis.35290335_0.out:        n_obs:  2957 -->  2957
+deg_analysis.35290335_0.out:
+deg_analysis.35290335_0.out:    Constructing design matrix...
+deg_analysis.35290335_0.out:    Design matrix is constructed in 0.2 seconds
+deg_analysis.35290335_0.out:    Design matrix dimensions: 2957 samples × 920 coefficients
+deg_analysis.35290335_0.out:    Filtering genes and normalizing counts...
+deg_analysis.35290335_0.out:    Genes are filtered and normalized in 45.1 seconds
+deg_analysis.35290335_0.out:    Running voom...
+deg_analysis.35290335_0.out:    Voom is completed in 90.3 seconds
+deg_analysis.35290335_0.out:    Running lmFit...
+deg_analysis.35290335_0.out:    LmFit is completed in 10373.2 seconds
+deg_analysis.35290335_0.out:DGE fit is completed in 10514.9 seconds
+deg_analysis.35290335_0.out:    Running contrasts...
+deg_analysis.35290335_0.out:    Running contrast 1/858
+deg_analysis.35290335_0.out:    Running contrast 51/858
+deg_analysis.35290335_0.out:    Running contrast 101/858
+deg_analysis.35290335_0.out:    Running contrast 151/858
+deg_analysis.35290335_0.out:    Running contrast 201/858
+deg_analysis.35290335_0.out:    Running contrast 251/858
+deg_analysis.35290335_0.out:    Running contrast 301/858
+deg_analysis.35290335_0.out:    Running contrast 351/858
+deg_analysis.35290335_0.out:    Running contrast 401/858
+deg_analysis.35290335_0.out:    Running contrast 451/858
+deg_analysis.35290335_0.out:    Running contrast 501/858
+deg_analysis.35290335_0.out:    Running contrast 551/858
+deg_analysis.35290335_0.out:    Running contrast 601/858
+deg_analysis.35290335_0.out:    Running contrast 651/858
+deg_analysis.35290335_0.out:    Running contrast 701/858
+deg_analysis.35290335_0.out:    Running contrast 751/858
+deg_analysis.35290335_0.out:    Running contrast 801/858
+deg_analysis.35290335_0.out:    Running contrast 851/858
+deg_analysis.35290335_0.out:    Running contrast 858/858
+deg_analysis.35290335_0.out:Contrasts are completed in 421.0 seconds
+deg_analysis.35290335_0.out:
+deg_analysis.35290335_0.out:    Writing:  ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/intermediate/CL_0000182/CL_0000182_batch_1_de.h5ad
+deg_analysis.35290335_0.out:
+deg_analysis.35290335_0.out:    Rewriting h5ad file: ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/intermediate/CL_0000182/CL_0000182_batch_1_de.h5ad
+deg_analysis.35290335_0.out:    Removed X matrix
+deg_analysis.35290335_0.out:    Rewriting h5ad file is done!
+deg_analysis.35290335_0.out:✓ Cell line completed in 11085.5 seconds
+deg_analysis.35290335_0.out:
+deg_analysis.35290335_0.out:DE analysis completed!
+deg_analysis.35290335_0.out:
+deg_analysis.35290335_0.out:Total runtime: 11154.4 seconds
+deg_analysis.35290335_0.err:
+deg_analysis.35290335_0.err:=== 2 Warnings encountered ===
+deg_analysis.35290335_0.err:
+deg_analysis.35290335_0.err:1. sparse->dense coercion: allocating vector of size 1.3 GiB
+deg_analysis.35290335_0.err:2. Partial NA coefficients for 2 probe(s)
+deg_analysis.35290334_1.out:
+deg_analysis.35290334_1.out:DE analysis started...
+deg_analysis.35290334_1.out:Loaded input file:  ./data/dilimap_train_val/pseudobulk_processed/group_rep/by_celltype/CL_0000182/CL_0000182_processed_batch_2.h5ad
+deg_analysis.35290334_1.out:Initial dimensions:  2957  samples ×  57385  genes
+deg_analysis.35290334_1.out:Filter samples with the low number of cells
+deg_analysis.35290334_1.out:    Filter threshold (min_cells):  0
+deg_analysis.35290334_1.out:    Found  2957  samples with sentinel value (-666), keeping all
+deg_analysis.35290334_1.out:    n_obs:  2957 -->  2957
+deg_analysis.35290334_1.out:
+deg_analysis.35290334_1.out:▶︎ Processing cell_type:  CL_0000182
+deg_analysis.35290334_1.out:    Filter controls by  pert_time_h  column
+deg_analysis.35290334_1.out:        n_obs:  2957 -->  2957
+deg_analysis.35290334_1.out:
+deg_analysis.35290334_1.out:    Constructing design matrix...
+deg_analysis.35290334_1.out:    Design matrix is constructed in 0.2 seconds
+deg_analysis.35290334_1.out:    Design matrix dimensions: 2957 samples × 847 coefficients
+deg_analysis.35290334_1.out:    Filtering genes and normalizing counts...
+deg_analysis.35290334_1.out:    Genes are filtered and normalized in 59.5 seconds
+deg_analysis.35290334_1.out:    Running voom...
+deg_analysis.35290334_1.out:    Voom is completed in 118.3 seconds
+deg_analysis.35290334_1.out:    Running lmFit...
+deg_analysis.35290334_1.out:    LmFit is completed in 11406.7 seconds
+deg_analysis.35290334_1.out:DGE fit is completed in 11592.9 seconds
+deg_analysis.35290334_1.out:    Running contrasts...
+deg_analysis.35290334_1.out:    Running contrast 1/785
+deg_analysis.35290334_1.out:    Running contrast 51/785
+deg_analysis.35290334_1.out:    Running contrast 101/785
+deg_analysis.35290334_1.out:    Running contrast 151/785
+deg_analysis.35290334_1.out:    Running contrast 201/785
+deg_analysis.35290334_1.out:    Running contrast 251/785
+deg_analysis.35290334_1.out:    Running contrast 301/785
+deg_analysis.35290334_1.out:    Running contrast 351/785
+deg_analysis.35290334_1.out:    Running contrast 401/785
+deg_analysis.35290334_1.out:    Running contrast 451/785
+deg_analysis.35290334_1.out:    Running contrast 501/785
+deg_analysis.35290334_1.out:    Running contrast 551/785
+deg_analysis.35290334_1.out:    Running contrast 601/785
+deg_analysis.35290334_1.out:    Running contrast 651/785
+deg_analysis.35290334_1.out:    Running contrast 701/785
+deg_analysis.35290334_1.out:    Running contrast 751/785
+deg_analysis.35290334_1.out:    Running contrast 785/785
+deg_analysis.35290334_1.out:Contrasts are completed in 350.9 seconds
+deg_analysis.35290334_1.out:
+deg_analysis.35290334_1.out:    Writing:  ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/intermediate/CL_0000182/CL_0000182_batch_2_de.h5ad
+deg_analysis.35290334_1.out:
+deg_analysis.35290334_1.out:    Rewriting h5ad file: ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/intermediate/CL_0000182/CL_0000182_batch_2_de.h5ad
+deg_analysis.35290334_1.out:    Removed X matrix
+deg_analysis.35290334_1.out:    Rewriting h5ad file is done!
+deg_analysis.35290334_1.out:✓ Cell line completed in 12072.2 seconds
+deg_analysis.35290334_1.out:
+deg_analysis.35290334_1.out:DE analysis completed!
+deg_analysis.35290334_1.out:
+deg_analysis.35290334_1.out:Total runtime: 12141.7 seconds
+deg_analysis.35290334_1.err:
+deg_analysis.35290334_1.err:=== 1 Warnings encountered ===
+deg_analysis.35290334_1.err:
+deg_analysis.35290334_1.err:1. sparse->dense coercion: allocating vector of size 1.3 GiB
+deg_aggregation.35290943.out:2026-04-17 02:59:29 | [INFO] Found 1 cell type(s) to aggregate
+deg_aggregation.35290943.out:2026-04-17 02:59:29 | [INFO] Aggregating 2 batch files for CL_0000182
+deg_aggregation.35290943.out:2026-04-17 02:59:29 | [INFO]   Reading: CL_0000182_batch_1_de.h5ad
+deg_aggregation.35290943.out:2026-04-17 02:59:42 | [INFO]   Reading: CL_0000182_batch_2_de.h5ad
+deg_aggregation.35290943.out:2026-04-17 02:59:53 | [INFO]   Concatenating 2 batches...
+deg_aggregation.35290943.out:2026-04-17 02:59:56 | [INFO]   Batch column added with 2
+deg_aggregation.35290943.out:2026-04-17 03:01:28 | [INFO]     Rewriting h5ad file: ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad
+deg_aggregation.35290943.out:2026-04-17 03:01:28 | [INFO]     Removed X matrix
+deg_aggregation.35290943.out:2026-04-17 03:01:28 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.35290943.out:2026-04-17 03:01:28 | [INFO]   Saved aggregated file: ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad (1643 obs, 21370 vars)
+deg_aggregation.35290943.out:2026-04-17 03:01:28 | [INFO] Aggregation completed
+deg_aggregation.35290943.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+deg_aggregation.35290943.err:  utils.warn_names_duplicates("obs")

@@ -16,6 +16,8 @@ PARTITION=cpu_p
 VALID_DATASETS=(
     "sciplex"
     "tahoe"
+    "dilimap_train"
+    "dilimap_train_val"
     "l1000_phase1"
     "l1000_phase2"
     "op3"
