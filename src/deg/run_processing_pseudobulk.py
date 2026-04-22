@@ -874,6 +874,17 @@ def rename_tmps(file_input: str,
         tmp_dir = os.path.join(dir_output, TMP_DIR)
         if os.path.isdir(tmp_dir):
             celltype_dir = os.path.join(dir_output, BY_CELLTYPE_DIR)
+            if os.path.exists(celltype_dir) and not os.path.isdir(celltype_dir):
+                raise NotADirectoryError(
+                    f'Expected {celltype_dir} to be a directory (or absent), '
+                    f'but found a non-directory path. Refusing to overwrite.'
+                )
+            if os.path.isdir(celltype_dir):
+                logger.warning(
+                    f'Destination directory {celltype_dir} already exists; '
+                    f'removing it before moving {tmp_dir} in its place.'
+                )
+                shutil.rmtree(celltype_dir)
             shutil.move(tmp_dir, celltype_dir)
             logger.info(f'Moved temporary directory {tmp_dir} to {celltype_dir}')
         else:
