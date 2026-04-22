@@ -300,6 +300,48 @@ def get_pubchem_cid_by_name(drug_name: str,
                                         universal_cache_key, n_retries)
 
 
+def get_pubchem_cid_by_cas(cas: str,
+                           cache: Dict[str, Optional[int]],
+                           universal_cache_key: Optional[str] = None,
+                           n_retries: int = 5) -> Optional[int]:
+    """
+    Fetch PubChem CID for a given CAS Registry Number, using cache to skip
+    repeat lookups.
+
+    CAS numbers are queried against PubChem's ``name`` namespace (PubChem
+    indexes CAS as a synonym) but stored under a dedicated ``cas:`` cache
+    namespace to avoid colliding with drug-name entries.
+
+    Parameters
+    ----------
+    cas : str
+        CAS Registry Number (e.g. ``"50-78-2"``).
+    cache : Dict[str, Optional[int]]
+        A dictionary storing the mapping of identifiers to PubChem CIDs.
+    universal_cache_key : Optional[str]
+        Universal cache key (e.g. perturbagen name) to check/store result.
+    n_retries : int
+        The number of retries when connecting to PubChem goes wrong.
+
+    Returns
+    -------
+    Optional[int]
+        PubChem CID or None if not found.
+    """
+    if not cas or pd.isna(cas):
+        return None
+
+    if universal_cache_key and universal_cache_key in cache:
+        return cache[universal_cache_key]
+
+    cache_key = f"cas:{cas.strip()}"
+    if cache_key in cache:
+        return cache[cache_key]
+
+    return _fetch_pubchem_cid_with_retry(cas.strip(), 'name', cache, cache_key, 'CAS',
+                                        universal_cache_key, n_retries)
+
+
 def lookup_pubchem_cids(df: pd.DataFrame,
                            cache: Dict[str, Optional[int]],
                            pert_id_col: Optional[str] = 'pert_id',
@@ -307,6 +349,7 @@ def lookup_pubchem_cids(df: pd.DataFrame,
                            pubchem_cid_col: str = 'pubchem_cid',
                            inchikey_col: str = 'inchi_key',
                            smiles_col: str = 'canonical_smiles',
+                           cas_col: Optional[str] = None,
                            cache_path: Optional[str] = None,
                            manual_mapping_func: Optional[Callable[[], Dict]] = None,
                            manual_mapping_by_drug_name: bool = True,
@@ -321,7 +364,8 @@ def lookup_pubchem_cids(df: pd.DataFrame,
     3. Lookup by InChIKey if available and valid
     4. Lookup by SMILES if available and valid
     5. Use manual mapping from manual_mapping_func by pert id or drug name
-    6. Lookup by drug name (perturbagen) 
+    6. Lookup by CAS Registry Number (if ``cas_col`` is given)
+    7. Lookup by drug name (perturbagen)
     
     Uses universal cache keys (pert_id or perturbagen) to avoid redundant lookups
     when the same compound is identified by different methods.
@@ -344,6 +388,10 @@ def lookup_pubchem_cids(df: pd.DataFrame,
         Column name for InChIKey
     smiles_col : str, default='canonical_smiles'
         Column name for SMILES
+    cas_col : Optional[str], default=None
+        Column name for CAS Registry Number. When set, CAS is tried before
+        the name lookup (resolved via PubChem's name namespace, but cached
+        under a dedicated ``cas:`` key to avoid aliasing drug names).
     cache_path : Optional[str], default=None
         Path to JSON file for persistent cache storage.
         If provided, cache will be loaded from this file at start and saved periodically.
@@ -469,13 +517,18 @@ def lookup_pubchem_cids(df: pd.DataFrame,
                         cache[universal_key] = cid
                     stored_cid = True
         
-        # Strategy 5: Lookup by drug name (if CID not found yet)
+        # Strategy 5: Lookup by CAS (if CID not found yet and cas_col was provided).
+        # CAS is tried before name because CAS Registry Numbers are globally
+        # unique and curated; name lookups are ambiguous (synonyms / stereoisomers).
+        if cid is None and cas_col and cas_col in row and pd.notna(row[cas_col]):
+            cas = str(row[cas_col]).strip()
+            cid = get_pubchem_cid_by_cas(cas, cache, universal_key)
+
+        # Strategy 6: Lookup by drug name (if CID not found yet)
         if cid is None and drug_col in row and pd.notna(row[drug_col]):
             drug_name = str(row[drug_col]).strip()
             cid = get_pubchem_cid_by_name(drug_name, cache, universal_key)
-        
-                
-        
+
         cids.append(cid)
         
         # Log progress every 50 compounds
