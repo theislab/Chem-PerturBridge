@@ -11,6 +11,7 @@ The current version of OP3_v2 includes the scripts for processing and analyzing 
 - [**Novartis**](https://www.nature.com/articles/s41467-018-06500-x)
 - [**VCPI-0001 / VCPI-0002**](https://thevirtualcell.com/)
 - [**GDPx2**](https://www.biorxiv.org/content/10.1101/2025.06.03.657593v1.full)
+- [**CIGS**](https://www.nature.com/articles/s41592-025-02781-5)
 
 It consists of the following steps:
 
@@ -37,6 +38,7 @@ The licences of the datasets used in this project are provided by their source:
 - **Novartis** - [Novartis DRUG-seq MoABox Dataset](https://zenodo.org/records/14291446)
 - **VCPI-0001 / VCPI-0002** - [The Virtual Cell Pharmacology Initiative](https://thevirtualcell.com/): "All validated data will be made publicly available to the research community. Contributors who submit compounds or engage the community in other ways will receive priority access to results. Academic researchers, industry partners, and citizen scientists are all welcome to access and utilize the data for their research and even commercial use."
 - **GDPx2** - [Ginkgo Datapoints](https://datapoints.ginkgo.bio/dataset-access) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=ginkgo-datapoints)
+- **CIGS** - [Chemical-Induced Gene Signature database](https://cigs.iomicscloud.com/) is available "for non-commercial research use only".
 
 The terms of use/license for each database used for annotations are defined by its original data provider:
 
