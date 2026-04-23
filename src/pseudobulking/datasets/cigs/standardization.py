@@ -177,7 +177,11 @@ def normalize_tcm_obs(obs: pd.DataFrame) -> pd.DataFrame:
         if "Plate" in obs.columns else np.nan
     )
     obs["well"] = np.nan
-    if "Sample_unique_id" in obs.columns:
+    # obs.index is already "{subset_key}.{Sample_unique_id}" upstream; only
+    # the legacy column path still needs the manual prefix.
+    if obs.index.name == "Sample_unique_id":
+        obs["sample_unique_id"] = obs.index.astype(str)
+    elif "Sample_unique_id" in obs.columns:
         obs["sample_unique_id"] = subset_prefix + obs["Sample_unique_id"].astype(str)
     return obs
 
@@ -185,6 +189,30 @@ def normalize_tcm_obs(obs: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # .var standardization (gene symbol → Ensembl ID)
 # ---------------------------------------------------------------------------
+
+# Fix Excel/R-mangled symbols to canonical HGNC form so MCE and TCM share an
+# identical gene axis.
+_GENE_SYMBOL_FIXES: Dict[str, str] = {
+    "2024-09-07 00:00:00": "SEPT7",
+    "X7.Sep":               "SEPT7",
+    "HLA.A":   "HLA-A",
+    "HLA.B":   "HLA-B",
+    "HLA.C":   "HLA-C",
+    "HLA.DMA": "HLA-DMA",
+    "HLA.DPA1":"HLA-DPA1",
+    "HLA.DRA": "HLA-DRA",
+    "HLA.E":   "HLA-E",
+    "NKX2.1":  "NKX2-1",
+    "NKX3.1":  "NKX3-1",
+}
+
+
+def _canonicalize_gene_symbols(symbols: list) -> Tuple[list, int]:
+    """Apply ``_GENE_SYMBOL_FIXES`` to ``symbols``; return (fixed, n_changed)."""
+    fixed = [_GENE_SYMBOL_FIXES.get(s, s) for s in symbols]
+    n_fixed = sum(1 for a, b in zip(symbols, fixed) if a != b)
+    return fixed, n_fixed
+
 
 def process_gene_annotations(
     var: pd.DataFrame,
@@ -196,7 +224,10 @@ def process_gene_annotations(
     keep the symbol as their index placeholder."""
     logger.info("Processing gene annotations")
 
-    symbols = var.index.astype(str).tolist()
+    raw_symbols = var.index.astype(str).tolist()
+    symbols, n_fixed = _canonicalize_gene_symbols(raw_symbols)
+    if n_fixed:
+        logger.info(f"  Canonicalized {n_fixed} Excel/R-mangled gene symbols")
     logger.info(f"  Resolving Ensembl IDs for {len(symbols):,} gene symbols ...")
 
     if annotate_genes:
@@ -514,7 +545,7 @@ def add_fixed_metadata_columns(obs: pd.DataFrame, source: Literal["mce", "tcm"])
     obs["tissue_type"]     = "cell culture"
     obs["suspension_type"] = "cell"
     obs["pert_type"]       = "compound"
-    obs["dataset"]         = "CIGS"
+    obs["dataset"]         = "CIGS MCE" if source == "mce" else "CIGS TCM"
     obs["library"]         = None
     obs["stimulation"]     = None
     obs["guide"]           = None
@@ -558,9 +589,12 @@ def add_fixed_metadata_columns(obs: pd.DataFrame, source: Literal["mce", "tcm"])
     # strip it from `plate` to avoid duplicating it).
     if "sample_unique_id" in obs.columns:
         raw_plate = obs["plate"].astype(str).str.split(".", n=1).str[1]
-        prefix = obs["sample_unique_id"].fillna("") + "." + raw_plate.fillna("")
+        prefix = obs["sample_unique_id"].astype("object").fillna("") + "." + raw_plate.fillna("")
     else:
-        prefix = obs["plate"].fillna("") + "_" + obs["well"].fillna("")
+        # .astype("object") avoids Categorical fillna TypeError.
+        plate_str = obs["plate"].astype("object").fillna("")
+        well_str  = obs["well"].astype("object").fillna("")
+        prefix = plate_str + "_" + well_str
 
     obs["sample_id"] = (
         prefix + "_" +
