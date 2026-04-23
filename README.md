@@ -26,7 +26,7 @@ After DEG, some `*_de.h5ad` objects may lose gene metadata (`symbol`, `is_merged
 
 # License
 
-This repository is a collection; each component retains its original license; our processed integration is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt).
+This repository is a collection; each component retains its original license. Our processed integration is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt) except for **CIGS**-derived files, which remain restricted to non-commercial research use (see the **CIGS** entry).
 
 The licences of the datasets used in this project are provided by their source:
 
