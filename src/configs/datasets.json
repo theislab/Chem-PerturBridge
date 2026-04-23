@@ -1,5 +1,4 @@
 {
-
 	"tahoe": {
 		"standardize_dataset": {
                           "module": "src.pseudobulking.datasets.tahoe.standardization",
@@ -14,7 +13,6 @@
 			  "module": "src.pseudobulking.datasets.tahoe.post_processing",
 			  "func": "process_tahoe_dataset"
 		  	}
-
 		 },
     "sciplex": {
 		"standardize_dataset": {

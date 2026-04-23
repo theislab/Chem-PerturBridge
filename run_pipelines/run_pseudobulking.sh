@@ -8,6 +8,8 @@ DATASET=""
 VALID_CHOICES=(
         "sciplex"
         "tahoe"
+		"dilimap_train"
+		"dilimap_train_val"
         "l1000_phase1"
         "l1000_phase2"
         "op3"
@@ -63,6 +65,18 @@ elif [[ "$DATASET" == "tahoe" ]]; then
     	./pipelines/tahoe/tahoe_pseudobulking_parallel.sh $ARG \
 		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_tahoe.out \
 		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_tahoe.err &
+
+elif [[ "$DATASET" == "dilimap_train" ]]; then
+        mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+        ./pipelines/dilimap_train/dilimap_train_pseudobulking.sh $ARG \
+                >  ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train.out \
+                2> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train.err &
+
+elif [[ "$DATASET" == "dilimap_train_val" ]]; then
+        mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
+        ./pipelines/dilimap_train_val/dilimap_train_val_pseudobulking.sh $ARG \
+                >  ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train_val.out \
+                2> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train_val.err &
 		
 elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]] || [[ "$DATASET" == "op3" ]] \
 	|| [[ "$DATASET" == "vcpi_0001" ]] || [[ "$DATASET" == "vcpi_0002" ]] \

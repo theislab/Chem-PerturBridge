@@ -1,0 +1,41 @@
+pseudobulk_dilimap_train.out:> Running dilimap_train assembly
+pseudobulk_dilimap_train.out:Submitted batch job 35215571
+pseudobulk_dilimap_train.out:> dilimap_train assembly is done
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:55 | [INFO] Assembling dilimap_train dataset (mode=train)
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:55 | [INFO] Assembling DILImap training dataset
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:55 | [INFO] All required files are present
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:55 | [INFO] All required data files are available
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:55 | [INFO]   Reading adata_training_counts.h5ad
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:59 | [INFO]   Loaded AnnData: 4,175 observations × 58,676 variables
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:59 | [INFO] DILImap training dataset assembly completed
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:59 | [INFO] PubChem cache: data/dilimap_train/raw/dilimap_pubchem_cache.json
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:59 | [INFO] Standardizing dilimap_train dataset
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:59 | [INFO] Filtering samples: 4,175 initial observations
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:40:59 | [INFO]   LDH QC: 593 samples removed (failed LDH or DMSO_replaced)
+pseudobulk_dilimap_train.35215571.out:Added the following to `adata.obs`: ['log_totalRNA', 'pct_mtRNA', 'pct_rRNA']
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:41:00 | [INFO]   RNA QC: 57 samples removed (low counts or high mtRNA; threshold log_totalRNA > 5.865)
+pseudobulk_dilimap_train.35215571.out:Added the following to `adata.obs`: ['cross_rep_correlation', 'rep_corr_qc_pass']
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:41:44 | [INFO]   Cross-replicate correlation QC: 195 samples removed
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:41:44 | [INFO]   Retained: 3,460 / 4,175 samples (715 removed in total)
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:41:44 | [INFO] Annotating compounds with PubChem CIDs
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:41:44 | [INFO]   Unique compounds: 252
+pseudobulk_dilimap_train.35215571.out:[1;34mPackage: s3://dilimap/public/data. Top hash: 155a2b3b63[m
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:43:01 | [INFO]   Compounds matched with SMILES: 243 / 252
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:43:01 | [INFO]   Using PubChem cache: data/dilimap_train/raw/dilimap_pubchem_cache.json
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:43:01 | [INFO] Cache file data/dilimap_train/raw/dilimap_pubchem_cache.json not found. Starting with empty cache.
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:43:01 | [INFO] Processing 252 compounds
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:43:47 | [INFO] Processed 50/252 compounds (50 mapped so far)
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:44:34 | [INFO] Processed 100/252 compounds (100 mapped so far)
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:45:19 | [INFO] Processed 150/252 compounds (150 mapped so far)
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:46:06 | [INFO] Processed 200/252 compounds (200 mapped so far)
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:46:53 | [INFO] Processed 250/252 compounds (250 mapped so far)
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:46:56 | [INFO] Mapped 252 out of 252 compounds to PubChem CIDs
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:46:56 | [INFO]   PubChem CIDs found: 252 / 252
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:46:58 | [INFO] Saving standardized dataset to: ./data/dilimap_train/pseudobulk/full/dilimap_train_assembled.h5ad
+pseudobulk_dilimap_train.35215571.out:2026-04-16 01:47:17 | [INFO] dilimap_train assembly complete
+pseudobulk_dilimap_train.35215571.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+pseudobulk_dilimap_train.35215571.err:  utils.warn_names_duplicates("obs")
+pseudobulk_dilimap_train.35215571.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+pseudobulk_dilimap_train.35215571.err:  utils.warn_names_duplicates("obs")
+pseudobulk_dilimap_train.35215571.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
+pseudobulk_dilimap_train.35215571.err:  return dispatch(args[0].__class__)(*args, **kw)
