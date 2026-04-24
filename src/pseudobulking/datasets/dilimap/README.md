@@ -18,7 +18,7 @@ section "Data availability").
 The file is shared via Google Drive. Place it at:
 
 ```
-op3_v2/data/adata_training_counts.h5ad
+Chem-PerturBridge/data/adata_training_counts.h5ad
 ```
 
 ### Validation data
@@ -33,7 +33,7 @@ adata = dmap.s3.read('validation_data_counts.h5ad', package_name='public/data')
 Place it at:
 
 ```
-op3_v2/data/adata_validation_counts.h5ad
+Chem-PerturBridge/data/adata_validation_counts.h5ad
 ```
 
 ## Running the pipeline

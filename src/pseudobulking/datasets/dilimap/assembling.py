@@ -26,7 +26,7 @@ def define_dilimap_train_paths(data_root: Optional[str] = None) -> dict:
     ----------
     data_root : str, optional
         Root directory containing the training H5AD file.
-        Defaults to ``'./op3_v2/data'``.
+        Defaults to ``'./Chem-PerturBridge/data'``.
 
     Returns
     -------
@@ -34,7 +34,7 @@ def define_dilimap_train_paths(data_root: Optional[str] = None) -> dict:
         Dictionary mapping file identifiers to :class:`~pathlib.Path` objects.
     """
     if data_root is None:
-        data_root = "./op3_v2/data"
+        data_root = "./Chem-PerturBridge/data"
     data_root = Path(data_root)
 
     return {
@@ -50,7 +50,7 @@ def define_dilimap_train_val_paths(data_root: Optional[str] = None) -> dict:
     ----------
     data_root : str, optional
         Root directory containing both H5AD files.
-        Defaults to ``'./op3_v2/data'``.
+        Defaults to ``'./Chem-PerturBridge/data'``.
 
     Returns
     -------
@@ -58,7 +58,7 @@ def define_dilimap_train_val_paths(data_root: Optional[str] = None) -> dict:
         Dictionary mapping file identifiers to :class:`~pathlib.Path` objects.
     """
     if data_root is None:
-        data_root = "./op3_v2/data"
+        data_root = "./Chem-PerturBridge/data"
     data_root = Path(data_root)
 
     return {

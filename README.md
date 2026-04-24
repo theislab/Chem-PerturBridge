@@ -1,8 +1,8 @@
 # Description
 
-**OP3_v2** is a set of pipelines for analyzing single-cell/bulk RNA sequencing data from perturbation experiments. 
+**Chem-PerturBridge** is a set of pipelines for analyzing single-cell/bulk RNA sequencing data from perturbation experiments. 
 
-The current version of OP3_v2 includes the scripts for processing and analyzing following datasets: 
+The current version of Chem-PerturBridge includes the scripts for processing and analyzing following datasets: 
 - [**Sci-Plex3**](https://www.science.org/doi/10.1126/science.aax6234)
 - [**Tahoe**](https://www.biorxiv.org/content/10.1101/2025.02.20.639398v1.full)
 - [**L1000**](https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0)
@@ -28,7 +28,7 @@ After DEG, some `*_de.h5ad` objects may lose gene metadata (`symbol`, `is_merged
 
 Code and project documentation in this repository are licensed under the [MIT License](LICENSE).
 
-Processed datasets, generated outputs, and integrated data files may contain third-party data and annotations. These materials are not relicensed by OP3_v2; they remain subject to the applicable upstream licenses, terms of use, data access agreements, and attribution requirements. Users should verify the terms attached to the specific upstream release used.
+Processed datasets, generated outputs, and integrated data files may contain third-party data and annotations. These materials are not relicensed by Chem-PerturBridge; they remain subject to the applicable upstream licenses, terms of use, data access agreements, and attribution requirements. Users should verify the terms attached to the specific upstream release used.
 
 The licences of the datasets used in this project are provided by their source:
 
@@ -41,11 +41,11 @@ Datasets referenced by the pipelines:
 - **Novartis** - [Novartis DRUG-seq MoABox Dataset](https://zenodo.org/records/14291446)
 - **VCPI-0001 / VCPI-0002** - [The Virtual Cell Pharmacology Initiative](https://thevirtualcell.com/). Public VCPI releases are described as available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt) where specified by VCPI; users should verify the terms attached to the specific release used.
 
-Datasets and outputs not redistributed in OP3_v2 public data releases due to upstream license or data-sharing limitations:
+Datasets and outputs not redistributed in Chem-PerturBridge public data releases due to upstream license or data-sharing limitations:
 
-- **DILImap** - [DILImap: Drug-Induced Liver Injury map](https://www.nature.com/articles/s41467-025-65690-3). Validation data is publicly available via the [DILImap S3 bucket](https://www.dilimap.org/); training data is available by request from the authors. DILImap training data and outputs derived from it are not redistributed by OP3_v2.
-- **GDPx2** - [Ginkgo Datapoints](https://datapoints.ginkgo.bio/dataset-access) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=ginkgo-datapoints). GDPx2 source data and processed outputs are not redistributed by OP3_v2 due to upstream license limitations; users should obtain access directly from Ginkgo Datapoints.
-- **CIGS** - [Chemical-Induced Gene Signature database](https://cigs.iomicscloud.com/) is available "for non-commercial research use only". CIGS source data and processed outputs are not redistributed by OP3_v2 due to upstream license limitations; users should obtain access directly from the CIGS provider.
+- **DILImap** - [DILImap: Drug-Induced Liver Injury map](https://www.nature.com/articles/s41467-025-65690-3). Validation data is publicly available via the [DILImap S3 bucket](https://www.dilimap.org/); training data is available by request from the authors. DILImap training data and outputs derived from it are not redistributed by Chem-PerturBridge.
+- **GDPx2** - [Ginkgo Datapoints](https://datapoints.ginkgo.bio/dataset-access) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=ginkgo-datapoints). GDPx2 source data and processed outputs are not redistributed by Chem-PerturBridge due to upstream license limitations; users should obtain access directly from Ginkgo Datapoints.
+- **CIGS** - [Chemical-Induced Gene Signature database](https://cigs.iomicscloud.com/) is available "for non-commercial research use only". CIGS source data and processed outputs are not redistributed by Chem-PerturBridge due to upstream license limitations; users should obtain access directly from the CIGS provider.
 
 The terms of use/license for each database used for annotations are defined by its original data provider:
 
@@ -102,7 +102,7 @@ fi
 
 **1.2.1** If you need to create the folder with the Python environment (in case you do not have it) and install the packages, please, run:
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 mamba create -f env.yaml -p path_to_env/venv --yes
 ```
 
@@ -138,13 +138,13 @@ To do that, please, execute:
 
 **1.3.1** **For environment**
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ln -s path_to_env/venv venv
 ```
 **1.3.2** **For data**
 ```
 mkdir path_to_data/data
-cd /op3_v2
+cd /Chem-PerturBridge
 ln -s path_to_data/data data
 ```
 
@@ -183,7 +183,7 @@ You can execute it with following arguments:
 
 For example, for subsample of Sci-Plex dataset, you need to run:
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_pseudobulking.sh -s -d sciplex
 ```
 
@@ -211,19 +211,19 @@ You can execute it with following arguments:
 
 For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode on the CPU nodes you need to run:
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_deg.sh -s -j -d sciplex -p group_all_replicates
 ```
 
 For a **normalized dataset** (e.g. L1000) with separate_replicates parameter on the CPU nodes:
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n
 ```
 
 For a **normalized dataset** (e.g. L1000) with separate_replicates parameter on the GPU nodes:
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n -g
 ```
 
@@ -242,7 +242,7 @@ Arguments:
 
 Example (paths depend on your layout and `group_rep` / `sep_rep`):
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_enrich_pseudobulk_var.sh \
   -d novartis \
   -i ./data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results \
@@ -257,13 +257,13 @@ After running pipelines, aggregate scattered log files into combined logs for ea
 
 **Recursive mode** (all datasets):
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_combining_logs.sh -r -l logs
 ```
 
 **Recursive mode** (single dataset):
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_combining_logs.sh -r -l logs/tahoe/
 ```
 
@@ -271,24 +271,24 @@ cd /op3_v2
 
 Pseudobulk logs:
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_combining_logs.sh -l logs/tahoe/full -t pseudobulk
 ```
 
 DEG logs:
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_combining_logs.sh -l logs/sciplex/full/deg/separate_replicates/qc_false/filter_min_cells_10 -t deg
 ```
 
 Enrich (pseudobulk `.var`) logs:
 ```
-cd /op3_v2
+cd /Chem-PerturBridge
 ./run_pipelines/run_combining_logs.sh -l logs/novartis/full/enrich_pseudobulk_var -t enrich
 ```
 
 ### 5. Add datasets
-To add a new dataset to the pipeline, follow the instructions in [`./docs/README.md`](https://github.com/theislab/op3_v2/blob/readme_new_dataset/docs/README.md)
+To add a new dataset to the pipeline, follow the instructions in [`./docs/README.md`](https://github.com/theislab/Chem-PerturBridge/blob/readme_new_dataset/docs/README.md)
 
 # Project structure:
 The structure of the repo:

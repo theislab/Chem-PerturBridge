@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Universal log combiner for OP3_v2 pipelines
+# Universal log combiner for Chem-PerturBridge pipelines
 # This script provides a convenient wrapper around the Python log aggregator
 
 set -e
