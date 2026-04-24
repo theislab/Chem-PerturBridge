@@ -26,19 +26,26 @@ After DEG, some `*_de.h5ad` objects may lose gene metadata (`symbol`, `is_merged
 
 # License
 
-This repository is a collection; each component retains its original license. Our processed integration is released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt) except for **CIGS**-derived files, which remain restricted to non-commercial research use (see the **CIGS** entry).
+Code and project documentation in this repository are licensed under the [MIT License](LICENSE).
+
+Processed datasets, generated outputs, and integrated data files may contain third-party data and annotations. These materials are not relicensed by OP3_v2; they remain subject to the applicable upstream licenses, terms of use, data access agreements, and attribution requirements. Users should verify the terms attached to the specific upstream release used.
 
 The licences of the datasets used in this project are provided by their source:
 
+Datasets referenced by the pipelines:
+
 - **Sci-Plex** - [scPerturb Single-Cell Perturbation Data](https://zenodo.org/records/13350497) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=scPerturb)
 - **Tahoe** - [Arc Virtual Cell Atlas](https://arcinstitute.org/tools/virtualcellatlas) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=Tahoe-100M)
-- **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply; we do not assert CC BY for upstream L1000. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS); small-molecule annotations from the [LINCS Data Portal](https://lincsportal.ccs.miami.edu/dcic-portal/#/terms) were used.
+- **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS); small-molecule annotations from the [LINCS Data Portal](https://lincsportal.ccs.miami.edu/dcic-portal/#/terms) were used.
 - **OP3** - [Open Problems Perturbation Prediction dataset](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945)
-- **DILImap** - [DILImap: Drug-Induced Liver Injury map](https://www.nature.com/articles/s41467-025-65690-3). Validation data is publicly available via the [DILImap S3 bucket](https://www.dilimap.org/); training data is available by request from the authors.
 - **Novartis** - [Novartis DRUG-seq MoABox Dataset](https://zenodo.org/records/14291446)
-- **VCPI-0001 / VCPI-0002** - [The Virtual Cell Pharmacology Initiative](https://thevirtualcell.com/): "All validated data will be made publicly available to the research community. Contributors who submit compounds or engage the community in other ways will receive priority access to results. Academic researchers, industry partners, and citizen scientists are all welcome to access and utilize the data for their research and even commercial use."
-- **GDPx2** - [Ginkgo Datapoints](https://datapoints.ginkgo.bio/dataset-access) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=ginkgo-datapoints)
-- **CIGS** - [Chemical-Induced Gene Signature database](https://cigs.iomicscloud.com/) is available "for non-commercial research use only".
+- **VCPI-0001 / VCPI-0002** - [The Virtual Cell Pharmacology Initiative](https://thevirtualcell.com/). Public VCPI releases are described as available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt) where specified by VCPI; users should verify the terms attached to the specific release used.
+
+Datasets and outputs not redistributed in OP3_v2 public data releases due to upstream license or data-sharing limitations:
+
+- **DILImap** - [DILImap: Drug-Induced Liver Injury map](https://www.nature.com/articles/s41467-025-65690-3). Validation data is publicly available via the [DILImap S3 bucket](https://www.dilimap.org/); training data is available by request from the authors. DILImap training data and outputs derived from it are not redistributed by OP3_v2.
+- **GDPx2** - [Ginkgo Datapoints](https://datapoints.ginkgo.bio/dataset-access) additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=ginkgo-datapoints). GDPx2 source data and processed outputs are not redistributed by OP3_v2 due to upstream license limitations; users should obtain access directly from Ginkgo Datapoints.
+- **CIGS** - [Chemical-Induced Gene Signature database](https://cigs.iomicscloud.com/) is available "for non-commercial research use only". CIGS source data and processed outputs are not redistributed by OP3_v2 due to upstream license limitations; users should obtain access directly from the CIGS provider.
 
 The terms of use/license for each database used for annotations are defined by its original data provider:
 
