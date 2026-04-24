@@ -1,0 +1,1094 @@
+deg_cigs_tcm.PID1497421.out:> Do not filter samples that did not pass quality control
+deg_cigs_tcm.PID1497421.out:> Work with a full version
+deg_cigs_tcm.PID1497421.out:> Mode: PARALLEL BY CELL TYPE (array jobs per cell type)
+deg_cigs_tcm.PID1497421.out:> Dataset is not normalized, running normalization steps
+deg_cigs_tcm.PID1497421.out:> Using config: ./pipelines/cigs_tcm/configs/deg/config.json
+deg_cigs_tcm.PID1497421.out:> Preprocess pseudobulk with parameter: separate_replicates
+deg_cigs_tcm.PID1497421.out:> Running preprocessing pseudobulk
+deg_cigs_tcm.PID1497421.out:Submitted batch job 35496564
+deg_cigs_tcm.PID1497421.out:> Preprocessing completed
+deg_cigs_tcm.PID1497421.out:> Starting DGE analysis with parameter: separate_replicates
+deg_cigs_tcm.PID1497421.out:  Found 10 file(s) to process
+deg_cigs_tcm.PID1497421.out:
+deg_cigs_tcm.PID1497421.out:============================================
+deg_cigs_tcm.PID1497421.out:DGE ANALYSIS
+deg_cigs_tcm.PID1497421.out:============================================
+deg_cigs_tcm.PID1497421.out:  Processing 10 file(s)...
+deg_cigs_tcm.PID1497421.out:
+deg_cigs_tcm.PID1497421.out:
+deg_cigs_tcm.PID1497421.out:============================================
+deg_cigs_tcm.PID1497421.out:DEG ANALYSIS: Array Job Mode
+deg_cigs_tcm.PID1497421.out:============================================
+deg_cigs_tcm.PID1497421.out:  Processing 10 file(s) with array job...
+deg_cigs_tcm.PID1497421.out:  Submitting array job [10 jobs, max 50 concurrent]...
+deg_cigs_tcm.PID1497421.out:Submitted batch job 35496582
+deg_cigs_tcm.PID1497421.out:> DEG array job completed
+deg_cigs_tcm.PID1497421.out:
+deg_cigs_tcm.PID1497421.out:============================================
+deg_cigs_tcm.PID1497421.out:AGGREGATING BATCH FILES
+deg_cigs_tcm.PID1497421.out:============================================
+deg_cigs_tcm.PID1497421.out:  Found files in ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate and results directory is empty
+deg_cigs_tcm.PID1497421.out:  Aggregating batch files from intermediate/ to results/...
+deg_cigs_tcm.PID1497421.out:  Running aggregation...
+deg_cigs_tcm.PID1497421.out:Submitted batch job 35501022
+deg_cigs_tcm.PID1497421.out:> Aggregation completed
+deg_cigs_tcm.PID1497421.out:
+deg_cigs_tcm.PID1497421.out:============================================
+deg_cigs_tcm.PID1497421.out:DGE PIPELINE COMPLETED
+deg_cigs_tcm.PID1497421.out:============================================
+deg_cigs_tcm.PID1497421.out:  Results saved to: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0
+deg_cigs_tcm.PID1497421.out:    - intermediate/ for separate files
+deg_cigs_tcm.PID1497421.out:    - results/ for combined
+deg_cigs_tcm.PID1497421.out:
+deg_cigs_tcm.PID1497421.out:> DGE pipeline is finished
+deg_cigs_tcm.PID1497421.out:> Cleaning up temporary files...
+deg_cigs_tcm.PID1497421.out:> Cleanup complete
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:42 | [INFO] Read pseudobulk file
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:44 | [INFO] Apply dataset-specific processing
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:44 | [INFO] Loaded process_cigs_dataset from src.pseudobulking.datasets.cigs.post_processing
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:44 | [INFO] CIGS post_processing: backfilling well from sample_unique_id for 22545 samples
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:44 | [INFO] Map ensembl IDs to current/replacement IDs
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:44 | [INFO] Mapping Ensembl IDs to current/replacement IDs
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:44 | [INFO]   Found 3407 genes with Ensembl IDs in var.index
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:44 | [INFO] Processing 3407 IDs in 4 queries
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:44 | [INFO]   Query 1/4: processing 1000 IDs
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:47 | [INFO]   Query 2/4: processing 1000 IDs
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:50 | [INFO]   Query 3/4: processing 1000 IDs
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:53 | [INFO]   Query 4/4: processing 407 IDs
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:53 | [INFO] Summary:
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:53 | [INFO]   Total results: 3300 out of 3407
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:53 | [INFO]   Current IDs: 3300
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:53 | [INFO]   Deprecated (no replacement): 0
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:53 | [INFO]   Single replacements: 0
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:53 | [INFO]   Multiple replacements: 0
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:53 | [INFO]   Unique target IDs with duplicates: 0
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:53 | [INFO]   Mapping size: 3300
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:54 | [INFO]   Result: 3407 → 3300 genes (reduced by 107)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:54 | [INFO] Check total counts
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:54 | [INFO] Total counts are greater than 0
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:54 | [INFO] Add perturbation label
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:03:54 | [INFO] Save data
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:00 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/file_tmp.h5ad (22545 obs, 1857 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:00 | [INFO] Splitting into 2 groups by ['cell_type']
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:00 | [INFO] Splitting CVCL_0062: 11268 obs, 10549 perturbation labels
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:00 | [INFO]   After separation: 1836 perturbagens, 10548 non-control obs, 10548 non-control labels
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:00 | [INFO]   Create batches
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:13 | [INFO]   Pad batches
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:25 | [INFO]   1 batches need to be padded
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:25 | [INFO]   After padding before adding controls: 5 batches, batch sizes: ['2504 x 2504', '2505 x 2505', '2502 x 2502', '2502 x 2502', '2503 x 2503']
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:25 | [INFO]   Add controls to batches
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:25 | [INFO]   Save batches:
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:26 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0062/CVCL_0062_processed_batch_1.h5ad (3224 obs, 441 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:27 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0062/CVCL_0062_processed_batch_2.h5ad (3225 obs, 435 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:28 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0062/CVCL_0062_processed_batch_3.h5ad (3222 obs, 435 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:29 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0062/CVCL_0062_processed_batch_4.h5ad (3222 obs, 436 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:30 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0062/CVCL_0062_processed_batch_5.h5ad (3223 obs, 435 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:30 | [INFO] Splitting CVCL_0062 is done
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:30 | [INFO] Splitting CVCL_0063: 11277 obs, 10565 perturbation labels
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:30 | [INFO]   After separation: 1846 perturbagens, 10564 non-control obs, 10564 non-control labels
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:30 | [INFO]   Create batches
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:43 | [INFO]   Pad batches
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:56 | [INFO]   1 batches need to be padded
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:56 | [INFO]   After padding before adding controls: 5 batches, batch sizes: ['2505 x 2505', '2501 x 2501', '2503 x 2503', '2500 x 2500', '2501 x 2501']
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:56 | [INFO]   Add controls to batches
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:56 | [INFO]   Save batches:
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:57 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0063/CVCL_0063_processed_batch_1.h5ad (3218 obs, 441 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:58 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0063/CVCL_0063_processed_batch_2.h5ad (3214 obs, 438 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:04:59 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0063/CVCL_0063_processed_batch_3.h5ad (3216 obs, 438 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:05:00 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0063/CVCL_0063_processed_batch_4.h5ad (3213 obs, 436 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:05:01 | [INFO]   Saved: ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp/CVCL_0063/CVCL_0063_processed_batch_5.h5ad (3214 obs, 438 perturbagens)
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:05:01 | [INFO] Splitting CVCL_0063 is done
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:05:01 | [INFO] Moved temporary file ./data/cigs_tcm/pseudobulk_processed/sep_rep/file_tmp.h5ad to ./data/cigs_tcm/pseudobulk_processed/sep_rep/cigs_tcm_processed.h5ad
+deg_processing_pseudobulk.35496564.out:2026-04-23 23:05:01 | [INFO] Moved temporary directory ./data/cigs_tcm/pseudobulk_processed/sep_rep/tmp to ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:03:53 | [WARNING] Filtering out 107 genes that could not be mapped (deprecated with no replacement or multiple replacements)
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:00 | [WARNING]   Non-control n_obs (10548) exceeds 2500, creating batches
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:25 | [WARNING]   Batch 1 has only 441 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:25 | [WARNING]   Batch 2 has only 435 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:25 | [WARNING]   Batch 3 has only 435 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:25 | [WARNING]   Batch 4 has only 436 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:25 | [WARNING]   Batch 5 has only 435 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:30 | [WARNING]   Non-control n_obs (10564) exceeds 2500, creating batches
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:56 | [WARNING]   Batch 1 has only 441 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:56 | [WARNING]   Batch 2 has only 438 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:56 | [WARNING]   Batch 3 has only 438 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:56 | [WARNING]   Batch 4 has only 436 perturbagens, which is below the minimum of 500
+deg_processing_pseudobulk.35496564.err:2026-04-23 23:04:56 | [WARNING]   Batch 5 has only 438 perturbagens, which is below the minimum of 500
+deg_analysis.35496583_0.out:
+deg_analysis.35496583_0.out:DE analysis started...
+deg_analysis.35496583_0.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0062/CVCL_0062_processed_batch_1.h5ad
+deg_analysis.35496583_0.out:Initial dimensions:  3224  samples ×  3300  genes
+deg_analysis.35496583_0.out:Filter samples with the low number of cells
+deg_analysis.35496583_0.out:    Filter threshold (min_cells):  0
+deg_analysis.35496583_0.out:    Found  3224  samples with sentinel value (-666), keeping all
+deg_analysis.35496583_0.out:    n_obs:  3224 -->  3224
+deg_analysis.35496583_0.out:
+deg_analysis.35496583_0.out:▶︎ Processing cell_type:  CVCL_0062
+deg_analysis.35496583_0.out:    Filter controls by  pert_time_h  column
+deg_analysis.35496583_0.out:        n_obs:  3224 -->  3224
+deg_analysis.35496583_0.out:
+deg_analysis.35496583_0.out:    Constructing design matrix...
+deg_analysis.35496583_0.out:    Design matrix is constructed in 0.4 seconds
+deg_analysis.35496583_0.out:    Design matrix dimensions: 3224 samples × 2544 coefficients
+deg_analysis.35496583_0.out:    Filtering genes and normalizing counts...
+deg_analysis.35496583_0.out:    Genes are filtered and normalized in 32.4 seconds
+deg_analysis.35496583_0.out:    Running voom...
+deg_analysis.35496583_0.out:    Voom is completed in 43.5 seconds
+deg_analysis.35496583_0.out:    Running lmFit...
+deg_analysis.35496583_0.out:    LmFit is completed in 12450.4 seconds
+deg_analysis.35496583_0.out:DGE fit is completed in 12528.0 seconds
+deg_analysis.35496583_0.out:    Running contrasts...
+deg_analysis.35496583_0.out:    Running contrast 1/2504
+deg_analysis.35496583_0.out:    Running contrast 51/2504
+deg_analysis.35496583_0.out:    Running contrast 101/2504
+deg_analysis.35496583_0.out:    Running contrast 151/2504
+deg_analysis.35496583_0.out:    Running contrast 201/2504
+deg_analysis.35496583_0.out:    Running contrast 251/2504
+deg_analysis.35496583_0.out:    Running contrast 301/2504
+deg_analysis.35496583_0.out:    Running contrast 351/2504
+deg_analysis.35496583_0.out:    Running contrast 401/2504
+deg_analysis.35496583_0.out:    Running contrast 451/2504
+deg_analysis.35496583_0.out:    Running contrast 501/2504
+deg_analysis.35496583_0.out:    Running contrast 551/2504
+deg_analysis.35496583_0.out:    Running contrast 601/2504
+deg_analysis.35496583_0.out:    Running contrast 651/2504
+deg_analysis.35496583_0.out:    Running contrast 701/2504
+deg_analysis.35496583_0.out:    Running contrast 751/2504
+deg_analysis.35496583_0.out:    Running contrast 801/2504
+deg_analysis.35496583_0.out:    Running contrast 851/2504
+deg_analysis.35496583_0.out:    Running contrast 901/2504
+deg_analysis.35496583_0.out:    Running contrast 951/2504
+deg_analysis.35496583_0.out:    Running contrast 1001/2504
+deg_analysis.35496583_0.out:    Running contrast 1051/2504
+deg_analysis.35496583_0.out:    Running contrast 1101/2504
+deg_analysis.35496583_0.out:    Running contrast 1151/2504
+deg_analysis.35496583_0.out:    Running contrast 1201/2504
+deg_analysis.35496583_0.out:    Running contrast 1251/2504
+deg_analysis.35496583_0.out:    Running contrast 1301/2504
+deg_analysis.35496583_0.out:    Running contrast 1351/2504
+deg_analysis.35496583_0.out:    Running contrast 1401/2504
+deg_analysis.35496583_0.out:    Running contrast 1451/2504
+deg_analysis.35496583_0.out:    Running contrast 1501/2504
+deg_analysis.35496583_0.out:    Running contrast 1551/2504
+deg_analysis.35496583_0.out:    Running contrast 1601/2504
+deg_analysis.35496583_0.out:    Running contrast 1651/2504
+deg_analysis.35496583_0.out:    Running contrast 1701/2504
+deg_analysis.35496583_0.out:    Running contrast 1751/2504
+deg_analysis.35496583_0.out:    Running contrast 1801/2504
+deg_analysis.35496583_0.out:    Running contrast 1851/2504
+deg_analysis.35496583_0.out:    Running contrast 1901/2504
+deg_analysis.35496583_0.out:    Running contrast 1951/2504
+deg_analysis.35496583_0.out:    Running contrast 2001/2504
+deg_analysis.35496583_0.out:    Running contrast 2051/2504
+deg_analysis.35496583_0.out:    Running contrast 2101/2504
+deg_analysis.35496583_0.out:    Running contrast 2151/2504
+deg_analysis.35496583_0.out:    Running contrast 2201/2504
+deg_analysis.35496583_0.out:    Running contrast 2251/2504
+deg_analysis.35496583_0.out:    Running contrast 2301/2504
+deg_analysis.35496583_0.out:    Running contrast 2351/2504
+deg_analysis.35496583_0.out:    Running contrast 2401/2504
+deg_analysis.35496583_0.out:    Running contrast 2451/2504
+deg_analysis.35496583_0.out:    Running contrast 2501/2504
+deg_analysis.35496583_0.out:    Running contrast 2504/2504
+deg_analysis.35496583_0.out:Contrasts are completed in 6660.8 seconds
+deg_analysis.35496583_0.out:
+deg_analysis.35496583_0.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_1_de.h5ad
+deg_analysis.35496583_0.out:
+deg_analysis.35496583_0.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_1_de.h5ad
+deg_analysis.35496583_0.out:    Removed X matrix
+deg_analysis.35496583_0.out:    Rewriting h5ad file is done!
+deg_analysis.35496583_0.out:✓ Cell line completed in 19225.3 seconds
+deg_analysis.35496583_0.out:
+deg_analysis.35496583_0.out:DE analysis completed!
+deg_analysis.35496583_0.out:
+deg_analysis.35496583_0.out:Total runtime: 19235.0 seconds
+deg_analysis.35496583_0.err:During startup - Warning messages:
+deg_analysis.35496583_0.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.35496583_0.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.35496583_0.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.35496583_0.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.35496583_0.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.35496583_0.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.35496583_0.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.35496584_1.out:
+deg_analysis.35496584_1.out:DE analysis started...
+deg_analysis.35496584_1.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0062/CVCL_0062_processed_batch_2.h5ad
+deg_analysis.35496584_1.out:Initial dimensions:  3225  samples ×  3300  genes
+deg_analysis.35496584_1.out:Filter samples with the low number of cells
+deg_analysis.35496584_1.out:    Filter threshold (min_cells):  0
+deg_analysis.35496584_1.out:    Found  3225  samples with sentinel value (-666), keeping all
+deg_analysis.35496584_1.out:    n_obs:  3225 -->  3225
+deg_analysis.35496584_1.out:
+deg_analysis.35496584_1.out:▶︎ Processing cell_type:  CVCL_0062
+deg_analysis.35496584_1.out:    Filter controls by  pert_time_h  column
+deg_analysis.35496584_1.out:        n_obs:  3225 -->  3225
+deg_analysis.35496584_1.out:
+deg_analysis.35496584_1.out:    Constructing design matrix...
+deg_analysis.35496584_1.out:    Design matrix is constructed in 0.4 seconds
+deg_analysis.35496584_1.out:    Design matrix dimensions: 3225 samples × 2545 coefficients
+deg_analysis.35496584_1.out:    Filtering genes and normalizing counts...
+deg_analysis.35496584_1.out:    Genes are filtered and normalized in 32.7 seconds
+deg_analysis.35496584_1.out:    Running voom...
+deg_analysis.35496584_1.out:    Voom is completed in 43.9 seconds
+deg_analysis.35496584_1.out:    Running lmFit...
+deg_analysis.35496584_1.out:    LmFit is completed in 12345.2 seconds
+deg_analysis.35496584_1.out:DGE fit is completed in 12423.4 seconds
+deg_analysis.35496584_1.out:    Running contrasts...
+deg_analysis.35496584_1.out:    Running contrast 1/2505
+deg_analysis.35496584_1.out:    Running contrast 51/2505
+deg_analysis.35496584_1.out:    Running contrast 101/2505
+deg_analysis.35496584_1.out:    Running contrast 151/2505
+deg_analysis.35496584_1.out:    Running contrast 201/2505
+deg_analysis.35496584_1.out:    Running contrast 251/2505
+deg_analysis.35496584_1.out:    Running contrast 301/2505
+deg_analysis.35496584_1.out:    Running contrast 351/2505
+deg_analysis.35496584_1.out:    Running contrast 401/2505
+deg_analysis.35496584_1.out:    Running contrast 451/2505
+deg_analysis.35496584_1.out:    Running contrast 501/2505
+deg_analysis.35496584_1.out:    Running contrast 551/2505
+deg_analysis.35496584_1.out:    Running contrast 601/2505
+deg_analysis.35496584_1.out:    Running contrast 651/2505
+deg_analysis.35496584_1.out:    Running contrast 701/2505
+deg_analysis.35496584_1.out:    Running contrast 751/2505
+deg_analysis.35496584_1.out:    Running contrast 801/2505
+deg_analysis.35496584_1.out:    Running contrast 851/2505
+deg_analysis.35496584_1.out:    Running contrast 901/2505
+deg_analysis.35496584_1.out:    Running contrast 951/2505
+deg_analysis.35496584_1.out:    Running contrast 1001/2505
+deg_analysis.35496584_1.out:    Running contrast 1051/2505
+deg_analysis.35496584_1.out:    Running contrast 1101/2505
+deg_analysis.35496584_1.out:    Running contrast 1151/2505
+deg_analysis.35496584_1.out:    Running contrast 1201/2505
+deg_analysis.35496584_1.out:    Running contrast 1251/2505
+deg_analysis.35496584_1.out:    Running contrast 1301/2505
+deg_analysis.35496584_1.out:    Running contrast 1351/2505
+deg_analysis.35496584_1.out:    Running contrast 1401/2505
+deg_analysis.35496584_1.out:    Running contrast 1451/2505
+deg_analysis.35496584_1.out:    Running contrast 1501/2505
+deg_analysis.35496584_1.out:    Running contrast 1551/2505
+deg_analysis.35496584_1.out:    Running contrast 1601/2505
+deg_analysis.35496584_1.out:    Running contrast 1651/2505
+deg_analysis.35496584_1.out:    Running contrast 1701/2505
+deg_analysis.35496584_1.out:    Running contrast 1751/2505
+deg_analysis.35496584_1.out:    Running contrast 1801/2505
+deg_analysis.35496584_1.out:    Running contrast 1851/2505
+deg_analysis.35496584_1.out:    Running contrast 1901/2505
+deg_analysis.35496584_1.out:    Running contrast 1951/2505
+deg_analysis.35496584_1.out:    Running contrast 2001/2505
+deg_analysis.35496584_1.out:    Running contrast 2051/2505
+deg_analysis.35496584_1.out:    Running contrast 2101/2505
+deg_analysis.35496584_1.out:    Running contrast 2151/2505
+deg_analysis.35496584_1.out:    Running contrast 2201/2505
+deg_analysis.35496584_1.out:    Running contrast 2251/2505
+deg_analysis.35496584_1.out:    Running contrast 2301/2505
+deg_analysis.35496584_1.out:    Running contrast 2351/2505
+deg_analysis.35496584_1.out:    Running contrast 2401/2505
+deg_analysis.35496584_1.out:    Running contrast 2451/2505
+deg_analysis.35496584_1.out:    Running contrast 2501/2505
+deg_analysis.35496584_1.out:    Running contrast 2505/2505
+deg_analysis.35496584_1.out:Contrasts are completed in 6758.4 seconds
+deg_analysis.35496584_1.out:
+deg_analysis.35496584_1.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_2_de.h5ad
+deg_analysis.35496584_1.out:
+deg_analysis.35496584_1.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_2_de.h5ad
+deg_analysis.35496584_1.out:    Removed X matrix
+deg_analysis.35496584_1.out:    Rewriting h5ad file is done!
+deg_analysis.35496584_1.out:✓ Cell line completed in 19218.7 seconds
+deg_analysis.35496584_1.out:
+deg_analysis.35496584_1.out:DE analysis completed!
+deg_analysis.35496584_1.out:
+deg_analysis.35496584_1.out:Total runtime: 19228.3 seconds
+deg_analysis.35496584_1.err:During startup - Warning messages:
+deg_analysis.35496584_1.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.35496584_1.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.35496584_1.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.35496584_1.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.35496584_1.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.35496584_1.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.35496584_1.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.35496585_2.out:
+deg_analysis.35496585_2.out:DE analysis started...
+deg_analysis.35496585_2.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0062/CVCL_0062_processed_batch_3.h5ad
+deg_analysis.35496585_2.out:Initial dimensions:  3222  samples ×  3300  genes
+deg_analysis.35496585_2.out:Filter samples with the low number of cells
+deg_analysis.35496585_2.out:    Filter threshold (min_cells):  0
+deg_analysis.35496585_2.out:    Found  3222  samples with sentinel value (-666), keeping all
+deg_analysis.35496585_2.out:    n_obs:  3222 -->  3222
+deg_analysis.35496585_2.out:
+deg_analysis.35496585_2.out:▶︎ Processing cell_type:  CVCL_0062
+deg_analysis.35496585_2.out:    Filter controls by  pert_time_h  column
+deg_analysis.35496585_2.out:        n_obs:  3222 -->  3222
+deg_analysis.35496585_2.out:
+deg_analysis.35496585_2.out:    Constructing design matrix...
+deg_analysis.35496585_2.out:    Design matrix is constructed in 0.4 seconds
+deg_analysis.35496585_2.out:    Design matrix dimensions: 3222 samples × 2542 coefficients
+deg_analysis.35496585_2.out:    Filtering genes and normalizing counts...
+deg_analysis.35496585_2.out:    Genes are filtered and normalized in 32.8 seconds
+deg_analysis.35496585_2.out:    Running voom...
+deg_analysis.35496585_2.out:    Voom is completed in 44.1 seconds
+deg_analysis.35496585_2.out:    Running lmFit...
+deg_analysis.35496585_2.out:    LmFit is completed in 12413.0 seconds
+deg_analysis.35496585_2.out:DGE fit is completed in 12491.6 seconds
+deg_analysis.35496585_2.out:    Running contrasts...
+deg_analysis.35496585_2.out:    Running contrast 1/2502
+deg_analysis.35496585_2.out:    Running contrast 51/2502
+deg_analysis.35496585_2.out:    Running contrast 101/2502
+deg_analysis.35496585_2.out:    Running contrast 151/2502
+deg_analysis.35496585_2.out:    Running contrast 201/2502
+deg_analysis.35496585_2.out:    Running contrast 251/2502
+deg_analysis.35496585_2.out:    Running contrast 301/2502
+deg_analysis.35496585_2.out:    Running contrast 351/2502
+deg_analysis.35496585_2.out:    Running contrast 401/2502
+deg_analysis.35496585_2.out:    Running contrast 451/2502
+deg_analysis.35496585_2.out:    Running contrast 501/2502
+deg_analysis.35496585_2.out:    Running contrast 551/2502
+deg_analysis.35496585_2.out:    Running contrast 601/2502
+deg_analysis.35496585_2.out:    Running contrast 651/2502
+deg_analysis.35496585_2.out:    Running contrast 701/2502
+deg_analysis.35496585_2.out:    Running contrast 751/2502
+deg_analysis.35496585_2.out:    Running contrast 801/2502
+deg_analysis.35496585_2.out:    Running contrast 851/2502
+deg_analysis.35496585_2.out:    Running contrast 901/2502
+deg_analysis.35496585_2.out:    Running contrast 951/2502
+deg_analysis.35496585_2.out:    Running contrast 1001/2502
+deg_analysis.35496585_2.out:    Running contrast 1051/2502
+deg_analysis.35496585_2.out:    Running contrast 1101/2502
+deg_analysis.35496585_2.out:    Running contrast 1151/2502
+deg_analysis.35496585_2.out:    Running contrast 1201/2502
+deg_analysis.35496585_2.out:    Running contrast 1251/2502
+deg_analysis.35496585_2.out:    Running contrast 1301/2502
+deg_analysis.35496585_2.out:    Running contrast 1351/2502
+deg_analysis.35496585_2.out:    Running contrast 1401/2502
+deg_analysis.35496585_2.out:    Running contrast 1451/2502
+deg_analysis.35496585_2.out:    Running contrast 1501/2502
+deg_analysis.35496585_2.out:    Running contrast 1551/2502
+deg_analysis.35496585_2.out:    Running contrast 1601/2502
+deg_analysis.35496585_2.out:    Running contrast 1651/2502
+deg_analysis.35496585_2.out:    Running contrast 1701/2502
+deg_analysis.35496585_2.out:    Running contrast 1751/2502
+deg_analysis.35496585_2.out:    Running contrast 1801/2502
+deg_analysis.35496585_2.out:    Running contrast 1851/2502
+deg_analysis.35496585_2.out:    Running contrast 1901/2502
+deg_analysis.35496585_2.out:    Running contrast 1951/2502
+deg_analysis.35496585_2.out:    Running contrast 2001/2502
+deg_analysis.35496585_2.out:    Running contrast 2051/2502
+deg_analysis.35496585_2.out:    Running contrast 2101/2502
+deg_analysis.35496585_2.out:    Running contrast 2151/2502
+deg_analysis.35496585_2.out:    Running contrast 2201/2502
+deg_analysis.35496585_2.out:    Running contrast 2251/2502
+deg_analysis.35496585_2.out:    Running contrast 2301/2502
+deg_analysis.35496585_2.out:    Running contrast 2351/2502
+deg_analysis.35496585_2.out:    Running contrast 2401/2502
+deg_analysis.35496585_2.out:    Running contrast 2451/2502
+deg_analysis.35496585_2.out:    Running contrast 2501/2502
+deg_analysis.35496585_2.out:    Running contrast 2502/2502
+deg_analysis.35496585_2.out:Contrasts are completed in 6766.6 seconds
+deg_analysis.35496585_2.out:
+deg_analysis.35496585_2.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_3_de.h5ad
+deg_analysis.35496585_2.out:
+deg_analysis.35496585_2.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_3_de.h5ad
+deg_analysis.35496585_2.out:    Removed X matrix
+deg_analysis.35496585_2.out:    Rewriting h5ad file is done!
+deg_analysis.35496585_2.out:✓ Cell line completed in 19293.6 seconds
+deg_analysis.35496585_2.out:
+deg_analysis.35496585_2.out:DE analysis completed!
+deg_analysis.35496585_2.out:
+deg_analysis.35496585_2.out:Total runtime: 19303.3 seconds
+deg_analysis.35496585_2.err:During startup - Warning messages:
+deg_analysis.35496585_2.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.35496585_2.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.35496585_2.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.35496585_2.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.35496585_2.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.35496585_2.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.35496585_2.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.35496586_3.out:
+deg_analysis.35496586_3.out:DE analysis started...
+deg_analysis.35496586_3.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0062/CVCL_0062_processed_batch_4.h5ad
+deg_analysis.35496586_3.out:Initial dimensions:  3222  samples ×  3300  genes
+deg_analysis.35496586_3.out:Filter samples with the low number of cells
+deg_analysis.35496586_3.out:    Filter threshold (min_cells):  0
+deg_analysis.35496586_3.out:    Found  3222  samples with sentinel value (-666), keeping all
+deg_analysis.35496586_3.out:    n_obs:  3222 -->  3222
+deg_analysis.35496586_3.out:
+deg_analysis.35496586_3.out:▶︎ Processing cell_type:  CVCL_0062
+deg_analysis.35496586_3.out:    Filter controls by  pert_time_h  column
+deg_analysis.35496586_3.out:        n_obs:  3222 -->  3222
+deg_analysis.35496586_3.out:
+deg_analysis.35496586_3.out:    Constructing design matrix...
+deg_analysis.35496586_3.out:    Design matrix is constructed in 0.4 seconds
+deg_analysis.35496586_3.out:    Design matrix dimensions: 3222 samples × 2542 coefficients
+deg_analysis.35496586_3.out:    Filtering genes and normalizing counts...
+deg_analysis.35496586_3.out:    Genes are filtered and normalized in 32.6 seconds
+deg_analysis.35496586_3.out:    Running voom...
+deg_analysis.35496586_3.out:    Voom is completed in 43.9 seconds
+deg_analysis.35496586_3.out:    Running lmFit...
+deg_analysis.35496586_3.out:    LmFit is completed in 12365.2 seconds
+deg_analysis.35496586_3.out:DGE fit is completed in 12443.4 seconds
+deg_analysis.35496586_3.out:    Running contrasts...
+deg_analysis.35496586_3.out:    Running contrast 1/2502
+deg_analysis.35496586_3.out:    Running contrast 51/2502
+deg_analysis.35496586_3.out:    Running contrast 101/2502
+deg_analysis.35496586_3.out:    Running contrast 151/2502
+deg_analysis.35496586_3.out:    Running contrast 201/2502
+deg_analysis.35496586_3.out:    Running contrast 251/2502
+deg_analysis.35496586_3.out:    Running contrast 301/2502
+deg_analysis.35496586_3.out:    Running contrast 351/2502
+deg_analysis.35496586_3.out:    Running contrast 401/2502
+deg_analysis.35496586_3.out:    Running contrast 451/2502
+deg_analysis.35496586_3.out:    Running contrast 501/2502
+deg_analysis.35496586_3.out:    Running contrast 551/2502
+deg_analysis.35496586_3.out:    Running contrast 601/2502
+deg_analysis.35496586_3.out:    Running contrast 651/2502
+deg_analysis.35496586_3.out:    Running contrast 701/2502
+deg_analysis.35496586_3.out:    Running contrast 751/2502
+deg_analysis.35496586_3.out:    Running contrast 801/2502
+deg_analysis.35496586_3.out:    Running contrast 851/2502
+deg_analysis.35496586_3.out:    Running contrast 901/2502
+deg_analysis.35496586_3.out:    Running contrast 951/2502
+deg_analysis.35496586_3.out:    Running contrast 1001/2502
+deg_analysis.35496586_3.out:    Running contrast 1051/2502
+deg_analysis.35496586_3.out:    Running contrast 1101/2502
+deg_analysis.35496586_3.out:    Running contrast 1151/2502
+deg_analysis.35496586_3.out:    Running contrast 1201/2502
+deg_analysis.35496586_3.out:    Running contrast 1251/2502
+deg_analysis.35496586_3.out:    Running contrast 1301/2502
+deg_analysis.35496586_3.out:    Running contrast 1351/2502
+deg_analysis.35496586_3.out:    Running contrast 1401/2502
+deg_analysis.35496586_3.out:    Running contrast 1451/2502
+deg_analysis.35496586_3.out:    Running contrast 1501/2502
+deg_analysis.35496586_3.out:    Running contrast 1551/2502
+deg_analysis.35496586_3.out:    Running contrast 1601/2502
+deg_analysis.35496586_3.out:    Running contrast 1651/2502
+deg_analysis.35496586_3.out:    Running contrast 1701/2502
+deg_analysis.35496586_3.out:    Running contrast 1751/2502
+deg_analysis.35496586_3.out:    Running contrast 1801/2502
+deg_analysis.35496586_3.out:    Running contrast 1851/2502
+deg_analysis.35496586_3.out:    Running contrast 1901/2502
+deg_analysis.35496586_3.out:    Running contrast 1951/2502
+deg_analysis.35496586_3.out:    Running contrast 2001/2502
+deg_analysis.35496586_3.out:    Running contrast 2051/2502
+deg_analysis.35496586_3.out:    Running contrast 2101/2502
+deg_analysis.35496586_3.out:    Running contrast 2151/2502
+deg_analysis.35496586_3.out:    Running contrast 2201/2502
+deg_analysis.35496586_3.out:    Running contrast 2251/2502
+deg_analysis.35496586_3.out:    Running contrast 2301/2502
+deg_analysis.35496586_3.out:    Running contrast 2351/2502
+deg_analysis.35496586_3.out:    Running contrast 2401/2502
+deg_analysis.35496586_3.out:    Running contrast 2451/2502
+deg_analysis.35496586_3.out:    Running contrast 2501/2502
+deg_analysis.35496586_3.out:    Running contrast 2502/2502
+deg_analysis.35496586_3.out:Contrasts are completed in 6752.5 seconds
+deg_analysis.35496586_3.out:
+deg_analysis.35496586_3.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_4_de.h5ad
+deg_analysis.35496586_3.out:
+deg_analysis.35496586_3.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_4_de.h5ad
+deg_analysis.35496586_3.out:    Removed X matrix
+deg_analysis.35496586_3.out:    Rewriting h5ad file is done!
+deg_analysis.35496586_3.out:✓ Cell line completed in 19231.5 seconds
+deg_analysis.35496586_3.out:
+deg_analysis.35496586_3.out:DE analysis completed!
+deg_analysis.35496586_3.out:
+deg_analysis.35496586_3.out:Total runtime: 19241.2 seconds
+deg_analysis.35496586_3.err:During startup - Warning messages:
+deg_analysis.35496586_3.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.35496586_3.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.35496586_3.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.35496586_3.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.35496586_3.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.35496586_3.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.35496586_3.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.35496587_4.out:
+deg_analysis.35496587_4.out:DE analysis started...
+deg_analysis.35496587_4.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0062/CVCL_0062_processed_batch_5.h5ad
+deg_analysis.35496587_4.out:Initial dimensions:  3223  samples ×  3300  genes
+deg_analysis.35496587_4.out:Filter samples with the low number of cells
+deg_analysis.35496587_4.out:    Filter threshold (min_cells):  0
+deg_analysis.35496587_4.out:    Found  3223  samples with sentinel value (-666), keeping all
+deg_analysis.35496587_4.out:    n_obs:  3223 -->  3223
+deg_analysis.35496587_4.out:
+deg_analysis.35496587_4.out:▶︎ Processing cell_type:  CVCL_0062
+deg_analysis.35496587_4.out:    Filter controls by  pert_time_h  column
+deg_analysis.35496587_4.out:        n_obs:  3223 -->  3223
+deg_analysis.35496587_4.out:
+deg_analysis.35496587_4.out:    Constructing design matrix...
+deg_analysis.35496587_4.out:    Design matrix is constructed in 0.4 seconds
+deg_analysis.35496587_4.out:    Design matrix dimensions: 3223 samples × 2543 coefficients
+deg_analysis.35496587_4.out:    Filtering genes and normalizing counts...
+deg_analysis.35496587_4.out:    Genes are filtered and normalized in 31.5 seconds
+deg_analysis.35496587_4.out:    Running voom...
+deg_analysis.35496587_4.out:    Voom is completed in 44.1 seconds
+deg_analysis.35496587_4.out:    Running lmFit...
+deg_analysis.35496587_4.out:    LmFit is completed in 12433.4 seconds
+deg_analysis.35496587_4.out:DGE fit is completed in 12510.7 seconds
+deg_analysis.35496587_4.out:    Running contrasts...
+deg_analysis.35496587_4.out:    Running contrast 1/2503
+deg_analysis.35496587_4.out:    Running contrast 51/2503
+deg_analysis.35496587_4.out:    Running contrast 101/2503
+deg_analysis.35496587_4.out:    Running contrast 151/2503
+deg_analysis.35496587_4.out:    Running contrast 201/2503
+deg_analysis.35496587_4.out:    Running contrast 251/2503
+deg_analysis.35496587_4.out:    Running contrast 301/2503
+deg_analysis.35496587_4.out:    Running contrast 351/2503
+deg_analysis.35496587_4.out:    Running contrast 401/2503
+deg_analysis.35496587_4.out:    Running contrast 451/2503
+deg_analysis.35496587_4.out:    Running contrast 501/2503
+deg_analysis.35496587_4.out:    Running contrast 551/2503
+deg_analysis.35496587_4.out:    Running contrast 601/2503
+deg_analysis.35496587_4.out:    Running contrast 651/2503
+deg_analysis.35496587_4.out:    Running contrast 701/2503
+deg_analysis.35496587_4.out:    Running contrast 751/2503
+deg_analysis.35496587_4.out:    Running contrast 801/2503
+deg_analysis.35496587_4.out:    Running contrast 851/2503
+deg_analysis.35496587_4.out:    Running contrast 901/2503
+deg_analysis.35496587_4.out:    Running contrast 951/2503
+deg_analysis.35496587_4.out:    Running contrast 1001/2503
+deg_analysis.35496587_4.out:    Running contrast 1051/2503
+deg_analysis.35496587_4.out:    Running contrast 1101/2503
+deg_analysis.35496587_4.out:    Running contrast 1151/2503
+deg_analysis.35496587_4.out:    Running contrast 1201/2503
+deg_analysis.35496587_4.out:    Running contrast 1251/2503
+deg_analysis.35496587_4.out:    Running contrast 1301/2503
+deg_analysis.35496587_4.out:    Running contrast 1351/2503
+deg_analysis.35496587_4.out:    Running contrast 1401/2503
+deg_analysis.35496587_4.out:    Running contrast 1451/2503
+deg_analysis.35496587_4.out:    Running contrast 1501/2503
+deg_analysis.35496587_4.out:    Running contrast 1551/2503
+deg_analysis.35496587_4.out:    Running contrast 1601/2503
+deg_analysis.35496587_4.out:    Running contrast 1651/2503
+deg_analysis.35496587_4.out:    Running contrast 1701/2503
+deg_analysis.35496587_4.out:    Running contrast 1751/2503
+deg_analysis.35496587_4.out:    Running contrast 1801/2503
+deg_analysis.35496587_4.out:    Running contrast 1851/2503
+deg_analysis.35496587_4.out:    Running contrast 1901/2503
+deg_analysis.35496587_4.out:    Running contrast 1951/2503
+deg_analysis.35496587_4.out:    Running contrast 2001/2503
+deg_analysis.35496587_4.out:    Running contrast 2051/2503
+deg_analysis.35496587_4.out:    Running contrast 2101/2503
+deg_analysis.35496587_4.out:    Running contrast 2151/2503
+deg_analysis.35496587_4.out:    Running contrast 2201/2503
+deg_analysis.35496587_4.out:    Running contrast 2251/2503
+deg_analysis.35496587_4.out:    Running contrast 2301/2503
+deg_analysis.35496587_4.out:    Running contrast 2351/2503
+deg_analysis.35496587_4.out:    Running contrast 2401/2503
+deg_analysis.35496587_4.out:    Running contrast 2451/2503
+deg_analysis.35496587_4.out:    Running contrast 2501/2503
+deg_analysis.35496587_4.out:    Running contrast 2503/2503
+deg_analysis.35496587_4.out:Contrasts are completed in 6763.0 seconds
+deg_analysis.35496587_4.out:
+deg_analysis.35496587_4.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_5_de.h5ad
+deg_analysis.35496587_4.out:
+deg_analysis.35496587_4.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0062/CVCL_0062_batch_5_de.h5ad
+deg_analysis.35496587_4.out:    Removed X matrix
+deg_analysis.35496587_4.out:    Rewriting h5ad file is done!
+deg_analysis.35496587_4.out:✓ Cell line completed in 19309.0 seconds
+deg_analysis.35496587_4.out:
+deg_analysis.35496587_4.out:DE analysis completed!
+deg_analysis.35496587_4.out:
+deg_analysis.35496587_4.out:Total runtime: 19318.7 seconds
+deg_analysis.35496587_4.err:During startup - Warning messages:
+deg_analysis.35496587_4.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.35496587_4.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.35496587_4.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.35496587_4.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.35496587_4.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.35496587_4.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.35496587_4.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.35496588_5.out:
+deg_analysis.35496588_5.out:DE analysis started...
+deg_analysis.35496588_5.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0063/CVCL_0063_processed_batch_1.h5ad
+deg_analysis.35496588_5.out:Initial dimensions:  3218  samples ×  3300  genes
+deg_analysis.35496588_5.out:Filter samples with the low number of cells
+deg_analysis.35496588_5.out:    Filter threshold (min_cells):  0
+deg_analysis.35496588_5.out:    Found  3218  samples with sentinel value (-666), keeping all
+deg_analysis.35496588_5.out:    n_obs:  3218 -->  3218
+deg_analysis.35496588_5.out:
+deg_analysis.35496588_5.out:▶︎ Processing cell_type:  CVCL_0063
+deg_analysis.35496588_5.out:    Filter controls by  pert_time_h  column
+deg_analysis.35496588_5.out:        n_obs:  3218 -->  3218
+deg_analysis.35496588_5.out:
+deg_analysis.35496588_5.out:    Constructing design matrix...
+deg_analysis.35496588_5.out:    Design matrix is constructed in 0.4 seconds
+deg_analysis.35496588_5.out:    Design matrix dimensions: 3218 samples × 2545 coefficients
+deg_analysis.35496588_5.out:    Filtering genes and normalizing counts...
+deg_analysis.35496588_5.out:    Genes are filtered and normalized in 32.6 seconds
+deg_analysis.35496588_5.out:    Running voom...
+deg_analysis.35496588_5.out:    Voom is completed in 43.4 seconds
+deg_analysis.35496588_5.out:    Running lmFit...
+deg_analysis.35496588_5.out:    LmFit is completed in 12084.7 seconds
+deg_analysis.35496588_5.out:DGE fit is completed in 12162.2 seconds
+deg_analysis.35496588_5.out:    Running contrasts...
+deg_analysis.35496588_5.out:    Running contrast 1/2505
+deg_analysis.35496588_5.out:    Running contrast 51/2505
+deg_analysis.35496588_5.out:    Running contrast 101/2505
+deg_analysis.35496588_5.out:    Running contrast 151/2505
+deg_analysis.35496588_5.out:    Running contrast 201/2505
+deg_analysis.35496588_5.out:    Running contrast 251/2505
+deg_analysis.35496588_5.out:    Running contrast 301/2505
+deg_analysis.35496588_5.out:    Running contrast 351/2505
+deg_analysis.35496588_5.out:    Running contrast 401/2505
+deg_analysis.35496588_5.out:    Running contrast 451/2505
+deg_analysis.35496588_5.out:    Running contrast 501/2505
+deg_analysis.35496588_5.out:    Running contrast 551/2505
+deg_analysis.35496588_5.out:    Running contrast 601/2505
+deg_analysis.35496588_5.out:    Running contrast 651/2505
+deg_analysis.35496588_5.out:    Running contrast 701/2505
+deg_analysis.35496588_5.out:    Running contrast 751/2505
+deg_analysis.35496588_5.out:    Running contrast 801/2505
+deg_analysis.35496588_5.out:    Running contrast 851/2505
+deg_analysis.35496588_5.out:    Running contrast 901/2505
+deg_analysis.35496588_5.out:    Running contrast 951/2505
+deg_analysis.35496588_5.out:    Running contrast 1001/2505
+deg_analysis.35496588_5.out:    Running contrast 1051/2505
+deg_analysis.35496588_5.out:    Running contrast 1101/2505
+deg_analysis.35496588_5.out:    Running contrast 1151/2505
+deg_analysis.35496588_5.out:    Running contrast 1201/2505
+deg_analysis.35496588_5.out:    Running contrast 1251/2505
+deg_analysis.35496588_5.out:    Running contrast 1301/2505
+deg_analysis.35496588_5.out:    Running contrast 1351/2505
+deg_analysis.35496588_5.out:    Running contrast 1401/2505
+deg_analysis.35496588_5.out:    Running contrast 1451/2505
+deg_analysis.35496588_5.out:    Running contrast 1501/2505
+deg_analysis.35496588_5.out:    Running contrast 1551/2505
+deg_analysis.35496588_5.out:    Running contrast 1601/2505
+deg_analysis.35496588_5.out:    Running contrast 1651/2505
+deg_analysis.35496588_5.out:    Running contrast 1701/2505
+deg_analysis.35496588_5.out:    Running contrast 1751/2505
+deg_analysis.35496588_5.out:    Running contrast 1801/2505
+deg_analysis.35496588_5.out:    Running contrast 1851/2505
+deg_analysis.35496588_5.out:    Running contrast 1901/2505
+deg_analysis.35496588_5.out:    Running contrast 1951/2505
+deg_analysis.35496588_5.out:    Running contrast 2001/2505
+deg_analysis.35496588_5.out:    Running contrast 2051/2505
+deg_analysis.35496588_5.out:    Running contrast 2101/2505
+deg_analysis.35496588_5.out:    Running contrast 2151/2505
+deg_analysis.35496588_5.out:    Running contrast 2201/2505
+deg_analysis.35496588_5.out:    Running contrast 2251/2505
+deg_analysis.35496588_5.out:    Running contrast 2301/2505
+deg_analysis.35496588_5.out:    Running contrast 2351/2505
+deg_analysis.35496588_5.out:    Running contrast 2401/2505
+deg_analysis.35496588_5.out:    Running contrast 2451/2505
+deg_analysis.35496588_5.out:    Running contrast 2501/2505
+deg_analysis.35496588_5.out:    Running contrast 2505/2505
+deg_analysis.35496588_5.out:Contrasts are completed in 6706.1 seconds
+deg_analysis.35496588_5.out:
+deg_analysis.35496588_5.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_1_de.h5ad
+deg_analysis.35496588_5.out:
+deg_analysis.35496588_5.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_1_de.h5ad
+deg_analysis.35496588_5.out:    Removed X matrix
+deg_analysis.35496588_5.out:    Rewriting h5ad file is done!
+deg_analysis.35496588_5.out:✓ Cell line completed in 18908.8 seconds
+deg_analysis.35496588_5.out:
+deg_analysis.35496588_5.out:DE analysis completed!
+deg_analysis.35496588_5.out:
+deg_analysis.35496588_5.out:Total runtime: 18918.6 seconds
+deg_analysis.35496588_5.err:During startup - Warning messages:
+deg_analysis.35496588_5.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.35496588_5.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.35496588_5.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.35496588_5.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.35496588_5.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.35496588_5.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.35496588_5.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.35497260_6.out:
+deg_analysis.35497260_6.out:DE analysis started...
+deg_analysis.35497260_6.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0063/CVCL_0063_processed_batch_2.h5ad
+deg_analysis.35497260_6.out:Initial dimensions:  3214  samples ×  3300  genes
+deg_analysis.35497260_6.out:Filter samples with the low number of cells
+deg_analysis.35497260_6.out:    Filter threshold (min_cells):  0
+deg_analysis.35497260_6.out:    Found  3214  samples with sentinel value (-666), keeping all
+deg_analysis.35497260_6.out:    n_obs:  3214 -->  3214
+deg_analysis.35497260_6.out:
+deg_analysis.35497260_6.out:▶︎ Processing cell_type:  CVCL_0063
+deg_analysis.35497260_6.out:    Filter controls by  pert_time_h  column
+deg_analysis.35497260_6.out:        n_obs:  3214 -->  3214
+deg_analysis.35497260_6.out:
+deg_analysis.35497260_6.out:    Constructing design matrix...
+deg_analysis.35497260_6.out:    Design matrix is constructed in 0.4 seconds
+deg_analysis.35497260_6.out:    Design matrix dimensions: 3214 samples × 2541 coefficients
+deg_analysis.35497260_6.out:    Filtering genes and normalizing counts...
+deg_analysis.35497260_6.out:    Genes are filtered and normalized in 35.9 seconds
+deg_analysis.35497260_6.out:    Running voom...
+deg_analysis.35497260_6.out:    Voom is completed in 48.3 seconds
+deg_analysis.35497260_6.out:    Running lmFit...
+deg_analysis.35497260_6.out:    LmFit is completed in 11697.0 seconds
+deg_analysis.35497260_6.out:DGE fit is completed in 11783.2 seconds
+deg_analysis.35497260_6.out:    Running contrasts...
+deg_analysis.35497260_6.out:    Running contrast 1/2501
+deg_analysis.35497260_6.out:    Running contrast 51/2501
+deg_analysis.35497260_6.out:    Running contrast 101/2501
+deg_analysis.35497260_6.out:    Running contrast 151/2501
+deg_analysis.35497260_6.out:    Running contrast 201/2501
+deg_analysis.35497260_6.out:    Running contrast 251/2501
+deg_analysis.35497260_6.out:    Running contrast 301/2501
+deg_analysis.35497260_6.out:    Running contrast 351/2501
+deg_analysis.35497260_6.out:    Running contrast 401/2501
+deg_analysis.35497260_6.out:    Running contrast 451/2501
+deg_analysis.35497260_6.out:    Running contrast 501/2501
+deg_analysis.35497260_6.out:    Running contrast 551/2501
+deg_analysis.35497260_6.out:    Running contrast 601/2501
+deg_analysis.35497260_6.out:    Running contrast 651/2501
+deg_analysis.35497260_6.out:    Running contrast 701/2501
+deg_analysis.35497260_6.out:    Running contrast 751/2501
+deg_analysis.35497260_6.out:    Running contrast 801/2501
+deg_analysis.35497260_6.out:    Running contrast 851/2501
+deg_analysis.35497260_6.out:    Running contrast 901/2501
+deg_analysis.35497260_6.out:    Running contrast 951/2501
+deg_analysis.35497260_6.out:    Running contrast 1001/2501
+deg_analysis.35497260_6.out:    Running contrast 1051/2501
+deg_analysis.35497260_6.out:    Running contrast 1101/2501
+deg_analysis.35497260_6.out:    Running contrast 1151/2501
+deg_analysis.35497260_6.out:    Running contrast 1201/2501
+deg_analysis.35497260_6.out:    Running contrast 1251/2501
+deg_analysis.35497260_6.out:    Running contrast 1301/2501
+deg_analysis.35497260_6.out:    Running contrast 1351/2501
+deg_analysis.35497260_6.out:    Running contrast 1401/2501
+deg_analysis.35497260_6.out:    Running contrast 1451/2501
+deg_analysis.35497260_6.out:    Running contrast 1501/2501
+deg_analysis.35497260_6.out:    Running contrast 1551/2501
+deg_analysis.35497260_6.out:    Running contrast 1601/2501
+deg_analysis.35497260_6.out:    Running contrast 1651/2501
+deg_analysis.35497260_6.out:    Running contrast 1701/2501
+deg_analysis.35497260_6.out:    Running contrast 1751/2501
+deg_analysis.35497260_6.out:    Running contrast 1801/2501
+deg_analysis.35497260_6.out:    Running contrast 1851/2501
+deg_analysis.35497260_6.out:    Running contrast 1901/2501
+deg_analysis.35497260_6.out:    Running contrast 1951/2501
+deg_analysis.35497260_6.out:    Running contrast 2001/2501
+deg_analysis.35497260_6.out:    Running contrast 2051/2501
+deg_analysis.35497260_6.out:    Running contrast 2101/2501
+deg_analysis.35497260_6.out:    Running contrast 2151/2501
+deg_analysis.35497260_6.out:    Running contrast 2201/2501
+deg_analysis.35497260_6.out:    Running contrast 2251/2501
+deg_analysis.35497260_6.out:    Running contrast 2301/2501
+deg_analysis.35497260_6.out:    Running contrast 2351/2501
+deg_analysis.35497260_6.out:    Running contrast 2401/2501
+deg_analysis.35497260_6.out:    Running contrast 2451/2501
+deg_analysis.35497260_6.out:    Running contrast 2501/2501
+deg_analysis.35497260_6.out:Contrasts are completed in 6502.9 seconds
+deg_analysis.35497260_6.out:
+deg_analysis.35497260_6.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_2_de.h5ad
+deg_analysis.35497260_6.out:
+deg_analysis.35497260_6.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_2_de.h5ad
+deg_analysis.35497260_6.out:    Removed X matrix
+deg_analysis.35497260_6.out:    Rewriting h5ad file is done!
+deg_analysis.35497260_6.out:✓ Cell line completed in 18318.2 seconds
+deg_analysis.35497260_6.out:
+deg_analysis.35497260_6.out:DE analysis completed!
+deg_analysis.35497260_6.out:
+deg_analysis.35497260_6.out:Total runtime: 18400.0 seconds
+deg_analysis.35497260_6.err:During startup - Warning messages:
+deg_analysis.35497260_6.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.35497260_6.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.35497260_6.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.35497260_6.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.35497260_6.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.35497260_6.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.35497260_6.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.35497261_7.out:
+deg_analysis.35497261_7.out:DE analysis started...
+deg_analysis.35497261_7.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0063/CVCL_0063_processed_batch_3.h5ad
+deg_analysis.35497261_7.out:Initial dimensions:  3216  samples ×  3300  genes
+deg_analysis.35497261_7.out:Filter samples with the low number of cells
+deg_analysis.35497261_7.out:    Filter threshold (min_cells):  0
+deg_analysis.35497261_7.out:    Found  3216  samples with sentinel value (-666), keeping all
+deg_analysis.35497261_7.out:    n_obs:  3216 -->  3216
+deg_analysis.35497261_7.out:
+deg_analysis.35497261_7.out:▶︎ Processing cell_type:  CVCL_0063
+deg_analysis.35497261_7.out:    Filter controls by  pert_time_h  column
+deg_analysis.35497261_7.out:        n_obs:  3216 -->  3216
+deg_analysis.35497261_7.out:
+deg_analysis.35497261_7.out:    Constructing design matrix...
+deg_analysis.35497261_7.out:    Design matrix is constructed in 0.4 seconds
+deg_analysis.35497261_7.out:    Design matrix dimensions: 3216 samples × 2543 coefficients
+deg_analysis.35497261_7.out:    Filtering genes and normalizing counts...
+deg_analysis.35497261_7.out:    Genes are filtered and normalized in 35.6 seconds
+deg_analysis.35497261_7.out:    Running voom...
+deg_analysis.35497261_7.out:    Voom is completed in 47.7 seconds
+deg_analysis.35497261_7.out:    Running lmFit...
+deg_analysis.35497261_7.out:    LmFit is completed in 11696.9 seconds
+deg_analysis.35497261_7.out:DGE fit is completed in 11782.2 seconds
+deg_analysis.35497261_7.out:    Running contrasts...
+deg_analysis.35497261_7.out:    Running contrast 1/2503
+deg_analysis.35497261_7.out:    Running contrast 51/2503
+deg_analysis.35497261_7.out:    Running contrast 101/2503
+deg_analysis.35497261_7.out:    Running contrast 151/2503
+deg_analysis.35497261_7.out:    Running contrast 201/2503
+deg_analysis.35497261_7.out:    Running contrast 251/2503
+deg_analysis.35497261_7.out:    Running contrast 301/2503
+deg_analysis.35497261_7.out:    Running contrast 351/2503
+deg_analysis.35497261_7.out:    Running contrast 401/2503
+deg_analysis.35497261_7.out:    Running contrast 451/2503
+deg_analysis.35497261_7.out:    Running contrast 501/2503
+deg_analysis.35497261_7.out:    Running contrast 551/2503
+deg_analysis.35497261_7.out:    Running contrast 601/2503
+deg_analysis.35497261_7.out:    Running contrast 651/2503
+deg_analysis.35497261_7.out:    Running contrast 701/2503
+deg_analysis.35497261_7.out:    Running contrast 751/2503
+deg_analysis.35497261_7.out:    Running contrast 801/2503
+deg_analysis.35497261_7.out:    Running contrast 851/2503
+deg_analysis.35497261_7.out:    Running contrast 901/2503
+deg_analysis.35497261_7.out:    Running contrast 951/2503
+deg_analysis.35497261_7.out:    Running contrast 1001/2503
+deg_analysis.35497261_7.out:    Running contrast 1051/2503
+deg_analysis.35497261_7.out:    Running contrast 1101/2503
+deg_analysis.35497261_7.out:    Running contrast 1151/2503
+deg_analysis.35497261_7.out:    Running contrast 1201/2503
+deg_analysis.35497261_7.out:    Running contrast 1251/2503
+deg_analysis.35497261_7.out:    Running contrast 1301/2503
+deg_analysis.35497261_7.out:    Running contrast 1351/2503
+deg_analysis.35497261_7.out:    Running contrast 1401/2503
+deg_analysis.35497261_7.out:    Running contrast 1451/2503
+deg_analysis.35497261_7.out:    Running contrast 1501/2503
+deg_analysis.35497261_7.out:    Running contrast 1551/2503
+deg_analysis.35497261_7.out:    Running contrast 1601/2503
+deg_analysis.35497261_7.out:    Running contrast 1651/2503
+deg_analysis.35497261_7.out:    Running contrast 1701/2503
+deg_analysis.35497261_7.out:    Running contrast 1751/2503
+deg_analysis.35497261_7.out:    Running contrast 1801/2503
+deg_analysis.35497261_7.out:    Running contrast 1851/2503
+deg_analysis.35497261_7.out:    Running contrast 1901/2503
+deg_analysis.35497261_7.out:    Running contrast 1951/2503
+deg_analysis.35497261_7.out:    Running contrast 2001/2503
+deg_analysis.35497261_7.out:    Running contrast 2051/2503
+deg_analysis.35497261_7.out:    Running contrast 2101/2503
+deg_analysis.35497261_7.out:    Running contrast 2151/2503
+deg_analysis.35497261_7.out:    Running contrast 2201/2503
+deg_analysis.35497261_7.out:    Running contrast 2251/2503
+deg_analysis.35497261_7.out:    Running contrast 2301/2503
+deg_analysis.35497261_7.out:    Running contrast 2351/2503
+deg_analysis.35497261_7.out:    Running contrast 2401/2503
+deg_analysis.35497261_7.out:    Running contrast 2451/2503
+deg_analysis.35497261_7.out:    Running contrast 2501/2503
+deg_analysis.35497261_7.out:    Running contrast 2503/2503
+deg_analysis.35497261_7.out:Contrasts are completed in 6499.4 seconds
+deg_analysis.35497261_7.out:
+deg_analysis.35497261_7.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_3_de.h5ad
+deg_analysis.35497261_7.out:
+deg_analysis.35497261_7.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_3_de.h5ad
+deg_analysis.35497261_7.out:    Removed X matrix
+deg_analysis.35497261_7.out:    Rewriting h5ad file is done!
+deg_analysis.35497261_7.out:✓ Cell line completed in 18313.8 seconds
+deg_analysis.35497261_7.out:
+deg_analysis.35497261_7.out:DE analysis completed!
+deg_analysis.35497261_7.out:
+deg_analysis.35497261_7.out:Total runtime: 18395.7 seconds
+deg_analysis.35497261_7.err:During startup - Warning messages:
+deg_analysis.35497261_7.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.35497261_7.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.35497261_7.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.35497261_7.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.35497261_7.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.35497261_7.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.35497261_7.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.35497263_8.out:
+deg_analysis.35497263_8.out:DE analysis started...
+deg_analysis.35497263_8.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0063/CVCL_0063_processed_batch_4.h5ad
+deg_analysis.35497263_8.out:Initial dimensions:  3213  samples ×  3300  genes
+deg_analysis.35497263_8.out:Filter samples with the low number of cells
+deg_analysis.35497263_8.out:    Filter threshold (min_cells):  0
+deg_analysis.35497263_8.out:    Found  3213  samples with sentinel value (-666), keeping all
+deg_analysis.35497263_8.out:    n_obs:  3213 -->  3213
+deg_analysis.35497263_8.out:
+deg_analysis.35497263_8.out:▶︎ Processing cell_type:  CVCL_0063
+deg_analysis.35497263_8.out:    Filter controls by  pert_time_h  column
+deg_analysis.35497263_8.out:        n_obs:  3213 -->  3213
+deg_analysis.35497263_8.out:
+deg_analysis.35497263_8.out:    Constructing design matrix...
+deg_analysis.35497263_8.out:    Design matrix is constructed in 0.4 seconds
+deg_analysis.35497263_8.out:    Design matrix dimensions: 3213 samples × 2540 coefficients
+deg_analysis.35497263_8.out:    Filtering genes and normalizing counts...
+deg_analysis.35497263_8.out:    Genes are filtered and normalized in 35.9 seconds
+deg_analysis.35497263_8.out:    Running voom...
+deg_analysis.35497263_8.out:    Voom is completed in 48.3 seconds
+deg_analysis.35497263_8.out:    Running lmFit...
+deg_analysis.35497263_8.out:    LmFit is completed in 11625.1 seconds
+deg_analysis.35497263_8.out:DGE fit is completed in 11711.3 seconds
+deg_analysis.35497263_8.out:    Running contrasts...
+deg_analysis.35497263_8.out:    Running contrast 1/2500
+deg_analysis.35497263_8.out:    Running contrast 51/2500
+deg_analysis.35497263_8.out:    Running contrast 101/2500
+deg_analysis.35497263_8.out:    Running contrast 151/2500
+deg_analysis.35497263_8.out:    Running contrast 201/2500
+deg_analysis.35497263_8.out:    Running contrast 251/2500
+deg_analysis.35497263_8.out:    Running contrast 301/2500
+deg_analysis.35497263_8.out:    Running contrast 351/2500
+deg_analysis.35497263_8.out:    Running contrast 401/2500
+deg_analysis.35497263_8.out:    Running contrast 451/2500
+deg_analysis.35497263_8.out:    Running contrast 501/2500
+deg_analysis.35497263_8.out:    Running contrast 551/2500
+deg_analysis.35497263_8.out:    Running contrast 601/2500
+deg_analysis.35497263_8.out:    Running contrast 651/2500
+deg_analysis.35497263_8.out:    Running contrast 701/2500
+deg_analysis.35497263_8.out:    Running contrast 751/2500
+deg_analysis.35497263_8.out:    Running contrast 801/2500
+deg_analysis.35497263_8.out:    Running contrast 851/2500
+deg_analysis.35497263_8.out:    Running contrast 901/2500
+deg_analysis.35497263_8.out:    Running contrast 951/2500
+deg_analysis.35497263_8.out:    Running contrast 1001/2500
+deg_analysis.35497263_8.out:    Running contrast 1051/2500
+deg_analysis.35497263_8.out:    Running contrast 1101/2500
+deg_analysis.35497263_8.out:    Running contrast 1151/2500
+deg_analysis.35497263_8.out:    Running contrast 1201/2500
+deg_analysis.35497263_8.out:    Running contrast 1251/2500
+deg_analysis.35497263_8.out:    Running contrast 1301/2500
+deg_analysis.35497263_8.out:    Running contrast 1351/2500
+deg_analysis.35497263_8.out:    Running contrast 1401/2500
+deg_analysis.35497263_8.out:    Running contrast 1451/2500
+deg_analysis.35497263_8.out:    Running contrast 1501/2500
+deg_analysis.35497263_8.out:    Running contrast 1551/2500
+deg_analysis.35497263_8.out:    Running contrast 1601/2500
+deg_analysis.35497263_8.out:    Running contrast 1651/2500
+deg_analysis.35497263_8.out:    Running contrast 1701/2500
+deg_analysis.35497263_8.out:    Running contrast 1751/2500
+deg_analysis.35497263_8.out:    Running contrast 1801/2500
+deg_analysis.35497263_8.out:    Running contrast 1851/2500
+deg_analysis.35497263_8.out:    Running contrast 1901/2500
+deg_analysis.35497263_8.out:    Running contrast 1951/2500
+deg_analysis.35497263_8.out:    Running contrast 2001/2500
+deg_analysis.35497263_8.out:    Running contrast 2051/2500
+deg_analysis.35497263_8.out:    Running contrast 2101/2500
+deg_analysis.35497263_8.out:    Running contrast 2151/2500
+deg_analysis.35497263_8.out:    Running contrast 2201/2500
+deg_analysis.35497263_8.out:    Running contrast 2251/2500
+deg_analysis.35497263_8.out:    Running contrast 2301/2500
+deg_analysis.35497263_8.out:    Running contrast 2351/2500
+deg_analysis.35497263_8.out:    Running contrast 2401/2500
+deg_analysis.35497263_8.out:    Running contrast 2451/2500
+deg_analysis.35497263_8.out:    Running contrast 2500/2500
+deg_analysis.35497263_8.out:Contrasts are completed in 6532.6 seconds
+deg_analysis.35497263_8.out:
+deg_analysis.35497263_8.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_4_de.h5ad
+deg_analysis.35497263_8.out:
+deg_analysis.35497263_8.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_4_de.h5ad
+deg_analysis.35497263_8.out:    Removed X matrix
+deg_analysis.35497263_8.out:    Rewriting h5ad file is done!
+deg_analysis.35497263_8.out:✓ Cell line completed in 18280.6 seconds
+deg_analysis.35497263_8.out:
+deg_analysis.35497263_8.out:DE analysis completed!
+deg_analysis.35497263_8.out:
+deg_analysis.35497263_8.out:Total runtime: 18362.4 seconds
+deg_analysis.35497263_8.err:During startup - Warning messages:
+deg_analysis.35497263_8.err:1: Setting LC_CTYPE failed, using "C"
+deg_analysis.35497263_8.err:2: Setting LC_COLLATE failed, using "C"
+deg_analysis.35497263_8.err:3: Setting LC_TIME failed, using "C"
+deg_analysis.35497263_8.err:4: Setting LC_MESSAGES failed, using "C"
+deg_analysis.35497263_8.err:5: Setting LC_MONETARY failed, using "C"
+deg_analysis.35497263_8.err:6: Setting LC_PAPER failed, using "C"
+deg_analysis.35497263_8.err:7: Setting LC_MEASUREMENT failed, using "C"
+deg_analysis.35496582_9.out:
+deg_analysis.35496582_9.out:DE analysis started...
+deg_analysis.35496582_9.out:Loaded input file:  ./data/cigs_tcm/pseudobulk_processed/sep_rep/by_celltype/CVCL_0063/CVCL_0063_processed_batch_5.h5ad
+deg_analysis.35496582_9.out:Initial dimensions:  3214  samples ×  3300  genes
+deg_analysis.35496582_9.out:Filter samples with the low number of cells
+deg_analysis.35496582_9.out:    Filter threshold (min_cells):  0
+deg_analysis.35496582_9.out:    Found  3214  samples with sentinel value (-666), keeping all
+deg_analysis.35496582_9.out:    n_obs:  3214 -->  3214
+deg_analysis.35496582_9.out:
+deg_analysis.35496582_9.out:▶︎ Processing cell_type:  CVCL_0063
+deg_analysis.35496582_9.out:    Filter controls by  pert_time_h  column
+deg_analysis.35496582_9.out:        n_obs:  3214 -->  3214
+deg_analysis.35496582_9.out:
+deg_analysis.35496582_9.out:    Constructing design matrix...
+deg_analysis.35496582_9.out:    Design matrix is constructed in 0.3 seconds
+deg_analysis.35496582_9.out:    Design matrix dimensions: 3214 samples × 2541 coefficients
+deg_analysis.35496582_9.out:    Filtering genes and normalizing counts...
+deg_analysis.35496582_9.out:    Genes are filtered and normalized in 21.8 seconds
+deg_analysis.35496582_9.out:    Running voom...
+deg_analysis.35496582_9.out:    Voom is completed in 29.1 seconds
+deg_analysis.35496582_9.out:    Running lmFit...
+deg_analysis.35496582_9.out:    LmFit is completed in 7516.4 seconds
+deg_analysis.35496582_9.out:DGE fit is completed in 7568.9 seconds
+deg_analysis.35496582_9.out:    Running contrasts...
+deg_analysis.35496582_9.out:    Running contrast 1/2501
+deg_analysis.35496582_9.out:    Running contrast 51/2501
+deg_analysis.35496582_9.out:    Running contrast 101/2501
+deg_analysis.35496582_9.out:    Running contrast 151/2501
+deg_analysis.35496582_9.out:    Running contrast 201/2501
+deg_analysis.35496582_9.out:    Running contrast 251/2501
+deg_analysis.35496582_9.out:    Running contrast 301/2501
+deg_analysis.35496582_9.out:    Running contrast 351/2501
+deg_analysis.35496582_9.out:    Running contrast 401/2501
+deg_analysis.35496582_9.out:    Running contrast 451/2501
+deg_analysis.35496582_9.out:    Running contrast 501/2501
+deg_analysis.35496582_9.out:    Running contrast 551/2501
+deg_analysis.35496582_9.out:    Running contrast 601/2501
+deg_analysis.35496582_9.out:    Running contrast 651/2501
+deg_analysis.35496582_9.out:    Running contrast 701/2501
+deg_analysis.35496582_9.out:    Running contrast 751/2501
+deg_analysis.35496582_9.out:    Running contrast 801/2501
+deg_analysis.35496582_9.out:    Running contrast 851/2501
+deg_analysis.35496582_9.out:    Running contrast 901/2501
+deg_analysis.35496582_9.out:    Running contrast 951/2501
+deg_analysis.35496582_9.out:    Running contrast 1001/2501
+deg_analysis.35496582_9.out:    Running contrast 1051/2501
+deg_analysis.35496582_9.out:    Running contrast 1101/2501
+deg_analysis.35496582_9.out:    Running contrast 1151/2501
+deg_analysis.35496582_9.out:    Running contrast 1201/2501
+deg_analysis.35496582_9.out:    Running contrast 1251/2501
+deg_analysis.35496582_9.out:    Running contrast 1301/2501
+deg_analysis.35496582_9.out:    Running contrast 1351/2501
+deg_analysis.35496582_9.out:    Running contrast 1401/2501
+deg_analysis.35496582_9.out:    Running contrast 1451/2501
+deg_analysis.35496582_9.out:    Running contrast 1501/2501
+deg_analysis.35496582_9.out:    Running contrast 1551/2501
+deg_analysis.35496582_9.out:    Running contrast 1601/2501
+deg_analysis.35496582_9.out:    Running contrast 1651/2501
+deg_analysis.35496582_9.out:    Running contrast 1701/2501
+deg_analysis.35496582_9.out:    Running contrast 1751/2501
+deg_analysis.35496582_9.out:    Running contrast 1801/2501
+deg_analysis.35496582_9.out:    Running contrast 1851/2501
+deg_analysis.35496582_9.out:    Running contrast 1901/2501
+deg_analysis.35496582_9.out:    Running contrast 1951/2501
+deg_analysis.35496582_9.out:    Running contrast 2001/2501
+deg_analysis.35496582_9.out:    Running contrast 2051/2501
+deg_analysis.35496582_9.out:    Running contrast 2101/2501
+deg_analysis.35496582_9.out:    Running contrast 2151/2501
+deg_analysis.35496582_9.out:    Running contrast 2201/2501
+deg_analysis.35496582_9.out:    Running contrast 2251/2501
+deg_analysis.35496582_9.out:    Running contrast 2301/2501
+deg_analysis.35496582_9.out:    Running contrast 2351/2501
+deg_analysis.35496582_9.out:    Running contrast 2401/2501
+deg_analysis.35496582_9.out:    Running contrast 2451/2501
+deg_analysis.35496582_9.out:    Running contrast 2501/2501
+deg_analysis.35496582_9.out:Contrasts are completed in 4774.7 seconds
+deg_analysis.35496582_9.out:
+deg_analysis.35496582_9.out:    Writing:  ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_5_de.h5ad
+deg_analysis.35496582_9.out:
+deg_analysis.35496582_9.out:    Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/intermediate/CVCL_0063/CVCL_0063_batch_5_de.h5ad
+deg_analysis.35496582_9.out:    Removed X matrix
+deg_analysis.35496582_9.out:    Rewriting h5ad file is done!
+deg_analysis.35496582_9.out:✓ Cell line completed in 12379.8 seconds
+deg_analysis.35496582_9.out:
+deg_analysis.35496582_9.out:DE analysis completed!
+deg_analysis.35496582_9.out:
+deg_analysis.35496582_9.out:Total runtime: 12459.9 seconds
+deg_aggregation.35501022.out:2026-04-24 04:39:46 | [INFO] Found 2 cell type(s) to aggregate
+deg_aggregation.35501022.out:2026-04-24 04:39:46 | [INFO] Aggregating 5 batch files for CVCL_0062
+deg_aggregation.35501022.out:2026-04-24 04:39:46 | [INFO]   Reading: CVCL_0062_batch_1_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:39:50 | [INFO]   Reading: CVCL_0062_batch_2_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:39:53 | [INFO]   Reading: CVCL_0062_batch_3_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:39:56 | [INFO]   Reading: CVCL_0062_batch_4_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:40:00 | [INFO]   Reading: CVCL_0062_batch_5_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:40:04 | [INFO]   Concatenating 5 batches...
+deg_aggregation.35501022.out:2026-04-24 04:40:05 | [INFO]   Batch column added with 5
+deg_aggregation.35501022.out:2026-04-24 04:40:51 | [INFO]     Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:40:51 | [INFO]     Removed X matrix
+deg_aggregation.35501022.out:2026-04-24 04:40:51 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.35501022.out:2026-04-24 04:40:51 | [INFO]   Saved aggregated file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad (12516 obs, 1894 vars)
+deg_aggregation.35501022.out:2026-04-24 04:40:51 | [INFO] Aggregating 5 batch files for CVCL_0063
+deg_aggregation.35501022.out:2026-04-24 04:40:51 | [INFO]   Reading: CVCL_0063_batch_1_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:40:55 | [INFO]   Reading: CVCL_0063_batch_2_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:40:58 | [INFO]   Reading: CVCL_0063_batch_3_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:41:01 | [INFO]   Reading: CVCL_0063_batch_4_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:41:03 | [INFO]   Reading: CVCL_0063_batch_5_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:41:06 | [INFO]   Concatenating 5 batches...
+deg_aggregation.35501022.out:2026-04-24 04:41:08 | [INFO]   Batch column added with 5
+deg_aggregation.35501022.out:2026-04-24 04:41:52 | [INFO]     Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
+deg_aggregation.35501022.out:2026-04-24 04:41:52 | [INFO]     Removed X matrix
+deg_aggregation.35501022.out:2026-04-24 04:41:52 | [INFO]     Rewriting h5ad file is done!
+deg_aggregation.35501022.out:2026-04-24 04:41:52 | [INFO]   Saved aggregated file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad (12510 obs, 1816 vars)
+deg_aggregation.35501022.out:2026-04-24 04:41:52 | [INFO] Aggregation completed
+deg_aggregation.35501022.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+deg_aggregation.35501022.err:  utils.warn_names_duplicates("obs")
+deg_aggregation.35501022.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+deg_aggregation.35501022.err:  utils.warn_names_duplicates("obs")

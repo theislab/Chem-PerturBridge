@@ -1,0 +1,437 @@
+pseudobulk_cigs_tcm.PID2091208.out:> Running cigs_tcm standardization
+pseudobulk_cigs_tcm.PID2091208.out:Submitted batch job 35496134
+pseudobulk_cigs_tcm.PID2091208.out:> cigs_tcm standardization is done
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:12:12 | [INFO] Downloading CIGS TCM raw Excel files ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:12:13 | [INFO] Downloading CIGS files to: data/cigs_tcm/raw
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:12:13 | [INFO] Downloading TCM_Compounds_HEK293T_10_Counts.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:13:21 | [INFO] Downloading TCM_Compounds_HEK293T_10_MetaData.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:13:22 | [INFO] Downloading TCM_Compounds_HEK293T_20_Counts.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:14:20 | [INFO] Downloading TCM_Compounds_HEK293T_20_MetaData.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:14:24 | [INFO] Downloading TCM_Compounds_MDA_MB_231_10_Counts.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:15:21 | [INFO] Downloading TCM_Compounds_MDA_MB_231_10_MetaData.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:15:22 | [INFO] Downloading TCM_Compounds_MDA_MB_231_20_Counts.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:12 | [INFO] Downloading TCM_Compounds_MDA_MB_231_20_MetaData.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:13 | [INFO] Downloading 41592_2025_2781_MOESM3_ESM.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:13 | [INFO] All CIGS downloads complete
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:13 | [INFO] Extracting compound tables from 41592_2025_2781_MOESM3_ESM.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:14 | [INFO] Saved MCE compound table → compounds_mce.csv (11,356 rows)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:14 | [INFO] Saved TCM compound table → compounds_tcm.csv (1,865 rows)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:14 | [INFO] Converting Excel files to AnnData and merging TCM subsets ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:14 | [INFO] Reading counts from TCM_Compounds_HEK293T_10_Counts.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:42 | [INFO]   Shape: 6315 samples × 3407 genes | index='Sample_unique_id' | first genes: ['ATP5G2', 'ATP6V1A', 'C17ORF85']
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:42 | [INFO] Reading metadata from TCM_Compounds_HEK293T_10_MetaData.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:42 | [INFO]   Note row detected — dropping and promoting next row to header
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:42 | [INFO]   Metadata shape: 6315 rows × 7 cols
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:42 | [INFO]   Metadata columns: ['Sample_unique_id', 'Treat', 'Plate', 'library', 'Cell', 'Dose', 'Time']
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:42 | [INFO]   Set index to column 'Sample_unique_id'
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:43 | [INFO]   Built AnnData for tcm_hek293t_10: 6315 samples × 3407 genes
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:46 | [INFO] Saved subset h5ad: data/cigs_tcm/raw/subsets/tcm_hek293t_10.h5ad
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:16:46 | [INFO] Reading counts from TCM_Compounds_HEK293T_20_Counts.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:12 | [INFO]   Shape: 6315 samples × 3407 genes | index='Sample_unique_id' | first genes: ['ATP5G2', 'ATP6V1A', 'C17ORF85']
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:12 | [INFO] Reading metadata from TCM_Compounds_HEK293T_20_MetaData.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:12 | [INFO]   Note row detected — dropping and promoting next row to header
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:12 | [INFO]   Metadata shape: 6315 rows × 7 cols
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:12 | [INFO]   Metadata columns: ['Sample_unique_id', 'Treat', 'Plate', 'Library', 'Cell', 'Dose', 'Time']
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:12 | [INFO]   Set index to column 'Sample_unique_id'
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:14 | [INFO]   Built AnnData for tcm_hek293t_20: 6315 samples × 3407 genes
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:16 | [INFO] Saved subset h5ad: data/cigs_tcm/raw/subsets/tcm_hek293t_20.h5ad
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:16 | [INFO] Reading counts from TCM_Compounds_MDA_MB_231_10_Counts.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:42 | [INFO]   Shape: 6257 samples × 3407 genes | index='Sample_unique_id' | first genes: ['ATP5G2', 'ATP6V1A', 'C17ORF85']
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:42 | [INFO] Reading metadata from TCM_Compounds_MDA_MB_231_10_MetaData.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:42 | [INFO]   Note row detected — dropping and promoting next row to header
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:42 | [INFO]   Metadata shape: 6257 rows × 7 cols
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:42 | [INFO]   Metadata columns: ['Sample_unique_id', 'Treat', 'Plate', 'Library', 'Cell', 'Dose', 'Time']
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:42 | [INFO]   Set index to column 'Sample_unique_id'
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:43 | [INFO]   Built AnnData for tcm_mda_mb_231_10: 6257 samples × 3407 genes
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:45 | [INFO] Saved subset h5ad: data/cigs_tcm/raw/subsets/tcm_mda_mb_231_10.h5ad
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:17:45 | [INFO] Reading counts from TCM_Compounds_MDA_MB_231_20_Counts.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:11 | [INFO]   Shape: 6315 samples × 3407 genes | index='Sample_unique_id' | first genes: ['ATP5G2', 'ATP6V1A', 'C17ORF85']
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:11 | [INFO] Reading metadata from TCM_Compounds_MDA_MB_231_20_MetaData.xlsx ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:11 | [INFO]   Note row detected — dropping and promoting next row to header
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:11 | [INFO]   Metadata shape: 6315 rows × 7 cols
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:11 | [INFO]   Metadata columns: ['Sample_unique_id', 'Treat', 'Plate', 'Library', 'Cell', 'Dose', 'Time']
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:11 | [INFO]   Set index to column 'Sample_unique_id'
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:12 | [INFO]   Built AnnData for tcm_mda_mb_231_20: 6315 samples × 3407 genes
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:14 | [INFO] Saved subset h5ad: data/cigs_tcm/raw/subsets/tcm_mda_mb_231_20.h5ad
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:14 | [INFO] Concatenating 4 subsets (inner join on genes) ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:14 | [INFO]   Shared genes across all subsets: 3,407
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:15 | [INFO] Merged CIGS AnnData: 25,202 samples × 3,407 genes
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:15 | [INFO] Saving merged raw TCM AnnData to data/cigs_tcm/raw/cigs_tcm_raw.h5ad ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:22 | [INFO] Standardizing CIGS TCM subset ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:22 | [INFO] Applying CIGS-specific processing (source=tcm)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:22 | [INFO]   Loaded AnnData: 25,202 × 3,407
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:22 | [INFO] Filtering empty and low-QC samples ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:22 | [INFO] Original: 25,202 samples
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:18:23 | [INFO] Running qc_filter.R on 25,202 samples ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:26 | [INFO] QC status: lowqc=1,328, pass=23,874
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO] Remaining: 23,874 samples
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO] Filtering JQ1 samples ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO]   Dropping 1,329 JQ1 samples
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO] Processing CIGS observations dataframe (source=tcm)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO]   Merging supplementary compound table onto obs
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO]   Loaded compound table compounds_tcm.csv: 1,865 compounds
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO]   1,433 rows without a compound-table hit (controls / unlisted) — using catalog_id as compound_name
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO]   Annotating compounds with PubChem CIDs
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO]   Extracted 1,857 unique compounds from obs
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO] Cache file data/cigs_tcm/raw/processed/pubchem_cid_cache.json not found. Starting with empty cache.
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:19:27 | [INFO] Processing 1857 compounds
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:20:03 | [INFO] Processed 50/1857 compounds (50 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:20:38 | [INFO] Processed 100/1857 compounds (100 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:21:16 | [INFO] Processed 150/1857 compounds (149 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:21:51 | [INFO] Processed 200/1857 compounds (199 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:22:29 | [INFO] Processed 250/1857 compounds (249 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:23:01 | [INFO] Processed 300/1857 compounds (299 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:23:36 | [INFO] Processed 350/1857 compounds (348 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:24:11 | [INFO] Processed 400/1857 compounds (398 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:24:44 | [INFO] Processed 450/1857 compounds (438 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:25:18 | [INFO] Processed 500/1857 compounds (486 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:25:52 | [INFO] Processed 550/1857 compounds (536 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:26:27 | [INFO] Processed 600/1857 compounds (585 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:27:02 | [INFO] Processed 650/1857 compounds (634 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:27:37 | [INFO] Processed 700/1857 compounds (683 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:28:09 | [INFO] Processed 750/1857 compounds (733 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:28:42 | [INFO] Processed 800/1857 compounds (783 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:29:17 | [INFO] Processed 850/1857 compounds (832 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:29:52 | [INFO] Processed 900/1857 compounds (881 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:30:26 | [INFO] Processed 950/1857 compounds (930 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:30:59 | [INFO] Processed 1000/1857 compounds (980 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:31:33 | [INFO] Processed 1050/1857 compounds (1030 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:32:07 | [INFO] Processed 1100/1857 compounds (1077 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:32:42 | [INFO] Processed 1150/1857 compounds (1127 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:33:16 | [INFO] Processed 1200/1857 compounds (1177 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:33:52 | [INFO] Processed 1250/1857 compounds (1227 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:34:28 | [INFO] Processed 1300/1857 compounds (1277 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:35:01 | [INFO] Processed 1350/1857 compounds (1325 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:35:36 | [INFO] Processed 1400/1857 compounds (1373 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:36:14 | [INFO] Processed 1450/1857 compounds (1423 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:36:49 | [INFO] Processed 1500/1857 compounds (1472 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:37:25 | [INFO] Processed 1550/1857 compounds (1520 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:37:59 | [INFO] Processed 1600/1857 compounds (1569 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:38:33 | [INFO] Processed 1650/1857 compounds (1619 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:39:08 | [INFO] Processed 1700/1857 compounds (1669 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:39:42 | [INFO] Processed 1750/1857 compounds (1719 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:40:19 | [INFO] Processed 1800/1857 compounds (1768 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:40:55 | [INFO] Processed 1850/1857 compounds (1818 mapped so far)
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:01 | [INFO] Mapped 1825 out of 1857 compounds to PubChem CIDs
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:02 | [INFO]   Adding fixed metadata columns and sample_id
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:02 | [INFO]   Enforcing strict obs schema
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:02 | [INFO]   Processed 22,545 observations
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:02 | [INFO] Processing gene annotations
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:02 | [INFO]   Canonicalized 10 Excel/R-mangled gene symbols
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:02 | [INFO]   Resolving Ensembl IDs for 3,407 gene symbols ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:02 | [INFO] Ensembl symbol→ID lookup: 3,407 unique, 0 cached, 3,407 to fetch
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:02 | [INFO]   Batch 1/4: querying 1,000 symbols
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:25 | [INFO]   Batch 2/4: querying 1,000 symbols
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:41:38 | [INFO]   Batch 3/4: querying 1,000 symbols
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:42:08 | [INFO]   Batch 4/4: querying 407 symbols
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:42:16 | [INFO] Saved Ensembl lookup cache: 3,407 entries to data/cigs_tcm/raw/processed/ensembl_cache.json
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:42:16 | [INFO]   Symbol→Ensembl mapping: 3,300 mapped, 107 unmapped
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:42:16 | [INFO]   Genes after annotation: 3,407
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:42:16 | [INFO] Creating standardized AnnData object
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:42:16 | [INFO] Standardized AnnData: 22,545 × 3,407
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:42:16 | [INFO] CIGS-specific processing completed
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:42:16 | [INFO] Saving standardized TCM dataset to data/cigs_tcm/pseudobulk/full/cigs_tcm.h5ad ...
+pseudobulk_cigs_tcm.35496134.out:2026-04-23 22:42:25 | [INFO] CIGS TCM standardization complete.
+pseudobulk_cigs_tcm.35496134.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_tcm.35496134.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_tcm.35496134.err:
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_tcm.35496134.err:  0 85.07M   0   7883   0      0   7582      0 3:16:05   00:01 3:16:04   7588
+pseudobulk_cigs_tcm.35496134.err:  1 85.07M   1  1.47M   0      0 628.7k      0   02:18   00:02   02:16 628.9k
+pseudobulk_cigs_tcm.35496134.err:  1 85.07M   1  1.61M   0      0 476.2k      0   03:02   00:03   02:59 476.3k
+pseudobulk_cigs_tcm.35496134.err:  2 85.07M   2  2.02M   0      0 455.5k      0   03:11   00:04   03:07 455.5k
+pseudobulk_cigs_tcm.35496134.err:  3 85.07M   3  2.59M   0      0 473.4k      0   03:03   00:05   02:58 473.5k
+pseudobulk_cigs_tcm.35496134.err:  4 85.07M   4  3.53M   0      0 530.7k      0   02:44   00:06   02:38 624.7k
+pseudobulk_cigs_tcm.35496134.err:  4 85.07M   4  3.95M   0      0 513.5k      0   02:49   00:07   02:42 462.8k
+pseudobulk_cigs_tcm.35496134.err:  6 85.07M   6  5.68M   0      0 649.1k      0   02:14   00:08   02:06 758.7k
+pseudobulk_cigs_tcm.35496134.err:  8 85.07M   8  7.07M   0      0 721.7k      0   02:00   00:10   01:50 942.1k
+pseudobulk_cigs_tcm.35496134.err:  9 85.07M   9  8.45M   0      0 779.7k      0   01:51   00:11   01:40  1.06M
+pseudobulk_cigs_tcm.35496134.err: 11 85.07M  11  9.86M   0      0 830.1k      0   01:44   00:12   01:32  1.18M
+pseudobulk_cigs_tcm.35496134.err: 13 85.07M  13 11.45M   0      0 886.6k      0   01:38   00:13   01:25  1.40M
+pseudobulk_cigs_tcm.35496134.err: 15 85.07M  15 12.83M   0      0 919.3k      0   01:34   00:14   01:20  1.34M
+pseudobulk_cigs_tcm.35496134.err: 16 85.07M  16 14.17M   0      0 944.5k      0   01:32   00:15   01:17  1.33M
+pseudobulk_cigs_tcm.35496134.err: 18 85.07M  18 15.69M   0      0 977.8k      0   01:29   00:16   01:13  1.35M
+pseudobulk_cigs_tcm.35496134.err: 20 85.07M  20 17.29M   0      0  0.99M      0   01:25   00:17   01:08  1.40M
+pseudobulk_cigs_tcm.35496134.err: 22 85.07M  22 18.95M   0      0  1.02M      0   01:23   00:18   01:05  1.42M
+pseudobulk_cigs_tcm.35496134.err: 23 85.07M  23 20.28M   0      0  1.03M      0   01:22   00:19   01:03  1.41M
+pseudobulk_cigs_tcm.35496134.err: 25 85.07M  25 21.68M   0      0  1.05M      0   01:20   00:20   01:00  1.43M
+pseudobulk_cigs_tcm.35496134.err: 27 85.07M  27 23.00M   0      0  1.06M      0   01:19   00:21   00:58  1.41M
+pseudobulk_cigs_tcm.35496134.err: 28 85.07M  28 24.63M   0      0  1.08M      0   01:18   00:22   00:56  1.41M
+pseudobulk_cigs_tcm.35496134.err: 30 85.07M  30 26.01M   0      0  1.09M      0   01:17   00:23   00:54  1.37M
+pseudobulk_cigs_tcm.35496134.err: 32 85.07M  32 27.29M   0      0  1.10M      0   01:16   00:24   00:52  1.37M
+pseudobulk_cigs_tcm.35496134.err: 33 85.07M  33 28.72M   0      0  1.11M      0   01:16   00:25   00:51  1.38M
+pseudobulk_cigs_tcm.35496134.err: 35 85.07M  35 30.25M   0      0  1.13M      0   01:15   00:26   00:49  1.42M
+pseudobulk_cigs_tcm.35496134.err: 37 85.07M  37 31.71M   0      0  1.14M      0   01:14   00:27   00:47  1.39M
+pseudobulk_cigs_tcm.35496134.err: 38 85.07M  38 33.07M   0      0  1.15M      0   01:13   00:28   00:45  1.39M
+pseudobulk_cigs_tcm.35496134.err: 40 85.07M  40 34.52M   0      0  1.16M      0   01:13   00:29   00:44  1.41M
+pseudobulk_cigs_tcm.35496134.err: 42 85.07M  42 35.82M   0      0  1.16M      0   01:13   00:30   00:43  1.39M
+pseudobulk_cigs_tcm.35496134.err: 43 85.07M  43 37.39M   0      0  1.17M      0   01:12   00:31   00:41  1.40M
+pseudobulk_cigs_tcm.35496134.err: 45 85.07M  45 39.00M   0      0  1.18M      0   01:11   00:32   00:39  1.43M
+pseudobulk_cigs_tcm.35496134.err: 47 85.07M  47 40.20M   0      0  1.18M      0   01:11   00:33   00:38  1.40M
+pseudobulk_cigs_tcm.35496134.err: 48 85.07M  48 41.55M   0      0  1.19M      0   01:11   00:34   00:37  1.38M
+pseudobulk_cigs_tcm.35496134.err: 50 85.07M  50 43.02M   0      0  1.20M      0   01:10   00:35   00:35  1.41M
+pseudobulk_cigs_tcm.35496134.err: 52 85.07M  52 44.49M   0      0  1.20M      0   01:10   00:36   00:34  1.39M
+pseudobulk_cigs_tcm.35496134.err: 54 85.07M  54 46.11M   0      0  1.21M      0   01:09   00:37   00:32  1.39M
+pseudobulk_cigs_tcm.35496134.err: 55 85.07M  55 47.34M   0      0  1.21M      0   01:09   00:38   00:31  1.40M
+pseudobulk_cigs_tcm.35496134.err: 57 85.07M  57 48.63M   0      0  1.21M      0   01:09   00:39   00:30  1.39M
+pseudobulk_cigs_tcm.35496134.err: 58 85.07M  58 50.11M   0      0  1.22M      0   01:09   00:40   00:29  1.39M
+pseudobulk_cigs_tcm.35496134.err: 60 85.07M  60 51.67M   0      0  1.23M      0   01:09   00:41   00:28  1.40M
+pseudobulk_cigs_tcm.35496134.err: 62 85.07M  62 53.21M   0      0  1.23M      0   01:08   00:42   00:26  1.39M
+pseudobulk_cigs_tcm.35496134.err: 64 85.07M  64 54.47M   0      0  1.23M      0   01:08   00:43   00:25  1.40M
+pseudobulk_cigs_tcm.35496134.err: 65 85.07M  65 55.80M   0      0  1.24M      0   01:08   00:44   00:24  1.40M
+pseudobulk_cigs_tcm.35496134.err: 67 85.07M  67 57.25M   0      0  1.24M      0   01:08   00:45   00:23  1.40M
+pseudobulk_cigs_tcm.35496134.err: 69 85.07M  69 58.81M   0      0  1.25M      0   01:07   00:47   00:20  1.40M
+pseudobulk_cigs_tcm.35496134.err: 70 85.07M  70 60.27M   0      0  1.25M      0   01:07   00:48   00:19  1.36M
+pseudobulk_cigs_tcm.35496134.err: 72 85.07M  72 61.66M   0      0  1.25M      0   01:07   00:49   00:18  1.38M
+pseudobulk_cigs_tcm.35496134.err: 74 85.07M  74 63.08M   0      0  1.25M      0   01:07   00:50   00:17  1.40M
+pseudobulk_cigs_tcm.35496134.err: 75 85.07M  75 64.52M   0      0  1.26M      0   01:07   00:51   00:16  1.40M
+pseudobulk_cigs_tcm.35496134.err: 77 85.07M  77 66.11M   0      0  1.26M      0   01:07   00:52   00:15  1.40M
+pseudobulk_cigs_tcm.35496134.err: 79 85.07M  79 67.51M   0      0  1.26M      0   01:07   00:53   00:14  1.41M
+pseudobulk_cigs_tcm.35496134.err: 80 85.07M  80 68.67M   0      0  1.26M      0   01:07   00:54   00:13  1.38M
+pseudobulk_cigs_tcm.35496134.err: 82 85.07M  82 70.13M   0      0  1.26M      0   01:07   00:55   00:12  1.38M
+pseudobulk_cigs_tcm.35496134.err: 83 85.07M  83 71.45M   0      0  1.26M      0   01:06   00:56   00:10  1.35M
+pseudobulk_cigs_tcm.35496134.err: 85 85.07M  85 72.59M   0      0  1.26M      0   01:07   00:57   00:10  1.27M
+pseudobulk_cigs_tcm.35496134.err: 86 85.07M  86 73.84M   0      0  1.26M      0   01:07   00:58   00:09  1.24M
+pseudobulk_cigs_tcm.35496134.err: 88 85.07M  88 75.12M   0      0  1.26M      0   01:07   00:59   00:08  1.26M
+pseudobulk_cigs_tcm.35496134.err: 89 85.07M  89 76.40M   0      0  1.26M      0   01:07   01:00   00:07  1.23M
+pseudobulk_cigs_tcm.35496134.err: 91 85.07M  91 77.70M   0      0  1.26M      0   01:07   01:01   00:06  1.23M
+pseudobulk_cigs_tcm.35496134.err: 92 85.07M  92 79.01M   0      0  1.26M      0   01:07   01:02   00:05  1.25M
+pseudobulk_cigs_tcm.35496134.err: 94 85.07M  94 80.37M   0      0  1.26M      0   01:07   01:03   00:04  1.28M
+pseudobulk_cigs_tcm.35496134.err: 95 85.07M  95 81.50M   0      0  1.26M      0   01:07   01:04   00:03  1.25M
+pseudobulk_cigs_tcm.35496134.err: 97 85.07M  97 82.71M   0      0  1.26M      0   01:07   01:05   00:02  1.23M
+pseudobulk_cigs_tcm.35496134.err: 98 85.07M  98 84.07M   0      0  1.26M      0   01:07   01:06   00:01  1.25M
+pseudobulk_cigs_tcm.35496134.err:100 85.07M 100 85.07M   0      0  1.26M      0   01:07   01:07          1.25M
+pseudobulk_cigs_tcm.35496134.err:100 85.07M 100 85.07M   0      0  1.26M      0   01:07   01:07          1.25M
+pseudobulk_cigs_tcm.35496134.err:100 85.07M 100 85.07M   0      0  1.26M      0   01:07   01:07          1.25M
+pseudobulk_cigs_tcm.35496134.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_tcm.35496134.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_tcm.35496134.err:
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_tcm.35496134.err: 85 237.2k  85 203.0k   0      0 177.9k      0   00:01   00:01         178.0k
+pseudobulk_cigs_tcm.35496134.err:100 237.2k 100 237.2k   0      0 207.4k      0   00:01   00:01         178.0k
+pseudobulk_cigs_tcm.35496134.err:100 237.2k 100 237.2k   0      0 207.1k      0   00:01   00:01         178.0k
+pseudobulk_cigs_tcm.35496134.err:100 237.2k 100 237.2k   0      0 206.7k      0   00:01   00:01         178.0k
+pseudobulk_cigs_tcm.35496134.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_tcm.35496134.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_tcm.35496134.err:
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_tcm.35496134.err:  0 86.06M   0 203.0k   0      0 202.9k      0   07:14   00:01   07:13 203.0k
+pseudobulk_cigs_tcm.35496134.err:  3 86.06M   3  3.18M   0      0  1.56M      0   00:54   00:02   00:52  1.56M
+pseudobulk_cigs_tcm.35496134.err:  5 86.06M   5  5.02M   0      0  1.52M      0   00:56   00:03   00:53  1.52M
+pseudobulk_cigs_tcm.35496134.err:  8 86.06M   8  7.35M   0      0  1.58M      0   00:54   00:04   00:50  1.58M
+pseudobulk_cigs_tcm.35496134.err: 12 86.06M  12 10.49M   0      0  1.82M      0   00:47   00:05   00:42  1.83M
+pseudobulk_cigs_tcm.35496134.err: 14 86.06M  14 12.31M   0      0  1.81M      0   00:47   00:06   00:41  2.10M
+pseudobulk_cigs_tcm.35496134.err: 17 86.06M  17 15.06M   0      0  1.93M      0   00:44   00:07   00:37  2.06M
+pseudobulk_cigs_tcm.35496134.err: 19 86.06M  19 17.10M   0      0  1.94M      0   00:44   00:08   00:36  2.19M
+pseudobulk_cigs_tcm.35496134.err: 22 86.06M  22 19.13M   0      0  1.95M      0   00:44   00:09   00:35  2.28M
+pseudobulk_cigs_tcm.35496134.err: 24 86.06M  24 21.11M   0      0  1.95M      0   00:44   00:10   00:34  2.09M
+pseudobulk_cigs_tcm.35496134.err: 26 86.06M  26 23.17M   0      0  1.95M      0   00:44   00:11   00:33  2.12M
+pseudobulk_cigs_tcm.35496134.err: 29 86.06M  29 25.46M   0      0  1.97M      0   00:43   00:12   00:31  2.03M
+pseudobulk_cigs_tcm.35496134.err: 32 86.06M  32 27.60M   0      0  1.97M      0   00:43   00:13   00:30  2.02M
+pseudobulk_cigs_tcm.35496134.err: 34 86.06M  34 29.86M   0      0  1.97M      0   00:43   00:15   00:28  2.00M
+pseudobulk_cigs_tcm.35496134.err: 36 86.06M  36 31.68M   0      0  1.96M      0   00:43   00:16   00:27  1.97M
+pseudobulk_cigs_tcm.35496134.err: 38 86.06M  38 33.19M   0      0  1.92M      0   00:44   00:17   00:27  1.86M
+pseudobulk_cigs_tcm.35496134.err: 40 86.06M  40 34.63M   0      0  1.89M      0   00:45   00:18   00:27  1.70M
+pseudobulk_cigs_tcm.35496134.err: 42 86.06M  42 36.19M   0      0  1.87M      0   00:45   00:19   00:26  1.62M
+pseudobulk_cigs_tcm.35496134.err: 43 86.06M  43 37.73M   0      0  1.85M      0   00:46   00:20   00:26  1.52M
+pseudobulk_cigs_tcm.35496134.err: 45 86.06M  45 39.22M   0      0  1.83M      0   00:46   00:21   00:25  1.44M
+pseudobulk_cigs_tcm.35496134.err: 47 86.06M  47 40.78M   0      0  1.82M      0   00:47   00:22   00:25  1.47M
+pseudobulk_cigs_tcm.35496134.err: 49 86.06M  49 42.40M   0      0  1.81M      0   00:47   00:23   00:24  1.51M
+pseudobulk_cigs_tcm.35496134.err: 51 86.06M  51 44.02M   0      0  1.80M      0   00:47   00:24   00:23  1.52M
+pseudobulk_cigs_tcm.35496134.err: 53 86.06M  53 45.71M   0      0  1.79M      0   00:47   00:25   00:22  1.55M
+pseudobulk_cigs_tcm.35496134.err: 54 86.06M  54 47.11M   0      0  1.78M      0   00:48   00:26   00:22  1.54M
+pseudobulk_cigs_tcm.35496134.err: 56 86.06M  56 48.43M   0      0  1.76M      0   00:48   00:27   00:21  1.49M
+pseudobulk_cigs_tcm.35496134.err: 57 86.06M  57 49.62M   0      0  1.74M      0   00:49   00:28   00:21  1.41M
+pseudobulk_cigs_tcm.35496134.err: 59 86.06M  59 50.85M   0      0  1.72M      0   00:49   00:29   00:20  1.33M
+pseudobulk_cigs_tcm.35496134.err: 60 86.06M  60 52.13M   0      0  1.70M      0   00:50   00:30   00:20  1.25M
+pseudobulk_cigs_tcm.35496134.err: 62 86.06M  62 53.39M   0      0  1.69M      0   00:50   00:31   00:19  1.23M
+pseudobulk_cigs_tcm.35496134.err: 63 86.06M  63 54.67M   0      0  1.67M      0   00:51   00:32   00:19  1.22M
+pseudobulk_cigs_tcm.35496134.err: 65 86.06M  65 56.09M   0      0  1.66M      0   00:51   00:33   00:18  1.26M
+pseudobulk_cigs_tcm.35496134.err: 66 86.06M  66 57.46M   0      0  1.65M      0   00:51   00:34   00:17  1.28M
+pseudobulk_cigs_tcm.35496134.err: 68 86.06M  68 58.83M   0      0  1.64M      0   00:52   00:35   00:17  1.28M
+pseudobulk_cigs_tcm.35496134.err: 69 86.06M  69 60.14M   0      0  1.63M      0   00:52   00:36   00:16  1.28M
+pseudobulk_cigs_tcm.35496134.err: 71 86.06M  71 61.35M   0      0  1.62M      0   00:53   00:37   00:16  1.27M
+pseudobulk_cigs_tcm.35496134.err: 72 86.06M  72 62.60M   0      0  1.61M      0   00:53   00:38   00:15  1.24M
+pseudobulk_cigs_tcm.35496134.err: 74 86.06M  74 63.76M   0      0  1.59M      0   00:53   00:39   00:14  1.20M
+pseudobulk_cigs_tcm.35496134.err: 75 86.06M  75 64.94M   0      0  1.58M      0   00:54   00:40   00:14  1.18M
+pseudobulk_cigs_tcm.35496134.err: 76 86.06M  76 66.20M   0      0  1.57M      0   00:54   00:41   00:13  1.18M
+pseudobulk_cigs_tcm.35496134.err: 78 86.06M  78 67.41M   0      0  1.57M      0   00:54   00:42   00:12  1.18M
+pseudobulk_cigs_tcm.35496134.err: 79 86.06M  79 68.61M   0      0  1.56M      0   00:55   00:43   00:12  1.17M
+pseudobulk_cigs_tcm.35496134.err: 81 86.06M  81 69.85M   0      0  1.55M      0   00:55   00:44   00:11  1.20M
+pseudobulk_cigs_tcm.35496134.err: 82 86.06M  82 71.26M   0      0  1.55M      0   00:55   00:45   00:10  1.25M
+pseudobulk_cigs_tcm.35496134.err: 84 86.06M  84 72.79M   0      0  1.55M      0   00:55   00:46   00:09  1.30M
+pseudobulk_cigs_tcm.35496134.err: 86 86.06M  86 74.54M   0      0  1.55M      0   00:55   00:47   00:08  1.41M
+pseudobulk_cigs_tcm.35496134.err: 88 86.06M  88 75.97M   0      0  1.55M      0   00:55   00:48   00:07  1.45M
+pseudobulk_cigs_tcm.35496134.err: 89 86.06M  89 77.24M   0      0  1.54M      0   00:55   00:49   00:06  1.45M
+pseudobulk_cigs_tcm.35496134.err: 91 86.06M  91 78.43M   0      0  1.53M      0   00:55   00:51   00:04  1.41M
+pseudobulk_cigs_tcm.35496134.err: 92 86.06M  92 79.69M   0      0  1.52M      0   00:56   00:52   00:04  1.34M
+pseudobulk_cigs_tcm.35496134.err: 93 86.06M  93 80.83M   0      0  1.52M      0   00:56   00:53   00:03  1.20M
+pseudobulk_cigs_tcm.35496134.err: 95 86.06M  95 81.97M   0      0  1.51M      0   00:56   00:54   00:02  1.16M
+pseudobulk_cigs_tcm.35496134.err: 96 86.06M  96 83.32M   0      0  1.50M      0   00:57   00:55   00:02  1.16M
+pseudobulk_cigs_tcm.35496134.err: 98 86.06M  98 84.57M   0      0  1.50M      0   00:57   00:56   00:01  1.17M
+pseudobulk_cigs_tcm.35496134.err: 99 86.06M  99 85.75M   0      0  1.49M      0   00:57   00:57          1.17M
+pseudobulk_cigs_tcm.35496134.err:100 86.06M 100 86.06M   0      0  1.49M      0   00:57   00:57          1.17M
+pseudobulk_cigs_tcm.35496134.err:100 86.06M 100 86.06M   0      0  1.49M      0   00:57   00:57          1.17M
+pseudobulk_cigs_tcm.35496134.err:100 86.06M 100 86.06M   0      0  1.49M      0   00:57   00:57          1.17M
+pseudobulk_cigs_tcm.35496134.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_tcm.35496134.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_tcm.35496134.err:
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0           00:01              0
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0           00:02              0
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0           00:03              0
+pseudobulk_cigs_tcm.35496134.err: 13 237.6k  13  31887   0      0   7753      0   00:31   00:04   00:27   7754
+pseudobulk_cigs_tcm.35496134.err:100 237.6k 100 237.6k   0      0  52841      0   00:04   00:04           7754
+pseudobulk_cigs_tcm.35496134.err:100 237.6k 100 237.6k   0      0  52818      0   00:04   00:04           7754
+pseudobulk_cigs_tcm.35496134.err:100 237.6k 100 237.6k   0      0  52795      0   00:04   00:04           7754
+pseudobulk_cigs_tcm.35496134.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_tcm.35496134.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_tcm.35496134.err:
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_tcm.35496134.err:  0 82.37M   0 273.3k   0      0 241.0k      0   05:49   00:01   05:48 241.1k
+pseudobulk_cigs_tcm.35496134.err:  4 82.37M   4  3.76M   0      0  1.75M      0   00:47   00:02   00:45  1.75M
+pseudobulk_cigs_tcm.35496134.err:  6 82.37M   6  5.51M   0      0  1.71M      0   00:48   00:03   00:45  1.71M
+pseudobulk_cigs_tcm.35496134.err:  8 82.37M   8  7.40M   0      0  1.75M      0   00:46   00:04   00:42  1.75M
+pseudobulk_cigs_tcm.35496134.err: 11 82.37M  11  9.49M   0      0  1.78M      0   00:46   00:05   00:41  1.78M
+pseudobulk_cigs_tcm.35496134.err: 14 82.37M  14 11.81M   0      0  1.87M      0   00:44   00:06   00:38  2.22M
+pseudobulk_cigs_tcm.35496134.err: 17 82.37M  17 14.26M   0      0  1.92M      0   00:42   00:07   00:35  2.00M
+pseudobulk_cigs_tcm.35496134.err: 20 82.37M  20 16.50M   0      0  1.96M      0   00:41   00:08   00:33  2.12M
+pseudobulk_cigs_tcm.35496134.err: 22 82.37M  22 18.40M   0      0  1.95M      0   00:42   00:09   00:33  2.12M
+pseudobulk_cigs_tcm.35496134.err: 24 82.37M  24 20.34M   0      0  1.95M      0   00:42   00:10   00:32  2.12M
+pseudobulk_cigs_tcm.35496134.err: 27 82.37M  27 22.61M   0      0  1.97M      0   00:41   00:11   00:30  2.11M
+pseudobulk_cigs_tcm.35496134.err: 29 82.37M  29 24.68M   0      0  1.97M      0   00:41   00:12   00:29  2.05M
+pseudobulk_cigs_tcm.35496134.err: 32 82.37M  32 26.86M   0      0  1.99M      0   00:41   00:13   00:28  2.04M
+pseudobulk_cigs_tcm.35496134.err: 34 82.37M  34 28.54M   0      0  1.97M      0   00:41   00:14   00:27  2.00M
+pseudobulk_cigs_tcm.35496134.err: 36 82.37M  36 30.26M   0      0  1.95M      0   00:42   00:15   00:27  1.96M
+pseudobulk_cigs_tcm.35496134.err: 38 82.37M  38 31.89M   0      0  1.93M      0   00:42   00:16   00:26  1.82M
+pseudobulk_cigs_tcm.35496134.err: 40 82.37M  40 33.37M   0      0  1.90M      0   00:43   00:17   00:26  1.71M
+pseudobulk_cigs_tcm.35496134.err: 42 82.37M  42 35.04M   0      0  1.88M      0   00:43   00:18   00:25  1.61M
+pseudobulk_cigs_tcm.35496134.err: 44 82.37M  44 36.65M   0      0  1.87M      0   00:43   00:19   00:24  1.59M
+pseudobulk_cigs_tcm.35496134.err: 46 82.37M  46 38.38M   0      0  1.86M      0   00:44   00:20   00:24  1.58M
+pseudobulk_cigs_tcm.35496134.err: 48 82.37M  48 39.98M   0      0  1.85M      0   00:44   00:21   00:23  1.58M
+pseudobulk_cigs_tcm.35496134.err: 50 82.37M  50 41.72M   0      0  1.84M      0   00:44   00:22   00:22  1.63M
+pseudobulk_cigs_tcm.35496134.err: 52 82.37M  52 43.41M   0      0  1.83M      0   00:44   00:23   00:21  1.64M
+pseudobulk_cigs_tcm.35496134.err: 54 82.37M  54 45.13M   0      0  1.81M      0   00:45   00:24   00:21  1.59M
+pseudobulk_cigs_tcm.35496134.err: 56 82.37M  56 46.83M   0      0  1.80M      0   00:45   00:25   00:20  1.59M
+pseudobulk_cigs_tcm.35496134.err: 58 82.37M  58 48.08M   0      0  1.78M      0   00:46   00:26   00:20  1.52M
+pseudobulk_cigs_tcm.35496134.err: 59 82.37M  59 49.33M   0      0  1.76M      0   00:46   00:27   00:19  1.43M
+pseudobulk_cigs_tcm.35496134.err: 61 82.37M  61 50.73M   0      0  1.75M      0   00:47   00:28   00:19  1.37M
+pseudobulk_cigs_tcm.35496134.err: 63 82.37M  63 52.05M   0      0  1.73M      0   00:47   00:29   00:18  1.35M
+pseudobulk_cigs_tcm.35496134.err: 64 82.37M  64 53.46M   0      0  1.72M      0   00:47   00:30   00:17  1.29M
+pseudobulk_cigs_tcm.35496134.err: 66 82.37M  66 54.80M   0      0  1.71M      0   00:48   00:32   00:16  1.31M
+pseudobulk_cigs_tcm.35496134.err: 68 82.37M  68 56.25M   0      0  1.70M      0   00:48   00:33   00:15  1.35M
+pseudobulk_cigs_tcm.35496134.err: 70 82.37M  70 57.70M   0      0  1.69M      0   00:48   00:34   00:14  1.36M
+pseudobulk_cigs_tcm.35496134.err: 71 82.37M  71 59.29M   0      0  1.68M      0   00:48   00:35   00:13  1.39M
+pseudobulk_cigs_tcm.35496134.err: 73 82.37M  73 60.68M   0      0  1.67M      0   00:49   00:36   00:13  1.36M
+pseudobulk_cigs_tcm.35496134.err: 75 82.37M  75 61.88M   0      0  1.65M      0   00:49   00:37   00:12  1.33M
+pseudobulk_cigs_tcm.35496134.err: 76 82.37M  76 63.00M   0      0  1.64M      0   00:50   00:38   00:12  1.28M
+pseudobulk_cigs_tcm.35496134.err: 77 82.37M  77 64.20M   0      0  1.63M      0   00:50   00:39   00:11  1.23M
+pseudobulk_cigs_tcm.35496134.err: 79 82.37M  79 65.37M   0      0  1.62M      0   00:50   00:40   00:10  1.18M
+pseudobulk_cigs_tcm.35496134.err: 80 82.37M  80 66.62M   0      0  1.61M      0   00:51   00:41   00:10  1.17M
+pseudobulk_cigs_tcm.35496134.err: 82 82.37M  82 67.80M   0      0  1.60M      0   00:51   00:42   00:09  1.16M
+pseudobulk_cigs_tcm.35496134.err: 83 82.37M  83 69.10M   0      0  1.59M      0   00:51   00:43   00:08  1.19M
+pseudobulk_cigs_tcm.35496134.err: 85 82.37M  85 70.42M   0      0  1.58M      0   00:51   00:44   00:07  1.22M
+pseudobulk_cigs_tcm.35496134.err: 87 82.37M  87 72.00M   0      0  1.58M      0   00:51   00:45   00:06  1.29M
+pseudobulk_cigs_tcm.35496134.err: 88 82.37M  88 73.20M   0      0  1.57M      0   00:52   00:46   00:06  1.29M
+pseudobulk_cigs_tcm.35496134.err: 90 82.37M  90 74.17M   0      0  1.56M      0   00:52   00:47   00:05  1.24M
+pseudobulk_cigs_tcm.35496134.err: 90 82.37M  90 74.93M   0      0  1.54M      0   00:53   00:48   00:05  1.14M
+pseudobulk_cigs_tcm.35496134.err: 91 82.37M  91 75.75M   0      0  1.53M      0   00:53   00:49   00:04  1.04M
+pseudobulk_cigs_tcm.35496134.err: 92 82.37M  92 76.60M   0      0  1.51M      0   00:54   00:50   00:04 922.9k
+pseudobulk_cigs_tcm.35496134.err: 94 82.37M  94 77.46M   0      0  1.50M      0   00:54   00:51   00:03 856.2k
+pseudobulk_cigs_tcm.35496134.err: 95 82.37M  95 78.32M   0      0  1.48M      0   00:55   00:52   00:03 833.3k
+pseudobulk_cigs_tcm.35496134.err: 96 82.37M  96 79.20M   0      0  1.47M      0   00:55   00:53   00:02 857.0k
+pseudobulk_cigs_tcm.35496134.err: 97 82.37M  97 80.14M   0      0  1.46M      0   00:56   00:54   00:02 880.5k
+pseudobulk_cigs_tcm.35496134.err: 98 82.37M  98 81.21M   0      0  1.45M      0   00:56   00:55   00:01 926.1k
+pseudobulk_cigs_tcm.35496134.err:100 82.37M 100 82.37M   0      0  1.45M      0   00:56   00:56         926.1k
+pseudobulk_cigs_tcm.35496134.err:100 82.37M 100 82.37M   0      0  1.45M      0   00:56   00:56         926.1k
+pseudobulk_cigs_tcm.35496134.err:100 82.37M 100 82.37M   0      0  1.45M      0   00:56   00:56         926.1k
+pseudobulk_cigs_tcm.35496134.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_tcm.35496134.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_tcm.35496134.err:
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_tcm.35496134.err:100 230.4k 100 230.4k   0      0 203.0k      0   00:01   00:01         203.1k
+pseudobulk_cigs_tcm.35496134.err:100 230.4k 100 230.4k   0      0 202.7k      0   00:01   00:01         203.1k
+pseudobulk_cigs_tcm.35496134.err:100 230.4k 100 230.4k   0      0 202.3k      0   00:01   00:01         203.1k
+pseudobulk_cigs_tcm.35496134.err:100 230.4k 100 230.4k   0      0 201.9k      0   00:01   00:01         203.1k
+pseudobulk_cigs_tcm.35496134.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_tcm.35496134.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_tcm.35496134.err:
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_tcm.35496134.err:  0 85.94M   0 265.5k   0      0 245.3k      0   05:58   00:01   05:57 245.4k
+pseudobulk_cigs_tcm.35496134.err:  1 85.94M   1  1.71M   0      0 818.0k      0   01:47   00:02   01:45 818.2k
+pseudobulk_cigs_tcm.35496134.err:  3 85.94M   3  2.98M   0      0 950.4k      0   01:32   00:03   01:29 950.6k
+pseudobulk_cigs_tcm.35496134.err:  5 85.94M   5  4.53M   0      0  1.01M      0   01:24   00:04   01:20  1.01M
+pseudobulk_cigs_tcm.35496134.err:  7 85.94M   7  6.41M   0      0  1.17M      0   01:13   00:05   01:08  1.17M
+pseudobulk_cigs_tcm.35496134.err:  9 85.94M   9  8.38M   0      0  1.28M      0   01:06   00:06   01:00  1.49M
+pseudobulk_cigs_tcm.35496134.err: 12 85.94M  12 10.34M   0      0  1.37M      0   01:02   00:07   00:55  1.60M
+pseudobulk_cigs_tcm.35496134.err: 14 85.94M  14 12.31M   0      0  1.43M      0   00:59   00:08   00:51  1.74M
+pseudobulk_cigs_tcm.35496134.err: 16 85.94M  16 14.28M   0      0  1.49M      0   00:57   00:09   00:48  1.91M
+pseudobulk_cigs_tcm.35496134.err: 18 85.94M  18 16.16M   0      0  1.52M      0   00:56   00:10   00:46  1.91M
+pseudobulk_cigs_tcm.35496134.err: 20 85.94M  20 17.74M   0      0  1.52M      0   00:56   00:11   00:45  1.83M
+pseudobulk_cigs_tcm.35496134.err: 22 85.94M  22 19.55M   0      0  1.55M      0   00:55   00:12   00:43  1.81M
+pseudobulk_cigs_tcm.35496134.err: 24 85.94M  24 21.46M   0      0  1.57M      0   00:54   00:13   00:41  1.80M
+pseudobulk_cigs_tcm.35496134.err: 27 85.94M  27 23.49M   0      0  1.60M      0   00:53   00:14   00:39  1.80M
+pseudobulk_cigs_tcm.35496134.err: 29 85.94M  29 25.48M   0      0  1.62M      0   00:52   00:15   00:37  1.83M
+pseudobulk_cigs_tcm.35496134.err: 31 85.94M  31 27.35M   0      0  1.64M      0   00:52   00:16   00:36  1.89M
+pseudobulk_cigs_tcm.35496134.err: 33 85.94M  33 28.92M   0      0  1.63M      0   00:52   00:17   00:35  1.84M
+pseudobulk_cigs_tcm.35496134.err: 35 85.94M  35 30.65M   0      0  1.63M      0   00:52   00:18   00:34  1.81M
+pseudobulk_cigs_tcm.35496134.err: 37 85.94M  37 32.60M   0      0  1.65M      0   00:51   00:19   00:32  1.79M
+pseudobulk_cigs_tcm.35496134.err: 40 85.94M  40 34.64M   0      0  1.67M      0   00:51   00:20   00:31  1.80M
+pseudobulk_cigs_tcm.35496134.err: 42 85.94M  42 36.42M   0      0  1.67M      0   00:51   00:21   00:30  1.78M
+pseudobulk_cigs_tcm.35496134.err: 44 85.94M  44 38.01M   0      0  1.66M      0   00:51   00:22   00:29  1.78M
+pseudobulk_cigs_tcm.35496134.err: 46 85.94M  46 39.82M   0      0  1.67M      0   00:51   00:23   00:28  1.79M
+pseudobulk_cigs_tcm.35496134.err: 48 85.94M  48 41.71M   0      0  1.68M      0   00:51   00:24   00:27  1.79M
+pseudobulk_cigs_tcm.35496134.err: 50 85.94M  50 43.75M   0      0  1.69M      0   00:50   00:25   00:25  1.78M
+pseudobulk_cigs_tcm.35496134.err: 52 85.94M  52 45.47M   0      0  1.69M      0   00:50   00:26   00:24  1.77M
+pseudobulk_cigs_tcm.35496134.err: 54 85.94M  54 47.07M   0      0  1.69M      0   00:50   00:27   00:23  1.78M
+pseudobulk_cigs_tcm.35496134.err: 56 85.94M  56 48.89M   0      0  1.69M      0   00:50   00:28   00:22  1.78M
+pseudobulk_cigs_tcm.35496134.err: 59 85.94M  59 50.84M   0      0  1.70M      0   00:50   00:29   00:21  1.79M
+pseudobulk_cigs_tcm.35496134.err: 61 85.94M  61 52.84M   0      0  1.71M      0   00:50   00:30   00:20  1.79M
+pseudobulk_cigs_tcm.35496134.err: 63 85.94M  63 54.55M   0      0  1.70M      0   00:50   00:31   00:19  1.79M
+pseudobulk_cigs_tcm.35496134.err: 65 85.94M  65 56.20M   0      0  1.70M      0   00:50   00:32   00:18  1.79M
+pseudobulk_cigs_tcm.35496134.err: 67 85.94M  67 58.03M   0      0  1.70M      0   00:50   00:33   00:17  1.79M
+pseudobulk_cigs_tcm.35496134.err: 69 85.94M  69 59.98M   0      0  1.71M      0   00:50   00:34   00:16  1.80M
+pseudobulk_cigs_tcm.35496134.err: 72 85.94M  72 62.03M   0      0  1.72M      0   00:49   00:35   00:14  1.80M
+pseudobulk_cigs_tcm.35496134.err: 74 85.94M  74 63.63M   0      0  1.72M      0   00:49   00:36   00:13  1.78M
+pseudobulk_cigs_tcm.35496134.err: 75 85.94M  75 65.26M   0      0  1.71M      0   00:50   00:37   00:13  1.78M
+pseudobulk_cigs_tcm.35496134.err: 78 85.94M  78 67.15M   0      0  1.71M      0   00:49   00:39   00:10  1.78M
+pseudobulk_cigs_tcm.35496134.err: 80 85.94M  80 69.12M   0      0  1.72M      0   00:49   00:40   00:09  1.79M
+pseudobulk_cigs_tcm.35496134.err: 82 85.94M  82 71.09M   0      0  1.73M      0   00:49   00:41   00:08  1.79M
+pseudobulk_cigs_tcm.35496134.err: 84 85.94M  84 72.73M   0      0  1.72M      0   00:49   00:42   00:07  1.78M
+pseudobulk_cigs_tcm.35496134.err: 86 85.94M  86 74.40M   0      0  1.72M      0   00:49   00:43   00:06  1.79M
+pseudobulk_cigs_tcm.35496134.err: 88 85.94M  88 76.22M   0      0  1.72M      0   00:49   00:44   00:05  1.79M
+pseudobulk_cigs_tcm.35496134.err: 91 85.94M  91 78.22M   0      0  1.73M      0   00:49   00:45   00:04  1.78M
+pseudobulk_cigs_tcm.35496134.err: 93 85.94M  93 79.99M   0      0  1.73M      0   00:49   00:46   00:03  1.74M
+pseudobulk_cigs_tcm.35496134.err: 95 85.94M  95 81.73M   0      0  1.73M      0   00:49   00:47   00:02  1.76M
+pseudobulk_cigs_tcm.35496134.err: 97 85.94M  97 83.51M   0      0  1.73M      0   00:49   00:48   00:01  1.77M
+pseudobulk_cigs_tcm.35496134.err: 99 85.94M  99 85.47M   0      0  1.73M      0   00:49   00:49          1.79M
+pseudobulk_cigs_tcm.35496134.err:100 85.94M 100 85.94M   0      0  1.73M      0   00:49   00:49          1.79M
+pseudobulk_cigs_tcm.35496134.err:100 85.94M 100 85.94M   0      0  1.73M      0   00:49   00:49          1.79M
+pseudobulk_cigs_tcm.35496134.err:100 85.94M 100 85.94M   0      0  1.73M      0   00:49   00:49          1.79M
+pseudobulk_cigs_tcm.35496134.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_tcm.35496134.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_tcm.35496134.err:
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_tcm.35496134.err:100 237.2k 100 237.2k   0      0 220.1k      0   00:01   00:01         220.2k
+pseudobulk_cigs_tcm.35496134.err:100 237.2k 100 237.2k   0      0 219.7k      0   00:01   00:01         220.2k
+pseudobulk_cigs_tcm.35496134.err:100 237.2k 100 237.2k   0      0 219.3k      0   00:01   00:01         220.2k
+pseudobulk_cigs_tcm.35496134.err:100 237.2k 100 237.2k   0      0 218.9k      0   00:01   00:01         220.2k
+pseudobulk_cigs_tcm.35496134.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_tcm.35496134.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_tcm.35496134.err:
+pseudobulk_cigs_tcm.35496134.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_tcm.35496134.err:100  4.09M 100  4.09M   0      0 29.05M      0                              0
+pseudobulk_cigs_tcm.35496134.err:100  4.09M 100  4.09M   0      0 28.94M      0                              0
+pseudobulk_cigs_tcm.35496134.err:100  4.09M 100  4.09M   0      0 28.82M      0                              0
+pseudobulk_cigs_tcm.35496134.err:/ictstr01/home/icb/olga.novitskaia/op3_v2/src/pseudobulking/datasets/cigs/standardization.py:294: FutureWarning: The behavior of array concatenation with empty entries is deprecated. In a future version, this will no longer exclude empty items when determining the result dtype. To retain the old behavior, exclude the empty entries before the concat operation.
+pseudobulk_cigs_tcm.35496134.err:  treat = treat.combine_first(obs["Treat"])
+pseudobulk_cigs_tcm.35496134.err:Loaded 25202 samples across 4 subsets (0 BLANK/RNA wells, 0 paper-excluded-plate wells)
+pseudobulk_cigs_tcm.35496134.err:  tcm_hek293t_10: IQR threshold log2(lib)=15.7365, lowqc=278/6315
+pseudobulk_cigs_tcm.35496134.err:  tcm_hek293t_20: IQR threshold log2(lib)=15.8228, lowqc=385/6315
+pseudobulk_cigs_tcm.35496134.err:  tcm_mda_mb_231_10: IQR threshold log2(lib)=15.0283, lowqc=220/6257
+pseudobulk_cigs_tcm.35496134.err:  tcm_mda_mb_231_20: IQR threshold log2(lib)=16.1033, lowqc=445/6315
+pseudobulk_cigs_tcm.35496134.err:Status counts:
+pseudobulk_cigs_tcm.35496134.err:  lowqc: 1328
+pseudobulk_cigs_tcm.35496134.err:  pass: 23874
+pseudobulk_cigs_tcm.35496134.err:Wrote /tmp/tmptz2y7u_w/cigs_qc_status.tsv
+pseudobulk_cigs_tcm.35496134.err:2026-04-23 22:42:16 | [WARNING]   107 symbols did not resolve; their symbol string will be used as the Ensembl ID placeholder

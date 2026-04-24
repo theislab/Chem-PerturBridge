@@ -1,0 +1,961 @@
+pseudobulk_cigs_mce.PID2044087.out:> Running cigs_mce standardization
+pseudobulk_cigs_mce.PID2044087.out:Submitted batch job 35496129
+pseudobulk_cigs_mce.PID2044087.out:> cigs_mce standardization is done
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:12:12 | [INFO] Downloading CIGS MCE raw Excel files ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:12:13 | [INFO] Downloading CIGS files to: data/cigs_mce/raw
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:12:13 | [INFO] Downloading MCE_Bioactive_Compounds_HEK293T_10μM_Counts.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:18:46 | [INFO] Downloading MCE_Bioactive_Compounds_HEK293T_10μM_MetaData.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:18:48 | [INFO] Downloading MCE_Bioactive_Compounds_MDA_MB_231_10μM_Counts.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:22:37 | [INFO] Downloading MCE_Bioactive_Compounds_MDA_MB_231_10μM_MetaData.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:22:39 | [INFO] Downloading 41592_2025_2781_MOESM3_ESM.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:22:39 | [INFO] All CIGS downloads complete
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:22:39 | [INFO] Extracting compound tables from 41592_2025_2781_MOESM3_ESM.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:22:41 | [INFO] Saved MCE compound table → compounds_mce.csv (11,356 rows)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:22:41 | [INFO] Saved TCM compound table → compounds_tcm.csv (1,865 rows)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:22:42 | [INFO] Converting Excel files to AnnData and merging MCE subsets ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:22:42 | [INFO] Reading counts from MCE_Bioactive_Compounds_HEK293T_10μM_Counts.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:25:26 | [INFO]   Shape: 40778 samples × 3407 genes | index='Sample_id' | first genes: ['A2M', 'A4GNT', 'AARS']
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:25:26 | [INFO] Reading metadata from MCE_Bioactive_Compounds_HEK293T_10μM_MetaData.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:25:28 | [INFO]   Note row detected — dropping and promoting next row to header
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:25:28 | [INFO]   Metadata shape: 40778 rows × 10 cols
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:25:28 | [INFO]   Metadata columns: ['unique_ID', 'experiment_no', 'sample_plate', 'sample_row', 'sample_column', 'cell_id', 'pert_itime', 'pert_idose', 'sample', 'treatment']
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:25:28 | [INFO]   Set index to column 'unique_ID'
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:25:34 | [INFO]   Built AnnData for mce_hek293t_10uM: 40778 samples × 3407 genes
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:25:45 | [INFO] Saved subset h5ad: data/cigs_mce/raw/subsets/mce_hek293t_10uM.h5ad
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:25:45 | [INFO] Reading counts from MCE_Bioactive_Compounds_MDA_MB_231_10μM_Counts.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:31 | [INFO]   Shape: 40871 samples × 3407 genes | index='Sample_id' | first genes: ['A2M', 'A4GNT', 'AARS']
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:31 | [INFO] Reading metadata from MCE_Bioactive_Compounds_MDA_MB_231_10μM_MetaData.xlsx ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:33 | [INFO]   Note row detected — dropping and promoting next row to header
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:33 | [INFO]   Metadata shape: 40871 rows × 10 cols
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:33 | [INFO]   Metadata columns: ['unique_ID', 'experiment_no', 'sample_plate', 'sample_row', 'sample_column', 'cell_id', 'pert_itime', 'pert_idose', 'sample', 'treatment']
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:33 | [INFO]   Set index to column 'unique_ID'
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:39 | [INFO]   Built AnnData for mce_mda_mb_231_10uM: 40871 samples × 3407 genes
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:47 | [INFO] Saved subset h5ad: data/cigs_mce/raw/subsets/mce_mda_mb_231_10uM.h5ad
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:47 | [INFO] Concatenating 2 subsets (inner join on genes) ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:47 | [INFO]   Shared genes across all subsets: 3,407
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:48 | [INFO] Merged CIGS AnnData: 81,649 samples × 3,407 genes
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:28:48 | [INFO] Saving merged raw MCE AnnData to data/cigs_mce/raw/cigs_mce_raw.h5ad ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:05 | [INFO] Standardizing CIGS MCE subset ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:05 | [INFO] Applying CIGS-specific processing (source=mce)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:05 | [INFO]   Loaded AnnData: 81,649 × 3,407
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:05 | [INFO] Filtering empty and low-QC samples ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:05 | [INFO] Original: 81,649 samples
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:06 | [INFO] Running qc_filter.R on 81,649 samples ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:41 | [INFO] QC status: blank=9,935, excluded_plate=1,130, lowqc=5,361, pass=65,223
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:42 | [INFO] Remaining: 65,223 samples
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:42 | [INFO] Filtering JQ1 samples ...
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:42 | [INFO]   Dropping 1,501 JQ1 samples
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:43 | [INFO] Processing CIGS observations dataframe (source=mce)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:44 | [INFO]   Merging supplementary compound table onto obs
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:44 | [INFO]   Loaded compound table compounds_mce.csv: 11,356 compounds
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:44 | [INFO]   1,631 rows without a compound-table hit (controls / unlisted) — using catalog_id as compound_name
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:44 | [INFO]   Annotating compounds with PubChem CIDs
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:44 | [INFO]   Extracted 11,262 unique compounds from obs
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:44 | [INFO] Cache file data/cigs_mce/raw/processed/pubchem_cid_cache.json not found. Starting with empty cache.
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:29:44 | [INFO] Processing 11262 compounds
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:30:17 | [INFO] Processed 50/11262 compounds (50 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:30:51 | [INFO] Processed 100/11262 compounds (100 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:31:26 | [INFO] Processed 150/11262 compounds (150 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:32:00 | [INFO] Processed 200/11262 compounds (200 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:32:35 | [INFO] Processed 250/11262 compounds (250 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:33:10 | [INFO] Processed 300/11262 compounds (300 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:33:42 | [INFO] Processed 350/11262 compounds (350 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:34:15 | [INFO] Processed 400/11262 compounds (400 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:34:48 | [INFO] Processed 450/11262 compounds (450 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:35:21 | [INFO] Processed 500/11262 compounds (500 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:35:54 | [INFO] Processed 550/11262 compounds (550 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:36:26 | [INFO] Processed 600/11262 compounds (600 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:36:59 | [INFO] Processed 650/11262 compounds (649 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:37:33 | [INFO] Processed 700/11262 compounds (698 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:38:07 | [INFO] Processed 750/11262 compounds (748 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:38:41 | [INFO] Processed 800/11262 compounds (798 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:39:16 | [INFO] Processed 850/11262 compounds (848 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:39:51 | [INFO] Processed 900/11262 compounds (898 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:40:25 | [INFO] Processed 950/11262 compounds (948 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:41:03 | [INFO] Processed 1000/11262 compounds (998 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:41:35 | [INFO] Processed 1050/11262 compounds (1048 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:42:07 | [INFO] Processed 1100/11262 compounds (1097 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:42:40 | [INFO] Processed 1150/11262 compounds (1146 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:43:13 | [INFO] Processed 1200/11262 compounds (1196 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:43:47 | [INFO] Processed 1250/11262 compounds (1246 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:44:20 | [INFO] Processed 1300/11262 compounds (1296 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:44:52 | [INFO] Processed 1350/11262 compounds (1346 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:45:26 | [INFO] Processed 1400/11262 compounds (1396 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:45:59 | [INFO] Processed 1450/11262 compounds (1446 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:46:33 | [INFO] Processed 1500/11262 compounds (1495 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:47:06 | [INFO] Processed 1550/11262 compounds (1545 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:47:40 | [INFO] Processed 1600/11262 compounds (1595 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:48:14 | [INFO] Processed 1650/11262 compounds (1645 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:48:48 | [INFO] Processed 1700/11262 compounds (1695 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:49:21 | [INFO] Processed 1750/11262 compounds (1745 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:49:54 | [INFO] Processed 1800/11262 compounds (1795 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:50:27 | [INFO] Processed 1850/11262 compounds (1845 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:51:00 | [INFO] Processed 1900/11262 compounds (1895 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:51:34 | [INFO] Processed 1950/11262 compounds (1945 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:52:09 | [INFO] Processed 2000/11262 compounds (1995 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:52:42 | [INFO] Processed 2050/11262 compounds (2045 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:53:16 | [INFO] Processed 2100/11262 compounds (2095 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:53:49 | [INFO] Processed 2150/11262 compounds (2145 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:54:23 | [INFO] Processed 2200/11262 compounds (2195 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:54:56 | [INFO] Processed 2250/11262 compounds (2245 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:55:29 | [INFO] Processed 2300/11262 compounds (2293 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:56:02 | [INFO] Processed 2350/11262 compounds (2343 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:56:36 | [INFO] Processed 2400/11262 compounds (2393 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:57:08 | [INFO] Processed 2450/11262 compounds (2442 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:57:42 | [INFO] Processed 2500/11262 compounds (2491 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:58:16 | [INFO] Processed 2550/11262 compounds (2541 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:58:49 | [INFO] Processed 2600/11262 compounds (2591 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:59:22 | [INFO] Processed 2650/11262 compounds (2638 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 22:59:55 | [INFO] Processed 2700/11262 compounds (2688 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:00:30 | [INFO] Processed 2750/11262 compounds (2738 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:01:03 | [INFO] Processed 2800/11262 compounds (2788 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:01:37 | [INFO] Processed 2850/11262 compounds (2838 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:02:10 | [INFO] Processed 2900/11262 compounds (2888 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:02:43 | [INFO] Processed 2950/11262 compounds (2938 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:03:17 | [INFO] Processed 3000/11262 compounds (2987 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:03:51 | [INFO] Processed 3050/11262 compounds (3036 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:04:24 | [INFO] Processed 3100/11262 compounds (3085 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:04:57 | [INFO] Processed 3150/11262 compounds (3135 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:05:31 | [INFO] Processed 3200/11262 compounds (3185 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:06:04 | [INFO] Processed 3250/11262 compounds (3235 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:06:38 | [INFO] Processed 3300/11262 compounds (3284 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:07:11 | [INFO] Processed 3350/11262 compounds (3334 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:07:45 | [INFO] Processed 3400/11262 compounds (3384 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:08:19 | [INFO] Processed 3450/11262 compounds (3434 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:08:54 | [INFO] Processed 3500/11262 compounds (3484 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:09:28 | [INFO] Processed 3550/11262 compounds (3534 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:10:01 | [INFO] Processed 3600/11262 compounds (3584 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:10:35 | [INFO] Processed 3650/11262 compounds (3634 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:11:08 | [INFO] Processed 3700/11262 compounds (3684 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:11:42 | [INFO] Processed 3750/11262 compounds (3734 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:12:16 | [INFO] Processed 3800/11262 compounds (3784 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:12:48 | [INFO] Processed 3850/11262 compounds (3833 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:13:21 | [INFO] Processed 3900/11262 compounds (3883 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:13:55 | [INFO] Processed 3950/11262 compounds (3933 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:14:28 | [INFO] Processed 4000/11262 compounds (3981 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:15:01 | [INFO] Processed 4050/11262 compounds (4029 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:15:34 | [INFO] Processed 4100/11262 compounds (4079 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:16:08 | [INFO] Processed 4150/11262 compounds (4128 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:16:41 | [INFO] Processed 4200/11262 compounds (4178 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:17:16 | [INFO] Processed 4250/11262 compounds (4228 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:17:51 | [INFO] Processed 4300/11262 compounds (4277 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:18:25 | [INFO] Processed 4350/11262 compounds (4327 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:18:59 | [INFO] Processed 4400/11262 compounds (4377 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:19:33 | [INFO] Processed 4450/11262 compounds (4427 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:20:06 | [INFO] Processed 4500/11262 compounds (4477 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:20:39 | [INFO] Processed 4550/11262 compounds (4527 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:21:13 | [INFO] Processed 4600/11262 compounds (4577 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:21:48 | [INFO] Processed 4650/11262 compounds (4627 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:22:23 | [INFO] Processed 4700/11262 compounds (4677 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:22:59 | [INFO] Processed 4750/11262 compounds (4726 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:23:33 | [INFO] Processed 4800/11262 compounds (4776 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:24:07 | [INFO] Processed 4850/11262 compounds (4826 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:24:42 | [INFO] Processed 4900/11262 compounds (4876 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:25:15 | [INFO] Processed 4950/11262 compounds (4926 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:25:50 | [INFO] Processed 5000/11262 compounds (4976 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:26:24 | [INFO] Processed 5050/11262 compounds (5026 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:26:58 | [INFO] Processed 5100/11262 compounds (5076 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:27:33 | [INFO] Processed 5150/11262 compounds (5126 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:28:07 | [INFO] Processed 5200/11262 compounds (5176 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:28:41 | [INFO] Processed 5250/11262 compounds (5226 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:29:16 | [INFO] Processed 5300/11262 compounds (5276 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:29:51 | [INFO] Processed 5350/11262 compounds (5326 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:30:24 | [INFO] Processed 5400/11262 compounds (5376 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:30:58 | [INFO] Processed 5450/11262 compounds (5426 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:31:33 | [INFO] Processed 5500/11262 compounds (5476 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:32:06 | [INFO] Processed 5550/11262 compounds (5526 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:32:40 | [INFO] Processed 5600/11262 compounds (5576 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:33:14 | [INFO] Processed 5650/11262 compounds (5626 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:33:48 | [INFO] Processed 5700/11262 compounds (5675 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:34:21 | [INFO] Processed 5750/11262 compounds (5725 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:34:54 | [INFO] Processed 5800/11262 compounds (5775 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:35:28 | [INFO] Processed 5850/11262 compounds (5825 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:36:02 | [INFO] Processed 5900/11262 compounds (5875 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:36:36 | [INFO] Processed 5950/11262 compounds (5925 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:37:10 | [INFO] Processed 6000/11262 compounds (5974 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:37:44 | [INFO] Processed 6050/11262 compounds (6024 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:38:18 | [INFO] Processed 6100/11262 compounds (6074 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:38:53 | [INFO] Processed 6150/11262 compounds (6123 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:39:27 | [INFO] Processed 6200/11262 compounds (6173 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:40:01 | [INFO] Processed 6250/11262 compounds (6223 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:40:34 | [INFO] Processed 6300/11262 compounds (6273 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:41:08 | [INFO] Processed 6350/11262 compounds (6323 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:41:42 | [INFO] Processed 6400/11262 compounds (6373 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:42:16 | [INFO] Processed 6450/11262 compounds (6423 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:42:52 | [INFO] Processed 6500/11262 compounds (6473 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:43:25 | [INFO] Processed 6550/11262 compounds (6523 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:43:58 | [INFO] Processed 6600/11262 compounds (6573 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:44:30 | [INFO] Processed 6650/11262 compounds (6623 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:45:04 | [INFO] Processed 6700/11262 compounds (6673 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:45:37 | [INFO] Processed 6750/11262 compounds (6723 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:46:12 | [INFO] Processed 6800/11262 compounds (6773 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:46:45 | [INFO] Processed 6850/11262 compounds (6823 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:47:18 | [INFO] Processed 6900/11262 compounds (6873 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:47:53 | [INFO] Processed 6950/11262 compounds (6923 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:48:26 | [INFO] Processed 7000/11262 compounds (6973 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:49:00 | [INFO] Processed 7050/11262 compounds (7023 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:49:34 | [INFO] Processed 7100/11262 compounds (7073 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:50:08 | [INFO] Processed 7150/11262 compounds (7123 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:50:41 | [INFO] Processed 7200/11262 compounds (7173 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:51:15 | [INFO] Processed 7250/11262 compounds (7223 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:51:51 | [INFO] Processed 7300/11262 compounds (7272 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:52:24 | [INFO] Processed 7350/11262 compounds (7322 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:53:00 | [INFO] Processed 7400/11262 compounds (7372 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:53:34 | [INFO] Processed 7450/11262 compounds (7422 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:54:09 | [INFO] Processed 7500/11262 compounds (7472 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:54:44 | [INFO] Processed 7550/11262 compounds (7522 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:55:19 | [INFO] Processed 7600/11262 compounds (7572 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:55:52 | [INFO] Processed 7650/11262 compounds (7622 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:56:24 | [INFO] Processed 7700/11262 compounds (7672 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:56:58 | [INFO] Processed 7750/11262 compounds (7722 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:57:32 | [INFO] Processed 7800/11262 compounds (7772 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:58:05 | [INFO] Processed 7850/11262 compounds (7822 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:58:38 | [INFO] Processed 7900/11262 compounds (7872 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:59:10 | [INFO] Processed 7950/11262 compounds (7922 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-23 23:59:45 | [INFO] Processed 8000/11262 compounds (7972 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:00:17 | [INFO] Processed 8050/11262 compounds (8022 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:00:49 | [INFO] Processed 8100/11262 compounds (8072 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:01:24 | [INFO] Processed 8150/11262 compounds (8122 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:01:56 | [INFO] Processed 8200/11262 compounds (8172 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:02:30 | [INFO] Processed 8250/11262 compounds (8222 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:03:04 | [INFO] Processed 8300/11262 compounds (8271 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:03:38 | [INFO] Processed 8350/11262 compounds (8320 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:04:11 | [INFO] Processed 8400/11262 compounds (8369 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:04:45 | [INFO] Processed 8450/11262 compounds (8419 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:05:17 | [INFO] Processed 8500/11262 compounds (8469 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:05:53 | [INFO] Processed 8550/11262 compounds (8515 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:06:28 | [INFO] Processed 8600/11262 compounds (8565 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:07:04 | [INFO] Processed 8650/11262 compounds (8613 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:07:39 | [INFO] Processed 8700/11262 compounds (8660 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:08:13 | [INFO] Processed 8750/11262 compounds (8706 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:08:47 | [INFO] Processed 8800/11262 compounds (8756 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:09:20 | [INFO] Processed 8850/11262 compounds (8805 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:09:54 | [INFO] Processed 8900/11262 compounds (8855 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:10:27 | [INFO] Processed 8950/11262 compounds (8905 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:11:01 | [INFO] Processed 9000/11262 compounds (8955 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:11:34 | [INFO] Processed 9050/11262 compounds (9005 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:12:08 | [INFO] Processed 9100/11262 compounds (9055 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:12:45 | [INFO] Processed 9150/11262 compounds (9105 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:13:19 | [INFO] Processed 9200/11262 compounds (9155 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:13:53 | [INFO] Processed 9250/11262 compounds (9205 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:14:27 | [INFO] Processed 9300/11262 compounds (9254 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:15:01 | [INFO] Processed 9350/11262 compounds (9304 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:15:34 | [INFO] Processed 9400/11262 compounds (9354 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:16:09 | [INFO] Processed 9450/11262 compounds (9404 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:16:42 | [INFO] Processed 9500/11262 compounds (9454 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:17:17 | [INFO] Processed 9550/11262 compounds (9504 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:17:49 | [INFO] Processed 9600/11262 compounds (9554 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:18:23 | [INFO] Processed 9650/11262 compounds (9604 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:18:58 | [INFO] Processed 9700/11262 compounds (9652 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:19:32 | [INFO] Processed 9750/11262 compounds (9702 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:20:07 | [INFO] Processed 9800/11262 compounds (9752 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:20:40 | [INFO] Processed 9850/11262 compounds (9802 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:21:15 | [INFO] Processed 9900/11262 compounds (9852 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:21:48 | [INFO] Processed 9950/11262 compounds (9900 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:22:22 | [INFO] Processed 10000/11262 compounds (9949 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:22:55 | [INFO] Processed 10050/11262 compounds (9999 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:23:30 | [INFO] Processed 10100/11262 compounds (10049 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:24:04 | [INFO] Processed 10150/11262 compounds (10099 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:24:37 | [INFO] Processed 10200/11262 compounds (10148 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:25:11 | [INFO] Processed 10250/11262 compounds (10198 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:25:46 | [INFO] Processed 10300/11262 compounds (10248 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:26:20 | [INFO] Processed 10350/11262 compounds (10298 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:44:00 | [INFO] Processed 10400/11262 compounds (10348 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:44:34 | [INFO] Processed 10450/11262 compounds (10398 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:45:09 | [INFO] Processed 10500/11262 compounds (10448 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:45:43 | [INFO] Processed 10550/11262 compounds (10497 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:46:16 | [INFO] Processed 10600/11262 compounds (10546 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:46:50 | [INFO] Processed 10650/11262 compounds (10596 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:47:24 | [INFO] Processed 10700/11262 compounds (10646 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:47:58 | [INFO] Processed 10750/11262 compounds (10696 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:48:32 | [INFO] Processed 10800/11262 compounds (10746 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:49:08 | [INFO] Processed 10850/11262 compounds (10796 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:49:42 | [INFO] Processed 10900/11262 compounds (10846 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:50:16 | [INFO] Processed 10950/11262 compounds (10896 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:50:51 | [INFO] Processed 11000/11262 compounds (10946 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:51:27 | [INFO] Processed 11050/11262 compounds (10996 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:52:03 | [INFO] Processed 11100/11262 compounds (11045 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:52:39 | [INFO] Processed 11150/11262 compounds (11095 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:14 | [INFO] Processed 11200/11262 compounds (11145 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:49 | [INFO] Processed 11250/11262 compounds (11195 mapped so far)
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:58 | [INFO] Mapped 11207 out of 11262 compounds to PubChem CIDs
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:59 | [INFO]   Adding fixed metadata columns and sample_id
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:59 | [INFO]   Enforcing strict obs schema
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:59 | [INFO]   Processed 63,722 observations
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:59 | [INFO] Processing gene annotations
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:59 | [INFO]   Canonicalized 1 Excel/R-mangled gene symbols
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:59 | [INFO]   Resolving Ensembl IDs for 3,407 gene symbols ...
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:59 | [INFO] Ensembl symbol→ID lookup: 3,407 unique, 0 cached, 3,407 to fetch
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:53:59 | [INFO]   Batch 1/4: querying 1,000 symbols
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:14 | [INFO]   Batch 2/4: querying 1,000 symbols
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:25 | [INFO]   Batch 3/4: querying 1,000 symbols
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:35 | [INFO]   Batch 4/4: querying 407 symbols
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:38 | [INFO] Saved Ensembl lookup cache: 3,407 entries to data/cigs_mce/raw/processed/ensembl_cache.json
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:38 | [INFO]   Symbol→Ensembl mapping: 3,300 mapped, 107 unmapped
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:39 | [INFO]   Genes after annotation: 3,407
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:39 | [INFO] Creating standardized AnnData object
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:39 | [INFO] Standardized AnnData: 63,722 × 3,407
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:39 | [INFO] CIGS-specific processing completed
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:39 | [INFO] Saving standardized MCE dataset to data/cigs_mce/pseudobulk/full/cigs_mce.h5ad ...
+pseudobulk_cigs_mce.35496129.out:2026-04-24 00:54:58 | [INFO] CIGS MCE standardization complete.
+pseudobulk_cigs_mce.35496129.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_mce.35496129.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_mce.35496129.err:
+pseudobulk_cigs_mce.35496129.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_mce.35496129.err:  0 529.4M   0  15881   0      0  15274      0 10h 05m   00:01 10h 05m  15284
+pseudobulk_cigs_mce.35496129.err:  0 529.4M   0  2.26M   0      0 962.0k      0   09:23   00:02   09:21 962.3k
+pseudobulk_cigs_mce.35496129.err:  0 529.4M   0  4.94M   0      0  1.36M      0   06:28   00:03   06:25  1.36M
+pseudobulk_cigs_mce.35496129.err:  1 529.4M   1  7.31M   0      0  1.55M      0   05:39   00:04   05:35  1.55M
+pseudobulk_cigs_mce.35496129.err:  1 529.4M   1  8.53M   0      0  1.44M      0   06:06   00:05   06:01  1.44M
+pseudobulk_cigs_mce.35496129.err:  2 529.4M   2 10.76M   0      0  1.54M      0   05:43   00:06   05:37  1.80M
+pseudobulk_cigs_mce.35496129.err:  2 529.4M   2 12.73M   0      0  1.58M      0   05:34   00:08   05:26  1.85M
+pseudobulk_cigs_mce.35496129.err:  2 529.4M   2 13.30M   0      0  1.45M      0   06:02   00:09   05:53  1.52M
+pseudobulk_cigs_mce.35496129.err:  2 529.4M   2 14.57M   0      0  1.43M      0   06:09   00:10   05:59  1.32M
+pseudobulk_cigs_mce.35496129.err:  2 529.4M   2 15.57M   0      0  1.38M      0   06:22   00:11   06:11  1.32M
+pseudobulk_cigs_mce.35496129.err:  3 529.4M   3 16.51M   0      0  1.34M      0   06:34   00:12   06:22  1.07M
+pseudobulk_cigs_mce.35496129.err:  3 529.4M   3 17.52M   0      0  1.30M      0   06:44   00:13   06:31 920.5k
+pseudobulk_cigs_mce.35496129.err:  3 529.4M   3 18.37M   0      0  1.27M      0   06:56   00:14   06:42 973.8k
+pseudobulk_cigs_mce.35496129.err:  3 529.4M   3 19.23M   0      0  1.24M      0   07:06   00:15   06:51 894.0k
+pseudobulk_cigs_mce.35496129.err:  3 529.4M   3 20.20M   0      0  1.22M      0   07:12   00:16   06:56 899.6k
+pseudobulk_cigs_mce.35496129.err:  4 529.4M   4 21.18M   0      0  1.20M      0   07:17   00:17   07:00 916.2k
+pseudobulk_cigs_mce.35496129.err:  4 529.4M   4 22.07M   0      0  1.18M      0   07:24   00:18   07:06 899.6k
+pseudobulk_cigs_mce.35496129.err:  4 529.4M   4 22.89M   0      0  1.17M      0   07:32   00:19   07:13 906.2k
+pseudobulk_cigs_mce.35496129.err:  4 529.4M   4 23.75M   0      0  1.15M      0   07:38   00:20   07:18 913.6k
+pseudobulk_cigs_mce.35496129.err:  4 529.4M   4 24.59M   0      0  1.13M      0   07:44   00:21   07:23 888.2k
+pseudobulk_cigs_mce.35496129.err:  4 529.4M   4 25.57M   0      0  1.13M      0   07:47   00:22   07:25 886.6k
+pseudobulk_cigs_mce.35496129.err:  5 529.4M   5 26.51M   0      0  1.12M      0   07:52   00:23   07:29 891.0k
+pseudobulk_cigs_mce.35496129.err:  5 529.4M   5 27.34M   0      0  1.10M      0   07:58   00:24   07:34 881.7k
+pseudobulk_cigs_mce.35496129.err:  5 529.4M   5 28.25M   0      0  1.09M      0   08:03   00:25   07:38 886.0k
+pseudobulk_cigs_mce.35496129.err:  5 529.4M   5 29.24M   0      0  1.08M      0   08:06   00:26   07:40 902.3k
+pseudobulk_cigs_mce.35496129.err:  5 529.4M   5 30.24M   0      0  1.08M      0   08:08   00:27   07:41 904.0k
+pseudobulk_cigs_mce.35496129.err:  5 529.4M   5 31.09M   0      0  1.07M      0   08:12   00:28   07:44 894.3k
+pseudobulk_cigs_mce.35496129.err:  6 529.4M   6 31.87M   0      0  1.06M      0   08:16   00:29   07:47 894.8k
+pseudobulk_cigs_mce.35496129.err:  6 529.4M   6 32.77M   0      0  1.05M      0   08:19   00:30   07:49 898.8k
+pseudobulk_cigs_mce.35496129.err:  6 529.4M   6 33.68M   0      0  1.05M      0   08:22   00:31   07:51 891.6k
+pseudobulk_cigs_mce.35496129.err:  6 529.4M   6 34.66M   0      0  1.05M      0   08:23   00:32   07:51 895.0k
+pseudobulk_cigs_mce.35496129.err:  6 529.4M   6 35.44M   0      0  1.04M      0   08:27   00:33   07:54 878.8k
+pseudobulk_cigs_mce.35496129.err:  6 529.4M   6 36.23M   0      0  1.03M      0   08:31   00:34   07:57 878.4k
+pseudobulk_cigs_mce.35496129.err:  7 529.4M   7 37.18M   0      0  1.03M      0   08:32   00:35   07:57 891.7k
+pseudobulk_cigs_mce.35496129.err:  7 529.4M   7 38.14M   0      0  1.03M      0   08:33   00:37   07:56 902.1k
+pseudobulk_cigs_mce.35496129.err:  7 529.4M   7 39.13M   0      0  1.02M      0   08:38   00:38   08:00 852.5k
+pseudobulk_cigs_mce.35496129.err:  7 529.4M   7 40.03M   0      0  1.01M      0   08:39   00:39   08:00 879.0k
+pseudobulk_cigs_mce.35496129.err:  7 529.4M   7 40.90M   0      0  1.01M      0   08:41   00:40   08:01 896.9k
+pseudobulk_cigs_mce.35496129.err:  7 529.4M   7 41.84M   0      0  1.01M      0   08:43   00:41   08:02 889.6k
+pseudobulk_cigs_mce.35496129.err:  8 529.4M   8 42.80M   0      0  1.00M      0   08:44   00:42   08:02 890.6k
+pseudobulk_cigs_mce.35496129.err:  8 529.4M   8 43.67M   0      0  1.00M      0   08:45   00:43   08:02 921.1k
+pseudobulk_cigs_mce.35496129.err:  8 529.4M   8 44.42M   0      0  1.00M      0   08:49   00:44   08:05 884.5k
+pseudobulk_cigs_mce.35496129.err:  8 529.4M   8 45.29M   0      0  0.99M      0   08:50   00:45   08:05 883.4k
+pseudobulk_cigs_mce.35496129.err:  8 529.4M   8 46.25M   0      0  0.99M      0   08:51   00:46   08:05 894.6k
+pseudobulk_cigs_mce.35496129.err:  8 529.4M   8 47.19M   0      0  0.99M      0   08:52   00:47   08:05 886.0k
+pseudobulk_cigs_mce.35496129.err:  9 529.4M   9 48.03M   0      0  0.99M      0   08:53   00:48   08:05 877.1k
+pseudobulk_cigs_mce.35496129.err:  9 529.4M   9 48.84M   0      0  0.98M      0   08:55   00:49   08:06 895.7k
+pseudobulk_cigs_mce.35496129.err:  9 529.4M   9 49.71M   0      0  0.98M      0   08:57   00:50   08:07 890.4k
+pseudobulk_cigs_mce.35496129.err:  9 529.4M   9 50.65M   0      0  0.98M      0   08:58   00:51   08:07 886.4k
+pseudobulk_cigs_mce.35496129.err:  9 529.4M   9 51.62M   0      0  0.98M      0   08:58   00:52   08:06 897.7k
+pseudobulk_cigs_mce.35496129.err:  9 529.4M   9 52.56M   0      0  0.98M      0   08:58   00:53   08:05 920.6k
+pseudobulk_cigs_mce.35496129.err: 10 529.4M  10 53.52M   0      0  0.98M      0   08:59   00:54   08:05 948.5k
+pseudobulk_cigs_mce.35496129.err: 10 529.4M  10 54.52M   0      0  0.98M      0   08:58   00:55   08:03 981.5k
+pseudobulk_cigs_mce.35496129.err: 10 529.4M  10 55.39M   0      0  0.97M      0   09:00   00:56   08:04 966.4k
+pseudobulk_cigs_mce.35496129.err: 10 529.4M  10 56.31M   0      0  0.97M      0   09:00   00:57   08:03 956.8k
+pseudobulk_cigs_mce.35496129.err: 10 529.4M  10 57.30M   0      0  0.97M      0   09:00   00:58   08:02 966.0k
+pseudobulk_cigs_mce.35496129.err: 11 529.4M  11 58.37M   0      0  0.98M      0   08:59   00:59   08:00 989.8k
+pseudobulk_cigs_mce.35496129.err: 11 529.4M  11 59.45M   0      0  0.98M      0   08:58   01:00   07:58  0.98M
+pseudobulk_cigs_mce.35496129.err: 11 529.4M  11 60.52M   0      0  0.98M      0   08:58   01:01   07:57  1.02M
+pseudobulk_cigs_mce.35496129.err: 11 529.4M  11 61.60M   0      0  0.98M      0   08:57   01:02   07:55  1.05M
+pseudobulk_cigs_mce.35496129.err: 11 529.4M  11 62.72M   0      0  0.98M      0   08:57   01:03   07:54  1.05M
+pseudobulk_cigs_mce.35496129.err: 12 529.4M  12 63.66M   0      0  0.98M      0   08:57   01:04   07:53  1.03M
+pseudobulk_cigs_mce.35496129.err: 12 529.4M  12 64.70M   0      0  0.98M      0   08:57   01:05   07:52  1.02M
+pseudobulk_cigs_mce.35496129.err: 12 529.4M  12 65.81M   0      0  0.98M      0   08:56   01:06   07:50  1.03M
+pseudobulk_cigs_mce.35496129.err: 12 529.4M  12 66.96M   0      0  0.98M      0   08:54   01:07   07:47  1.04M
+pseudobulk_cigs_mce.35496129.err: 12 529.4M  12 68.09M   0      0  0.99M      0   08:53   01:08   07:45  1.07M
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 69.25M   0      0  0.99M      0   08:52   01:09   07:43  1.11M
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 70.23M   0      0  0.99M      0   08:52   01:10   07:42  1.09M
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 70.80M   0      0  0.98M      0   08:56   01:11   07:45  0.98M
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 71.13M   0      0  0.97M      0   09:01   01:12   07:49 844.0k
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 71.24M   0      0 989.6k      0   09:07   01:13   07:54 636.9k
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 71.32M   0      0 975.7k      0   09:15   01:14   08:01 406.7k
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 71.37M   0      0 963.3k      0   09:22   01:15   08:07 223.8k
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 71.42M   0      0 950.7k      0   09:30   01:16   08:14 120.8k
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 71.50M   0      0 938.7k      0   09:37   01:17   08:20  72461
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 71.61M   0      0 927.5k      0   09:44   01:19   08:25  73316
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 71.76M   0      0 917.0k      0   09:51   01:20   08:31  86503
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 71.95M   0      0 907.4k      0   09:57   01:21   08:36 111.5k
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 72.30M   0      0 900.0k      0   10:02   01:22   08:40 168.7k
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 72.92M   0      0 896.2k      0   10:04   01:23   08:41 274.4k
+pseudobulk_cigs_mce.35496129.err: 13 529.4M  13 73.71M   0      0 894.4k      0   10:06   01:24   08:42 403.4k
+pseudobulk_cigs_mce.35496129.err: 14 529.4M  14 74.33M   0      0 891.5k      0   10:08   01:25   08:43 502.0k
+pseudobulk_cigs_mce.35496129.err: 14 529.4M  14 74.95M   0      0 888.3k      0   10:10   01:26   08:44 590.0k
+pseudobulk_cigs_mce.35496129.err: 14 529.4M  14 75.56M   0      0 885.0k      0   10:12   01:27   08:45 646.0k
+pseudobulk_cigs_mce.35496129.err: 14 529.4M  14 76.27M   0      0 882.5k      0   10:14   01:28   08:46 661.1k
+pseudobulk_cigs_mce.35496129.err: 14 529.4M  14 76.96M   0      0 879.9k      0   10:16   01:29   08:47 643.1k
+pseudobulk_cigs_mce.35496129.err: 14 529.4M  14 77.69M   0      0 877.9k      0   10:17   01:30   08:47 656.0k
+pseudobulk_cigs_mce.35496129.err: 14 529.4M  14 78.46M   0      0 876.3k      0   10:18   01:31   08:47 680.2k
+pseudobulk_cigs_mce.35496129.err: 14 529.4M  14 79.36M   0      0 876.4k      0   10:18   01:32   08:46 734.8k
+pseudobulk_cigs_mce.35496129.err: 15 529.4M  15 80.47M   0      0 878.9k      0   10:16   01:33   08:43 819.4k
+pseudobulk_cigs_mce.35496129.err: 15 529.4M  15 81.58M   0      0 881.5k      0   10:14   01:34   08:40 908.4k
+pseudobulk_cigs_mce.35496129.err: 15 529.4M  15 82.57M   0      0 882.8k      0   10:14   01:35   08:39 970.0k
+pseudobulk_cigs_mce.35496129.err: 15 529.4M  15 83.45M   0      0 882.8k      0   10:14   01:36   08:38 999.8k
+pseudobulk_cigs_mce.35496129.err: 15 529.4M  15 84.44M   0      0 883.9k      0   10:13   01:37   08:36  0.99M
+pseudobulk_cigs_mce.35496129.err: 16 529.4M  16 85.41M   0      0 885.1k      0   10:12   01:38   08:34 999.4k
+pseudobulk_cigs_mce.35496129.err: 16 529.4M  16 86.38M   0      0 886.0k      0   10:11   01:39   08:32 970.8k
+pseudobulk_cigs_mce.35496129.err: 16 529.4M  16 87.41M   0      0 887.5k      0   10:10   01:40   08:30 975.6k
+pseudobulk_cigs_mce.35496129.err: 16 529.4M  16 88.41M   0      0 888.8k      0   10:09   01:41   08:28  0.98M
+pseudobulk_cigs_mce.35496129.err: 16 529.4M  16 89.50M   0      0 890.8k      0   10:08   01:42   08:26  0.99M
+pseudobulk_cigs_mce.35496129.err: 17 529.4M  17 90.76M   0      0 894.5k      0   10:06   01:43   08:23  1.05M
+pseudobulk_cigs_mce.35496129.err: 17 529.4M  17 91.77M   0      0 895.8k      0   10:05   01:44   08:21  1.06M
+pseudobulk_cigs_mce.35496129.err: 17 529.4M  17 92.95M   0      0 897.3k      0   10:04   01:46   08:18  1.06M
+pseudobulk_cigs_mce.35496129.err: 17 529.4M  17 93.74M   0      0 896.3k      0   10:04   01:47   08:17  1.01M
+pseudobulk_cigs_mce.35496129.err: 17 529.4M  17 94.42M   0      0 894.5k      0   10:06   01:48   08:18 966.5k
+pseudobulk_cigs_mce.35496129.err: 17 529.4M  17 95.12M   0      0 892.6k      0   10:07   01:49   08:18 855.3k
+pseudobulk_cigs_mce.35496129.err: 18 529.4M  18 95.85M   0      0 891.1k      0   10:08   01:50   08:18 797.5k
+pseudobulk_cigs_mce.35496129.err: 18 529.4M  18 96.58M   0      0 889.9k      0   10:09   01:51   08:18 733.7k
+pseudobulk_cigs_mce.35496129.err: 18 529.4M  18 97.31M   0      0 888.4k      0   10:10   01:52   08:18 721.3k
+pseudobulk_cigs_mce.35496129.err: 18 529.4M  18 98.13M   0      0 888.0k      0   10:10   01:53   08:17 750.7k
+pseudobulk_cigs_mce.35496129.err: 18 529.4M  18 99.06M   0      0 888.4k      0   10:10   01:54   08:16 796.8k
+pseudobulk_cigs_mce.35496129.err: 18 529.4M  18 100.2M   0      0 890.8k      0   10:08   01:55   08:13 883.3k
+pseudobulk_cigs_mce.35496129.err: 19 529.4M  19 101.7M   0      0 896.3k      0   10:04   01:56   08:08  1.01M
+pseudobulk_cigs_mce.35496129.err: 19 529.4M  19 103.2M   0      0 900.9k      0   10:01   01:57   08:04  1.14M
+pseudobulk_cigs_mce.35496129.err: 19 529.4M  19 104.3M   0      0 902.4k      0   10:00   01:58   08:02  1.18M
+pseudobulk_cigs_mce.35496129.err: 19 529.4M  19 105.5M   0      0 904.9k      0   09:59   01:59   08:00  1.23M
+pseudobulk_cigs_mce.35496129.err: 20 529.4M  20 106.6M   0      0 905.5k      0   09:58   02:00   07:58  1.19M
+pseudobulk_cigs_mce.35496129.err: 20 529.4M  20 107.7M   0      0 907.0k      0   09:57   02:01   07:56  1.11M
+pseudobulk_cigs_mce.35496129.err: 20 529.4M  20 108.8M   0      0 908.9k      0   09:56   02:02   07:54  1.06M
+pseudobulk_cigs_mce.35496129.err: 20 529.4M  20 110.0M   0      0 911.5k      0   09:54   02:03   07:51  1.08M
+pseudobulk_cigs_mce.35496129.err: 21 529.4M  21 111.2M   0      0 913.8k      0   09:53   02:04   07:49  1.08M
+pseudobulk_cigs_mce.35496129.err: 21 529.4M  21 112.3M   0      0 915.2k      0   09:52   02:05   07:47  1.11M
+pseudobulk_cigs_mce.35496129.err: 21 529.4M  21 113.4M   0      0 916.3k      0   09:51   02:06   07:45  1.10M
+pseudobulk_cigs_mce.35496129.err: 21 529.4M  21 114.5M   0      0 918.3k      0   09:50   02:07   07:43  1.11M
+pseudobulk_cigs_mce.35496129.err: 21 529.4M  21 115.7M   0      0 920.0k      0   09:49   02:08   07:41  1.09M
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 116.9M   0      0 922.8k      0   09:47   02:09   07:38  1.11M
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 118.2M   0      0 925.4k      0   09:45   02:10   07:35  1.14M
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 119.4M   0      0 927.8k      0   09:44   02:11   07:33  1.18M
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 120.3M   0      0 927.3k      0   09:44   02:12   07:32  1.12M
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 120.7M   0      0 923.5k      0   09:46   02:13   07:33  0.98M
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 121.0M   0      0 917.8k      0   09:50   02:15   07:35 795.2k
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 121.2M   0      0 912.3k      0   09:54   02:16   07:38 585.1k
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 121.3M   0      0 904.9k      0   09:59   02:17   07:42 353.6k
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 121.4M   0      0 898.6k      0   10:03   02:18   07:45 207.8k
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 121.5M   0      0 892.3k      0   10:07   02:19   07:48 145.0k
+pseudobulk_cigs_mce.35496129.err: 22 529.4M  22 121.6M   0      0 886.6k      0   10:11   02:20   07:51 116.8k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 121.8M   0      0 881.2k      0   10:15   02:21   07:54 114.7k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 122.0M   0      0 876.6k      0   10:18   02:22   07:56 143.0k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 122.4M   0      0 873.2k      0   10:20   02:23   07:57 205.2k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 122.9M   0      0 870.3k      0   10:22   02:24   07:58 276.0k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 123.6M   0      0 868.8k      0   10:23   02:25   07:58 383.8k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 124.2M   0      0 866.9k      0   10:25   02:26   07:59 473.1k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 124.7M   0      0 864.4k      0   10:27   02:27   08:00 530.3k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 125.3M   0      0 862.3k      0   10:28   02:28   08:00 565.6k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 126.0M   0      0 860.4k      0   10:30   02:29   08:01 589.7k
+pseudobulk_cigs_mce.35496129.err: 23 529.4M  23 126.6M   0      0 858.5k      0   10:31   02:31   08:00 576.4k
+pseudobulk_cigs_mce.35496129.err: 24 529.4M  24 127.2M   0      0 857.0k      0   10:32   02:32   08:00 583.9k
+pseudobulk_cigs_mce.35496129.err: 24 529.4M  24 127.9M   0      0 855.7k      0   10:33   02:33   08:00 614.7k
+pseudobulk_cigs_mce.35496129.err: 24 529.4M  24 128.8M   0      0 855.4k      0   10:33   02:34   07:59 660.4k
+pseudobulk_cigs_mce.35496129.err: 24 529.4M  24 129.8M   0      0 856.2k      0   10:33   02:35   07:58 739.4k
+pseudobulk_cigs_mce.35496129.err: 24 529.4M  24 130.8M   0      0 856.7k      0   10:32   02:36   07:56 806.5k
+pseudobulk_cigs_mce.35496129.err: 24 529.4M  24 131.6M   0      0 856.7k      0   10:32   02:37   07:55 848.9k
+pseudobulk_cigs_mce.35496129.err: 25 529.4M  25 132.4M   0      0 856.3k      0   10:33   02:38   07:55 872.9k
+pseudobulk_cigs_mce.35496129.err: 25 529.4M  25 133.3M   0      0 856.4k      0   10:33   02:39   07:54 887.3k
+pseudobulk_cigs_mce.35496129.err: 25 529.4M  25 134.2M   0      0 856.6k      0   10:32   02:40   07:52 870.0k
+pseudobulk_cigs_mce.35496129.err: 25 529.4M  25 135.0M   0      0 856.8k      0   10:32   02:41   07:51 858.5k
+pseudobulk_cigs_mce.35496129.err: 25 529.4M  25 135.9M   0      0 857.1k      0   10:32   02:42   07:50 868.4k
+pseudobulk_cigs_mce.35496129.err: 25 529.4M  25 136.9M   0      0 857.6k      0   10:32   02:43   07:49 898.9k
+pseudobulk_cigs_mce.35496129.err: 26 529.4M  26 137.9M   0      0 858.7k      0   10:31   02:44   07:47 932.7k
+pseudobulk_cigs_mce.35496129.err: 26 529.4M  26 139.1M   0      0 861.0k      0   10:29   02:45   07:44  0.97M
+pseudobulk_cigs_mce.35496129.err: 26 529.4M  26 140.2M   0      0 862.3k      0   10:28   02:46   07:42  1.01M
+pseudobulk_cigs_mce.35496129.err: 26 529.4M  26 141.0M   0      0 862.3k      0   10:28   02:47   07:41  1.00M
+pseudobulk_cigs_mce.35496129.err: 26 529.4M  26 141.9M   0      0 862.5k      0   10:28   02:48   07:40  0.99M
+pseudobulk_cigs_mce.35496129.err: 26 529.4M  26 142.9M   0      0 863.2k      0   10:28   02:49   07:39  0.98M
+pseudobulk_cigs_mce.35496129.err: 27 529.4M  27 143.9M   0      0 864.0k      0   10:27   02:50   07:37 960.7k
+pseudobulk_cigs_mce.35496129.err: 27 529.4M  27 144.8M   0      0 864.6k      0   10:26   02:51   07:35 941.9k
+pseudobulk_cigs_mce.35496129.err: 27 529.4M  27 145.8M   0      0 865.4k      0   10:26   02:52   07:34 965.5k
+pseudobulk_cigs_mce.35496129.err: 27 529.4M  27 146.9M   0      0 866.5k      0   10:25   02:53   07:32 997.1k
+pseudobulk_cigs_mce.35496129.err: 27 529.4M  27 147.9M   0      0 867.8k      0   10:24   02:54   07:30  0.99M
+pseudobulk_cigs_mce.35496129.err: 28 529.4M  28 149.2M   0      0 870.2k      0   10:22   02:55   07:27  1.05M
+pseudobulk_cigs_mce.35496129.err: 28 529.4M  28 150.5M   0      0 872.9k      0   10:21   02:56   07:25  1.12M
+pseudobulk_cigs_mce.35496129.err: 28 529.4M  28 152.0M   0      0 876.1k      0   10:18   02:57   07:21  1.21M
+pseudobulk_cigs_mce.35496129.err: 28 529.4M  28 153.1M   0      0 877.8k      0   10:17   02:58   07:19  1.23M
+pseudobulk_cigs_mce.35496129.err: 29 529.4M  29 154.3M   0      0 879.4k      0   10:16   02:59   07:17  1.24M
+pseudobulk_cigs_mce.35496129.err: 29 529.4M  29 155.4M   0      0 881.1k      0   10:15   03:00   07:15  1.22M
+pseudobulk_cigs_mce.35496129.err: 29 529.4M  29 156.7M   0      0 883.1k      0   10:13   03:01   07:12  1.20M
+pseudobulk_cigs_mce.35496129.err: 29 529.4M  29 157.9M   0      0 885.1k      0   10:12   03:02   07:10  1.17M
+pseudobulk_cigs_mce.35496129.err: 30 529.4M  30 159.1M   0      0 887.0k      0   10:11   03:03   07:08  1.18M
+pseudobulk_cigs_mce.35496129.err: 30 529.4M  30 160.4M   0      0 889.1k      0   10:09   03:04   07:05  1.20M
+pseudobulk_cigs_mce.35496129.err: 30 529.4M  30 161.7M   0      0 891.7k      0   10:07   03:05   07:02  1.23M
+pseudobulk_cigs_mce.35496129.err: 30 529.4M  30 163.2M   0      0 894.7k      0   10:05   03:06   06:59  1.28M
+pseudobulk_cigs_mce.35496129.err: 31 529.4M  31 164.9M   0      0 899.1k      0   10:02   03:07   06:55  1.37M
+pseudobulk_cigs_mce.35496129.err: 31 529.4M  31 166.9M   0      0 905.5k      0   09:58   03:08   06:50  1.53M
+pseudobulk_cigs_mce.35496129.err: 32 529.4M  32 169.5M   0      0 913.6k      0   09:53   03:09   06:44  1.74M
+pseudobulk_cigs_mce.35496129.err: 32 529.4M  32 171.0M   0      0 917.1k      0   09:51   03:10   06:41  1.77M
+pseudobulk_cigs_mce.35496129.err: 32 529.4M  32 172.1M   0      0 918.0k      0   09:50   03:12   06:38  1.70M
+pseudobulk_cigs_mce.35496129.err: 32 529.4M  32 172.8M   0      0 917.0k      0   09:51   03:13   06:38  1.52M
+pseudobulk_cigs_mce.35496129.err: 32 529.4M  32 173.3M   0      0 914.5k      0   09:52   03:14   06:38  1.21M
+pseudobulk_cigs_mce.35496129.err: 32 529.4M  32 173.6M   0      0 911.6k      0   09:54   03:15   06:39 835.8k
+pseudobulk_cigs_mce.35496129.err: 32 529.4M  32 174.0M   0      0 908.9k      0   09:56   03:16   06:40 601.9k
+pseudobulk_cigs_mce.35496129.err: 32 529.4M  32 174.4M   0      0 906.3k      0   09:58   03:17   06:41 463.7k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 174.8M   0      0 903.8k      0   09:59   03:18   06:41 404.5k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 175.2M   0      0 901.2k      0   10:01   03:19   06:42 392.6k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 175.6M   0      0 898.7k      0   10:03   03:20   06:43 400.9k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 176.0M   0      0 896.3k      0   10:04   03:21   06:43 409.5k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 176.5M   0      0 894.2k      0   10:06   03:22   06:44 423.4k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 176.9M   0      0 892.0k      0   10:07   03:23   06:44 428.7k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 177.4M   0      0 889.9k      0   10:09   03:24   06:45 443.4k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 177.9M   0      0 887.7k      0   10:10   03:25   06:45 455.6k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 178.3M   0      0 885.5k      0   10:12   03:26   06:46 455.0k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 178.8M   0      0 883.6k      0   10:13   03:27   06:46 459.6k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 179.3M   0      0 881.8k      0   10:14   03:28   06:46 475.3k
+pseudobulk_cigs_mce.35496129.err: 33 529.4M  33 179.8M   0      0 880.2k      0   10:15   03:29   06:46 489.0k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 180.3M   0      0 878.0k      0   10:17   03:30   06:47 485.4k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 180.7M   0      0 876.0k      0   10:18   03:31   06:47 489.2k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 181.2M   0      0 874.2k      0   10:20   03:32   06:48 491.0k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 181.7M   0      0 872.5k      0   10:21   03:33   06:48 488.7k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 182.2M   0      0 870.9k      0   10:22   03:34   06:48 487.8k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 182.7M   0      0 868.9k      0   10:23   03:35   06:48 491.2k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 183.1M   0      0 866.8k      0   10:25   03:36   06:49 485.8k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 183.6M   0      0 865.2k      0   10:26   03:37   06:49 489.3k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 184.2M   0      0 863.7k      0   10:27   03:38   06:49 492.7k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 184.6M   0      0 862.0k      0   10:28   03:39   06:49 487.5k
+pseudobulk_cigs_mce.35496129.err: 34 529.4M  34 185.1M   0      0 860.0k      0   10:30   03:40   06:50 481.4k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 185.5M   0      0 858.2k      0   10:31   03:41   06:50 489.5k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 186.0M   0      0 856.6k      0   10:32   03:42   06:50 485.9k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 186.6M   0      0 855.1k      0   10:33   03:43   06:50 486.0k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 187.1M   0      0 853.6k      0   10:35   03:44   06:51 489.3k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 187.5M   0      0 851.6k      0   10:36   03:45   06:51 486.4k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 187.9M   0      0 849.9k      0   10:37   03:46   06:51 485.8k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 188.4M   0      0 848.3k      0   10:39   03:47   06:52 486.2k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 189.0M   0      0 846.9k      0   10:40   03:48   06:52 486.2k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 189.5M   0      0 845.5k      0   10:41   03:49   06:52 487.8k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 189.9M   0      0 843.7k      0   10:42   03:50   06:52 494.0k
+pseudobulk_cigs_mce.35496129.err: 35 529.4M  35 190.4M   0      0 842.2k      0   10:43   03:51   06:52 498.7k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 190.9M   0      0 840.8k      0   10:44   03:52   06:52 502.9k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 191.4M   0      0 839.4k      0   10:45   03:53   06:52 500.4k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 192.0M   0      0 837.8k      0   10:47   03:54   06:53 494.5k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 192.4M   0      0 836.1k      0   10:48   03:55   06:53 491.3k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 192.9M   0      0 834.7k      0   10:49   03:56   06:53 495.9k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 193.4M   0      0 833.3k      0   10:50   03:57   06:53 493.4k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 193.9M   0      0 832.1k      0   10:51   03:58   06:53 497.6k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 194.5M   0      0 830.8k      0   10:52   03:59   06:53 505.9k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 195.0M   0      0 829.6k      0   10:53   04:00   06:53 531.2k
+pseudobulk_cigs_mce.35496129.err: 36 529.4M  36 195.6M   0      0 828.8k      0   10:54   04:01   06:53 556.0k
+pseudobulk_cigs_mce.35496129.err: 37 529.4M  37 196.4M   0      0 828.6k      0   10:54   04:02   06:52 607.7k
+pseudobulk_cigs_mce.35496129.err: 37 529.4M  37 197.4M   0      0 829.2k      0   10:53   04:03   06:50 694.0k
+pseudobulk_cigs_mce.35496129.err: 37 529.4M  37 198.7M   0      0 831.2k      0   10:52   04:04   06:48 848.4k
+pseudobulk_cigs_mce.35496129.err: 37 529.4M  37 200.5M   0      0 835.5k      0   10:48   04:05   06:43  1.08M
+pseudobulk_cigs_mce.35496129.err: 38 529.4M  38 202.9M   0      0 841.9k      0   10:43   04:06   06:37  1.43M
+pseudobulk_cigs_mce.35496129.err: 38 529.4M  38 206.1M   0      0 851.6k      0   10:36   04:07   06:29  1.90M
+pseudobulk_cigs_mce.35496129.err: 39 529.4M  39 209.4M   0      0 861.9k      0   10:28   04:08   06:20  2.37M
+pseudobulk_cigs_mce.35496129.err: 39 529.4M  39 211.6M   0      0 867.4k      0   10:24   04:09   06:15  2.56M
+pseudobulk_cigs_mce.35496129.err: 40 529.4M  40 214.2M   0      0 873.3k      0   10:20   04:11   06:09  2.55M
+pseudobulk_cigs_mce.35496129.err: 40 529.4M  40 216.5M   0      0 879.2k      0   10:16   04:12   06:04  2.54M
+pseudobulk_cigs_mce.35496129.err: 41 529.4M  41 218.5M   0      0 884.0k      0   10:13   04:13   06:00  2.33M
+pseudobulk_cigs_mce.35496129.err: 41 529.4M  41 220.6M   0      0 888.8k      0   10:09   04:14   05:55  2.09M
+pseudobulk_cigs_mce.35496129.err: 42 529.4M  42 222.8M   0      0 894.2k      0   10:06   04:15   05:51  2.09M
+pseudobulk_cigs_mce.35496129.err: 42 529.4M  42 225.0M   0      0 899.4k      0   10:02   04:16   05:46  2.14M
+pseudobulk_cigs_mce.35496129.err: 42 529.4M  42 227.1M   0      0 904.3k      0   09:59   04:17   05:42  2.10M
+pseudobulk_cigs_mce.35496129.err: 43 529.4M  43 229.4M   0      0 909.6k      0   09:55   04:18   05:37  2.13M
+pseudobulk_cigs_mce.35496129.err: 43 529.4M  43 231.6M   0      0 915.1k      0   09:52   04:19   05:33  2.18M
+pseudobulk_cigs_mce.35496129.err: 44 529.4M  44 234.0M   0      0 920.6k      0   09:48   04:20   05:28  2.19M
+pseudobulk_cigs_mce.35496129.err: 44 529.4M  44 236.6M   0      0 927.3k      0   09:44   04:21   05:23  2.27M
+pseudobulk_cigs_mce.35496129.err: 45 529.4M  45 239.5M   0      0 935.2k      0   09:39   04:22   05:17  2.44M
+pseudobulk_cigs_mce.35496129.err: 45 529.4M  45 242.2M   0      0 941.9k      0   09:35   04:23   05:12  2.69M
+pseudobulk_cigs_mce.35496129.err: 45 529.4M  45 242.2M   0      0 941.9k      0   09:35   04:23   05:12 941.9k
+pseudobulk_cigs_mce.35496129.err: 46 529.4M  46 244.4M   0      0 946.9k      0   09:32   04:24   05:08  2.22M
+pseudobulk_cigs_mce.35496129.err: 46 529.4M  46 246.4M   0      0 950.9k      0   09:30   04:25   05:05  2.07M
+pseudobulk_cigs_mce.35496129.err: 46 529.4M  46 248.5M   0      0 955.4k      0   09:27   04:26   05:01  2.07M
+pseudobulk_cigs_mce.35496129.err: 47 529.4M  47 250.7M   0      0 960.4k      0   09:24   04:27   04:57  2.10M
+pseudobulk_cigs_mce.35496129.err: 47 529.4M  47 253.0M   0      0 965.3k      0   09:21   04:28   04:53  2.12M
+pseudobulk_cigs_mce.35496129.err: 48 529.4M  48 255.2M   0      0 970.1k      0   09:18   04:29   04:49  2.12M
+pseudobulk_cigs_mce.35496129.err: 48 529.4M  48 257.4M   0      0 975.1k      0   09:15   04:30   04:45  2.18M
+pseudobulk_cigs_mce.35496129.err: 49 529.4M  49 259.7M   0      0 980.0k      0   09:13   04:31   04:42  2.21M
+pseudobulk_cigs_mce.35496129.err: 49 529.4M  49 262.0M   0      0 985.0k      0   09:10   04:32   04:38  2.23M
+pseudobulk_cigs_mce.35496129.err: 49 529.4M  49 264.5M   0      0 990.8k      0   09:07   04:33   04:34  2.29M
+pseudobulk_cigs_mce.35496129.err: 50 529.4M  50 267.3M   0      0 997.2k      0   09:03   04:34   04:29  2.38M
+pseudobulk_cigs_mce.35496129.err: 50 529.4M  50 269.8M   0      0  0.97M      0   09:00   04:35   04:25  2.42M
+pseudobulk_cigs_mce.35496129.err: 51 529.4M  51 272.2M   0      0  0.98M      0   08:57   04:36   04:21  2.45M
+pseudobulk_cigs_mce.35496129.err: 51 529.4M  51 274.3M   0      0  0.98M      0   08:55   04:37   04:18  2.40M
+pseudobulk_cigs_mce.35496129.err: 52 529.4M  52 276.3M   0      0  0.99M      0   08:53   04:38   04:15  2.31M
+pseudobulk_cigs_mce.35496129.err: 52 529.4M  52 278.5M   0      0  0.99M      0   08:51   04:39   04:12  2.21M
+pseudobulk_cigs_mce.35496129.err: 53 529.4M  53 280.7M   0      0  1.00M      0   08:49   04:40   04:09  2.15M
+pseudobulk_cigs_mce.35496129.err: 53 529.4M  53 283.0M   0      0  1.00M      0   08:46   04:41   04:05  2.12M
+pseudobulk_cigs_mce.35496129.err: 53 529.4M  53 285.3M   0      0  1.00M      0   08:44   04:42   04:02  2.17M
+pseudobulk_cigs_mce.35496129.err: 54 529.4M  54 287.5M   0      0  1.01M      0   08:42   04:43   03:59  2.21M
+pseudobulk_cigs_mce.35496129.err: 54 529.4M  54 289.8M   0      0  1.01M      0   08:39   04:44   03:55  2.22M
+pseudobulk_cigs_mce.35496129.err: 55 529.4M  55 292.2M   0      0  1.02M      0   08:37   04:45   03:52  2.27M
+pseudobulk_cigs_mce.35496129.err: 55 529.4M  55 294.7M   0      0  1.02M      0   08:34   04:46   03:48  2.32M
+pseudobulk_cigs_mce.35496129.err: 56 529.4M  56 297.5M   0      0  1.03M      0   08:31   04:47   03:44  2.41M
+pseudobulk_cigs_mce.35496129.err: 56 529.4M  56 299.7M   0      0  1.03M      0   08:29   04:48   03:41  2.40M
+pseudobulk_cigs_mce.35496129.err: 57 529.4M  57 301.8M   0      0  1.04M      0   08:28   04:49   03:39  2.36M
+pseudobulk_cigs_mce.35496129.err: 57 529.4M  57 304.0M   0      0  1.04M      0   08:26   04:50   03:36  2.31M
+pseudobulk_cigs_mce.35496129.err: 57 529.4M  57 306.1M   0      0  1.04M      0   08:24   04:51   03:33  2.23M
+pseudobulk_cigs_mce.35496129.err: 58 529.4M  58 308.2M   0      0  1.05M      0   08:22   04:52   03:30  2.11M
+pseudobulk_cigs_mce.35496129.err: 58 529.4M  58 310.4M   0      0  1.05M      0   08:20   04:53   03:27  2.10M
+pseudobulk_cigs_mce.35496129.err: 59 529.4M  59 312.6M   0      0  1.06M      0   08:19   04:54   03:25  2.14M
+pseudobulk_cigs_mce.35496129.err: 59 529.4M  59 314.9M   0      0  1.06M      0   08:17   04:55   03:22  2.14M
+pseudobulk_cigs_mce.35496129.err: 59 529.4M  59 317.1M   0      0  1.06M      0   08:15   04:56   03:19  2.16M
+pseudobulk_cigs_mce.35496129.err: 60 529.4M  60 319.4M   0      0  1.07M      0   08:13   04:57   03:16  2.19M
+pseudobulk_cigs_mce.35496129.err: 60 529.4M  60 321.7M   0      0  1.07M      0   08:11   04:58   03:13  2.23M
+pseudobulk_cigs_mce.35496129.err: 61 529.4M  61 324.3M   0      0  1.08M      0   08:09   04:59   03:10  2.29M
+pseudobulk_cigs_mce.35496129.err: 61 529.4M  61 327.2M   0      0  1.08M      0   08:06   05:00   03:06  2.43M
+pseudobulk_cigs_mce.35496129.err: 62 529.4M  62 329.7M   0      0  1.09M      0   08:04   05:01   03:03  2.49M
+pseudobulk_cigs_mce.35496129.err: 62 529.4M  62 331.7M   0      0  1.09M      0   08:03   05:02   03:01  2.43M
+pseudobulk_cigs_mce.35496129.err: 63 529.4M  63 333.6M   0      0  1.09M      0   08:02   05:03   02:59  2.34M
+pseudobulk_cigs_mce.35496129.err: 63 529.4M  63 335.7M   0      0  1.10M      0   08:00   05:04   02:56  2.24M
+pseudobulk_cigs_mce.35496129.err: 63 529.4M  63 337.9M   0      0  1.10M      0   07:59   05:05   02:54  2.09M
+pseudobulk_cigs_mce.35496129.err: 64 529.4M  64 340.0M   0      0  1.10M      0   07:57   05:06   02:51  2.03M
+pseudobulk_cigs_mce.35496129.err: 64 529.4M  64 342.2M   0      0  1.11M      0   07:56   05:07   02:49  2.06M
+pseudobulk_cigs_mce.35496129.err: 65 529.4M  65 344.3M   0      0  1.11M      0   07:55   05:08   02:47  2.10M
+pseudobulk_cigs_mce.35496129.err: 65 529.4M  65 346.4M   0      0  1.11M      0   07:53   05:09   02:44  2.13M
+pseudobulk_cigs_mce.35496129.err: 65 529.4M  65 348.7M   0      0  1.12M      0   07:52   05:10   02:42  2.15M
+pseudobulk_cigs_mce.35496129.err: 66 529.4M  66 351.1M   0      0  1.12M      0   07:50   05:11   02:39  2.21M
+pseudobulk_cigs_mce.35496129.err: 66 529.4M  66 353.4M   0      0  1.12M      0   07:48   05:12   02:36  2.23M
+pseudobulk_cigs_mce.35496129.err: 67 529.4M  67 355.4M   0      0  1.13M      0   07:47   05:13   02:34  2.22M
+pseudobulk_cigs_mce.35496129.err: 67 529.4M  67 357.7M   0      0  1.13M      0   07:46   05:14   02:32  2.25M
+pseudobulk_cigs_mce.35496129.err: 67 529.4M  67 359.6M   0      0  1.13M      0   07:45   05:15   02:30  2.17M
+pseudobulk_cigs_mce.35496129.err: 68 529.4M  68 361.6M   0      0  1.14M      0   07:44   05:16   02:28  2.08M
+pseudobulk_cigs_mce.35496129.err: 68 529.4M  68 363.7M   0      0  1.14M      0   07:42   05:17   02:25  2.05M
+pseudobulk_cigs_mce.35496129.err: 69 529.4M  69 365.7M   0      0  1.14M      0   07:41   05:18   02:23  2.05M
+pseudobulk_cigs_mce.35496129.err: 69 529.4M  69 367.8M   0      0  1.14M      0   07:40   05:19   02:21  2.00M
+pseudobulk_cigs_mce.35496129.err: 69 529.4M  69 369.9M   0      0  1.15M      0   07:39   05:20   02:19  2.05M
+pseudobulk_cigs_mce.35496129.err: 70 529.4M  70 372.1M   0      0  1.15M      0   07:38   05:21   02:17  2.09M
+pseudobulk_cigs_mce.35496129.err: 70 529.4M  70 374.3M   0      0  1.15M      0   07:36   05:22   02:14  2.11M
+pseudobulk_cigs_mce.35496129.err: 71 529.4M  71 376.3M   0      0  1.16M      0   07:35   05:24   02:11  2.08M
+pseudobulk_cigs_mce.35496129.err: 71 529.4M  71 378.2M   0      0  1.16M      0   07:34   05:25   02:09  2.05M
+pseudobulk_cigs_mce.35496129.err: 71 529.4M  71 380.2M   0      0  1.16M      0   07:33   05:26   02:07  2.03M
+pseudobulk_cigs_mce.35496129.err: 72 529.4M  72 382.3M   0      0  1.16M      0   07:32   05:27   02:05  2.03M
+pseudobulk_cigs_mce.35496129.err: 72 529.4M  72 384.6M   0      0  1.17M      0   07:31   05:28   02:03  2.04M
+pseudobulk_cigs_mce.35496129.err: 73 529.4M  73 386.9M   0      0  1.17M      0   07:30   05:29   02:01  2.12M
+pseudobulk_cigs_mce.35496129.err: 73 529.4M  73 389.2M   0      0  1.17M      0   07:28   05:30   01:58  2.19M
+pseudobulk_cigs_mce.35496129.err: 73 529.4M  73 391.6M   0      0  1.18M      0   07:27   05:31   01:56  2.25M
+pseudobulk_cigs_mce.35496129.err: 74 529.4M  74 393.8M   0      0  1.18M      0   07:26   05:32   01:54  2.28M
+pseudobulk_cigs_mce.35496129.err: 74 529.4M  74 396.2M   0      0  1.18M      0   07:24   05:33   01:51  2.31M
+pseudobulk_cigs_mce.35496129.err: 75 529.4M  75 398.7M   0      0  1.19M      0   07:23   05:34   01:49  2.34M
+pseudobulk_cigs_mce.35496129.err: 75 529.4M  75 401.3M   0      0  1.19M      0   07:22   05:35   01:47  2.29M
+pseudobulk_cigs_mce.35496129.err: 76 529.4M  76 403.8M   0      0  1.20M      0   07:20   05:36   01:44  2.32M
+pseudobulk_cigs_mce.35496129.err: 76 529.4M  76 406.2M   0      0  1.20M      0   07:19   05:37   01:42  2.35M
+pseudobulk_cigs_mce.35496129.err: 77 529.4M  77 408.2M   0      0  1.20M      0   07:18   05:38   01:40  2.26M
+pseudobulk_cigs_mce.35496129.err: 77 529.4M  77 410.6M   0      0  1.20M      0   07:17   05:39   01:38  2.24M
+pseudobulk_cigs_mce.35496129.err: 77 529.4M  77 412.7M   0      0  1.21M      0   07:16   05:40   01:36  2.25M
+pseudobulk_cigs_mce.35496129.err: 78 529.4M  78 414.9M   0      0  1.21M      0   07:15   05:41   01:34  2.20M
+pseudobulk_cigs_mce.35496129.err: 78 529.4M  78 417.2M   0      0  1.21M      0   07:14   05:42   01:32  2.15M
+pseudobulk_cigs_mce.35496129.err: 79 529.4M  79 419.4M   0      0  1.22M      0   07:13   05:43   01:30  2.22M
+pseudobulk_cigs_mce.35496129.err: 79 529.4M  79 421.7M   0      0  1.22M      0   07:12   05:44   01:28  2.20M
+pseudobulk_cigs_mce.35496129.err: 80 529.4M  80 424.0M   0      0  1.22M      0   07:11   05:45   01:26  2.22M
+pseudobulk_cigs_mce.35496129.err: 80 529.4M  80 426.3M   0      0  1.23M      0   07:10   05:46   01:24  2.25M
+pseudobulk_cigs_mce.35496129.err: 80 529.4M  80 428.8M   0      0  1.23M      0   07:08   05:47   01:21  2.28M
+pseudobulk_cigs_mce.35496129.err: 81 529.4M  81 431.4M   0      0  1.23M      0   07:07   05:48   01:19  2.36M
+pseudobulk_cigs_mce.35496129.err: 81 529.4M  81 433.9M   0      0  1.24M      0   07:06   05:49   01:17  2.41M
+pseudobulk_cigs_mce.35496129.err: 82 529.4M  82 436.3M   0      0  1.24M      0   07:05   05:50   01:15  2.42M
+pseudobulk_cigs_mce.35496129.err: 82 529.4M  82 438.3M   0      0  1.24M      0   07:04   05:51   01:13  2.35M
+pseudobulk_cigs_mce.35496129.err: 83 529.4M  83 440.3M   0      0  1.24M      0   07:03   05:52   01:11  2.26M
+pseudobulk_cigs_mce.35496129.err: 83 529.4M  83 442.4M   0      0  1.25M      0   07:03   05:53   01:10  2.16M
+pseudobulk_cigs_mce.35496129.err: 83 529.4M  83 444.6M   0      0  1.25M      0   07:02   05:54   01:08  2.09M
+pseudobulk_cigs_mce.35496129.err: 84 529.4M  84 446.7M   0      0  1.25M      0   07:01   05:55   01:06  2.06M
+pseudobulk_cigs_mce.35496129.err: 84 529.4M  84 449.0M   0      0  1.25M      0   07:00   05:56   01:04  2.10M
+pseudobulk_cigs_mce.35496129.err: 85 529.4M  85 451.1M   0      0  1.26M      0   06:59   05:57   01:02  2.14M
+pseudobulk_cigs_mce.35496129.err: 85 529.4M  85 453.4M   0      0  1.26M      0   06:58   05:58   01:00  2.15M
+pseudobulk_cigs_mce.35496129.err: 86 529.4M  86 455.7M   0      0  1.26M      0   06:57   05:59   00:58  2.19M
+pseudobulk_cigs_mce.35496129.err: 86 529.4M  86 458.2M   0      0  1.27M      0   06:56   06:00   00:56  2.25M
+pseudobulk_cigs_mce.35496129.err: 87 529.4M  87 460.9M   0      0  1.27M      0   06:55   06:01   00:54  2.35M
+pseudobulk_cigs_mce.35496129.err: 87 529.4M  87 463.8M   0      0  1.27M      0   06:54   06:02   00:52  2.39M
+pseudobulk_cigs_mce.35496129.err: 88 529.4M  88 466.6M   0      0  1.28M      0   06:52   06:03   00:49  2.48M
+pseudobulk_cigs_mce.35496129.err: 88 529.4M  88 468.7M   0      0  1.28M      0   06:52   06:04   00:48  2.43M
+pseudobulk_cigs_mce.35496129.err: 88 529.4M  88 470.8M   0      0  1.28M      0   06:51   06:05   00:46  2.37M
+pseudobulk_cigs_mce.35496129.err: 89 529.4M  89 473.0M   0      0  1.28M      0   06:50   06:06   00:44  2.27M
+pseudobulk_cigs_mce.35496129.err: 89 529.4M  89 475.3M   0      0  1.29M      0   06:49   06:07   00:42  2.25M
+pseudobulk_cigs_mce.35496129.err: 90 529.4M  90 477.6M   0      0  1.29M      0   06:49   06:09   00:40  2.17M
+pseudobulk_cigs_mce.35496129.err: 90 529.4M  90 479.8M   0      0  1.29M      0   06:48   06:10   00:38  2.18M
+pseudobulk_cigs_mce.35496129.err: 91 529.4M  91 482.1M   0      0  1.29M      0   06:47   06:11   00:36  2.22M
+pseudobulk_cigs_mce.35496129.err: 91 529.4M  91 484.5M   0      0  1.30M      0   06:46   06:12   00:34  2.26M
+pseudobulk_cigs_mce.35496129.err: 91 529.4M  91 486.9M   0      0  1.30M      0   06:45   06:13   00:32  2.27M
+pseudobulk_cigs_mce.35496129.err: 92 529.4M  92 489.6M   0      0  1.30M      0   06:44   06:14   00:30  2.36M
+pseudobulk_cigs_mce.35496129.err: 92 529.4M  92 492.0M   0      0  1.31M      0   06:43   06:15   00:28  2.41M
+pseudobulk_cigs_mce.35496129.err: 93 529.4M  93 494.3M   0      0  1.31M      0   06:42   06:16   00:26  2.39M
+pseudobulk_cigs_mce.35496129.err: 93 529.4M  93 496.5M   0      0  1.31M      0   06:42   06:17   00:25  2.36M
+pseudobulk_cigs_mce.35496129.err: 94 529.4M  94 498.3M   0      0  1.31M      0   06:41   06:18   00:23  2.25M
+pseudobulk_cigs_mce.35496129.err: 94 529.4M  94 500.5M   0      0  1.31M      0   06:41   06:19   00:22  2.13M
+pseudobulk_cigs_mce.35496129.err: 94 529.4M  94 502.7M   0      0  1.32M      0   06:40   06:20   00:20  2.09M
+pseudobulk_cigs_mce.35496129.err: 95 529.4M  95 504.9M   0      0  1.32M      0   06:39   06:21   00:18  2.08M
+pseudobulk_cigs_mce.35496129.err: 95 529.4M  95 507.1M   0      0  1.32M      0   06:38   06:22   00:16  2.09M
+pseudobulk_cigs_mce.35496129.err: 96 529.4M  96 509.3M   0      0  1.32M      0   06:38   06:23   00:15  2.16M
+pseudobulk_cigs_mce.35496129.err: 96 529.4M  96 511.5M   0      0  1.33M      0   06:37   06:24   00:13  2.18M
+pseudobulk_cigs_mce.35496129.err: 97 529.4M  97 513.8M   0      0  1.33M      0   06:36   06:25   00:11  2.20M
+pseudobulk_cigs_mce.35496129.err: 97 529.4M  97 516.4M   0      0  1.33M      0   06:35   06:26   00:09  2.27M
+pseudobulk_cigs_mce.35496129.err: 98 529.4M  98 519.0M   0      0  1.33M      0   06:35   06:27   00:08  2.34M
+pseudobulk_cigs_mce.35496129.err: 98 529.4M  98 521.9M   0      0  1.34M      0   06:33   06:28   00:05  2.44M
+pseudobulk_cigs_mce.35496129.err: 99 529.4M  99 524.1M   0      0  1.34M      0   06:33   06:29   00:04  2.41M
+pseudobulk_cigs_mce.35496129.err: 99 529.4M  99 526.5M   0      0  1.34M      0   06:32   06:30   00:02  2.41M
+pseudobulk_cigs_mce.35496129.err: 99 529.4M  99 528.5M   0      0  1.34M      0   06:32   06:31   00:01  2.31M
+pseudobulk_cigs_mce.35496129.err:100 529.4M 100 529.4M   0      0  1.35M      0   06:31   06:31          2.31M
+pseudobulk_cigs_mce.35496129.err:100 529.4M 100 529.4M   0      0  1.35M      0   06:31   06:31          2.31M
+pseudobulk_cigs_mce.35496129.err:100 529.4M 100 529.4M   0      0  1.35M      0   06:31   06:31          2.31M
+pseudobulk_cigs_mce.35496129.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_mce.35496129.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_mce.35496129.err:
+pseudobulk_cigs_mce.35496129.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_mce.35496129.err:  2  2.03M   2  47885   0      0  45886      0   00:46   00:01   00:45  45917
+pseudobulk_cigs_mce.35496129.err:100  2.03M 100  2.03M   0      0  1.09M      0   00:01   00:01          45917
+pseudobulk_cigs_mce.35496129.err:100  2.03M 100  2.03M   0      0  1.09M      0   00:01   00:01          45917
+pseudobulk_cigs_mce.35496129.err:100  2.03M 100  2.03M   0      0  1.09M      0   00:01   00:01          45917
+pseudobulk_cigs_mce.35496129.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_mce.35496129.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_mce.35496129.err:
+pseudobulk_cigs_mce.35496129.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_mce.35496129.err:  0 510.0M   0 288.9k   0      0 268.5k      0   32:25   00:01   32:24 268.6k
+pseudobulk_cigs_mce.35496129.err:  0 510.0M   0  4.18M   0      0  1.95M      0   04:20   00:02   04:18  1.95M
+pseudobulk_cigs_mce.35496129.err:  1 510.0M   1  7.01M   0      0  2.18M      0   03:52   00:03   03:49  2.18M
+pseudobulk_cigs_mce.35496129.err:  1 510.0M   1  8.41M   0      0  1.97M      0   04:18   00:04   04:14  1.97M
+pseudobulk_cigs_mce.35496129.err:  2 510.0M   2 11.67M   0      0  2.19M      0   03:52   00:05   03:47  2.19M
+pseudobulk_cigs_mce.35496129.err:  2 510.0M   2 14.19M   0      0  2.21M      0   03:49   00:06   03:43  2.61M
+pseudobulk_cigs_mce.35496129.err:  3 510.0M   3 16.34M   0      0  2.19M      0   03:52   00:07   03:45  2.28M
+pseudobulk_cigs_mce.35496129.err:  3 510.0M   3 18.68M   0      0  2.19M      0   03:52   00:08   03:44  2.19M
+pseudobulk_cigs_mce.35496129.err:  4 510.0M   4 21.14M   0      0  2.20M      0   03:51   00:09   03:42  2.39M
+pseudobulk_cigs_mce.35496129.err:  4 510.0M   4 23.67M   0      0  2.22M      0   03:49   00:10   03:39  2.25M
+pseudobulk_cigs_mce.35496129.err:  5 510.0M   5 26.22M   0      0  2.23M      0   03:47   00:11   03:36  2.26M
+pseudobulk_cigs_mce.35496129.err:  5 510.0M   5 28.28M   0      0  2.21M      0   03:50   00:12   03:38  2.24M
+pseudobulk_cigs_mce.35496129.err:  5 510.0M   5 30.37M   0      0  2.19M      0   03:52   00:13   03:39  2.20M
+pseudobulk_cigs_mce.35496129.err:  6 510.0M   6 32.69M   0      0  2.20M      0   03:51   00:14   03:37  2.19M
+pseudobulk_cigs_mce.35496129.err:  6 510.0M   6 35.05M   0      0  2.21M      0   03:50   00:15   03:35  2.18M
+pseudobulk_cigs_mce.35496129.err:  7 510.0M   7 37.33M   0      0  2.21M      0   03:50   00:16   03:34  2.15M
+pseudobulk_cigs_mce.35496129.err:  7 510.0M   7 39.84M   0      0  2.22M      0   03:48   00:17   03:31  2.26M
+pseudobulk_cigs_mce.35496129.err:  8 510.0M   8 42.30M   0      0  2.24M      0   03:47   00:18   03:29  2.35M
+pseudobulk_cigs_mce.35496129.err:  8 510.0M   8 44.60M   0      0  2.24M      0   03:47   00:19   03:28  2.36M
+pseudobulk_cigs_mce.35496129.err:  9 510.0M   9 47.16M   0      0  2.25M      0   03:46   00:20   03:26  2.39M
+pseudobulk_cigs_mce.35496129.err:  9 510.0M   9 49.30M   0      0  2.25M      0   03:46   00:21   03:25  2.36M
+pseudobulk_cigs_mce.35496129.err: 10 510.0M  10 51.22M   0      0  2.23M      0   03:48   00:22   03:26  2.25M
+pseudobulk_cigs_mce.35496129.err: 10 510.0M  10 53.58M   0      0  2.23M      0   03:47   00:23   03:24  2.22M
+pseudobulk_cigs_mce.35496129.err: 10 510.0M  10 56.01M   0      0  2.24M      0   03:47   00:24   03:23  2.25M
+pseudobulk_cigs_mce.35496129.err: 11 510.0M  11 58.43M   0      0  2.25M      0   03:46   00:25   03:21  2.23M
+pseudobulk_cigs_mce.35496129.err: 11 510.0M  11 60.75M   0      0  2.23M      0   03:47   00:27   03:20  2.19M
+pseudobulk_cigs_mce.35496129.err: 12 510.0M  12 63.20M   0      0  2.24M      0   03:47   00:28   03:19  2.29M
+pseudobulk_cigs_mce.35496129.err: 12 510.0M  12 65.34M   0      0  2.24M      0   03:47   00:29   03:18  2.26M
+pseudobulk_cigs_mce.35496129.err: 13 510.0M  13 67.80M   0      0  2.24M      0   03:46   00:30   03:16  2.26M
+pseudobulk_cigs_mce.35496129.err: 13 510.0M  13 70.28M   0      0  2.25M      0   03:46   00:31   03:15  2.27M
+pseudobulk_cigs_mce.35496129.err: 14 510.0M  14 72.75M   0      0  2.26M      0   03:45   00:32   03:13  2.37M
+pseudobulk_cigs_mce.35496129.err: 14 510.0M  14 74.75M   0      0  2.25M      0   03:46   00:33   03:13  2.28M
+pseudobulk_cigs_mce.35496129.err: 15 510.0M  15 76.90M   0      0  2.24M      0   03:46   00:34   03:12  2.28M
+pseudobulk_cigs_mce.35496129.err: 15 510.0M  15 79.13M   0      0  2.24M      0   03:46   00:35   03:11  2.24M
+pseudobulk_cigs_mce.35496129.err: 16 510.0M  16 81.68M   0      0  2.25M      0   03:46   00:36   03:10  2.25M
+pseudobulk_cigs_mce.35496129.err: 16 510.0M  16 84.22M   0      0  2.26M      0   03:45   00:37   03:08  2.26M
+pseudobulk_cigs_mce.35496129.err: 16 510.0M  16 86.27M   0      0  2.25M      0   03:46   00:38   03:08  2.27M
+pseudobulk_cigs_mce.35496129.err: 17 510.0M  17 88.37M   0      0  2.25M      0   03:46   00:39   03:07  2.26M
+pseudobulk_cigs_mce.35496129.err: 17 510.0M  17 90.65M   0      0  2.25M      0   03:46   00:40   03:06  2.27M
+pseudobulk_cigs_mce.35496129.err: 18 510.0M  18 92.99M   0      0  2.25M      0   03:46   00:41   03:05  2.23M
+pseudobulk_cigs_mce.35496129.err: 18 510.0M  18 95.60M   0      0  2.26M      0   03:45   00:42   03:03  2.24M
+pseudobulk_cigs_mce.35496129.err: 19 510.0M  19 97.47M   0      0  2.25M      0   03:46   00:43   03:03  2.21M
+pseudobulk_cigs_mce.35496129.err: 19 510.0M  19 99.81M   0      0  2.25M      0   03:46   00:44   03:02  2.26M
+pseudobulk_cigs_mce.35496129.err: 20 510.0M  20 102.1M   0      0  2.25M      0   03:46   00:45   03:01  2.26M
+pseudobulk_cigs_mce.35496129.err: 20 510.0M  20 104.5M   0      0  2.25M      0   03:46   00:46   03:00  2.28M
+pseudobulk_cigs_mce.35496129.err: 20 510.0M  20 106.8M   0      0  2.25M      0   03:45   00:47   02:58  2.23M
+pseudobulk_cigs_mce.35496129.err: 21 510.0M  21 109.5M   0      0  2.25M      0   03:45   00:48   02:57  2.31M
+pseudobulk_cigs_mce.35496129.err: 21 510.0M  21 111.7M   0      0  2.25M      0   03:45   00:49   02:56  2.29M
+pseudobulk_cigs_mce.35496129.err: 22 510.0M  22 113.8M   0      0  2.25M      0   03:46   00:50   02:56  2.25M
+pseudobulk_cigs_mce.35496129.err: 22 510.0M  22 116.2M   0      0  2.25M      0   03:46   00:51   02:55  2.25M
+pseudobulk_cigs_mce.35496129.err: 23 510.0M  23 118.7M   0      0  2.25M      0   03:45   00:52   02:53  2.27M
+pseudobulk_cigs_mce.35496129.err: 23 510.0M  23 121.2M   0      0  2.26M      0   03:45   00:53   02:52  2.31M
+pseudobulk_cigs_mce.35496129.err: 24 510.0M  24 123.4M   0      0  2.26M      0   03:45   00:54   02:51  2.30M
+pseudobulk_cigs_mce.35496129.err: 24 510.0M  24 125.4M   0      0  2.25M      0   03:45   00:55   02:50  2.29M
+pseudobulk_cigs_mce.35496129.err: 25 510.0M  25 127.6M   0      0  2.25M      0   03:46   00:56   02:50  2.25M
+pseudobulk_cigs_mce.35496129.err: 25 510.0M  25 130.1M   0      0  2.25M      0   03:45   00:57   02:48  2.25M
+pseudobulk_cigs_mce.35496129.err: 26 510.0M  26 132.7M   0      0  2.26M      0   03:45   00:58   02:47  2.27M
+pseudobulk_cigs_mce.35496129.err: 26 510.0M  26 134.9M   0      0  2.26M      0   03:45   00:59   02:46  2.27M
+pseudobulk_cigs_mce.35496129.err: 26 510.0M  26 136.9M   0      0  2.25M      0   03:45   01:00   02:45  2.26M
+pseudobulk_cigs_mce.35496129.err: 27 510.0M  27 139.1M   0      0  2.25M      0   03:45   01:01   02:44  2.27M
+pseudobulk_cigs_mce.35496129.err: 27 510.0M  27 141.4M   0      0  2.25M      0   03:45   01:02   02:43  2.24M
+pseudobulk_cigs_mce.35496129.err: 28 510.0M  28 144.0M   0      0  2.26M      0   03:45   01:03   02:42  2.24M
+pseudobulk_cigs_mce.35496129.err: 28 510.0M  28 146.4M   0      0  2.25M      0   03:45   01:04   02:41  2.20M
+pseudobulk_cigs_mce.35496129.err: 29 510.0M  29 148.6M   0      0  2.25M      0   03:45   01:05   02:40  2.25M
+pseudobulk_cigs_mce.35496129.err: 29 510.0M  29 150.9M   0      0  2.25M      0   03:45   01:06   02:39  2.26M
+pseudobulk_cigs_mce.35496129.err: 30 510.0M  30 153.3M   0      0  2.25M      0   03:45   01:07   02:38  2.26M
+pseudobulk_cigs_mce.35496129.err: 30 510.0M  30 155.7M   0      0  2.26M      0   03:45   01:08   02:37  2.24M
+pseudobulk_cigs_mce.35496129.err: 31 510.0M  31 158.3M   0      0  2.26M      0   03:45   01:09   02:36  2.36M
+pseudobulk_cigs_mce.35496129.err: 31 510.0M  31 160.4M   0      0  2.26M      0   03:45   01:10   02:35  2.31M
+pseudobulk_cigs_mce.35496129.err: 31 510.0M  31 162.4M   0      0  2.25M      0   03:45   01:11   02:34  2.26M
+pseudobulk_cigs_mce.35496129.err: 32 510.0M  32 164.7M   0      0  2.25M      0   03:45   01:12   02:33  2.26M
+pseudobulk_cigs_mce.35496129.err: 32 510.0M  32 167.2M   0      0  2.26M      0   03:45   01:13   02:32  2.26M
+pseudobulk_cigs_mce.35496129.err: 33 510.0M  33 169.6M   0      0  2.26M      0   03:45   01:14   02:31  2.24M
+pseudobulk_cigs_mce.35496129.err: 33 510.0M  33 171.9M   0      0  2.26M      0   03:45   01:15   02:30  2.29M
+pseudobulk_cigs_mce.35496129.err: 34 510.0M  34 173.9M   0      0  2.25M      0   03:45   01:16   02:29  2.27M
+pseudobulk_cigs_mce.35496129.err: 34 510.0M  34 176.1M   0      0  2.25M      0   03:45   01:17   02:28  2.24M
+pseudobulk_cigs_mce.35496129.err: 35 510.0M  35 178.5M   0      0  2.26M      0   03:45   01:18   02:27  2.24M
+pseudobulk_cigs_mce.35496129.err: 35 510.0M  35 181.0M   0      0  2.26M      0   03:45   01:19   02:26  2.25M
+pseudobulk_cigs_mce.35496129.err: 35 510.0M  35 183.5M   0      0  2.26M      0   03:45   01:21   02:24  2.29M
+pseudobulk_cigs_mce.35496129.err: 36 510.0M  36 185.5M   0      0  2.26M      0   03:45   01:22   02:23  2.29M
+pseudobulk_cigs_mce.35496129.err: 36 510.0M  36 187.6M   0      0  2.25M      0   03:45   01:23   02:22  2.28M
+pseudobulk_cigs_mce.35496129.err: 37 510.0M  37 189.9M   0      0  2.25M      0   03:45   01:24   02:21  2.25M
+pseudobulk_cigs_mce.35496129.err: 37 510.0M  37 192.4M   0      0  2.26M      0   03:45   01:25   02:20  2.25M
+pseudobulk_cigs_mce.35496129.err: 38 510.0M  38 194.9M   0      0  2.26M      0   03:45   01:26   02:19  2.25M
+pseudobulk_cigs_mce.35496129.err: 38 510.0M  38 197.2M   0      0  2.26M      0   03:45   01:27   02:18  2.31M
+pseudobulk_cigs_mce.35496129.err: 39 510.0M  39 199.2M   0      0  2.26M      0   03:45   01:28   02:17  2.28M
+pseudobulk_cigs_mce.35496129.err: 39 510.0M  39 201.5M   0      0  2.26M      0   03:45   01:29   02:16  2.28M
+pseudobulk_cigs_mce.35496129.err: 39 510.0M  39 203.8M   0      0  2.26M      0   03:45   01:30   02:15  2.25M
+pseudobulk_cigs_mce.35496129.err: 40 510.0M  40 206.3M   0      0  2.26M      0   03:45   01:31   02:14  2.25M
+pseudobulk_cigs_mce.35496129.err: 40 510.0M  40 208.5M   0      0  2.26M      0   03:45   01:32   02:13  2.23M
+pseudobulk_cigs_mce.35496129.err: 41 510.0M  41 210.7M   0      0  2.26M      0   03:45   01:33   02:12  2.27M
+pseudobulk_cigs_mce.35496129.err: 41 510.0M  41 212.9M   0      0  2.26M      0   03:45   01:34   02:11  2.26M
+pseudobulk_cigs_mce.35496129.err: 42 510.0M  42 215.3M   0      0  2.26M      0   03:45   01:35   02:10  2.26M
+pseudobulk_cigs_mce.35496129.err: 42 510.0M  42 217.7M   0      0  2.26M      0   03:45   01:36   02:09  2.25M
+pseudobulk_cigs_mce.35496129.err: 43 510.0M  43 220.3M   0      0  2.26M      0   03:44   01:37   02:07  2.33M
+pseudobulk_cigs_mce.35496129.err: 43 510.0M  43 222.3M   0      0  2.26M      0   03:45   01:38   02:07  2.28M
+pseudobulk_cigs_mce.35496129.err: 43 510.0M  43 224.4M   0      0  2.26M      0   03:45   01:39   02:06  2.26M
+pseudobulk_cigs_mce.35496129.err: 44 510.0M  44 226.7M   0      0  2.26M      0   03:45   01:40   02:05  2.26M
+pseudobulk_cigs_mce.35496129.err: 44 510.0M  44 229.2M   0      0  2.26M      0   03:45   01:41   02:04  2.26M
+pseudobulk_cigs_mce.35496129.err: 45 510.0M  45 231.7M   0      0  2.26M      0   03:45   01:42   02:03  2.24M
+pseudobulk_cigs_mce.35496129.err: 45 510.0M  45 233.8M   0      0  2.26M      0   03:45   01:43   02:02  2.28M
+pseudobulk_cigs_mce.35496129.err: 46 510.0M  46 235.9M   0      0  2.26M      0   03:45   01:44   02:01  2.27M
+pseudobulk_cigs_mce.35496129.err: 46 510.0M  46 238.1M   0      0  2.26M      0   03:45   01:45   02:00  2.25M
+pseudobulk_cigs_mce.35496129.err: 47 510.0M  47 240.6M   0      0  2.26M      0   03:45   01:46   01:59  2.25M
+pseudobulk_cigs_mce.35496129.err: 47 510.0M  47 243.1M   0      0  2.26M      0   03:45   01:47   01:58  2.26M
+pseudobulk_cigs_mce.35496129.err: 48 510.0M  48 245.4M   0      0  2.26M      0   03:45   01:48   01:57  2.29M
+pseudobulk_cigs_mce.35496129.err: 48 510.0M  48 247.4M   0      0  2.26M      0   03:45   01:49   01:56  2.28M
+pseudobulk_cigs_mce.35496129.err: 48 510.0M  48 249.6M   0      0  2.26M      0   03:45   01:50   01:55  2.27M
+pseudobulk_cigs_mce.35496129.err: 49 510.0M  49 252.0M   0      0  2.26M      0   03:45   01:51   01:54  2.25M
+pseudobulk_cigs_mce.35496129.err: 49 510.0M  49 254.4M   0      0  2.26M      0   03:45   01:52   01:53  2.25M
+pseudobulk_cigs_mce.35496129.err: 50 510.0M  50 257.1M   0      0  2.26M      0   03:45   01:53   01:52  2.17M
+pseudobulk_cigs_mce.35496129.err: 50 510.0M  50 259.5M   0      0  2.26M      0   03:45   01:54   01:51  2.26M
+pseudobulk_cigs_mce.35496129.err: 51 510.0M  51 261.7M   0      0  2.26M      0   03:45   01:55   01:50  2.27M
+pseudobulk_cigs_mce.35496129.err: 51 510.0M  51 264.1M   0      0  2.26M      0   03:45   01:56   01:49  2.27M
+pseudobulk_cigs_mce.35496129.err: 52 510.0M  52 266.6M   0      0  2.26M      0   03:45   01:57   01:48  2.26M
+pseudobulk_cigs_mce.35496129.err: 52 510.0M  52 269.1M   0      0  2.26M      0   03:44   01:58   01:46  2.39M
+pseudobulk_cigs_mce.35496129.err: 53 510.0M  53 271.1M   0      0  2.26M      0   03:45   01:59   01:46  2.29M
+pseudobulk_cigs_mce.35496129.err: 53 510.0M  53 273.2M   0      0  2.26M      0   03:45   02:00   01:45  2.26M
+pseudobulk_cigs_mce.35496129.err: 54 510.0M  54 275.5M   0      0  2.26M      0   03:45   02:01   01:44  2.25M
+pseudobulk_cigs_mce.35496129.err: 54 510.0M  54 278.0M   0      0  2.26M      0   03:45   02:02   01:43  2.26M
+pseudobulk_cigs_mce.35496129.err: 55 510.0M  55 280.5M   0      0  2.26M      0   03:45   02:03   01:42  2.24M
+pseudobulk_cigs_mce.35496129.err: 55 510.0M  55 282.7M   0      0  2.26M      0   03:45   02:04   01:41  2.30M
+pseudobulk_cigs_mce.35496129.err: 55 510.0M  55 284.7M   0      0  2.26M      0   03:45   02:05   01:40  2.28M
+pseudobulk_cigs_mce.35496129.err: 56 510.0M  56 287.0M   0      0  2.26M      0   03:45   02:06   01:39  2.25M
+pseudobulk_cigs_mce.35496129.err: 56 510.0M  56 289.4M   0      0  2.26M      0   03:45   02:07   01:38  2.25M
+pseudobulk_cigs_mce.35496129.err: 57 510.0M  57 291.9M   0      0  2.26M      0   03:45   02:08   01:37  2.25M
+pseudobulk_cigs_mce.35496129.err: 57 510.0M  57 294.3M   0      0  2.26M      0   03:45   02:10   01:35  2.18M
+pseudobulk_cigs_mce.35496129.err: 58 510.0M  58 296.7M   0      0  2.26M      0   03:45   02:11   01:34  2.26M
+pseudobulk_cigs_mce.35496129.err: 58 510.0M  58 298.9M   0      0  2.26M      0   03:45   02:12   01:33  2.27M
+pseudobulk_cigs_mce.35496129.err: 59 510.0M  59 301.3M   0      0  2.26M      0   03:45   02:13   01:32  2.26M
+pseudobulk_cigs_mce.35496129.err: 59 510.0M  59 303.2M   0      0  2.26M      0   03:45   02:14   01:31  2.15M
+pseudobulk_cigs_mce.35496129.err: 59 510.0M  59 305.1M   0      0  2.25M      0   03:45   02:15   01:30  2.15M
+pseudobulk_cigs_mce.35496129.err: 60 510.0M  60 307.1M   0      0  2.25M      0   03:46   02:16   01:30  2.07M
+pseudobulk_cigs_mce.35496129.err: 60 510.0M  60 309.2M   0      0  2.25M      0   03:46   02:17   01:29  2.04M
+pseudobulk_cigs_mce.35496129.err: 61 510.0M  61 311.4M   0      0  2.25M      0   03:46   02:18   01:28  1.99M
+pseudobulk_cigs_mce.35496129.err: 61 510.0M  61 313.5M   0      0  2.25M      0   03:46   02:19   01:27  2.02M
+pseudobulk_cigs_mce.35496129.err: 61 510.0M  61 315.6M   0      0  2.25M      0   03:46   02:20   01:26  2.06M
+pseudobulk_cigs_mce.35496129.err: 62 510.0M  62 317.8M   0      0  2.25M      0   03:46   02:21   01:25  2.10M
+pseudobulk_cigs_mce.35496129.err: 62 510.0M  62 320.0M   0      0  2.25M      0   03:46   02:22   01:24  2.12M
+pseudobulk_cigs_mce.35496129.err: 63 510.0M  63 322.4M   0      0  2.25M      0   03:46   02:23   01:23  2.16M
+pseudobulk_cigs_mce.35496129.err: 63 510.0M  63 324.4M   0      0  2.24M      0   03:46   02:24   01:22  2.15M
+pseudobulk_cigs_mce.35496129.err: 63 510.0M  63 326.4M   0      0  2.24M      0   03:46   02:25   01:21  2.12M
+pseudobulk_cigs_mce.35496129.err: 64 510.0M  64 328.4M   0      0  2.24M      0   03:47   02:26   01:21  2.10M
+pseudobulk_cigs_mce.35496129.err: 64 510.0M  64 330.3M   0      0  2.24M      0   03:47   02:27   01:20  2.04M
+pseudobulk_cigs_mce.35496129.err: 65 510.0M  65 332.2M   0      0  2.24M      0   03:47   02:28   01:19  1.94M
+pseudobulk_cigs_mce.35496129.err: 65 510.0M  65 334.0M   0      0  2.23M      0   03:48   02:29   01:19  1.84M
+pseudobulk_cigs_mce.35496129.err: 65 510.0M  65 335.8M   0      0  2.23M      0   03:48   02:30   01:18  1.80M
+pseudobulk_cigs_mce.35496129.err: 66 510.0M  66 337.5M   0      0  2.22M      0   03:48   02:31   01:17  1.72M
+pseudobulk_cigs_mce.35496129.err: 66 510.0M  66 339.2M   0      0  2.22M      0   03:49   02:32   01:17  1.68M
+pseudobulk_cigs_mce.35496129.err: 66 510.0M  66 340.8M   0      0  2.22M      0   03:49   02:33   01:16  1.64M
+pseudobulk_cigs_mce.35496129.err: 67 510.0M  67 342.6M   0      0  2.21M      0   03:50   02:34   01:16  1.68M
+pseudobulk_cigs_mce.35496129.err: 67 510.0M  67 344.3M   0      0  2.21M      0   03:50   02:35   01:15  1.67M
+pseudobulk_cigs_mce.35496129.err: 67 510.0M  67 346.0M   0      0  2.20M      0   03:50   02:36   01:14  1.68M
+pseudobulk_cigs_mce.35496129.err: 68 510.0M  68 347.8M   0      0  2.20M      0   03:50   02:37   01:13  1.71M
+pseudobulk_cigs_mce.35496129.err: 68 510.0M  68 349.9M   0      0  2.20M      0   03:51   02:38   01:13  1.78M
+pseudobulk_cigs_mce.35496129.err: 69 510.0M  69 352.0M   0      0  2.20M      0   03:51   02:39   01:12  1.86M
+pseudobulk_cigs_mce.35496129.err: 69 510.0M  69 354.6M   0      0  2.20M      0   03:50   02:40   01:10  2.04M
+pseudobulk_cigs_mce.35496129.err: 70 510.0M  70 357.8M   0      0  2.21M      0   03:50   02:41   01:09  2.33M
+pseudobulk_cigs_mce.35496129.err: 70 510.0M  70 360.6M   0      0  2.21M      0   03:50   02:42   01:08  2.49M
+pseudobulk_cigs_mce.35496129.err: 71 510.0M  71 363.3M   0      0  2.21M      0   03:49   02:43   01:06  2.63M
+pseudobulk_cigs_mce.35496129.err: 71 510.0M  71 365.5M   0      0  2.21M      0   03:49   02:44   01:05  2.65M
+pseudobulk_cigs_mce.35496129.err: 72 510.0M  72 367.9M   0      0  2.22M      0   03:49   02:45   01:04  2.59M
+pseudobulk_cigs_mce.35496129.err: 72 510.0M  72 370.0M   0      0  2.21M      0   03:49   02:46   01:03  2.34M
+pseudobulk_cigs_mce.35496129.err: 73 510.0M  73 372.3M   0      0  2.21M      0   03:49   02:47   01:02  2.26M
+pseudobulk_cigs_mce.35496129.err: 73 510.0M  73 374.3M   0      0  2.21M      0   03:50   02:48   01:02  2.13M
+pseudobulk_cigs_mce.35496129.err: 73 510.0M  73 376.4M   0      0  2.21M      0   03:50   02:49   01:01  2.11M
+pseudobulk_cigs_mce.35496129.err: 74 510.0M  74 378.5M   0      0  2.21M      0   03:50   02:50   01:00  2.05M
+pseudobulk_cigs_mce.35496129.err: 74 510.0M  74 380.6M   0      0  2.21M      0   03:50   02:51   00:59  2.10M
+pseudobulk_cigs_mce.35496129.err: 75 510.0M  75 382.8M   0      0  2.21M      0   03:50   02:52   00:58  2.07M
+pseudobulk_cigs_mce.35496129.err: 75 510.0M  75 384.9M   0      0  2.21M      0   03:50   02:53   00:57  2.09M
+pseudobulk_cigs_mce.35496129.err: 75 510.0M  75 387.1M   0      0  2.21M      0   03:50   02:54   00:56  2.11M
+pseudobulk_cigs_mce.35496129.err: 76 510.0M  76 389.5M   0      0  2.21M      0   03:50   02:55   00:55  2.16M
+pseudobulk_cigs_mce.35496129.err: 76 510.0M  76 392.0M   0      0  2.21M      0   03:50   02:56   00:54  2.24M
+pseudobulk_cigs_mce.35496129.err: 77 510.0M  77 394.9M   0      0  2.21M      0   03:49   02:57   00:52  2.39M
+pseudobulk_cigs_mce.35496129.err: 78 510.0M  78 398.0M   0      0  2.22M      0   03:49   02:58   00:51  2.55M
+pseudobulk_cigs_mce.35496129.err: 78 510.0M  78 400.4M   0      0  2.22M      0   03:49   03:00   00:49  2.58M
+pseudobulk_cigs_mce.35496129.err: 78 510.0M  78 402.4M   0      0  2.22M      0   03:49   03:01   00:48  2.51M
+pseudobulk_cigs_mce.35496129.err: 79 510.0M  79 404.6M   0      0  2.22M      0   03:49   03:02   00:47  2.45M
+pseudobulk_cigs_mce.35496129.err: 79 510.0M  79 406.8M   0      0  2.22M      0   03:49   03:03   00:46  2.30M
+pseudobulk_cigs_mce.35496129.err: 80 510.0M  80 409.0M   0      0  2.22M      0   03:49   03:04   00:45  2.17M
+pseudobulk_cigs_mce.35496129.err: 80 510.0M  80 411.3M   0      0  2.22M      0   03:49   03:05   00:44  2.14M
+pseudobulk_cigs_mce.35496129.err: 81 510.0M  81 413.6M   0      0  2.22M      0   03:49   03:06   00:43  2.20M
+pseudobulk_cigs_mce.35496129.err: 81 510.0M  81 415.8M   0      0  2.22M      0   03:49   03:07   00:42  2.21M
+pseudobulk_cigs_mce.35496129.err: 81 510.0M  81 418.2M   0      0  2.22M      0   03:49   03:08   00:41  2.24M
+pseudobulk_cigs_mce.35496129.err: 82 510.0M  82 420.7M   0      0  2.22M      0   03:49   03:09   00:40  2.30M
+pseudobulk_cigs_mce.35496129.err: 83 510.0M  83 423.3M   0      0  2.22M      0   03:49   03:10   00:39  2.38M
+pseudobulk_cigs_mce.35496129.err: 83 510.0M  83 425.8M   0      0  2.22M      0   03:48   03:11   00:37  2.41M
+pseudobulk_cigs_mce.35496129.err: 83 510.0M  83 427.9M   0      0  2.22M      0   03:49   03:12   00:37  2.37M
+pseudobulk_cigs_mce.35496129.err: 84 510.0M  84 430.0M   0      0  2.22M      0   03:49   03:13   00:36  2.34M
+pseudobulk_cigs_mce.35496129.err: 84 510.0M  84 432.1M   0      0  2.22M      0   03:49   03:14   00:35  2.24M
+pseudobulk_cigs_mce.35496129.err: 85 510.0M  85 434.2M   0      0  2.22M      0   03:49   03:15   00:34  2.14M
+pseudobulk_cigs_mce.35496129.err: 85 510.0M  85 436.3M   0      0  2.22M      0   03:49   03:16   00:33  2.09M
+pseudobulk_cigs_mce.35496129.err: 85 510.0M  85 438.5M   0      0  2.22M      0   03:49   03:17   00:32  2.10M
+pseudobulk_cigs_mce.35496129.err: 86 510.0M  86 440.7M   0      0  2.22M      0   03:49   03:18   00:31  2.11M
+pseudobulk_cigs_mce.35496129.err: 86 510.0M  86 442.9M   0      0  2.22M      0   03:49   03:19   00:30  2.15M
+pseudobulk_cigs_mce.35496129.err: 87 510.0M  87 445.2M   0      0  2.22M      0   03:49   03:20   00:29  2.16M
+pseudobulk_cigs_mce.35496129.err: 87 510.0M  87 447.5M   0      0  2.22M      0   03:49   03:21   00:28  2.20M
+pseudobulk_cigs_mce.35496129.err: 88 510.0M  88 450.0M   0      0  2.22M      0   03:49   03:22   00:27  2.28M
+pseudobulk_cigs_mce.35496129.err: 88 510.0M  88 452.9M   0      0  2.22M      0   03:48   03:23   00:25  2.40M
+pseudobulk_cigs_mce.35496129.err: 89 510.0M  89 455.6M   0      0  2.22M      0   03:48   03:24   00:24  2.51M
+pseudobulk_cigs_mce.35496129.err: 89 510.0M  89 457.8M   0      0  2.22M      0   03:48   03:25   00:23  2.51M
+pseudobulk_cigs_mce.35496129.err: 90 510.0M  90 459.8M   0      0  2.22M      0   03:48   03:26   00:22  2.43M
+pseudobulk_cigs_mce.35496129.err: 90 510.0M  90 461.9M   0      0  2.22M      0   03:48   03:27   00:21  2.34M
+pseudobulk_cigs_mce.35496129.err: 90 510.0M  90 464.1M   0      0  2.22M      0   03:48   03:28   00:20  2.22M
+pseudobulk_cigs_mce.35496129.err: 91 510.0M  91 466.4M   0      0  2.22M      0   03:48   03:29   00:19  2.12M
+pseudobulk_cigs_mce.35496129.err: 91 510.0M  91 468.6M   0      0  2.22M      0   03:48   03:30   00:18  2.11M
+pseudobulk_cigs_mce.35496129.err: 92 510.0M  92 470.8M   0      0  2.22M      0   03:48   03:31   00:17  2.17M
+pseudobulk_cigs_mce.35496129.err: 92 510.0M  92 473.1M   0      0  2.22M      0   03:48   03:32   00:16  2.21M
+pseudobulk_cigs_mce.35496129.err: 93 510.0M  93 475.4M   0      0  2.22M      0   03:48   03:33   00:15  2.22M
+pseudobulk_cigs_mce.35496129.err: 93 510.0M  93 477.8M   0      0  2.22M      0   03:48   03:34   00:14  2.27M
+pseudobulk_cigs_mce.35496129.err: 94 510.0M  94 480.5M   0      0  2.23M      0   03:48   03:35   00:13  2.36M
+pseudobulk_cigs_mce.35496129.err: 94 510.0M  94 483.0M   0      0  2.23M      0   03:48   03:36   00:12  2.40M
+pseudobulk_cigs_mce.35496129.err: 95 510.0M  95 485.5M   0      0  2.23M      0   03:48   03:37   00:11  2.45M
+pseudobulk_cigs_mce.35496129.err: 95 510.0M  95 487.4M   0      0  2.23M      0   03:48   03:38   00:10  2.38M
+pseudobulk_cigs_mce.35496129.err: 95 510.0M  95 489.4M   0      0  2.22M      0   03:48   03:39   00:09  2.27M
+pseudobulk_cigs_mce.35496129.err: 96 510.0M  96 491.5M   0      0  2.22M      0   03:48   03:40   00:08  2.17M
+pseudobulk_cigs_mce.35496129.err: 96 510.0M  96 493.7M   0      0  2.22M      0   03:48   03:41   00:07  2.11M
+pseudobulk_cigs_mce.35496129.err: 97 510.0M  97 495.8M   0      0  2.22M      0   03:48   03:42   00:06  2.04M
+pseudobulk_cigs_mce.35496129.err: 97 510.0M  97 498.0M   0      0  2.22M      0   03:48   03:43   00:05  2.09M
+pseudobulk_cigs_mce.35496129.err: 98 510.0M  98 500.2M   0      0  2.22M      0   03:48   03:44   00:04  2.14M
+pseudobulk_cigs_mce.35496129.err: 98 510.0M  98 502.4M   0      0  2.22M      0   03:48   03:45   00:03  2.15M
+pseudobulk_cigs_mce.35496129.err: 98 510.0M  98 504.7M   0      0  2.22M      0   03:48   03:46   00:02  2.18M
+pseudobulk_cigs_mce.35496129.err: 99 510.0M  99 507.3M   0      0  2.22M      0   03:48   03:47   00:01  2.26M
+pseudobulk_cigs_mce.35496129.err: 99 510.0M  99 510.0M   0      0  2.23M      0   03:48   03:48          2.36M
+pseudobulk_cigs_mce.35496129.err:100 510.0M 100 510.0M   0      0  2.23M      0   03:48   03:48          2.36M
+pseudobulk_cigs_mce.35496129.err:100 510.0M 100 510.0M   0      0  2.23M      0   03:48   03:48          2.36M
+pseudobulk_cigs_mce.35496129.err:100 510.0M 100 510.0M   0      0  2.23M      0   03:48   03:48          2.36M
+pseudobulk_cigs_mce.35496129.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_mce.35496129.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_mce.35496129.err:
+pseudobulk_cigs_mce.35496129.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_mce.35496129.err:  4  2.04M   4  95885   0      0  85466      0   00:25   00:01   00:24  85504
+pseudobulk_cigs_mce.35496129.err:100  2.04M 100  2.04M   0      0  1.17M      0   00:01   00:01          85504
+pseudobulk_cigs_mce.35496129.err:100  2.04M 100  2.04M   0      0  1.17M      0   00:01   00:01          85504
+pseudobulk_cigs_mce.35496129.err:100  2.04M 100  2.04M   0      0  1.17M      0   00:01   00:01          85504
+pseudobulk_cigs_mce.35496129.err:  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+pseudobulk_cigs_mce.35496129.err:                                 Dload  Upload  Total   Spent   Left   Speed
+pseudobulk_cigs_mce.35496129.err:
+pseudobulk_cigs_mce.35496129.err:  0      0   0      0   0      0      0      0                              0
+pseudobulk_cigs_mce.35496129.err:100  4.09M 100  4.09M   0      0 27.65M      0                              0
+pseudobulk_cigs_mce.35496129.err:100  4.09M 100  4.09M   0      0 27.55M      0                              0
+pseudobulk_cigs_mce.35496129.err:100  4.09M 100  4.09M   0      0 27.45M      0                              0
+pseudobulk_cigs_mce.35496129.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
+pseudobulk_cigs_mce.35496129.err:  return dispatch(args[0].__class__)(*args, **kw)
+pseudobulk_cigs_mce.35496129.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
+pseudobulk_cigs_mce.35496129.err:  return dispatch(args[0].__class__)(*args, **kw)
+pseudobulk_cigs_mce.35496129.err:/ictstr01/home/icb/olga.novitskaia/op3_v2/src/pseudobulking/datasets/cigs/standardization.py:292: FutureWarning: The behavior of array concatenation with empty entries is deprecated. In a future version, this will no longer exclude empty items when determining the result dtype. To retain the old behavior, exclude the empty entries before the concat operation.
+pseudobulk_cigs_mce.35496129.err:  treat = treat.combine_first(obs["treatment"])
+pseudobulk_cigs_mce.35496129.err:Loaded 81649 samples across 2 subsets (10057 BLANK/RNA wells, 1130 paper-excluded-plate wells)
+pseudobulk_cigs_mce.35496129.err:  mce_hek293t_10uM: IQR threshold log2(lib)=13.2885, lowqc=2660/34788
+pseudobulk_cigs_mce.35496129.err:  mce_mda_mb_231_10uM: IQR threshold log2(lib)=12.6602, lowqc=2701/35796
+pseudobulk_cigs_mce.35496129.err:Status counts:
+pseudobulk_cigs_mce.35496129.err:  blank: 9935
+pseudobulk_cigs_mce.35496129.err:  excluded_plate: 1130
+pseudobulk_cigs_mce.35496129.err:  lowqc: 5361
+pseudobulk_cigs_mce.35496129.err:  pass: 65223
+pseudobulk_cigs_mce.35496129.err:Wrote /tmp/tmph4h98b7a/cigs_qc_status.tsv
+pseudobulk_cigs_mce.35496129.err:2026-04-23 22:40:46 | [WARNING] PubChem lookup failed for CAS '456-12-2': Remote end closed connection without response. Retry 0.
+pseudobulk_cigs_mce.35496129.err:2026-04-24 00:43:34 | [WARNING] PubChem lookup failed for CAS '7174-27-8': <urlopen error [Errno 110] Connection timed out>. Retry 0.
+pseudobulk_cigs_mce.35496129.err:2026-04-24 00:54:38 | [WARNING]   107 symbols did not resolve; their symbol string will be used as the Ensembl ID placeholder
