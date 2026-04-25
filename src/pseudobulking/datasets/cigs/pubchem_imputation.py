@@ -8,6 +8,6 @@ def pubchem_mapping_cigs() -> dict:
             # (wrong CAS in the TCM supplement). Pin Vindolinine's CID via its
             # TCM catalog_id so the CAS-first PubChem lookup never silently
             # mislabels it.
-            "Compd0165": 24148538,
+            "Cpd0165": 24148538,
         }
     }

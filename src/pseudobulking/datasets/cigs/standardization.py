@@ -463,7 +463,7 @@ def annotate_pubchem_cids(
         cas_col="cas_number" if "cas_number" in compound_df.columns else None,
         cache_path=cache_path,
         manual_mapping_func=pubchem_mapping_cigs,
-        manual_mapping_by_drug_name=True,
+        manual_mapping_by_drug_name=False,
         dataset_key="cigs",
     )
 
