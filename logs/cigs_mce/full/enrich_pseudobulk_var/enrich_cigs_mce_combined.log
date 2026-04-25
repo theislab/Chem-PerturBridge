@@ -1,0 +1,50 @@
+enrich_cigs_mce.PID1873011.out:> DEG directory (scan *_de.h5ad): ./data/cigs_mce/deg_data/group_rep/full/qc_false/filter_min_cells_0/results
+enrich_cigs_mce.PID1873011.out:> Reference pseudobulk: ./data/cigs_mce/pseudobulk_processed/group_rep/cigs_mce_processed.h5ad
+enrich_cigs_mce.PID1873011.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
+enrich_cigs_mce.PID1873011.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2/logs/cigs_mce/full/enrich_pseudobulk_var/enrich_cigs_mce.%j.out / /home/icb/olga.novitskaia/op3_v2/logs/cigs_mce/full/enrich_pseudobulk_var/enrich_cigs_mce.%j.err
+enrich_cigs_mce.PID1873011.out:Submitted batch job 35511598
+enrich_cigs_mce.PID1873011.out:> enrich_pseudobulk_var Slurm job finished
+enrich_cigs_mce.PID2002556.out:> DEG directory (scan *_de.h5ad): ./data/cigs_mce/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results
+enrich_cigs_mce.PID2002556.out:> Reference pseudobulk: ./data/cigs_mce/pseudobulk_processed/sep_rep/cigs_mce_processed.h5ad
+enrich_cigs_mce.PID2002556.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
+enrich_cigs_mce.PID2002556.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2/logs/cigs_mce/full/enrich_pseudobulk_var/enrich_cigs_mce.%j.out / /home/icb/olga.novitskaia/op3_v2/logs/cigs_mce/full/enrich_pseudobulk_var/enrich_cigs_mce.%j.err
+enrich_cigs_mce.PID2002556.out:Submitted batch job 35511618
+enrich_cigs_mce.PID2002556.out:> enrich_pseudobulk_var Slurm job finished
+enrich_cigs_mce.35511598.out:2026-04-24 14:03:50 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/group_rep/full/qc_false/filter_min_cells_0/results
+enrich_cigs_mce.35511598.out:2026-04-24 14:03:50 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/pseudobulk_processed/group_rep/cigs_mce_processed.h5ad
+enrich_cigs_mce.35511598.out:2026-04-24 14:04:12 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
+enrich_cigs_mce.35511598.out:2026-04-24 14:05:16 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
+enrich_cigs_mce.35511598.out:2026-04-24 14:05:16 | [INFO]     Removed X matrix
+enrich_cigs_mce.35511598.out:2026-04-24 14:05:16 | [INFO]     Rewriting h5ad file is done!
+enrich_cigs_mce.35511598.out:2026-04-24 14:05:37 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
+enrich_cigs_mce.35511598.out:2026-04-24 14:06:53 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
+enrich_cigs_mce.35511598.out:2026-04-24 14:06:53 | [INFO]     Removed X matrix
+enrich_cigs_mce.35511598.out:2026-04-24 14:06:53 | [INFO]     Rewriting h5ad file is done!
+enrich_cigs_mce.35511598.out:2026-04-24 14:06:53 | [INFO] Done: scanned=2, need_enrichment=2, written=2 (dry_run=False)
+enrich_cigs_mce.35511598.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_mce.35511598.err:  utils.warn_names_duplicates("obs")
+enrich_cigs_mce.35511598.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_mce.35511598.err:  utils.warn_names_duplicates("obs")
+enrich_cigs_mce.35511598.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_mce.35511598.err:  utils.warn_names_duplicates("obs")
+enrich_cigs_mce.35511598.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_mce.35511598.err:  utils.warn_names_duplicates("obs")
+enrich_cigs_mce.35511618.out:2026-04-24 14:03:50 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results
+enrich_cigs_mce.35511618.out:2026-04-24 14:03:50 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/pseudobulk_processed/sep_rep/cigs_mce_processed.h5ad
+enrich_cigs_mce.35511618.out:2026-04-24 14:04:39 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
+enrich_cigs_mce.35511618.out:2026-04-24 14:07:35 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
+enrich_cigs_mce.35511618.out:2026-04-24 14:07:35 | [INFO]     Removed X matrix
+enrich_cigs_mce.35511618.out:2026-04-24 14:07:35 | [INFO]     Rewriting h5ad file is done!
+enrich_cigs_mce.35511618.out:2026-04-24 14:08:34 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
+enrich_cigs_mce.35511618.out:2026-04-24 14:11:52 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_mce/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
+enrich_cigs_mce.35511618.out:2026-04-24 14:11:52 | [INFO]     Removed X matrix
+enrich_cigs_mce.35511618.out:2026-04-24 14:11:52 | [INFO]     Rewriting h5ad file is done!
+enrich_cigs_mce.35511618.out:2026-04-24 14:11:52 | [INFO] Done: scanned=2, need_enrichment=2, written=2 (dry_run=False)
+enrich_cigs_mce.35511618.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_mce.35511618.err:  utils.warn_names_duplicates("obs")
+enrich_cigs_mce.35511618.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_mce.35511618.err:  utils.warn_names_duplicates("obs")
+enrich_cigs_mce.35511618.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_mce.35511618.err:  utils.warn_names_duplicates("obs")
+enrich_cigs_mce.35511618.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_mce.35511618.err:  utils.warn_names_duplicates("obs")

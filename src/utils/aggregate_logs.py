@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Universal log aggregator for OP3_v2 pipelines.
+Universal log aggregator for Chem-PerturBridge pipelines.
 
 Modes:
   1) Recursive: scan ./logs (or --log_dir) and aggregate per dataset/pipeline folder.
@@ -521,7 +521,7 @@ def aggregate_target(
 def main() -> None:
     """Main entry point for the log aggregator."""
     parser = argparse.ArgumentParser(
-        description='Log aggregator for OP3_v2 pipelines',
+        description='Log aggregator for Chem-PerturBridge pipelines',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:

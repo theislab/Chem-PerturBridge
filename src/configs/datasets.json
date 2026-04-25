@@ -23,5 +23,12 @@
 			  "module": "src.pseudobulking.datasets.sciplex.pubchem_imputation",
                           "func": "pubchem_mapping_sciplex"
                   	}
+
+		 },
+    "cigs_tcm": {
+		  "post_processing": {
+			  "module": "src.pseudobulking.datasets.cigs.post_processing",
+			  "func": "process_cigs_dataset"
+		  	}
 		 }
 }

@@ -25,6 +25,8 @@ VALID_DATASETS=(
     "vcpi_0001"
     "vcpi_0002"
     "gdpx2"
+    "cigs_mce"
+    "cigs_tcm"
 )
 
 DATASET=""
