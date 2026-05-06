@@ -51,7 +51,7 @@ The terms of use/license for each database used for annotations are defined by i
 
 - **PubChem** - [NCBI](https://www.ncbi.nlm.nih.gov/home/about/policies/)
 - **NCBI datasets** - [NCBI](https://www.ncbi.nlm.nih.gov/home/about/policies/)
-- **Cellosaurus** - [Cellosaurus database](https://www.ncbi.nlm.nih.gov/home/about/policies/)
+- **Cellosaurus** - [Cellosaurus database](https://www.cellosaurus.org/description.html)
 - **OLS4** - [EMBL-EBI Data Resources and Tools](https://www.ebi.ac.uk/about/terms-of-use/)
 - **HGNC** - [HGNC resources](https://www.genenames.org/about/license/)
 - **Ensembl** - [Ensembl data](https://www.ensembl.org/info/about/legal/disclaimer.html)
@@ -128,7 +128,7 @@ echo $MY_API_KEY #If you want to print your MY_API_KEY
 mamba deactivate
 ```
 
-**NB!** Make sure that a path to your environment (as well as a path to your secret_key.txt file) is included in .gitignore, .cursorignore, .cursorindexingignore, .codexignore and .codexindexingignor to try not to allow to read/index API KEYS by Cursor/Codex. But still, there might be a leak of KEYS to AI-agents.
+**NB!** Make sure that a path to your environment (as well as a path to your secret_key.txt file) is included in .gitignore, .cursorignore, .cursorindexignore, .codexignore and .codexindexingignor to try not to allow to read/index API KEYS by Cursor/Codex. But still, there might be a leak of KEYS to AI-agents.
 
 **1.3** **Create symlinks**
 
@@ -299,50 +299,17 @@ The structure of the repo:
 ├── docs
 ├── env.yaml
 ├── logs
-│   └── dataset_i
-│       ├── full (or subsample)
-│       │   ├── enrich_pseudobulk_var/
-│       │   │   └── enrich_<dataset>.*.out, *.err
-│       │   └── deg
-│       │       └── parameter_name (group_all_replicates or separate_replicates)
-│       │           └── qc_true (or qc_false)
-│       │               └── filter_min_cells_f
-│       │                   ├── preprocessing/
-│       │                   │   └── deg_processing_pseudobulk.*.out, *.err
-│       │                   ├── deg/
-│       │                   │   ├── celltype1/
-│       │                   │   │   └── deg_analysis.*.out, *.err
-│       │                   │   ├── celltype2/
-│       │                   │   │   └── deg_analysis.*.out, *.err
-│       │                   │   └── ...
-│       │                   └── aggregation/
-│       │                       └── deg_aggregation.*.out, *.err
-│       └── ...
 ├── pipelines
 │   ├── common
 |   |   ├── combining_logs.sh
 │   │   ├── deg.sh
 │   │   └── enrich_pseudobulk_var.sh
 │   ├── dataset_i
-│   │   └─── configs/
-│   │       ├── deg/
-│   │       │   └── config.json
-│   │       └── sciplex_pseudobulking.sh
-│   ├── tahoe
-│   │   └─── configs/
-│   │       ├── deg/
-│   │       │   └── config.json
-│   │       └── tahoe_pseudobulking_parallel.sh
-│   ├── dilimap_train
-│   │   └─── configs/
-│   │       ├── deg/
-│   │       │   └── config.json
-│   │       └── dilimap_train_pseudobulking.sh
-│   └── dilimap_train_val
-│       └─── configs/
-│           ├── deg/
-│           │   └── config.json
-│           └── dilimap_train_val_pseudobulking.sh
+│   │   ├── configs/
+│   │   │   └── deg/
+│   │   │       └── config.json
+│   │   └── dataset_i_pseudobulking.sh
+│   └── ...
 ├── README.md
 ├── run_pipelines
 │   ├── run_combining_logs.sh
@@ -372,14 +339,7 @@ The structure of the repo:
 │   │       ├── dataset_i
 │   │       │   ├── pubchem_imputation.py
 │   │       │   └── standardization.py
-│   │       ├── tahoe
-│   │           ├── pubchem_imputation.py
-│   │           └── standardization.py
-│   │       └── dilimap_train
-│   │           ├── assembling.py
-│   │           ├── pubchem_imputation.py
-│   │           ├── run_assembly.py
-│   │           └── standardization.py
+│   │       └────...
 │   └── utils
 │       ├──  aggregate_logs.py
 │       └─── parsing_utils.py
@@ -412,7 +372,7 @@ The structure of the `data` folder:
 │   │       │   │   └──...
 │   │       │   └──qc_false
 │   │       │       └──...
-│   │       └──subsampling
+│   │       └──subsample
 │   │           ├──qc_true
 │   │           │   └──...
 │   │           └──qc_false
