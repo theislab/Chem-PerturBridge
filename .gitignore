@@ -1,5 +1,7 @@
 .idea/
+data
 data/
+venv
 venv/
 venv/**
 ~/venv/**

@@ -38,11 +38,11 @@ pseudobulk_dilimap_train_val.35290224.out:2026-04-16 23:20:03 | [INFO] Mapped 30
 pseudobulk_dilimap_train_val.35290224.out:2026-04-16 23:20:03 | [INFO]   PubChem CIDs found: 302 / 302
 pseudobulk_dilimap_train_val.35290224.out:2026-04-16 23:20:05 | [INFO] Saving standardized dataset to: ./data/dilimap_train_val/pseudobulk/full/dilimap_train_val_assembled.h5ad
 pseudobulk_dilimap_train_val.35290224.out:2026-04-16 23:20:27 | [INFO] dilimap_train_val assembly complete
-pseudobulk_dilimap_train_val.35290224.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+pseudobulk_dilimap_train_val.35290224.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 pseudobulk_dilimap_train_val.35290224.err:  utils.warn_names_duplicates("obs")
-pseudobulk_dilimap_train_val.35290224.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+pseudobulk_dilimap_train_val.35290224.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 pseudobulk_dilimap_train_val.35290224.err:  utils.warn_names_duplicates("obs")
-pseudobulk_dilimap_train_val.35290224.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+pseudobulk_dilimap_train_val.35290224.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 pseudobulk_dilimap_train_val.35290224.err:  utils.warn_names_duplicates("obs")
-pseudobulk_dilimap_train_val.35290224.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
+pseudobulk_dilimap_train_val.35290224.err:./venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
 pseudobulk_dilimap_train_val.35290224.err:  return dispatch(args[0].__class__)(*args, **kw)

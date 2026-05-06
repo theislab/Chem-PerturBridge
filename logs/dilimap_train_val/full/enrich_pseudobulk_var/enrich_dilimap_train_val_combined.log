@@ -1,34 +1,34 @@
 enrich_dilimap_train_val.PID3191725.out:> DEG directory (scan *_de.h5ad): ./data/dilimap_train_val/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/
 enrich_dilimap_train_val.PID3191725.out:> Reference pseudobulk: ./data/dilimap_train_val/pseudobulk_processed/sep_rep/dilimap_train_val_assembled_processed.h5ad
 enrich_dilimap_train_val.PID3191725.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
-enrich_dilimap_train_val.PID3191725.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2_dili/logs/dilimap_train_val/full/enrich_pseudobulk_var/enrich_dilimap_train_val.%j.out / /home/icb/olga.novitskaia/op3_v2_dili/logs/dilimap_train_val/full/enrich_pseudobulk_var/enrich_dilimap_train_val.%j.err
+enrich_dilimap_train_val.PID3191725.out:> Slurm logs: ./logs/dilimap_train_val/full/enrich_pseudobulk_var/enrich_dilimap_train_val.%j.out / ./logs/dilimap_train_val/full/enrich_pseudobulk_var/enrich_dilimap_train_val.%j.err
 enrich_dilimap_train_val.PID3191725.out:Submitted batch job 35316882
 enrich_dilimap_train_val.PID3191725.out:> enrich_pseudobulk_var Slurm job finished
 enrich_dilimap_train_val.PID3216230.out:> DEG directory (scan *_de.h5ad): ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/
 enrich_dilimap_train_val.PID3216230.out:> Reference pseudobulk: ./data/dilimap_train_val/pseudobulk_processed/group_rep/dilimap_train_val_assembled_processed.h5ad
 enrich_dilimap_train_val.PID3216230.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
-enrich_dilimap_train_val.PID3216230.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2_dili/logs/dilimap_train_val/full/enrich_pseudobulk_var/enrich_dilimap_train_val.%j.out / /home/icb/olga.novitskaia/op3_v2_dili/logs/dilimap_train_val/full/enrich_pseudobulk_var/enrich_dilimap_train_val.%j.err
+enrich_dilimap_train_val.PID3216230.out:> Slurm logs: ./logs/dilimap_train_val/full/enrich_pseudobulk_var/enrich_dilimap_train_val.%j.out / ./logs/dilimap_train_val/full/enrich_pseudobulk_var/enrich_dilimap_train_val.%j.err
 enrich_dilimap_train_val.PID3216230.out:Submitted batch job 35316883
 enrich_dilimap_train_val.PID3216230.out:> enrich_pseudobulk_var Slurm job finished
-enrich_dilimap_train_val.35316882.out:2026-04-18 22:21:06 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2_dili/data/dilimap_train_val/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results
-enrich_dilimap_train_val.35316882.out:2026-04-18 22:21:06 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2_dili/data/dilimap_train_val/pseudobulk_processed/sep_rep/dilimap_train_val_assembled_processed.h5ad
-enrich_dilimap_train_val.35316882.out:2026-04-18 22:22:15 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2_dili/data/dilimap_train_val/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad
-enrich_dilimap_train_val.35316882.out:2026-04-18 22:26:55 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2_dili/data/dilimap_train_val/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad
+enrich_dilimap_train_val.35316882.out:2026-04-18 22:21:06 | [INFO] DEG directory (scan *_de.h5ad): ./data/dilimap_train_val/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results
+enrich_dilimap_train_val.35316882.out:2026-04-18 22:21:06 | [INFO] Reference pseudobulk: ./data/dilimap_train_val/pseudobulk_processed/sep_rep/dilimap_train_val_assembled_processed.h5ad
+enrich_dilimap_train_val.35316882.out:2026-04-18 22:22:15 | [INFO] Enrich ./data/dilimap_train_val/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad
+enrich_dilimap_train_val.35316882.out:2026-04-18 22:26:55 | [INFO]     Rewriting h5ad file: ./data/dilimap_train_val/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad
 enrich_dilimap_train_val.35316882.out:2026-04-18 22:26:55 | [INFO]     Removed X matrix
 enrich_dilimap_train_val.35316882.out:2026-04-18 22:26:55 | [INFO]     Rewriting h5ad file is done!
 enrich_dilimap_train_val.35316882.out:2026-04-18 22:26:55 | [INFO] Done: scanned=1, need_enrichment=1, written=1 (dry_run=False)
-enrich_dilimap_train_val.35316882.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_dilimap_train_val.35316882.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_dilimap_train_val.35316882.err:  utils.warn_names_duplicates("obs")
-enrich_dilimap_train_val.35316882.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_dilimap_train_val.35316882.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_dilimap_train_val.35316882.err:  utils.warn_names_duplicates("obs")
-enrich_dilimap_train_val.35316883.out:2026-04-18 22:21:06 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2_dili/data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/results
-enrich_dilimap_train_val.35316883.out:2026-04-18 22:21:06 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2_dili/data/dilimap_train_val/pseudobulk_processed/group_rep/dilimap_train_val_assembled_processed.h5ad
-enrich_dilimap_train_val.35316883.out:2026-04-18 22:21:31 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2_dili/data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad
-enrich_dilimap_train_val.35316883.out:2026-04-18 22:22:58 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2_dili/data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad
+enrich_dilimap_train_val.35316883.out:2026-04-18 22:21:06 | [INFO] DEG directory (scan *_de.h5ad): ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/results
+enrich_dilimap_train_val.35316883.out:2026-04-18 22:21:06 | [INFO] Reference pseudobulk: ./data/dilimap_train_val/pseudobulk_processed/group_rep/dilimap_train_val_assembled_processed.h5ad
+enrich_dilimap_train_val.35316883.out:2026-04-18 22:21:31 | [INFO] Enrich ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad
+enrich_dilimap_train_val.35316883.out:2026-04-18 22:22:58 | [INFO]     Rewriting h5ad file: ./data/dilimap_train_val/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad
 enrich_dilimap_train_val.35316883.out:2026-04-18 22:22:58 | [INFO]     Removed X matrix
 enrich_dilimap_train_val.35316883.out:2026-04-18 22:22:58 | [INFO]     Rewriting h5ad file is done!
 enrich_dilimap_train_val.35316883.out:2026-04-18 22:22:58 | [INFO] Done: scanned=1, need_enrichment=1, written=1 (dry_run=False)
-enrich_dilimap_train_val.35316883.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_dilimap_train_val.35316883.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_dilimap_train_val.35316883.err:  utils.warn_names_duplicates("obs")
-enrich_dilimap_train_val.35316883.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_dilimap_train_val.35316883.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_dilimap_train_val.35316883.err:  utils.warn_names_duplicates("obs")

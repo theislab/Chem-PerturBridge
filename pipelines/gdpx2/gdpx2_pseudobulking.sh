@@ -20,8 +20,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 SBATCH_PREAMBLE="export PATH=\${HOME}/miniforge3/bin:\${PATH} && cd ${PROJECT_ROOT} && eval \"\$(mamba shell hook --shell bash)\" && mamba activate ${ENV_DIR}"
-QOS=cpu_normal
-PARTITION=cpu_p
+QOS=${QOS:-normal}
+PARTITION=${PARTITION:-compute}
 
 mkdir -p ${DATA_ROOT}/raw
 mkdir -p ${OUTPUT_DIR}

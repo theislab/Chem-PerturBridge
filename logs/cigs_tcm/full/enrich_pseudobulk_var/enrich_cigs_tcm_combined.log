@@ -1,50 +1,50 @@
 enrich_cigs_tcm.PID2010625.out:> DEG directory (scan *_de.h5ad): ./data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/
 enrich_cigs_tcm.PID2010625.out:> Reference pseudobulk: ./data/cigs_tcm/pseudobulk_processed/group_rep/cigs_tcm_processed.h5ad
 enrich_cigs_tcm.PID2010625.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
-enrich_cigs_tcm.PID2010625.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2/logs/cigs_tcm/full/enrich_pseudobulk_var/enrich_cigs_tcm.%j.out / /home/icb/olga.novitskaia/op3_v2/logs/cigs_tcm/full/enrich_pseudobulk_var/enrich_cigs_tcm.%j.err
+enrich_cigs_tcm.PID2010625.out:> Slurm logs: ./logs/cigs_tcm/full/enrich_pseudobulk_var/enrich_cigs_tcm.%j.out / ./logs/cigs_tcm/full/enrich_pseudobulk_var/enrich_cigs_tcm.%j.err
 enrich_cigs_tcm.PID2010625.out:Submitted batch job 35581927
 enrich_cigs_tcm.PID2010625.out:> enrich_pseudobulk_var Slurm job finished
 enrich_cigs_tcm.PID2254457.out:> DEG directory (scan *_de.h5ad): ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/
 enrich_cigs_tcm.PID2254457.out:> Reference pseudobulk: ./data/cigs_tcm/pseudobulk_processed/sep_rep/cigs_tcm_processed.h5ad
 enrich_cigs_tcm.PID2254457.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
-enrich_cigs_tcm.PID2254457.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2/logs/cigs_tcm/full/enrich_pseudobulk_var/enrich_cigs_tcm.%j.out / /home/icb/olga.novitskaia/op3_v2/logs/cigs_tcm/full/enrich_pseudobulk_var/enrich_cigs_tcm.%j.err
+enrich_cigs_tcm.PID2254457.out:> Slurm logs: ./logs/cigs_tcm/full/enrich_pseudobulk_var/enrich_cigs_tcm.%j.out / ./logs/cigs_tcm/full/enrich_pseudobulk_var/enrich_cigs_tcm.%j.err
 enrich_cigs_tcm.PID2254457.out:Submitted batch job 35581970
 enrich_cigs_tcm.PID2254457.out:> enrich_pseudobulk_var Slurm job finished
-enrich_cigs_tcm.35581927.out:2026-04-25 20:57:42 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results
-enrich_cigs_tcm.35581927.out:2026-04-25 20:57:42 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/pseudobulk_processed/group_rep/cigs_tcm_processed.h5ad
-enrich_cigs_tcm.35581927.out:2026-04-25 20:57:50 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
-enrich_cigs_tcm.35581927.out:2026-04-25 20:58:11 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
+enrich_cigs_tcm.35581927.out:2026-04-25 20:57:42 | [INFO] DEG directory (scan *_de.h5ad): ./data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results
+enrich_cigs_tcm.35581927.out:2026-04-25 20:57:42 | [INFO] Reference pseudobulk: ./data/cigs_tcm/pseudobulk_processed/group_rep/cigs_tcm_processed.h5ad
+enrich_cigs_tcm.35581927.out:2026-04-25 20:57:50 | [INFO] Enrich ./data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
+enrich_cigs_tcm.35581927.out:2026-04-25 20:58:11 | [INFO]     Rewriting h5ad file: ./data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
 enrich_cigs_tcm.35581927.out:2026-04-25 20:58:11 | [INFO]     Removed X matrix
 enrich_cigs_tcm.35581927.out:2026-04-25 20:58:11 | [INFO]     Rewriting h5ad file is done!
-enrich_cigs_tcm.35581927.out:2026-04-25 20:58:17 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
-enrich_cigs_tcm.35581927.out:2026-04-25 20:58:37 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
+enrich_cigs_tcm.35581927.out:2026-04-25 20:58:17 | [INFO] Enrich ./data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
+enrich_cigs_tcm.35581927.out:2026-04-25 20:58:37 | [INFO]     Rewriting h5ad file: ./data/cigs_tcm/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
 enrich_cigs_tcm.35581927.out:2026-04-25 20:58:37 | [INFO]     Removed X matrix
 enrich_cigs_tcm.35581927.out:2026-04-25 20:58:37 | [INFO]     Rewriting h5ad file is done!
 enrich_cigs_tcm.35581927.out:2026-04-25 20:58:37 | [INFO] Done: scanned=2, need_enrichment=2, written=2 (dry_run=False)
-enrich_cigs_tcm.35581927.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_tcm.35581927.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_cigs_tcm.35581927.err:  utils.warn_names_duplicates("obs")
-enrich_cigs_tcm.35581927.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_tcm.35581927.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_cigs_tcm.35581927.err:  utils.warn_names_duplicates("obs")
-enrich_cigs_tcm.35581927.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_tcm.35581927.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_cigs_tcm.35581927.err:  utils.warn_names_duplicates("obs")
-enrich_cigs_tcm.35581927.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_tcm.35581927.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_cigs_tcm.35581927.err:  utils.warn_names_duplicates("obs")
-enrich_cigs_tcm.35581970.out:2026-04-25 20:57:42 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results
-enrich_cigs_tcm.35581970.out:2026-04-25 20:57:42 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/pseudobulk_processed/sep_rep/cigs_tcm_processed.h5ad
-enrich_cigs_tcm.35581970.out:2026-04-25 20:57:59 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
-enrich_cigs_tcm.35581970.out:2026-04-25 20:58:54 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
+enrich_cigs_tcm.35581970.out:2026-04-25 20:57:42 | [INFO] DEG directory (scan *_de.h5ad): ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results
+enrich_cigs_tcm.35581970.out:2026-04-25 20:57:42 | [INFO] Reference pseudobulk: ./data/cigs_tcm/pseudobulk_processed/sep_rep/cigs_tcm_processed.h5ad
+enrich_cigs_tcm.35581970.out:2026-04-25 20:57:59 | [INFO] Enrich ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
+enrich_cigs_tcm.35581970.out:2026-04-25 20:58:54 | [INFO]     Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0062_de.h5ad
 enrich_cigs_tcm.35581970.out:2026-04-25 20:58:54 | [INFO]     Removed X matrix
 enrich_cigs_tcm.35581970.out:2026-04-25 20:58:54 | [INFO]     Rewriting h5ad file is done!
-enrich_cigs_tcm.35581970.out:2026-04-25 20:59:08 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
-enrich_cigs_tcm.35581970.out:2026-04-25 21:00:02 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
+enrich_cigs_tcm.35581970.out:2026-04-25 20:59:08 | [INFO] Enrich ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
+enrich_cigs_tcm.35581970.out:2026-04-25 21:00:02 | [INFO]     Rewriting h5ad file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad
 enrich_cigs_tcm.35581970.out:2026-04-25 21:00:02 | [INFO]     Removed X matrix
 enrich_cigs_tcm.35581970.out:2026-04-25 21:00:02 | [INFO]     Rewriting h5ad file is done!
 enrich_cigs_tcm.35581970.out:2026-04-25 21:00:02 | [INFO] Done: scanned=2, need_enrichment=2, written=2 (dry_run=False)
-enrich_cigs_tcm.35581970.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_tcm.35581970.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_cigs_tcm.35581970.err:  utils.warn_names_duplicates("obs")
-enrich_cigs_tcm.35581970.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_tcm.35581970.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_cigs_tcm.35581970.err:  utils.warn_names_duplicates("obs")
-enrich_cigs_tcm.35581970.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_tcm.35581970.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_cigs_tcm.35581970.err:  utils.warn_names_duplicates("obs")
-enrich_cigs_tcm.35581970.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_cigs_tcm.35581970.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_cigs_tcm.35581970.err:  utils.warn_names_duplicates("obs")

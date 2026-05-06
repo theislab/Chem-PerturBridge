@@ -1048,7 +1048,7 @@ deg_aggregation.35580398.out:2026-04-25 20:00:19 | [INFO]     Removed X matrix
 deg_aggregation.35580398.out:2026-04-25 20:00:19 | [INFO]     Rewriting h5ad file is done!
 deg_aggregation.35580398.out:2026-04-25 20:00:19 | [INFO]   Saved aggregated file: ./data/cigs_tcm/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0063_de.h5ad (12510 obs, 1816 vars)
 deg_aggregation.35580398.out:2026-04-25 20:00:19 | [INFO] Aggregation completed
-deg_aggregation.35580398.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+deg_aggregation.35580398.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 deg_aggregation.35580398.err:  utils.warn_names_duplicates("obs")
-deg_aggregation.35580398.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+deg_aggregation.35580398.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 deg_aggregation.35580398.err:  utils.warn_names_duplicates("obs")

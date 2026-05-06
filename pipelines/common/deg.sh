@@ -25,9 +25,9 @@ PIPELINE_NAME="deg"
 ENV_DIR=./venv
 LOGS_DIR=./logs
 MAX_CONCURRENT=50
-# QOS/PARTITION: set by -g flag (gpu_normal/gpu_p) or default (cpu_normal/cpu_p)
-QOS=cpu_normal
-PARTITION=cpu_p
+# Slurm QOS/PARTITION defaults can be overridden with QOS/PARTITION env vars.
+QOS=${QOS:-normal}
+PARTITION=${PARTITION:-compute}
 
 # Default values
 MODE_S=False
@@ -65,8 +65,8 @@ while getopts ":sjqp:f:c:d:nhgP" opt; do
                         echo "  -s  Subsample mode - limits DEG analysis for testing/debugging"
                         echo "      NOTE: Does NOT change input files (those are defined in config)"
                         echo "  -j  Parallel mode - run array jobs per cell type (faster)"
-                        echo "  -g  Use GPU QOS/partition (gpu_normal/gpu_p); default is CPU (cpu_normal/cpu_p)"
-                        echo "  -P  Use cpu_preemptible QOS for DEG step only (100G mem, 48h, 10 CPUs); partition stays cpu_p"
+                        echo "  -g  Use GPU QOS/partition; set GPU_QOS/GPU_PARTITION to override"
+                        echo "  -P  Use preemptible QOS for DEG step only; set PREEMPTIBLE_QOS/GPU_PREEMPTIBLE_QOS to override"
                         echo "  -f  VALUE - Filter: minimum cells per sample (e.g., -f 50)"
                         echo "  -q  Quality control filter - remove samples that failed QC"
                         echo "  -n  Normalized dataset: pass --normalized to preprocessing (Ensembl: drop ambiguous"
@@ -108,12 +108,12 @@ while getopts ":sjqp:f:c:d:nhgP" opt; do
 done
 
 if [ "$MODE_G" = True ]; then
-    QOS=gpu_normal
-    PARTITION=gpu_p
+    QOS=${GPU_QOS:-gpu}
+    PARTITION=${GPU_PARTITION:-gpu}
 fi
 
 if [ "$MODE_P" = True ]; then
-    echo "> Using cpu_preemptible QOS for DEG step (100G, 48h, 10 CPUs)"
+    echo "> Using preemptible QOS for DEG step (100G, 48h, 10 CPUs)"
 fi
 
 # ============================================================================
@@ -300,9 +300,9 @@ DEG_TIME=24:00:00
 DEG_CPUS=2
 if [ "$MODE_P" = True ]; then
     if [ "$MODE_G" = True ]; then
-        DEG_QOS=gpu_preemptible
+        DEG_QOS=${GPU_PREEMPTIBLE_QOS:-gpu-preemptible}
     else
-        DEG_QOS=cpu_preemptible
+        DEG_QOS=${PREEMPTIBLE_QOS:-preemptible}
     fi
     MEM=100G
     DEG_TIME=48:00:00

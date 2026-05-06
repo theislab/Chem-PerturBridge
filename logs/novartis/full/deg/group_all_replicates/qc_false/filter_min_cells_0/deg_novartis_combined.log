@@ -1500,5 +1500,5 @@ deg_aggregation.34940563.out:2026-04-01 00:00:52 | [INFO]     Removed X matrix
 deg_aggregation.34940563.out:2026-04-01 00:00:52 | [INFO]     Rewriting h5ad file is done!
 deg_aggregation.34940563.out:2026-04-01 00:00:52 | [INFO]   Saved aggregated file: ./data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0042_de.h5ad (18176 obs, 14370 vars)
 deg_aggregation.34940563.out:2026-04-01 00:00:52 | [INFO] Aggregation completed
-deg_aggregation.34940563.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+deg_aggregation.34940563.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 deg_aggregation.34940563.err:  utils.warn_names_duplicates("obs")

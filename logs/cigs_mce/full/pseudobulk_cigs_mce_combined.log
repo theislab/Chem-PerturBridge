@@ -941,11 +941,11 @@ pseudobulk_cigs_mce.35496129.err:  0      0   0      0   0      0      0      0 
 pseudobulk_cigs_mce.35496129.err:100  4.09M 100  4.09M   0      0 27.65M      0                              0
 pseudobulk_cigs_mce.35496129.err:100  4.09M 100  4.09M   0      0 27.55M      0                              0
 pseudobulk_cigs_mce.35496129.err:100  4.09M 100  4.09M   0      0 27.45M      0                              0
-pseudobulk_cigs_mce.35496129.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
+pseudobulk_cigs_mce.35496129.err:./venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
 pseudobulk_cigs_mce.35496129.err:  return dispatch(args[0].__class__)(*args, **kw)
-pseudobulk_cigs_mce.35496129.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
+pseudobulk_cigs_mce.35496129.err:./venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
 pseudobulk_cigs_mce.35496129.err:  return dispatch(args[0].__class__)(*args, **kw)
-pseudobulk_cigs_mce.35496129.err:/ictstr01/home/icb/olga.novitskaia/op3_v2/src/pseudobulking/datasets/cigs/standardization.py:292: FutureWarning: The behavior of array concatenation with empty entries is deprecated. In a future version, this will no longer exclude empty items when determining the result dtype. To retain the old behavior, exclude the empty entries before the concat operation.
+pseudobulk_cigs_mce.35496129.err:./src/pseudobulking/datasets/cigs/standardization.py:292: FutureWarning: The behavior of array concatenation with empty entries is deprecated. In a future version, this will no longer exclude empty items when determining the result dtype. To retain the old behavior, exclude the empty entries before the concat operation.
 pseudobulk_cigs_mce.35496129.err:  treat = treat.combine_first(obs["treatment"])
 pseudobulk_cigs_mce.35496129.err:Loaded 81649 samples across 2 subsets (10057 BLANK/RNA wells, 1130 paper-excluded-plate wells)
 pseudobulk_cigs_mce.35496129.err:  mce_hek293t_10uM: IQR threshold log2(lib)=13.2885, lowqc=2660/34788

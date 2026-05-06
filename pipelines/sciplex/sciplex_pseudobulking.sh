@@ -2,9 +2,7 @@
 #SBATCH -J pseudobulk_sciplex
 #SBATCH -t 1:00:00
 #SBATCH -n 1
-#SBATCH --qos=cpu_normal
 #SBATCH --mem=100G
-#SBATCH --partition=cpu_p
 #SBATCH --cpus-per-task=2
 
 set -e

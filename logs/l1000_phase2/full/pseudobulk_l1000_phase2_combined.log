@@ -1403,7 +1403,7 @@ pseudobulk_l1000_phase2.33693534.err:[19:55:09] SMILES Parse Error: check for mi
 pseudobulk_l1000_phase2.33693534.err:[19:55:09] -666
 pseudobulk_l1000_phase2.33693534.err:[19:55:09] ^
 pseudobulk_l1000_phase2.33693534.err:[19:55:09] SMILES Parse Error: Failed parsing SMILES '-666' for input: '-666'
-pseudobulk_l1000_phase2.33693534.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/cmapPy/pandasGEXpress/parse_gctx.py:275: FutureWarning: errors='ignore' is deprecated and will raise in a future version. Use to_numeric without passing `errors` and catch exceptions explicitly instead
+pseudobulk_l1000_phase2.33693534.err:./venv/lib/python3.12/site-packages/cmapPy/pandasGEXpress/parse_gctx.py:275: FutureWarning: errors='ignore' is deprecated and will raise in a future version. Use to_numeric without passing `errors` and catch exceptions explicitly instead
 pseudobulk_l1000_phase2.33693534.err:  meta_df = meta_df.apply(lambda x: pd.to_numeric(x, errors="ignore"))
-pseudobulk_l1000_phase2.33693534.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/cmapPy/pandasGEXpress/parse_gctx.py:275: FutureWarning: errors='ignore' is deprecated and will raise in a future version. Use to_numeric without passing `errors` and catch exceptions explicitly instead
+pseudobulk_l1000_phase2.33693534.err:./venv/lib/python3.12/site-packages/cmapPy/pandasGEXpress/parse_gctx.py:275: FutureWarning: errors='ignore' is deprecated and will raise in a future version. Use to_numeric without passing `errors` and catch exceptions explicitly instead
 pseudobulk_l1000_phase2.33693534.err:  meta_df = meta_df.apply(lambda x: pd.to_numeric(x, errors="ignore"))

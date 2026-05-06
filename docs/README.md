@@ -30,9 +30,9 @@ The **executed code** could be divided into two parts:
 >
 > **1.1.2** **scripts**
 > * Add python modules to the directory created in **1.1.1** containing specific helping functions to prepare the dataset which you want to add.
-> * **NB!** Please, check out [this description](https://github.com/theislab/Chem-PerturBridge/blob/main/docs/Format_Pseudobulk.ipynb) of a core standardized schema for bulked/pseudobulked data which you need to receive at the end of pseudobulking pipeline. This schema is not entirely strict, so you can add some other columns (e.g. a `split` column including train/test/validation label) which you think contains useful information.
-> * **NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding a dataset you need to check if the dataset has been already annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the script that downloads and assembles your dataset and saves it in `.h5ad` format needs to be added to `Chem-PerturBridge/src/pseudobulking/datasets/mynewdataset`. Look at [**L1000** case](https://github.com/theislab/Chem-PerturBridge/tree/main/src/pseudobulking/datasets/l1000) for the details.
-> * **NB!** If you already have the bulked/pseudobulked version of the data, there is no need to compute pseudobulks. But you need to add the assembling modules to `Chem-PerturBridge/src/pseudobulking/datasets/mynewdataset`, and execute them later with `Chem-PerturBridge/run_pipelines/run_pseudobulking.sh`. Look at [**L1000** case](https://github.com/theislab/Chem-PerturBridge/tree/main/src/pseudobulking/datasets/l1000) for the details.
+> * **NB!** Please, check out the [core pseudobulk schema](Format_Pseudobulk.ipynb) for bulked/pseudobulked data which you need to receive at the end of pseudobulking pipeline. This schema is not entirely strict, so you can add some other columns (e.g. a `split` column including train/test/validation label) which you think contains useful information.
+> * **NB!** The pseudobulking pipeline is oriented mainly to Laminlabs annotated datasets as the main source for data, therefore before adding a dataset you need to check if the dataset has been already annotated by Laminlabs and represented on their [site](https://lamin.ai/laminlabs/pertdata). Otherwise the script that downloads and assembles your dataset and saves it in `.h5ad` format needs to be added to `Chem-PerturBridge/src/pseudobulking/datasets/mynewdataset`. Look at the [**L1000** case](../src/pseudobulking/datasets/l1000) for the details.
+> * **NB!** If you already have the bulked/pseudobulked version of the data, there is no need to compute pseudobulks. But you need to add the assembling modules to `Chem-PerturBridge/src/pseudobulking/datasets/mynewdataset`, and execute them later with `Chem-PerturBridge/run_pipelines/run_pseudobulking.sh`. Look at the [**L1000** case](../src/pseudobulking/datasets/l1000) for the details.
 >
 > **1.1.3** **configs**
 > * Update a file `Chem-PerturBridge/src/configs/datasets.json` which stores paths to the modules from **1.1.2**.
@@ -71,7 +71,7 @@ The **executed code** could be divided into two parts:
 > **2.2.2** **scripts**
 > * Update `run_pipelines/run_deg.sh`:
 >   - Add the name of the dataset (`mynewdataset` in our case) to `VALID_CHOICES` variable.
-> * **NB!** If you already have the bulked/pseudobulked version of the data, you need to figure out if your data is already normalized or it has raw counts. Use `-n` option while executing `run_deg.sh` if your data is already nomalized, otherwise for raw counts skip setting `-n` option. Look at the example of [**L1000** case](https://github.com/theislab/Chem-PerturBridge?tab=readme-ov-file#3-run-scripts) in README.md for the details.
+> * **NB!** If you already have the bulked/pseudobulked version of the data, you need to figure out if your data is already normalized or it has raw counts. Use `-n` option while executing `run_deg.sh` if your data is already nomalized, otherwise for raw counts skip setting `-n` option. Look at the example of **L1000** in [`../README.md`](../README.md) for the details.
 >
 > **2.2.3** **configs**
 > * Create a file `Chem-PerturBridge/pipelines/mynewdataset/configs/deg/config.json` which keeps the parameters for DEG analysis.
@@ -108,15 +108,15 @@ The **executed code** could be divided into two parts:
 
 **3.2** **Run on the full dataset...**
 
-For full command usage and examples, refer to [`../README.md`](https://github.com/theislab/Chem-PerturBridge/blob/main/README.md) in the `main` branch.
+For full command usage and examples, refer to [`../README.md`](../README.md).
 
 ### **4** **Optionally...**
 
-If you are a contributor, it would be great to update `README.md` file by adding information on the dataset which you processed (url link to dataset paper, a license of a processed dataset, and a license for additional sources used in dataset processing). Just follow our sample dataset descriptions in main [`../README.md`](https://github.com/theislab/Chem-PerturBridge/blob/main/README.md).
+If you are a contributor, it would be great to update `README.md` file by adding information on the dataset which you processed (url link to dataset paper, a license of a processed dataset, and a license for additional sources used in dataset processing). Just follow our sample dataset descriptions in [`../README.md`](../README.md).
 
 ## Additional Resources
 
-- Main README: [`../README.md`](https://github.com/theislab/Chem-PerturBridge/blob/main/README.md)
+- Main README: [`../README.md`](../README.md)
 - Check existing files and directories for the following datasets: **sciplex**, **tahoe**, **L1000**, **op3** in the `main` branch as reference examples.
-- [Core pseudobulk schema](https://github.com/theislab/Chem-PerturBridge/blob/main/docs/Format_Pseudobulk.ipynb)
+- [Core pseudobulk schema](Format_Pseudobulk.ipynb)
 - `Chem-PerturBridge/docs/STANDARDIZATION.md` - a more detailed description of how to standardize data.

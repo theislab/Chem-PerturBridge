@@ -10,8 +10,8 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 cd "${PROJECT_ROOT}"
 
 ENV_DIR=./venv
-QOS=cpu_normal
-PARTITION=cpu_p
+QOS=${QOS:-normal}
+PARTITION=${PARTITION:-compute}
 
 VALID_DATASETS=(
     "sciplex"

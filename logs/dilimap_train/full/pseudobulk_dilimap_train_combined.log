@@ -33,9 +33,9 @@ pseudobulk_dilimap_train.35215571.out:2026-04-16 01:46:56 | [INFO] Mapped 252 ou
 pseudobulk_dilimap_train.35215571.out:2026-04-16 01:46:56 | [INFO]   PubChem CIDs found: 252 / 252
 pseudobulk_dilimap_train.35215571.out:2026-04-16 01:46:58 | [INFO] Saving standardized dataset to: ./data/dilimap_train/pseudobulk/full/dilimap_train_assembled.h5ad
 pseudobulk_dilimap_train.35215571.out:2026-04-16 01:47:17 | [INFO] dilimap_train assembly complete
-pseudobulk_dilimap_train.35215571.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+pseudobulk_dilimap_train.35215571.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 pseudobulk_dilimap_train.35215571.err:  utils.warn_names_duplicates("obs")
-pseudobulk_dilimap_train.35215571.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+pseudobulk_dilimap_train.35215571.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 pseudobulk_dilimap_train.35215571.err:  utils.warn_names_duplicates("obs")
-pseudobulk_dilimap_train.35215571.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
+pseudobulk_dilimap_train.35215571.err:./venv/lib/python3.12/functools.py:912: ImplicitModificationWarning: Transforming to str index.
 pseudobulk_dilimap_train.35215571.err:  return dispatch(args[0].__class__)(*args, **kw)

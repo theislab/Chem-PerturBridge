@@ -1,34 +1,34 @@
 enrich_novartis.PID272912.out:> DEG directory (scan *_de.h5ad): ./data/novartis/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/
 enrich_novartis.PID272912.out:> Reference pseudobulk: ./data/novartis/pseudobulk_processed/sep_rep/novartis_standardized_processed.h5ad
 enrich_novartis.PID272912.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
-enrich_novartis.PID272912.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2/logs/novartis/full/enrich_pseudobulk_var/enrich_novartis.%j.out / /home/icb/olga.novitskaia/op3_v2/logs/novartis/full/enrich_pseudobulk_var/enrich_novartis.%j.err
+enrich_novartis.PID272912.out:> Slurm logs: ./logs/novartis/full/enrich_pseudobulk_var/enrich_novartis.%j.out / ./logs/novartis/full/enrich_pseudobulk_var/enrich_novartis.%j.err
 enrich_novartis.PID272912.out:Submitted batch job 34989067
 enrich_novartis.PID272912.out:> enrich_pseudobulk_var Slurm job finished
 enrich_novartis.PID273364.out:> DEG directory (scan *_de.h5ad): ./data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/
 enrich_novartis.PID273364.out:> Reference pseudobulk: ./data/novartis/pseudobulk_processed/group_rep/novartis_standardized_processed.h5ad
 enrich_novartis.PID273364.out:> Submitting Slurm job (sbatch -W) enrich_pseudobulk_var
-enrich_novartis.PID273364.out:> Slurm logs: /home/icb/olga.novitskaia/op3_v2/logs/novartis/full/enrich_pseudobulk_var/enrich_novartis.%j.out / /home/icb/olga.novitskaia/op3_v2/logs/novartis/full/enrich_pseudobulk_var/enrich_novartis.%j.err
+enrich_novartis.PID273364.out:> Slurm logs: ./logs/novartis/full/enrich_pseudobulk_var/enrich_novartis.%j.out / ./logs/novartis/full/enrich_pseudobulk_var/enrich_novartis.%j.err
 enrich_novartis.PID273364.out:Submitted batch job 34989068
 enrich_novartis.PID273364.out:> enrich_pseudobulk_var Slurm job finished
-enrich_novartis.34989067.out:2026-04-03 14:00:46 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2/data/novartis/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results
-enrich_novartis.34989067.out:2026-04-03 14:00:46 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/novartis/pseudobulk_processed/sep_rep/novartis_standardized_processed.h5ad
-enrich_novartis.34989067.out:2026-04-03 14:09:09 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/novartis/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0042_de.h5ad
-enrich_novartis.34989067.out:2026-04-03 14:48:38 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/novartis/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0042_de.h5ad
+enrich_novartis.34989067.out:2026-04-03 14:00:46 | [INFO] DEG directory (scan *_de.h5ad): ./data/novartis/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results
+enrich_novartis.34989067.out:2026-04-03 14:00:46 | [INFO] Reference pseudobulk: ./data/novartis/pseudobulk_processed/sep_rep/novartis_standardized_processed.h5ad
+enrich_novartis.34989067.out:2026-04-03 14:09:09 | [INFO] Enrich ./data/novartis/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0042_de.h5ad
+enrich_novartis.34989067.out:2026-04-03 14:48:38 | [INFO]     Rewriting h5ad file: ./data/novartis/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0042_de.h5ad
 enrich_novartis.34989067.out:2026-04-03 14:48:38 | [INFO]     Removed X matrix
 enrich_novartis.34989067.out:2026-04-03 14:48:38 | [INFO]     Rewriting h5ad file is done!
 enrich_novartis.34989067.out:2026-04-03 14:48:39 | [INFO] Done: scanned=1, need_enrichment=1, written=1 (dry_run=False)
-enrich_novartis.34989067.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_novartis.34989067.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_novartis.34989067.err:  utils.warn_names_duplicates("obs")
-enrich_novartis.34989067.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_novartis.34989067.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_novartis.34989067.err:  utils.warn_names_duplicates("obs")
-enrich_novartis.34989068.out:2026-04-03 14:00:46 | [INFO] DEG directory (scan *_de.h5ad): /ictstr01/home/icb/olga.novitskaia/op3_v2/data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results
-enrich_novartis.34989068.out:2026-04-03 14:00:46 | [INFO] Reference pseudobulk: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/novartis/pseudobulk_processed/group_rep/novartis_standardized_processed.h5ad
-enrich_novartis.34989068.out:2026-04-03 14:03:19 | [INFO] Enrich /ictstr01/home/icb/olga.novitskaia/op3_v2/data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0042_de.h5ad
-enrich_novartis.34989068.out:2026-04-03 14:13:36 | [INFO]     Rewriting h5ad file: /ictstr01/home/icb/olga.novitskaia/op3_v2/data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0042_de.h5ad
+enrich_novartis.34989068.out:2026-04-03 14:00:46 | [INFO] DEG directory (scan *_de.h5ad): ./data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results
+enrich_novartis.34989068.out:2026-04-03 14:00:46 | [INFO] Reference pseudobulk: ./data/novartis/pseudobulk_processed/group_rep/novartis_standardized_processed.h5ad
+enrich_novartis.34989068.out:2026-04-03 14:03:19 | [INFO] Enrich ./data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0042_de.h5ad
+enrich_novartis.34989068.out:2026-04-03 14:13:36 | [INFO]     Rewriting h5ad file: ./data/novartis/deg_data/group_rep/full/qc_false/filter_min_cells_0/results/CVCL_0042_de.h5ad
 enrich_novartis.34989068.out:2026-04-03 14:13:36 | [INFO]     Removed X matrix
 enrich_novartis.34989068.out:2026-04-03 14:13:36 | [INFO]     Rewriting h5ad file is done!
 enrich_novartis.34989068.out:2026-04-03 14:13:37 | [INFO] Done: scanned=1, need_enrichment=1, written=1 (dry_run=False)
-enrich_novartis.34989068.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_novartis.34989068.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_novartis.34989068.err:  utils.warn_names_duplicates("obs")
-enrich_novartis.34989068.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+enrich_novartis.34989068.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 enrich_novartis.34989068.err:  utils.warn_names_duplicates("obs")

@@ -1,4 +1,4 @@
-deg_dilimap_train_val.PID1423675.out:> Using cpu_preemptible QOS for DEG step (100G, 48h, 10 CPUs)
+deg_dilimap_train_val.PID1423675.out:> Using preemptible QOS for DEG step (100G, 48h, 10 CPUs)
 deg_dilimap_train_val.PID1423675.out:> Do not filter samples that did not pass quality control
 deg_dilimap_train_val.PID1423675.out:> Work with a full version
 deg_dilimap_train_val.PID1423675.out:> Mode: PARALLEL BY CELL TYPE (array jobs per cell type)
@@ -350,5 +350,5 @@ deg_aggregation.35309444.out:2026-04-18 02:43:50 | [INFO]     Removed X matrix
 deg_aggregation.35309444.out:2026-04-18 02:43:50 | [INFO]     Rewriting h5ad file is done!
 deg_aggregation.35309444.out:2026-04-18 02:43:50 | [INFO]   Saved aggregated file: ./data/dilimap_train_val/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CL_0000182_de.h5ad (5000 obs, 21370 vars)
 deg_aggregation.35309444.out:2026-04-18 02:43:50 | [INFO] Aggregation completed
-deg_aggregation.35309444.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+deg_aggregation.35309444.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 deg_aggregation.35309444.err:  utils.warn_names_duplicates("obs")

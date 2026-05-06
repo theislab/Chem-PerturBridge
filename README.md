@@ -62,6 +62,8 @@ You can run scripts on the HPC cluster with the workload manager (SLURM)
 
 **NB!** Before running some bash scripts, you may need to run `chmod u+x ./path/script.sh` before their execution.
 
+**NB!** The repository does not include raw data, processed data, or a Python environment. The pipelines expect local `./data` and `./venv` paths, which can be real directories or symlinks and are ignored by Git.
+
 **NB!** After the first trial of fetching the dataset from lamindb with the pipeline, the full version of data has been downloaded into your `~/.cache` directory as well as the version from your request (full/subsample) has been downloaded into the specified directory. Then, during the next re-runs the data is retrieved from `~/.cache` synchronization to the external database.
 
 ### 1. Set up prerequisites
@@ -84,7 +86,7 @@ conda config --set auto_activate_base false
 
 **1.1.3** Additionally, once you install Mamba and Conda with Miniforge, add the path of their location to `~/.bashrc` file:
 ```
-export PATH="/you_path/miniforge3/bin:$PATH"
+export PATH="/path/to/miniforge3/bin:$PATH"
 ```
 And then run:
 ```
@@ -128,7 +130,7 @@ echo $MY_API_KEY #If you want to print your MY_API_KEY
 mamba deactivate
 ```
 
-**NB!** Make sure that a path to your environment (as well as a path to your secret_key.txt file) is included in .gitignore, .cursorignore, .cursorindexignore, .codexignore and .codexindexingignor to try not to allow to read/index API KEYS by Cursor/Codex. But still, there might be a leak of KEYS to AI-agents.
+**NB!** Make sure that the paths to your environment and local secret files are ignored by Git and by any local indexing tools you use.
 
 **1.3** **Create symlinks**
 
@@ -148,10 +150,27 @@ cd /Chem-PerturBridge
 ln -s path_to_data/data data
 ```
 
-### 2. Set up the SLURM parameters for the pipeline script. 
+### 2. Set up the SLURM parameters for the pipeline script.
 If you want to run the dataset pseudobulking pipeline, e.g. for the Sci-plex dataset: `./pipelines/sciplex/sciplex_pseudobulking.sh`, you need to determine the parameters such as the number of cpus or the requested memory for the node under the commented lines by editing `#SBATCH` lines inside the script.
 
 However, for Tahoe you need to change the arguments under `sbatch` command in the script `./pipelines/tahoe/tahoe_pseudobulking_parallel.sh`. 
+
+Most wrappers default to generic Slurm settings:
+```
+QOS=normal
+PARTITION=compute
+GPU_QOS=gpu
+GPU_PARTITION=gpu
+PREEMPTIBLE_QOS=preemptible
+GPU_PREEMPTIBLE_QOS=gpu-preemptible
+```
+
+Override these before launching if your cluster uses different queue names, for example:
+```
+export QOS=my_cpu_queue
+export PARTITION=my_cpu_partition
+./run_pipelines/run_pseudobulking.sh -d sciplex
+```
 
 For example:
 
@@ -160,9 +179,9 @@ sbatch -W -J pseudobulk_tahoe \
         -t 10:00:00 \
         -n 1 \
         --array=1-14 \
-        --qos=cpu_normal \
+        --qos=normal \
         --mem=250G \
-        --partition=cpu_p \
+        --partition=compute \
         --cpus-per-task=2 \
 						...
 ```
@@ -198,8 +217,8 @@ You can execute it with following arguments:
 ```
 -s if this flag is included, then the script is executed for a subsample of a dataset, default=false
 -j if this flag is included, then the script is executed in parallel mode (array jobs per cell type), default=false
--g Use GPU QOS/partition (gpu_normal/gpu_p), default=CPU
--P Use preemptible QOS for the DEG step only (cpu_preemptible by default; gpu_preemptible combined with with -g); 100G mem, 48h, 10 CPUs, default=false
+-g Use GPU QOS/partition; set GPU_QOS/GPU_PARTITION to override, default=CPU
+-P Use preemptible QOS for the DEG step only; set PREEMPTIBLE_QOS/GPU_PREEMPTIBLE_QOS to override; 100G mem, 48h, 10 CPUs, default=false
 -h if this flag is included, then the help is printed, default=false
 -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
 -q if this flag is included, then samples that did not pass quality control are filtered out, default=false
@@ -207,7 +226,7 @@ You can execute it with following arguments:
 -d it is a required flag specifying which dataset should be processed: sciplex | tahoe | ...
 -p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
 ```
-**NB!** The `-g` option distributes DEG calculations across GPU nodes. The `-P` option uses the preemptible queue for the DEG step: `cpu_preemptible` by default, or `gpu_preemptible` when combined with `-g`.
+**NB!** The `-g` option distributes DEG calculations across GPU nodes. The `-P` option uses the preemptible queue for the DEG step. Queue names can be customized with environment variables before launching the wrapper.
 
 For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode on the CPU nodes you need to run:
 ```
@@ -288,14 +307,14 @@ cd /Chem-PerturBridge
 ```
 
 ### 5. Add datasets
-To add a new dataset to the pipeline, follow the instructions in [`./docs/README.md`](https://github.com/theislab/Chem-PerturBridge/blob/readme_new_dataset/docs/README.md)
+To add a new dataset to the pipeline, follow the instructions in [`./docs/README.md`](./docs/README.md)
 
 # Project structure:
 The structure of the repo:
 ```
  tree .
 .
-├── data -> /lustre/groups/ml01/workspace/olga.novitskaia/data
+├── data/  # local data directory, ignored by Git
 ├── docs
 ├── env.yaml
 ├── logs
@@ -343,7 +362,7 @@ The structure of the repo:
 │   └── utils
 │       ├──  aggregate_logs.py
 │       └─── parsing_utils.py
-└── venv -> /lustre/groups/ml01/workspace/olga.novitskaia/venv
+└── venv/  # local virtual environment, ignored by Git
 ```
 
 # Data

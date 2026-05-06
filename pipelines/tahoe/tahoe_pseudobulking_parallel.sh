@@ -20,8 +20,8 @@ BULK_DIR=./data/tahoe/pseudobulk_to_merge/${SUBDIR}
 OUTPUT_DIR=./data/tahoe/pseudobulk/${SUBDIR}
 LOGS_DIR=./logs
 ENV_DIR=./venv
-QOS=cpu_normal
-PARTITION=cpu_p
+QOS=${QOS:-normal}
+PARTITION=${PARTITION:-compute}
 
 echo "> Download dataset"
 sbatch -W -J pseudobulk_tahoe \

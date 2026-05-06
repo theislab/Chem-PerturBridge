@@ -1,4 +1,4 @@
-deg_vcpi_0001.PID1430496.out:> Using cpu_preemptible QOS for DEG step (100G, 48h, 10 CPUs)
+deg_vcpi_0001.PID1430496.out:> Using preemptible QOS for DEG step (100G, 48h, 10 CPUs)
 deg_vcpi_0001.PID1430496.out:> Do not filter samples that did not pass quality control
 deg_vcpi_0001.PID1430496.out:> Work with a full version
 deg_vcpi_0001.PID1430496.out:> Mode: PARALLEL BY CELL TYPE (array jobs per cell type)
@@ -1211,5 +1211,5 @@ deg_aggregation.35148741.out:2026-04-14 01:25:32 | [INFO]     Removed X matrix
 deg_aggregation.35148741.out:2026-04-14 01:25:32 | [INFO]     Rewriting h5ad file is done!
 deg_aggregation.35148741.out:2026-04-14 01:25:32 | [INFO]   Saved aggregated file: ./data/vcpi_0001/deg_data/sep_rep/full/qc_false/filter_min_cells_0/results/CVCL_0006_de.h5ad (27552 obs, 19517 vars)
 deg_aggregation.35148741.out:2026-04-14 01:25:33 | [INFO] Aggregation completed
-deg_aggregation.35148741.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+deg_aggregation.35148741.err:./venv/lib/python3.12/site-packages/anndata/_core/anndata.py:1774: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
 deg_aggregation.35148741.err:  utils.warn_names_duplicates("obs")

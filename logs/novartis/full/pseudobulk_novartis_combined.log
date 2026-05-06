@@ -268,7 +268,7 @@ pseudobulk_novartis.34925152.err:[49/52] batch 51
 pseudobulk_novartis.34925152.err:[50/52] batch 29
 pseudobulk_novartis.34925152.err:[51/52] batch 7
 pseudobulk_novartis.34925152.err:[52/52] batch 45
-pseudobulk_novartis.34925152.err:/ictstr01/home/icb/olga.novitskaia/venv/lib/python3.12/site-packages/legacy_api_wrap/__init__.py:88: FutureWarning: The dtype argument is deprecated and will be removed in late 2024.
+pseudobulk_novartis.34925152.err:./venv/lib/python3.12/site-packages/legacy_api_wrap/__init__.py:88: FutureWarning: The dtype argument is deprecated and will be removed in late 2024.
 pseudobulk_novartis.34925152.err:  return fn(*args_all, **kw)
 pseudobulk_novartis.34925152.err:Saved AnnData to data/novartis/raw/novartis_raw.h5ad
 pseudobulk_novartis.34925152.err:Loading gene annotation from data/novartis/raw/drugseq_ensembl_v98_annotation_and_entrez_mapping.RData

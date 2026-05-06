@@ -343,7 +343,7 @@ pseudobulk_cigs_tcm.35572396.err:  0      0   0      0   0      0      0      0 
 pseudobulk_cigs_tcm.35572396.err:100  4.09M 100  4.09M   0      0 18.74M      0                              0
 pseudobulk_cigs_tcm.35572396.err:100  4.09M 100  4.09M   0      0 18.70M      0                              0
 pseudobulk_cigs_tcm.35572396.err:100  4.09M 100  4.09M   0      0 18.67M      0                              0
-pseudobulk_cigs_tcm.35572396.err:/ictstr01/home/icb/olga.novitskaia/op3_v2/src/pseudobulking/datasets/cigs/standardization.py:294: FutureWarning: The behavior of array concatenation with empty entries is deprecated. In a future version, this will no longer exclude empty items when determining the result dtype. To retain the old behavior, exclude the empty entries before the concat operation.
+pseudobulk_cigs_tcm.35572396.err:./src/pseudobulking/datasets/cigs/standardization.py:294: FutureWarning: The behavior of array concatenation with empty entries is deprecated. In a future version, this will no longer exclude empty items when determining the result dtype. To retain the old behavior, exclude the empty entries before the concat operation.
 pseudobulk_cigs_tcm.35572396.err:  treat = treat.combine_first(obs["Treat"])
 pseudobulk_cigs_tcm.35572396.err:Loaded 25202 samples across 4 subsets (0 BLANK/RNA wells, 0 paper-excluded-plate wells)
 pseudobulk_cigs_tcm.35572396.err:  tcm_hek293t_10: IQR threshold log2(lib)=15.7365, lowqc=278/6315
