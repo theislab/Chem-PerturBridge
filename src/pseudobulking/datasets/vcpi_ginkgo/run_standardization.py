@@ -17,11 +17,21 @@ from src.pseudobulking.datasets.vcpi_ginkgo.standardization import standardize_v
 EXPERIMENT_TO_SLUG = {
     "vcpi-0001": "vcpi_0001",
     "vcpi-0002": "vcpi_0002",
+    "vcpi-0003": "vcpi_0003",
 }
 
 EXPERIMENT_TITLES = {
     "vcpi-0001": "Ginkgo VCPI vcpi-0001 (tvc-bhr-009)",
     "vcpi-0002": "Ginkgo VCPI vcpi-0002 (tvc-kdl-010)",
+    "vcpi-0003": "Ginkgo VCPI vcpi-0003 (tvc-qnu-012)",
+}
+
+# The VCPI client resolves downloads by opaque job id (tvc-...), not by the
+# human-readable experiment name (vcpi-000X), so map the latter to the former.
+EXPERIMENT_TO_JOB_ID = {
+    "vcpi-0001": "tvc-bhr-009",
+    "vcpi-0002": "tvc-kdl-010",
+    "vcpi-0003": "tvc-qnu-012",
 }
 
 
@@ -58,6 +68,8 @@ def get_vcpi_ginkgo_paths(data_root: str | Path, experiment_id: str) -> dict:
         "ensembl_symbol_cache": raw_dir / "vcpi_ginkgo_ensembl_symbol_cache.json",
         # experiment metadata
         "dataset_title":      EXPERIMENT_TITLES[experiment_id],
+        # opaque VCPI job id used for the actual download (vcpi.load_experiment)
+        "job_id":             EXPERIMENT_TO_JOB_ID[experiment_id],
     }
 
 
@@ -76,7 +88,7 @@ def main():
     Command-line Arguments
     ----------------------
     --experiment : str, required
-        VCPI experiment id (vcpi-0001 or vcpi-0002).
+        VCPI experiment id (vcpi-0001, vcpi-0002 or vcpi-0003).
     --output_file : str, required
         Output path for the standardized H5AD file.
     --data_root : str, required

@@ -1,0 +1,1039 @@
+pseudobulk_vcpi_0003.PID907490.out:> Running vcpi_0003 VCPI standardization (vcpi-0003)
+pseudobulk_vcpi_0003.PID907490.out:Submitted batch job 37962530
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:40:55 | [INFO] Loading and converting VCPI Ginkgo raw data
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:41:26 | [INFO] Downloading experiment via vcpi.load_experiment('tvc-qnu-012') [name='vcpi-0003']
+pseudobulk_vcpi_0003.37962530.out:
+pseudobulk_vcpi_0003.37962530.out:--- Loading experiment: tvc-qnu-012 ---
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:42:56 | [INFO] Saved experiments pickle: data/vcpi_0003/raw/experiments.pkl
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:42:56 | [INFO] Converting VCPI payload to AnnData ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:43:05 | [INFO] Expression matrix shape (samples × genes): (21888, 78778)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:44:51 | [INFO] Saved raw AnnData: data/vcpi_0003/raw/vcpi_ginkgo_raw.h5ad
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:44:51 | [INFO] Extracting compound metadata from experiments['chemistry'] ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:44:52 | [INFO] Saved compound metadata: data/vcpi_0003/raw/df_compounds.csv (10261 rows)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:44:52 | [INFO] Standardizing VCPI Ginkgo dataset
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:44:52 | [INFO] Loading raw data ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:05 | [INFO] Standardizing .var ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:05 | [INFO] Dropping 92 ERCC spike-in genes
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:10 | [INFO] Fetching gene symbols from Ensembl REST API ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:10 | [INFO] Ensembl symbol lookup: 78686 unique IDs total, 0 already cached, 78686 to fetch
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:10 | [INFO]   Batch 1/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:19 | [INFO]   Batch 2/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:27 | [INFO]   Batch 3/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:36 | [INFO]   Batch 4/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:45 | [INFO]   Batch 5/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:51 | [INFO]   Batch 6/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:45:59 | [INFO]   Batch 7/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:46:04 | [INFO]   Batch 8/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:46:13 | [INFO]   Batch 9/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:46:21 | [INFO]   Batch 10/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:46:31 | [INFO]   Batch 11/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:46:36 | [INFO]   Batch 12/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:46:41 | [INFO]   Batch 13/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:46:48 | [INFO]   Batch 14/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:46:57 | [INFO]   Batch 15/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:47:06 | [INFO]   Batch 16/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:47:16 | [INFO]   Batch 17/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:47:24 | [INFO]   Batch 18/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:47:32 | [INFO]   Batch 19/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:47:36 | [INFO]   Batch 20/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:47:46 | [INFO]   Batch 21/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:48:13 | [INFO]   Batch 22/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:48:27 | [INFO]   Batch 23/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:48:51 | [INFO]   Batch 24/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:48:57 | [INFO]   Batch 25/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:49:11 | [INFO]   Batch 26/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:49:22 | [INFO]   Batch 27/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:49:44 | [INFO]   Batch 28/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:50:07 | [INFO]   Batch 29/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:50:13 | [INFO]   Batch 30/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:50:29 | [INFO]   Batch 31/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:50:50 | [INFO]   Batch 32/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:51:10 | [INFO]   Batch 33/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:51:16 | [INFO]   Batch 34/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:51:42 | [INFO]   Batch 35/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:52:04 | [INFO]   Batch 36/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:52:31 | [INFO]   Batch 37/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:52:53 | [INFO]   Batch 38/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:53:23 | [INFO]   Batch 39/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:53:28 | [INFO]   Batch 40/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:53:42 | [INFO]   Batch 41/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:53:52 | [INFO]   Batch 42/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:54:10 | [INFO]   Batch 43/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:54:34 | [INFO]   Batch 44/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:54:40 | [INFO]   Batch 45/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:54:46 | [INFO]   Batch 46/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:54:56 | [INFO]   Batch 47/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:55:02 | [INFO]   Batch 48/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:55:07 | [INFO]   Batch 49/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:55:11 | [INFO]   Batch 50/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:55:37 | [INFO]   Batch 51/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:55:42 | [INFO]   Batch 52/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:55:48 | [INFO]   Batch 53/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:55:53 | [INFO]   Batch 54/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:55:58 | [INFO]   Batch 55/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:56:08 | [INFO]   Batch 56/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:56:20 | [INFO]   Batch 57/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:56:29 | [INFO]   Batch 58/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:56:50 | [INFO]   Batch 59/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:56:58 | [INFO]   Batch 60/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:57:04 | [INFO]   Batch 61/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:57:14 | [INFO]   Batch 62/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:57:21 | [INFO]   Batch 63/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:57:26 | [INFO]   Batch 64/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:57:32 | [INFO]   Batch 65/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:57:38 | [INFO]   Batch 66/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:57:47 | [INFO]   Batch 67/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:57:55 | [INFO]   Batch 68/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:58:01 | [INFO]   Batch 69/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:58:09 | [INFO]   Batch 70/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:58:18 | [INFO]   Batch 71/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:58:30 | [INFO]   Batch 72/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:58:48 | [INFO]   Batch 73/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:58:53 | [INFO]   Batch 74/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:59:10 | [INFO]   Batch 75/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:59:26 | [INFO]   Batch 76/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:59:47 | [INFO]   Batch 77/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 16:59:52 | [INFO]   Batch 78/79: querying 1000 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:16 | [INFO]   Batch 79/79: querying 686 IDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:20 | [INFO] Saved Ensembl symbol cache: 78686 entries to data/vcpi_0003/raw/vcpi_ginkgo_ensembl_symbol_cache.json
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:23 | [INFO] Symbol mapping: 43406 mapped, 35280 unmapped out of 78686 genes
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:23 | [INFO] Genes after ERCC removal: 78686
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:23 | [INFO] Filtering samples ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:23 | [INFO] Original: 21888 samples
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:24 | [INFO] Zero or negative library size (sum X <= 0): 0 samples
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:24 | [INFO] Positive controls (non-DMSO is_control): 912 samples
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:24 | [INFO] Total outliers: 912 / 21888
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:28 | [INFO] Remaining: 20976 samples
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:28 | [INFO] Annotating compounds with PubChem CIDs ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:28 | [INFO] Cache file data/vcpi_0003/raw/vcpi_ginkgo_pubchem_cache.json not found. Starting with empty cache.
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:28 | [INFO] Processing 10261 compounds
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:00:58 | [INFO] Processed 50/10261 compounds (49 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:01:33 | [INFO] Processed 100/10261 compounds (98 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:02:03 | [INFO] Processed 150/10261 compounds (147 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:02:32 | [INFO] Processed 200/10261 compounds (196 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:03:05 | [INFO] Processed 250/10261 compounds (244 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:03:32 | [INFO] Processed 300/10261 compounds (291 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:04:03 | [INFO] Processed 350/10261 compounds (339 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:04:34 | [INFO] Processed 400/10261 compounds (387 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:05:03 | [INFO] Processed 450/10261 compounds (434 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:05:36 | [INFO] Processed 500/10261 compounds (483 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:06:04 | [INFO] Processed 550/10261 compounds (532 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:06:34 | [INFO] Processed 600/10261 compounds (581 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:07:03 | [INFO] Processed 650/10261 compounds (631 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:07:32 | [INFO] Processed 700/10261 compounds (681 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:08:00 | [INFO] Processed 750/10261 compounds (730 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:08:30 | [INFO] Processed 800/10261 compounds (780 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:09:03 | [INFO] Processed 850/10261 compounds (828 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:09:33 | [INFO] Processed 900/10261 compounds (878 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:10:07 | [INFO] Processed 950/10261 compounds (928 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:10:35 | [INFO] Processed 1000/10261 compounds (978 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:11:10 | [INFO] Processed 1050/10261 compounds (1025 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:11:38 | [INFO] Processed 1100/10261 compounds (1073 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:12:06 | [INFO] Processed 1150/10261 compounds (1122 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:12:42 | [INFO] Processed 1200/10261 compounds (1171 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:13:10 | [INFO] Processed 1250/10261 compounds (1221 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:13:39 | [INFO] Processed 1300/10261 compounds (1271 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:14:13 | [INFO] Processed 1350/10261 compounds (1321 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:14:42 | [INFO] Processed 1400/10261 compounds (1369 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:15:21 | [INFO] Processed 1450/10261 compounds (1417 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:15:49 | [INFO] Processed 1500/10261 compounds (1466 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:16:24 | [INFO] Processed 1550/10261 compounds (1514 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:16:56 | [INFO] Processed 1600/10261 compounds (1564 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:17:27 | [INFO] Processed 1650/10261 compounds (1613 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:17:55 | [INFO] Processed 1700/10261 compounds (1663 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:18:39 | [INFO] Processed 1750/10261 compounds (1713 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:19:07 | [INFO] Processed 1800/10261 compounds (1762 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:19:35 | [INFO] Processed 1850/10261 compounds (1812 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:20:04 | [INFO] Processed 1900/10261 compounds (1861 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:20:33 | [INFO] Processed 1950/10261 compounds (1911 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:21:07 | [INFO] Processed 2000/10261 compounds (1960 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:21:36 | [INFO] Processed 2050/10261 compounds (2010 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:22:06 | [INFO] Processed 2100/10261 compounds (2059 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:22:39 | [INFO] Processed 2150/10261 compounds (2108 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:23:07 | [INFO] Processed 2200/10261 compounds (2156 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:23:42 | [INFO] Processed 2250/10261 compounds (2205 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:24:09 | [INFO] Processed 2300/10261 compounds (2253 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:24:43 | [INFO] Processed 2350/10261 compounds (2303 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:25:11 | [INFO] Processed 2400/10261 compounds (2353 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:25:40 | [INFO] Processed 2450/10261 compounds (2403 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:26:14 | [INFO] Processed 2500/10261 compounds (2453 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:26:42 | [INFO] Processed 2550/10261 compounds (2503 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:27:17 | [INFO] Processed 2600/10261 compounds (2551 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:27:45 | [INFO] Processed 2650/10261 compounds (2599 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:28:13 | [INFO] Processed 2700/10261 compounds (2645 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:28:42 | [INFO] Processed 2750/10261 compounds (2693 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:29:10 | [INFO] Processed 2800/10261 compounds (2742 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:29:38 | [INFO] Processed 2850/10261 compounds (2791 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:30:06 | [INFO] Processed 2900/10261 compounds (2841 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:30:36 | [INFO] Processed 2950/10261 compounds (2891 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:31:20 | [INFO] Processed 3000/10261 compounds (2940 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:31:49 | [INFO] Processed 3050/10261 compounds (2988 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:32:18 | [INFO] Processed 3100/10261 compounds (3037 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:32:46 | [INFO] Processed 3150/10261 compounds (3086 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:33:20 | [INFO] Processed 3200/10261 compounds (3135 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:33:50 | [INFO] Processed 3250/10261 compounds (3184 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:34:24 | [INFO] Processed 3300/10261 compounds (3232 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:34:54 | [INFO] Processed 3350/10261 compounds (3281 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:35:24 | [INFO] Processed 3400/10261 compounds (3331 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:35:58 | [INFO] Processed 3450/10261 compounds (3380 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:36:27 | [INFO] Processed 3500/10261 compounds (3428 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:37:01 | [INFO] Processed 3550/10261 compounds (3478 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:37:30 | [INFO] Processed 3600/10261 compounds (3528 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:37:58 | [INFO] Processed 3650/10261 compounds (3575 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:38:26 | [INFO] Processed 3700/10261 compounds (3625 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:39:08 | [INFO] Processed 3750/10261 compounds (3673 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:39:37 | [INFO] Processed 3800/10261 compounds (3723 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:40:05 | [INFO] Processed 3850/10261 compounds (3772 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:40:40 | [INFO] Processed 3900/10261 compounds (3820 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:41:14 | [INFO] Processed 3950/10261 compounds (3868 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:41:47 | [INFO] Processed 4000/10261 compounds (3916 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:42:21 | [INFO] Processed 4050/10261 compounds (3964 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:42:50 | [INFO] Processed 4100/10261 compounds (4014 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:43:18 | [INFO] Processed 4150/10261 compounds (4064 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:43:46 | [INFO] Processed 4200/10261 compounds (4114 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:44:15 | [INFO] Processed 4250/10261 compounds (4163 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:44:42 | [INFO] Processed 4300/10261 compounds (4212 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:45:12 | [INFO] Processed 4350/10261 compounds (4262 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:45:50 | [INFO] Processed 4400/10261 compounds (4312 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:46:18 | [INFO] Processed 4450/10261 compounds (4362 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:46:46 | [INFO] Processed 4500/10261 compounds (4412 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:47:15 | [INFO] Processed 4550/10261 compounds (4461 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:47:49 | [INFO] Processed 4600/10261 compounds (4508 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:48:32 | [INFO] Processed 4650/10261 compounds (4558 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:49:00 | [INFO] Processed 4700/10261 compounds (4607 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:49:30 | [INFO] Processed 4750/10261 compounds (4657 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:49:57 | [INFO] Processed 4800/10261 compounds (4707 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:50:25 | [INFO] Processed 4850/10261 compounds (4755 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:50:58 | [INFO] Processed 4900/10261 compounds (4803 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:51:32 | [INFO] Processed 4950/10261 compounds (4851 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:52:00 | [INFO] Processed 5000/10261 compounds (4900 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:52:29 | [INFO] Processed 5050/10261 compounds (4948 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:53:02 | [INFO] Processed 5100/10261 compounds (4995 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:53:30 | [INFO] Processed 5150/10261 compounds (5044 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:54:03 | [INFO] Processed 5200/10261 compounds (5094 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:54:42 | [INFO] Processed 5250/10261 compounds (5143 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:55:17 | [INFO] Processed 5300/10261 compounds (5193 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:55:50 | [INFO] Processed 5350/10261 compounds (5240 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:56:24 | [INFO] Processed 5400/10261 compounds (5290 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:56:52 | [INFO] Processed 5450/10261 compounds (5340 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:57:26 | [INFO] Processed 5500/10261 compounds (5390 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:57:55 | [INFO] Processed 5550/10261 compounds (5440 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:58:28 | [INFO] Processed 5600/10261 compounds (5489 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:59:08 | [INFO] Processed 5650/10261 compounds (5539 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 17:59:42 | [INFO] Processed 5700/10261 compounds (5588 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:00:13 | [INFO] Processed 5750/10261 compounds (5638 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:00:41 | [INFO] Processed 5800/10261 compounds (5687 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:01:10 | [INFO] Processed 5850/10261 compounds (5737 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:01:40 | [INFO] Processed 5900/10261 compounds (5787 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:02:07 | [INFO] Processed 5950/10261 compounds (5835 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:02:36 | [INFO] Processed 6000/10261 compounds (5884 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:03:05 | [INFO] Processed 6050/10261 compounds (5930 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:03:34 | [INFO] Processed 6100/10261 compounds (5980 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:04:04 | [INFO] Processed 6150/10261 compounds (6029 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:04:34 | [INFO] Processed 6200/10261 compounds (6079 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:05:02 | [INFO] Processed 6250/10261 compounds (6127 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:05:30 | [INFO] Processed 6300/10261 compounds (6176 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:05:58 | [INFO] Processed 6350/10261 compounds (6223 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:06:32 | [INFO] Processed 6400/10261 compounds (6272 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:06:59 | [INFO] Processed 6450/10261 compounds (6320 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:07:26 | [INFO] Processed 6500/10261 compounds (6370 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:07:53 | [INFO] Processed 6550/10261 compounds (6420 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:08:23 | [INFO] Processed 6600/10261 compounds (6468 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:08:51 | [INFO] Processed 6650/10261 compounds (6518 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:09:20 | [INFO] Processed 6700/10261 compounds (6565 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:09:54 | [INFO] Processed 6750/10261 compounds (6614 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:10:22 | [INFO] Processed 6800/10261 compounds (6662 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:10:52 | [INFO] Processed 6850/10261 compounds (6711 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:11:25 | [INFO] Processed 6900/10261 compounds (6761 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:11:54 | [INFO] Processed 6950/10261 compounds (6811 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:12:23 | [INFO] Processed 7000/10261 compounds (6860 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:13:02 | [INFO] Processed 7050/10261 compounds (6909 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:13:30 | [INFO] Processed 7100/10261 compounds (6959 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:14:04 | [INFO] Processed 7150/10261 compounds (7009 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:14:34 | [INFO] Processed 7200/10261 compounds (7059 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:15:11 | [INFO] Processed 7250/10261 compounds (7108 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:15:39 | [INFO] Processed 7300/10261 compounds (7158 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:16:07 | [INFO] Processed 7350/10261 compounds (7206 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:16:35 | [INFO] Processed 7400/10261 compounds (7255 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:17:02 | [INFO] Processed 7450/10261 compounds (7302 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:17:31 | [INFO] Processed 7500/10261 compounds (7350 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:18:03 | [INFO] Processed 7550/10261 compounds (7400 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:18:31 | [INFO] Processed 7600/10261 compounds (7448 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:19:07 | [INFO] Processed 7650/10261 compounds (7497 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:19:50 | [INFO] Processed 7700/10261 compounds (7546 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:20:54 | [INFO] Processed 7750/10261 compounds (7596 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:21:25 | [INFO] Processed 7800/10261 compounds (7646 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:21:59 | [INFO] Processed 7850/10261 compounds (7696 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:22:32 | [INFO] Processed 7900/10261 compounds (7746 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:22:59 | [INFO] Processed 7950/10261 compounds (7795 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:23:33 | [INFO] Processed 8000/10261 compounds (7845 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:24:03 | [INFO] Processed 8050/10261 compounds (7894 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:24:37 | [INFO] Processed 8100/10261 compounds (7943 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:25:04 | [INFO] Processed 8150/10261 compounds (7991 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:25:38 | [INFO] Processed 8200/10261 compounds (8039 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:26:07 | [INFO] Processed 8250/10261 compounds (8087 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:26:36 | [INFO] Processed 8300/10261 compounds (8136 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:27:05 | [INFO] Processed 8350/10261 compounds (8185 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:27:38 | [INFO] Processed 8400/10261 compounds (8234 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:28:06 | [INFO] Processed 8450/10261 compounds (8283 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:28:34 | [INFO] Processed 8500/10261 compounds (8332 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:29:01 | [INFO] Processed 8550/10261 compounds (8381 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:29:29 | [INFO] Processed 8600/10261 compounds (8430 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:29:57 | [INFO] Processed 8650/10261 compounds (8480 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:30:25 | [INFO] Processed 8700/10261 compounds (8529 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:31:00 | [INFO] Processed 8750/10261 compounds (8578 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:31:29 | [INFO] Processed 8800/10261 compounds (8626 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:31:57 | [INFO] Processed 8850/10261 compounds (8675 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:32:26 | [INFO] Processed 8900/10261 compounds (8723 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:32:55 | [INFO] Processed 8950/10261 compounds (8773 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:33:24 | [INFO] Processed 9000/10261 compounds (8823 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:33:53 | [INFO] Processed 9050/10261 compounds (8873 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:34:23 | [INFO] Processed 9100/10261 compounds (8922 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:34:52 | [INFO] Processed 9150/10261 compounds (8972 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:35:20 | [INFO] Processed 9200/10261 compounds (9021 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:35:49 | [INFO] Processed 9250/10261 compounds (9071 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:36:24 | [INFO] Processed 9300/10261 compounds (9119 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:37:03 | [INFO] Processed 9350/10261 compounds (9169 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:37:38 | [INFO] Processed 9400/10261 compounds (9217 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:38:05 | [INFO] Processed 9450/10261 compounds (9267 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:38:34 | [INFO] Processed 9500/10261 compounds (9316 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:39:01 | [INFO] Processed 9550/10261 compounds (9366 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:39:30 | [INFO] Processed 9600/10261 compounds (9415 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:39:57 | [INFO] Processed 9650/10261 compounds (9463 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:40:25 | [INFO] Processed 9700/10261 compounds (9512 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:40:52 | [INFO] Processed 9750/10261 compounds (9561 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:41:20 | [INFO] Processed 9800/10261 compounds (9608 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:41:48 | [INFO] Processed 9850/10261 compounds (9658 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:42:16 | [INFO] Processed 9900/10261 compounds (9708 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:42:46 | [INFO] Processed 9950/10261 compounds (9757 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:43:14 | [INFO] Processed 10000/10261 compounds (9805 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:43:42 | [INFO] Processed 10050/10261 compounds (9855 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:44:09 | [INFO] Processed 10100/10261 compounds (9904 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:44:44 | [INFO] Processed 10150/10261 compounds (9954 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:45:13 | [INFO] Processed 10200/10261 compounds (10003 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:45:40 | [INFO] Processed 10250/10261 compounds (10053 mapped so far)
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:45:47 | [INFO] Mapped 10064 out of 10261 compounds to PubChem CIDs
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:45:47 | [INFO] Looking up drug synonym names by PubChem CID ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:45:47 | [INFO] Unique valid CIDs: 10062, to fetch: 10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:46:35 | [INFO] Fetched 50/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:47:17 | [INFO] Fetched 100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:48:00 | [INFO] Fetched 150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:48:41 | [INFO] Fetched 200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:49:28 | [INFO] Fetched 250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:50:11 | [INFO] Fetched 300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:51:00 | [INFO] Fetched 350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:51:48 | [INFO] Fetched 400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:52:28 | [INFO] Fetched 450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:53:11 | [INFO] Fetched 500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:54:08 | [INFO] Fetched 550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:54:54 | [INFO] Fetched 600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:55:37 | [INFO] Fetched 650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:56:18 | [INFO] Fetched 700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:57:06 | [INFO] Fetched 750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:57:47 | [INFO] Fetched 800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:58:34 | [INFO] Fetched 850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 18:59:14 | [INFO] Fetched 900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:00:02 | [INFO] Fetched 950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:00:48 | [INFO] Fetched 1000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:01:29 | [INFO] Fetched 1050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:02:12 | [INFO] Fetched 1100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:02:53 | [INFO] Fetched 1150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:03:42 | [INFO] Fetched 1200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:04:28 | [INFO] Fetched 1250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:05:20 | [INFO] Fetched 1300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:06:02 | [INFO] Fetched 1350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:06:48 | [INFO] Fetched 1400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:07:34 | [INFO] Fetched 1450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:08:16 | [INFO] Fetched 1500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:09:14 | [INFO] Fetched 1550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:10:00 | [INFO] Fetched 1600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:10:41 | [INFO] Fetched 1650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:11:23 | [INFO] Fetched 1700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:12:11 | [INFO] Fetched 1750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:12:54 | [INFO] Fetched 1800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:13:33 | [INFO] Fetched 1850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:14:22 | [INFO] Fetched 1900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:15:10 | [INFO] Fetched 1950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:15:54 | [INFO] Fetched 2000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:16:40 | [INFO] Fetched 2050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:17:22 | [INFO] Fetched 2100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:18:06 | [INFO] Fetched 2150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:18:59 | [INFO] Fetched 2200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:19:45 | [INFO] Fetched 2250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:20:37 | [INFO] Fetched 2300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:21:18 | [INFO] Fetched 2350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:22:05 | [INFO] Fetched 2400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:22:48 | [INFO] Fetched 2450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:23:29 | [INFO] Fetched 2500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:24:12 | [INFO] Fetched 2550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:25:00 | [INFO] Fetched 2600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:25:46 | [INFO] Fetched 2650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:26:28 | [INFO] Fetched 2700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:27:11 | [INFO] Fetched 2750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:28:02 | [INFO] Fetched 2800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:28:45 | [INFO] Fetched 2850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:29:33 | [INFO] Fetched 2900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:30:13 | [INFO] Fetched 2950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:31:00 | [INFO] Fetched 3000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:31:42 | [INFO] Fetched 3050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:32:23 | [INFO] Fetched 3100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:33:15 | [INFO] Fetched 3150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:33:56 | [INFO] Fetched 3200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:34:36 | [INFO] Fetched 3250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:35:19 | [INFO] Fetched 3300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:36:10 | [INFO] Fetched 3350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:36:51 | [INFO] Fetched 3400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:37:33 | [INFO] Fetched 3450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:38:14 | [INFO] Fetched 3500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:38:56 | [INFO] Fetched 3550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:39:44 | [INFO] Fetched 3600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:40:27 | [INFO] Fetched 3650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:41:18 | [INFO] Fetched 3700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:42:04 | [INFO] Fetched 3750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:42:45 | [INFO] Fetched 3800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:43:39 | [INFO] Fetched 3850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:44:32 | [INFO] Fetched 3900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:45:18 | [INFO] Fetched 3950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:46:01 | [INFO] Fetched 4000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:46:44 | [INFO] Fetched 4050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:47:26 | [INFO] Fetched 4100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:48:07 | [INFO] Fetched 4150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:48:49 | [INFO] Fetched 4200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:49:32 | [INFO] Fetched 4250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:50:12 | [INFO] Fetched 4300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:51:05 | [INFO] Fetched 4350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:51:56 | [INFO] Fetched 4400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:52:49 | [INFO] Fetched 4450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:53:32 | [INFO] Fetched 4500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:54:19 | [INFO] Fetched 4550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:55:01 | [INFO] Fetched 4600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:55:41 | [INFO] Fetched 4650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:56:28 | [INFO] Fetched 4700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:57:11 | [INFO] Fetched 4750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:57:53 | [INFO] Fetched 4800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:58:38 | [INFO] Fetched 4850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 19:59:31 | [INFO] Fetched 4900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:00:17 | [INFO] Fetched 4950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:00:58 | [INFO] Fetched 5000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:01:47 | [INFO] Fetched 5050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:02:26 | [INFO] Fetched 5100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:03:12 | [INFO] Fetched 5150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:03:59 | [INFO] Fetched 5200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:04:47 | [INFO] Fetched 5250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:05:38 | [INFO] Fetched 5300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:06:19 | [INFO] Fetched 5350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:07:09 | [INFO] Fetched 5400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:08:02 | [INFO] Fetched 5450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:08:42 | [INFO] Fetched 5500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:09:25 | [INFO] Fetched 5550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:10:24 | [INFO] Fetched 5600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:11:11 | [INFO] Fetched 5650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:11:52 | [INFO] Fetched 5700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:12:34 | [INFO] Fetched 5750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:13:16 | [INFO] Fetched 5800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:14:00 | [INFO] Fetched 5850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:14:48 | [INFO] Fetched 5900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:15:29 | [INFO] Fetched 5950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:16:11 | [INFO] Fetched 6000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:17:03 | [INFO] Fetched 6050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:17:49 | [INFO] Fetched 6100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:18:30 | [INFO] Fetched 6150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:19:11 | [INFO] Fetched 6200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:19:58 | [INFO] Fetched 6250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:20:41 | [INFO] Fetched 6300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:21:28 | [INFO] Fetched 6350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:22:10 | [INFO] Fetched 6400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:22:55 | [INFO] Fetched 6450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:23:37 | [INFO] Fetched 6500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:24:30 | [INFO] Fetched 6550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:25:11 | [INFO] Fetched 6600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:25:52 | [INFO] Fetched 6650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:26:44 | [INFO] Fetched 6700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:27:25 | [INFO] Fetched 6750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:28:06 | [INFO] Fetched 6800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:28:59 | [INFO] Fetched 6850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:29:44 | [INFO] Fetched 6900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:30:25 | [INFO] Fetched 6950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:31:18 | [INFO] Fetched 7000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:31:58 | [INFO] Fetched 7050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:32:45 | [INFO] Fetched 7100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:33:24 | [INFO] Fetched 7150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:34:07 | [INFO] Fetched 7200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:34:48 | [INFO] Fetched 7250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:35:34 | [INFO] Fetched 7300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:36:14 | [INFO] Fetched 7350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:37:01 | [INFO] Fetched 7400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:37:42 | [INFO] Fetched 7450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:38:33 | [INFO] Fetched 7500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:39:17 | [INFO] Fetched 7550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:39:59 | [INFO] Fetched 7600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:40:46 | [INFO] Fetched 7650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:41:37 | [INFO] Fetched 7700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:42:18 | [INFO] Fetched 7750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:43:06 | [INFO] Fetched 7800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:43:47 | [INFO] Fetched 7850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:44:37 | [INFO] Fetched 7900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:45:24 | [INFO] Fetched 7950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:46:10 | [INFO] Fetched 8000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:46:51 | [INFO] Fetched 8050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:47:44 | [INFO] Fetched 8100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:48:35 | [INFO] Fetched 8150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:49:15 | [INFO] Fetched 8200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:50:07 | [INFO] Fetched 8250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:50:53 | [INFO] Fetched 8300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:51:51 | [INFO] Fetched 8350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:52:42 | [INFO] Fetched 8400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:53:25 | [INFO] Fetched 8450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:54:08 | [INFO] Fetched 8500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:54:48 | [INFO] Fetched 8550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:55:29 | [INFO] Fetched 8600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:56:24 | [INFO] Fetched 8650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:57:16 | [INFO] Fetched 8700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:57:59 | [INFO] Fetched 8750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:58:47 | [INFO] Fetched 8800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 20:59:34 | [INFO] Fetched 8850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:00:26 | [INFO] Fetched 8900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:01:12 | [INFO] Fetched 8950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:01:58 | [INFO] Fetched 9000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:02:44 | [INFO] Fetched 9050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:03:29 | [INFO] Fetched 9100/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:04:11 | [INFO] Fetched 9150/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:04:50 | [INFO] Fetched 9200/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:05:31 | [INFO] Fetched 9250/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:06:11 | [INFO] Fetched 9300/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:06:52 | [INFO] Fetched 9350/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:07:33 | [INFO] Fetched 9400/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:08:13 | [INFO] Fetched 9450/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:08:54 | [INFO] Fetched 9500/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:09:37 | [INFO] Fetched 9550/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:10:28 | [INFO] Fetched 9600/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:11:21 | [INFO] Fetched 9650/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:12:05 | [INFO] Fetched 9700/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:12:45 | [INFO] Fetched 9750/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:13:32 | [INFO] Fetched 9800/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:14:13 | [INFO] Fetched 9850/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:15:00 | [INFO] Fetched 9900/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:15:40 | [INFO] Fetched 9950/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:16:25 | [INFO] Fetched 10000/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:17:06 | [INFO] Fetched 10050/10061
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:17:16 | [INFO] Mapped 9645/10261 rows to drug names
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:17:17 | [INFO] perturbagen: 9641 from pubchem_name, 616 NaN -> user_compound_id, 4 duplicated -> user_compound_id
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:17:17 | [INFO] Standardizing .obs ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:17:18 | [INFO]   Processed 20,976 observations
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:17:18 | [INFO] Creating standardized AnnData object ...
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:17:19 | [INFO] Standardization complete: 20976 observations x 78686 genes
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:17:19 | [INFO] Saving standardized dataset to: ./data/vcpi_0003/pseudobulk/full/vcpi_0003_standardized.h5ad
+pseudobulk_vcpi_0003.37962530.out:2026-06-19 21:18:42 | [INFO] VCPI Ginkgo standardization complete
+pseudobulk_vcpi_0003.37962530.err:
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   0%|          | 0.00/988M [00:00<?, ?B/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   0%|          | 256k/988M [00:00<15:22, 1.12MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   0%|          | 512k/988M [00:00<11:20, 1.52MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   0%|          | 768k/988M [00:00<09:53, 1.74MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   0%|          | 1.50M/988M [00:00<05:49, 2.96MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   0%|          | 3.00M/988M [00:00<03:18, 5.19MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   1%|          | 6.00M/988M [00:00<01:50, 9.35MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   1%|          | 9.75M/988M [00:00<01:16, 13.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   1%|▏         | 13.8M/988M [00:01<01:01, 16.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   2%|▏         | 16.2M/988M [00:01<00:56, 17.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   2%|▏         | 20.0M/988M [00:01<00:50, 19.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   2%|▏         | 23.5M/988M [00:01<00:47, 21.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   3%|▎         | 26.8M/988M [00:01<00:45, 22.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   3%|▎         | 30.8M/988M [00:01<00:42, 23.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   3%|▎         | 34.5M/988M [00:01<00:40, 24.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   4%|▍         | 38.5M/988M [00:01<00:38, 25.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   4%|▍         | 41.5M/988M [00:02<00:38, 25.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   5%|▍         | 44.5M/988M [00:02<00:37, 26.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   5%|▍         | 47.8M/988M [00:02<00:37, 26.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   5%|▌         | 51.5M/988M [00:02<00:36, 27.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   6%|▌         | 55.5M/988M [00:02<00:35, 27.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   6%|▌         | 59.2M/988M [00:02<00:34, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   6%|▋         | 63.2M/988M [00:02<00:34, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   7%|▋         | 67.2M/988M [00:02<00:34, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   7%|▋         | 71.0M/988M [00:03<00:34, 28.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   7%|▋         | 73.0M/988M [00:03<00:35, 27.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   8%|▊         | 76.0M/988M [00:03<00:35, 27.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   8%|▊         | 80.0M/988M [00:03<00:34, 27.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   8%|▊         | 83.8M/988M [00:03<00:34, 27.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   9%|▉         | 87.8M/988M [00:03<00:33, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:   9%|▉         | 90.5M/988M [00:03<00:33, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  10%|▉         | 94.5M/988M [00:03<00:32, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  10%|▉         | 98.2M/988M [00:04<00:32, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  10%|█         | 101M/988M [00:04<00:32, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  11%|█         | 104M/988M [00:04<00:32, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  11%|█         | 108M/988M [00:04<00:32, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  11%|█▏        | 112M/988M [00:04<00:31, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  12%|█▏        | 116M/988M [00:04<00:31, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  12%|█▏        | 120M/988M [00:04<00:31, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  12%|█▏        | 123M/988M [00:04<00:30, 29.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  13%|█▎        | 126M/988M [00:05<00:30, 29.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  13%|█▎        | 128M/988M [00:05<00:31, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  13%|█▎        | 132M/988M [00:05<00:30, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  14%|█▎        | 135M/988M [00:05<00:30, 29.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  14%|█▍        | 139M/988M [00:05<00:31, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  14%|█▍        | 143M/988M [00:05<00:30, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  15%|█▍        | 147M/988M [00:05<00:30, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  15%|█▌        | 150M/988M [00:05<00:30, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  15%|█▌        | 152M/988M [00:06<00:31, 27.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  16%|█▌        | 156M/988M [00:06<00:30, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  16%|█▌        | 160M/988M [00:06<00:31, 27.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  17%|█▋        | 164M/988M [00:06<00:30, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  17%|█▋        | 167M/988M [00:06<00:29, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  17%|█▋        | 171M/988M [00:06<00:30, 27.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  18%|█▊        | 175M/988M [00:06<00:30, 28.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  18%|█▊        | 179M/988M [00:07<00:29, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  18%|█▊        | 182M/988M [00:07<00:29, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  19%|█▊        | 184M/988M [00:07<00:30, 27.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  19%|█▉        | 188M/988M [00:07<00:29, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  19%|█▉        | 192M/988M [00:07<00:29, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  20%|█▉        | 196M/988M [00:07<00:29, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  20%|██        | 200M/988M [00:07<00:28, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  21%|██        | 204M/988M [00:07<00:28, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  21%|██        | 208M/988M [00:08<00:27, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  21%|██▏       | 212M/988M [00:08<00:27, 29.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  22%|██▏       | 215M/988M [00:08<00:27, 29.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  22%|██▏       | 219M/988M [00:08<00:26, 30.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  22%|██▏       | 220M/988M [00:08<00:28, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  23%|██▎       | 223M/988M [00:08<00:28, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  23%|██▎       | 226M/988M [00:08<00:27, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  23%|██▎       | 228M/988M [00:08<00:28, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  23%|██▎       | 232M/988M [00:08<00:28, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  24%|██▍       | 235M/988M [00:09<00:28, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  24%|██▍       | 239M/988M [00:09<00:27, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  25%|██▍       | 242M/988M [00:09<00:27, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  25%|██▍       | 246M/988M [00:09<00:26, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  25%|██▌       | 248M/988M [00:09<00:27, 28.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  25%|██▌       | 252M/988M [00:09<00:27, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  26%|██▌       | 256M/988M [00:09<00:26, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  26%|██▌       | 259M/988M [00:09<00:26, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  27%|██▋       | 262M/988M [00:10<00:25, 29.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  27%|██▋       | 265M/988M [00:10<00:25, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  27%|██▋       | 268M/988M [00:10<00:25, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  27%|██▋       | 271M/988M [00:10<00:25, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  28%|██▊       | 274M/988M [00:10<00:25, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  28%|██▊       | 278M/988M [00:10<00:25, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  28%|██▊       | 280M/988M [00:10<00:26, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  29%|██▊       | 284M/988M [00:10<00:25, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  29%|██▉       | 288M/988M [00:10<00:25, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  29%|██▉       | 291M/988M [00:11<00:24, 29.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  30%|██▉       | 295M/988M [00:11<00:24, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  30%|███       | 299M/988M [00:11<00:25, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  31%|███       | 303M/988M [00:11<00:24, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  31%|███       | 306M/988M [00:11<00:24, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  31%|███▏      | 310M/988M [00:11<00:24, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  32%|███▏      | 313M/988M [00:11<00:24, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  32%|███▏      | 316M/988M [00:12<00:23, 29.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  32%|███▏      | 318M/988M [00:12<00:24, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  33%|███▎      | 322M/988M [00:12<00:24, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  33%|███▎      | 326M/988M [00:12<00:24, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  33%|███▎      | 329M/988M [00:12<00:23, 29.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  34%|███▎      | 332M/988M [00:12<00:23, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  34%|███▍      | 336M/988M [00:12<00:23, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  34%|███▍      | 339M/988M [00:12<00:24, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  35%|███▍      | 343M/988M [00:13<00:23, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  35%|███▌      | 347M/988M [00:13<00:23, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  36%|███▌      | 351M/988M [00:13<00:22, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  36%|███▌      | 354M/988M [00:13<00:22, 29.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  36%|███▌      | 355M/988M [00:13<00:23, 28.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  36%|███▋      | 359M/988M [00:13<00:23, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  37%|███▋      | 362M/988M [00:13<00:22, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  37%|███▋      | 366M/988M [00:13<00:23, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  37%|███▋      | 368M/988M [00:13<00:23, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  38%|███▊      | 372M/988M [00:14<00:22, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  38%|███▊      | 375M/988M [00:14<00:22, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  38%|███▊      | 379M/988M [00:14<00:23, 27.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  39%|███▊      | 383M/988M [00:14<00:22, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  39%|███▉      | 386M/988M [00:14<00:22, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  39%|███▉      | 390M/988M [00:14<00:22, 28.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  40%|███▉      | 392M/988M [00:14<00:22, 27.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  40%|███▉      | 395M/988M [00:14<00:22, 27.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  40%|████      | 399M/988M [00:15<00:22, 27.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  41%|████      | 402M/988M [00:15<00:21, 28.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  41%|████      | 406M/988M [00:15<00:21, 28.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  41%|████▏     | 410M/988M [00:15<00:21, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  42%|████▏     | 413M/988M [00:15<00:21, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  42%|████▏     | 416M/988M [00:15<00:21, 27.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  42%|████▏     | 419M/988M [00:15<00:21, 27.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  43%|████▎     | 423M/988M [00:16<00:21, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  43%|████▎     | 426M/988M [00:16<00:20, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  43%|████▎     | 430M/988M [00:16<00:20, 28.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  44%|████▍     | 434M/988M [00:16<00:20, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  44%|████▍     | 437M/988M [00:16<00:19, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  45%|████▍     | 440M/988M [00:16<00:20, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  45%|████▍     | 444M/988M [00:16<00:20, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  45%|████▌     | 447M/988M [00:16<00:19, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  46%|████▌     | 451M/988M [00:17<00:20, 27.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  46%|████▌     | 455M/988M [00:17<00:19, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  46%|████▋     | 459M/988M [00:17<00:20, 27.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  47%|████▋     | 463M/988M [00:17<00:19, 28.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  47%|████▋     | 466M/988M [00:17<00:19, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  48%|████▊     | 470M/988M [00:17<00:18, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  48%|████▊     | 473M/988M [00:17<00:19, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  48%|████▊     | 476M/988M [00:17<00:19, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  49%|████▊     | 480M/988M [00:18<00:18, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  49%|████▉     | 484M/988M [00:18<00:18, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  49%|████▉     | 488M/988M [00:18<00:18, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  50%|████▉     | 491M/988M [00:18<00:18, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  50%|████▉     | 494M/988M [00:18<00:17, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  50%|█████     | 496M/988M [00:18<00:18, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  51%|█████     | 500M/988M [00:18<00:17, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  51%|█████     | 503M/988M [00:18<00:17, 29.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  51%|█████     | 505M/988M [00:19<00:17, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  51%|█████▏    | 509M/988M [00:19<00:17, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  52%|█████▏    | 512M/988M [00:19<00:17, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  52%|█████▏    | 515M/988M [00:19<00:17, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  53%|█████▎    | 519M/988M [00:19<00:16, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  53%|█████▎    | 521M/988M [00:19<00:16, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  53%|█████▎    | 524M/988M [00:19<00:17, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  53%|█████▎    | 527M/988M [00:19<00:17, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  54%|█████▎    | 530M/988M [00:19<00:16, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  54%|█████▍    | 532M/988M [00:20<00:17, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  54%|█████▍    | 536M/988M [00:20<00:16, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  55%|█████▍    | 540M/988M [00:20<00:16, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  55%|█████▌    | 544M/988M [00:20<00:16, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  55%|█████▌    | 547M/988M [00:20<00:15, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  56%|█████▌    | 551M/988M [00:20<00:15, 29.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  56%|█████▌    | 554M/988M [00:20<00:15, 29.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  57%|█████▋    | 558M/988M [00:20<00:14, 30.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  57%|█████▋    | 560M/988M [00:21<00:15, 29.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  57%|█████▋    | 564M/988M [00:21<00:14, 29.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  57%|█████▋    | 568M/988M [00:21<00:14, 30.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  58%|█████▊    | 571M/988M [00:21<00:14, 30.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  58%|█████▊    | 574M/988M [00:21<00:14, 29.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  58%|█████▊    | 576M/988M [00:21<00:14, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  59%|█████▊    | 579M/988M [00:21<00:14, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  59%|█████▉    | 583M/988M [00:21<00:14, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  59%|█████▉    | 587M/988M [00:21<00:14, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  60%|█████▉    | 591M/988M [00:22<00:14, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  60%|██████    | 594M/988M [00:22<00:14, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  61%|██████    | 598M/988M [00:22<00:13, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  61%|██████    | 602M/988M [00:22<00:13, 29.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  61%|██████▏   | 606M/988M [00:22<00:13, 29.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  62%|██████▏   | 609M/988M [00:22<00:13, 29.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  62%|██████▏   | 612M/988M [00:22<00:13, 29.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  62%|██████▏   | 616M/988M [00:22<00:13, 29.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  63%|██████▎   | 620M/988M [00:23<00:12, 30.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  63%|██████▎   | 622M/988M [00:23<00:12, 29.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  63%|██████▎   | 626M/988M [00:23<00:12, 29.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  64%|██████▎   | 630M/988M [00:23<00:12, 29.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  64%|██████▍   | 632M/988M [00:23<00:13, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  64%|██████▍   | 636M/988M [00:23<00:12, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  65%|██████▍   | 640M/988M [00:23<00:12, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  65%|██████▌   | 644M/988M [00:23<00:12, 29.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  66%|██████▌   | 648M/988M [00:24<00:11, 29.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  66%|██████▌   | 651M/988M [00:24<00:11, 30.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  66%|██████▋   | 655M/988M [00:24<00:12, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  67%|██████▋   | 658M/988M [00:24<00:11, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  67%|██████▋   | 662M/988M [00:24<00:11, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  67%|██████▋   | 664M/988M [00:24<00:12, 27.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  68%|██████▊   | 668M/988M [00:24<00:12, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  68%|██████▊   | 672M/988M [00:25<00:11, 28.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  68%|██████▊   | 676M/988M [00:25<00:11, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  69%|██████▉   | 680M/988M [00:25<00:11, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  69%|██████▉   | 684M/988M [00:25<00:11, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  70%|██████▉   | 688M/988M [00:25<00:10, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  70%|██████▉   | 692M/988M [00:25<00:10, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  70%|███████   | 695M/988M [00:25<00:10, 29.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  71%|███████   | 698M/988M [00:25<00:10, 29.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  71%|███████   | 700M/988M [00:26<00:10, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  71%|███████   | 704M/988M [00:26<00:10, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  72%|███████▏  | 707M/988M [00:26<00:10, 29.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  72%|███████▏  | 711M/988M [00:26<00:09, 29.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  72%|███████▏  | 712M/988M [00:26<00:10, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  72%|███████▏  | 715M/988M [00:26<00:10, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  73%|███████▎  | 719M/988M [00:26<00:09, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  73%|███████▎  | 723M/988M [00:26<00:09, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  73%|███████▎  | 726M/988M [00:26<00:09, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  74%|███████▎  | 728M/988M [00:27<00:09, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  74%|███████▍  | 732M/988M [00:27<00:09, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  74%|███████▍  | 735M/988M [00:27<00:09, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  75%|███████▍  | 738M/988M [00:27<00:09, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  75%|███████▌  | 742M/988M [00:27<00:09, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  76%|███████▌  | 746M/988M [00:27<00:08, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  76%|███████▌  | 750M/988M [00:27<00:08, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  76%|███████▌  | 752M/988M [00:27<00:08, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  76%|███████▋  | 755M/988M [00:28<00:08, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  77%|███████▋  | 759M/988M [00:28<00:08, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  77%|███████▋  | 763M/988M [00:28<00:08, 29.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  77%|███████▋  | 766M/988M [00:28<00:08, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  78%|███████▊  | 768M/988M [00:28<00:08, 26.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  78%|███████▊  | 772M/988M [00:28<00:08, 27.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  79%|███████▊  | 776M/988M [00:28<00:07, 28.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  79%|███████▉  | 780M/988M [00:28<00:07, 28.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  79%|███████▉  | 783M/988M [00:29<00:07, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  80%|███████▉  | 786M/988M [00:29<00:07, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  80%|████████  | 790M/988M [00:29<00:07, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  80%|████████  | 793M/988M [00:29<00:07, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  81%|████████  | 796M/988M [00:29<00:06, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  81%|████████  | 800M/988M [00:29<00:06, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  81%|████████▏ | 804M/988M [00:29<00:06, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  82%|████████▏ | 807M/988M [00:29<00:06, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  82%|████████▏ | 811M/988M [00:30<00:06, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  82%|████████▏ | 815M/988M [00:30<00:06, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  83%|████████▎ | 816M/988M [00:30<00:06, 27.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  83%|████████▎ | 820M/988M [00:30<00:06, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  83%|████████▎ | 824M/988M [00:30<00:05, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  84%|████████▍ | 828M/988M [00:30<00:05, 28.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  84%|████████▍ | 832M/988M [00:30<00:05, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  84%|████████▍ | 835M/988M [00:30<00:05, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  85%|████████▍ | 838M/988M [00:31<00:05, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  85%|████████▌ | 842M/988M [00:31<00:05, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  86%|████████▌ | 845M/988M [00:31<00:05, 28.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  86%|████████▌ | 849M/988M [00:31<00:05, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  86%|████████▋ | 853M/988M [00:31<00:04, 29.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  87%|████████▋ | 856M/988M [00:31<00:04, 29.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  87%|████████▋ | 860M/988M [00:31<00:04, 29.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  87%|████████▋ | 864M/988M [00:31<00:04, 29.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  88%|████████▊ | 868M/988M [00:32<00:04, 29.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  88%|████████▊ | 872M/988M [00:32<00:04, 29.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  89%|████████▊ | 875M/988M [00:32<00:03, 29.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  89%|████████▉ | 879M/988M [00:32<00:03, 30.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  89%|████████▉ | 881M/988M [00:32<00:03, 30.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  89%|████████▉ | 884M/988M [00:32<00:03, 29.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  90%|████████▉ | 888M/988M [00:32<00:03, 29.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  90%|█████████ | 891M/988M [00:32<00:03, 30.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  91%|█████████ | 895M/988M [00:33<00:03, 30.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  91%|█████████ | 899M/988M [00:33<00:03, 29.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  91%|█████████▏| 903M/988M [00:33<00:03, 29.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  92%|█████████▏| 905M/988M [00:33<00:02, 29.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  92%|█████████▏| 908M/988M [00:33<00:02, 28.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  92%|█████████▏| 911M/988M [00:33<00:02, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  93%|█████████▎| 914M/988M [00:33<00:02, 28.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  93%|█████████▎| 916M/988M [00:33<00:02, 27.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  93%|█████████▎| 919M/988M [00:34<00:02, 27.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  93%|█████████▎| 922M/988M [00:34<00:02, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  94%|█████████▎| 924M/988M [00:34<00:02, 27.1MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  94%|█████████▍| 928M/988M [00:34<00:02, 27.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  94%|█████████▍| 932M/988M [00:34<00:02, 27.4MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  95%|█████████▍| 935M/988M [00:34<00:01, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  95%|█████████▌| 939M/988M [00:34<00:01, 27.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  95%|█████████▌| 943M/988M [00:34<00:01, 28.0MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  96%|█████████▌| 944M/988M [00:35<00:01, 27.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  96%|█████████▌| 948M/988M [00:35<00:01, 27.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  96%|█████████▋| 952M/988M [00:35<00:01, 27.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  97%|█████████▋| 955M/988M [00:35<00:01, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  97%|█████████▋| 959M/988M [00:35<00:01, 27.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  97%|█████████▋| 962M/988M [00:35<00:00, 28.2MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  98%|█████████▊| 964M/988M [00:35<00:00, 27.6MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  98%|█████████▊| 967M/988M [00:35<00:00, 27.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  98%|█████████▊| 970M/988M [00:35<00:00, 27.8MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  99%|█████████▊| 974M/988M [00:36<00:00, 28.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  99%|█████████▉| 976M/988M [00:36<00:00, 26.9MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…:  99%|█████████▉| 980M/988M [00:36<00:00, 27.5MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…: 100%|█████████▉| 984M/988M [00:36<00:00, 27.7MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…: 100%|█████████▉| 988M/988M [00:36<00:00, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:Downloading tvc-qnu-…: 100%|██████████| 988M/988M [00:36<00:00, 28.3MB/s]
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:01:25 | [WARNING] PubChem lookup failed for InChIKey 'FELYAZAWTURXNF-JJIBRWJFSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:02:57 | [WARNING] PubChem lookup failed for InChIKey 'GYAYGXHBFOHKHY-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:05:29 | [WARNING] PubChem lookup failed for InChIKey 'PKLLXDYTLFSUNT-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:08:43 | [WARNING] PubChem lookup failed for InChIKey 'APIPZIWFYOESKN-ZZEZOPTASA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:09:52 | [WARNING] PubChem lookup failed for InChIKey 'QAIWTEUIQPMZEA-ZZEZOPTASA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:10:38 | [WARNING] PubChem lookup failed for InChIKey 'DPDQXNMMIARCBQ-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:12:19 | [WARNING] PubChem lookup failed for InChIKey 'MSQLZRDNXXBHJT-XLNRJJMWSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:13:44 | [WARNING] PubChem lookup failed for InChIKey 'RJNSNFZXAZXOFX-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:14:46 | [WARNING] PubChem lookup failed for InChIKey 'RRGNMWCGFDSLLD-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:14:52 | [WARNING] PubChem lookup failed for InChIKey 'DOBOYMKCRRLTRF-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:15:57 | [WARNING] PubChem lookup failed for InChIKey 'JISCYQWWSXPVCV-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:18:03 | [WARNING] PubChem lookup failed for InChIKey 'NRZWECORTTWSEF-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:18:19 | [WARNING] PubChem lookup failed for InChIKey 'RKQDUSVCVGWAKJ-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:18:28 | [WARNING] PubChem lookup failed for InChIKey 'QJLLWGKISNNQAH-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:20:59 | [WARNING] PubChem lookup failed for InChIKey 'XCBSDRWUWCALRI-LVEBTZEWSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:22:10 | [WARNING] PubChem lookup failed for InChIKey 'PTHDVPPLPCACPF-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:23:36 | [WARNING] PubChem lookup failed for InChIKey 'RZNBBQXUGWILIM-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:24:21 | [WARNING] PubChem lookup failed for InChIKey 'QDWMDYXUUYOKHC-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:25:56 | [WARNING] PubChem lookup failed for InChIKey 'JYSUYJCLUODSLN-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:27:06 | [WARNING] PubChem lookup failed for InChIKey 'DOVCSTHCCWGIQE-KPKJPENVSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:30:38 | [WARNING] PubChem lookup failed for InChIKey 'PQJZMXBWFCAZTB-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:30:52 | [WARNING] PubChem lookup failed for InChIKey 'JEQINKRQPZVYNM-FMIVXFBMSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:31:14 | [WARNING] PubChem lookup failed for InChIKey 'KRIKILRRJCIWNB-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:32:55 | [WARNING] PubChem lookup failed for InChIKey 'SKQDXRQGAMEKAO-VYIQYICTSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:34:14 | [WARNING] PubChem lookup failed for InChIKey 'DFBCMDHPBOFPNF-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:35:24 | [WARNING] PubChem lookup failed for InChIKey 'LBOPECYONBDFEM-RWALOXMOSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:36:30 | [WARNING] PubChem lookup failed for InChIKey 'WLYWDNGEULSBAS-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:38:39 | [WARNING] PubChem lookup failed for InChIKey 'ZJNFOQABHVJICF-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:38:48 | [WARNING] PubChem lookup failed for InChIKey 'JPOCPRQVRVQGSL-VXPUYCOJSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:38:57 | [WARNING] PubChem lookup failed for InChIKey 'ZQCZDNCTYGHQCI-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:40:22 | [WARNING] PubChem lookup failed for InChIKey 'ZUOUKGJUHCKVDK-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:40:59 | [WARNING] PubChem lookup failed for InChIKey 'IXYXHAVNXYNCIV-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:41:14 | [WARNING] PubChem lookup failed for InChIKey 'KPZIZVWBVHRJLS-MTJSOVHGSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:41:57 | [WARNING] PubChem lookup failed for InChIKey 'NBXFKAVYIKTFOG-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:45:16 | [WARNING] PubChem lookup failed for InChIKey 'QRWZEPLJLFMMCG-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:45:33 | [WARNING] PubChem lookup failed for InChIKey 'LMOOORKAAOCBSC-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:47:29 | [WARNING] PubChem lookup failed for InChIKey 'SHMGGXYUEGWCJF-UKTHLTGXSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:47:49 | [WARNING] PubChem lookup failed for InChIKey 'BKXVVCILCIUCLG-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:48:08 | [WARNING] PubChem lookup failed for InChIKey 'DPUKDTMEAJFOQB-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:48:13 | [WARNING] PubChem lookup failed for InChIKey 'DPUKDTMEAJFOQB-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 1.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:50:52 | [WARNING] PubChem lookup failed for InChIKey 'MAKSUMATINUOPC-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:51:15 | [WARNING] PubChem lookup failed for InChIKey 'SSVOWZLFSMINRT-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:52:55 | [WARNING] PubChem lookup failed for InChIKey 'GOINHGOYJSTMDZ-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:53:43 | [WARNING] PubChem lookup failed for InChIKey 'DLTOEESOSYKJBK-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:54:04 | [WARNING] PubChem lookup failed for InChIKey 'ITCDSRXKOSGICJ-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:54:32 | [WARNING] PubChem lookup failed for InChIKey 'KBAYNSGKTDYHHM-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:55:01 | [WARNING] PubChem lookup failed for InChIKey 'HGLILEHBVDDIJN-UZYVYHOESA-N': <urlopen error [Errno 101] Network is unreachable>. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:55:37 | [WARNING] PubChem lookup failed for InChIKey 'JSRUEBJBIBOHNI-BKUYFWCQSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:55:53 | [WARNING] PubChem lookup failed for InChIKey 'YAAFETPMUZYQMY-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:57:00 | [WARNING] PubChem lookup failed for InChIKey 'OGZLNNSXEWMTQY-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:57:56 | [WARNING] PubChem lookup failed for InChIKey 'IZTMINWHYLUIKH-KEBDBYFISA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:58:39 | [WARNING] PubChem lookup failed for InChIKey 'IZYXGDUGXGFNGV-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:59:03 | [WARNING] PubChem lookup failed for InChIKey 'MDSDXUISUNIKFL-ZDLGFXPLSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 17:59:27 | [WARNING] PubChem lookup failed for InChIKey 'KPPSROAKKZWYBU-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:06:11 | [WARNING] PubChem lookup failed for InChIKey 'JKUWJKVKKBEAEA-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:09:35 | [WARNING] PubChem lookup failed for InChIKey 'FVLXAEXRZJMEIS-VOTSOKGWSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:10:07 | [WARNING] PubChem lookup failed for InChIKey 'XGQWIMJEPZWURZ-UHFFFAOYSA-N': IncompleteRead(9104 bytes read)
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:11:05 | [WARNING] PubChem lookup failed for InChIKey 'PBZRRADJWNBPNY-XDRMOJKASA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:12:39 | [WARNING] PubChem lookup failed for InChIKey 'FIWIPIOCGSXUTE-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:12:51 | [WARNING] PubChem lookup failed for InChIKey 'ZYLIYQPAPKKGSL-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:13:31 | [WARNING] PubChem lookup failed for InChIKey 'QGLCQRHVJRVJBD-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:14:41 | [WARNING] PubChem lookup failed for InChIKey 'TWFPIHSRBFDFTC-JAIQZWGSSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:14:46 | [WARNING] PubChem lookup failed for InChIKey 'LUYGWMWDYXVZNA-XBXARRHUSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:17:53 | [WARNING] PubChem lookup failed for InChIKey 'PZGVZHDQZXIQEH-JZJYNLBNSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:19:42 | [WARNING] PubChem lookup failed for InChIKey 'JIYMVSQRGZEYAX-CWUUNJJBSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:20:01 | [WARNING] PubChem lookup failed for InChIKey 'JCSGFHVFHSKIJH-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:20:16 | [WARNING] PubChem lookup failed for InChIKey 'QCVMEVJRQMHQBL-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:21:15 | [WARNING] PubChem lookup failed for InChIKey 'QODXZESJVXQCSC-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:21:41 | [WARNING] PubChem lookup failed for InChIKey 'PYZOZKKUKGNTFZ-IDUWFGFVSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:22:16 | [WARNING] PubChem lookup failed for InChIKey 'OQOXUCROLVTFLI-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:23:03 | [WARNING] PubChem lookup failed for InChIKey 'TWRNIQIIFVZNEU-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:24:12 | [WARNING] PubChem lookup failed for InChIKey 'BEJGLFVJZIJLDQ-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:25:29 | [WARNING] PubChem lookup failed for InChIKey 'AVSDRLFFNDMUOM-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:27:06 | [WARNING] PubChem lookup failed for InChIKey 'JMGLHVQTBGPWAF-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:30:51 | [WARNING] PubChem lookup failed for InChIKey 'KYUMVJGGSOXCLE-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:35:54 | [WARNING] PubChem lookup failed for InChIKey 'AXEXWINALFDZIT-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:36:31 | [WARNING] PubChem lookup failed for InChIKey 'JYCSUZZTVRYVRO-CSKARUKUSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:36:36 | [WARNING] PubChem lookup failed for InChIKey 'JYCSUZZTVRYVRO-CSKARUKUSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 1.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:37:31 | [WARNING] PubChem lookup failed for InChIKey 'SULZVUVERDTJOJ-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:44:10 | [WARNING] PubChem lookup failed for InChIKey 'APTYVWPMARQQMY-UHFFFAOYSA-N': PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:46:00 | [WARNING] PubChem lookup failed for CID 7222469: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:48:44 | [WARNING] PubChem lookup failed for CID 66414: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:50:13 | [WARNING] PubChem lookup failed for CID 10975565: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:51:04 | [WARNING] PubChem lookup failed for CID 16803250: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:53:12 | [WARNING] PubChem lookup failed for CID 162518: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:53:46 | [WARNING] PubChem lookup failed for CID 4965975: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:54:01 | [WARNING] PubChem lookup failed for CID 2855066: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:54:45 | [WARNING] PubChem lookup failed for CID 2280595: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:56:47 | [WARNING] PubChem lookup failed for CID 9082: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:57:59 | [WARNING] PubChem lookup failed for CID 2381436: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 18:59:24 | [WARNING] PubChem lookup failed for CID 5642201: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:00:04 | [WARNING] PubChem lookup failed for CID 18581129: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:03:00 | [WARNING] PubChem lookup failed for CID 49666725: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:04:21 | [WARNING] PubChem lookup failed for CID 9837640: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:04:41 | [WARNING] PubChem lookup failed for CID 52416479: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:04:53 | [WARNING] PubChem lookup failed for CID 16891522: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:06:09 | [WARNING] PubChem lookup failed for CID 139027749: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:07:11 | [WARNING] PubChem lookup failed for CID 91624550: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:08:25 | [WARNING] PubChem lookup failed for CID 146074463: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:08:41 | [WARNING] PubChem lookup failed for CID 137967879: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:08:52 | [WARNING] PubChem lookup failed for CID 71798519: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:09:42 | [WARNING] PubChem lookup failed for CID 5281069: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:11:44 | [WARNING] PubChem lookup failed for CID 91631836: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:13:41 | [WARNING] PubChem lookup failed for CID 7119016: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:14:23 | [WARNING] PubChem lookup failed for CID 16861380: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:16:19 | [WARNING] PubChem lookup failed for CID 2140009: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:18:06 | [WARNING] PubChem lookup failed for CID 4279614: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:18:31 | [WARNING] PubChem lookup failed for CID 975333: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:20:04 | [WARNING] PubChem lookup failed for CID 76145068: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:20:29 | [WARNING] PubChem lookup failed for CID 90487997: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:21:52 | [WARNING] PubChem lookup failed for CID 44116369: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:24:44 | [WARNING] PubChem lookup failed for CID 131704002: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:25:32 | [WARNING] PubChem lookup failed for CID 11688197: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:27:13 | [WARNING] PubChem lookup failed for CID 712897: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:27:55 | [WARNING] PubChem lookup failed for CID 4577119: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:29:16 | [WARNING] PubChem lookup failed for CID 18558431: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:30:36 | [WARNING] PubChem lookup failed for CID 4973905: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:32:33 | [WARNING] PubChem lookup failed for CID 5335: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:33:03 | [WARNING] PubChem lookup failed for CID 86261464: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:35:40 | [WARNING] PubChem lookup failed for CID 126855482: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:35:47 | [WARNING] PubChem lookup failed for CID 53367339: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:39:22 | [WARNING] PubChem lookup failed for CID 72718321: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:40:48 | [WARNING] PubChem lookup failed for CID 44086869: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:40:56 | [WARNING] PubChem lookup failed for CID 52907425: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:41:32 | [WARNING] PubChem lookup failed for CID 521106: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:42:52 | [WARNING] PubChem lookup failed for CID 126850384: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:43:23 | [WARNING] PubChem lookup failed for CID 52992634: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:44:00 | [WARNING] PubChem lookup failed for CID 16922450: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:44:09 | [WARNING] PubChem lookup failed for CID 10212: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:44:35 | [WARNING] PubChem lookup failed for CID 16801251: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:50:15 | [WARNING] PubChem lookup failed for CID 2913411: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:50:28 | [WARNING] PubChem lookup failed for CID 56972187: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:51:19 | [WARNING] PubChem lookup failed for CID 18558370: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:51:41 | [WARNING] PubChem lookup failed for CID 20895276: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:52:23 | [WARNING] PubChem lookup failed for CID 75526: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:52:32 | [WARNING] PubChem lookup failed for CID 86265222: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:54:10 | [WARNING] PubChem lookup failed for CID 18558375: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:56:06 | [WARNING] PubChem lookup failed for CID 1818616: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:58:06 | [WARNING] PubChem lookup failed for CID 154830656: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 19:59:05 | [WARNING] PubChem lookup failed for CID 18585611: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:00:03 | [WARNING] PubChem lookup failed for CID 46329700: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:01:37 | [WARNING] PubChem lookup failed for CID 2571015: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:02:57 | [WARNING] PubChem lookup failed for CID 72200024: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:03:48 | [WARNING] PubChem lookup failed for CID 3272523: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:04:24 | [WARNING] PubChem lookup failed for CID 2930429: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:04:53 | [WARNING] PubChem lookup failed for CID 10204153: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:05:04 | [WARNING] PubChem lookup failed for CID 16813990: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:06:20 | [WARNING] PubChem lookup failed for CID 16810671: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:06:56 | [WARNING] PubChem lookup failed for CID 7198327: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:07:14 | [WARNING] PubChem lookup failed for CID 35203536: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:07:37 | [WARNING] PubChem lookup failed for CID 26944157: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:09:36 | [WARNING] PubChem lookup failed for CID 11957569: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:09:43 | [WARNING] PubChem lookup failed for CID 7185491: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:09:48 | [WARNING] PubChem lookup failed for CID 7185491: PubChem HTTP Error 502 Bad Gateway. Retry 1.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:10:39 | [WARNING] PubChem lookup failed for CID 16825442: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:14:09 | [WARNING] PubChem lookup failed for CID 4911362: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:16:19 | [WARNING] PubChem lookup failed for CID 907424: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:16:46 | [WARNING] PubChem lookup failed for CID 155974808: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:17:26 | [WARNING] PubChem lookup failed for CID 889330: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:19:39 | [WARNING] PubChem lookup failed for CID 16801813: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:20:52 | [WARNING] PubChem lookup failed for CID 85074598: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:22:47 | [WARNING] PubChem lookup failed for CID 16920413: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:23:45 | [WARNING] PubChem lookup failed for CID 139016034: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:24:13 | [WARNING] PubChem lookup failed for CID 72717846: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:25:57 | [WARNING] PubChem lookup failed for CID 45504320: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:26:25 | [WARNING] PubChem lookup failed for CID 3157473: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:28:09 | [WARNING] PubChem lookup failed for CID 2250173: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:28:47 | [WARNING] PubChem lookup failed for CID 135473044: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:29:12 | [WARNING] PubChem lookup failed for CID 291411: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:30:29 | [WARNING] PubChem lookup failed for CID 135398737: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:30:45 | [WARNING] PubChem lookup failed for CID 71779675: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:32:36 | [WARNING] PubChem lookup failed for CID 664842: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:34:52 | [WARNING] PubChem lookup failed for CID 155980113: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:36:55 | [WARNING] PubChem lookup failed for CID 2155793: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:37:51 | [WARNING] PubChem lookup failed for CID 91814188: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:38:22 | [WARNING] PubChem lookup failed for CID 11957700: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:40:35 | [WARNING] PubChem lookup failed for CID 49676913: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:40:56 | [WARNING] PubChem lookup failed for CID 27377537: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:41:16 | [WARNING] PubChem lookup failed for CID 121021256: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:42:37 | [WARNING] PubChem lookup failed for CID 44118093: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:44:00 | [WARNING] PubChem lookup failed for CID 3380039: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:44:23 | [WARNING] PubChem lookup failed for CID 6315118: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:45:17 | [WARNING] PubChem lookup failed for CID 2757788: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:45:36 | [WARNING] PubChem lookup failed for CID 752440: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:47:07 | [WARNING] PubChem lookup failed for CID 57519532: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:47:14 | [WARNING] PubChem lookup failed for CID 3498: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:47:51 | [WARNING] PubChem lookup failed for CID 6064712: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:48:17 | [WARNING] PubChem lookup failed for CID 119104570: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:49:23 | [WARNING] PubChem lookup failed for CID 6104215: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:49:54 | [WARNING] PubChem lookup failed for CID 2136353: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:50:44 | [WARNING] PubChem lookup failed for CID 5642215: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:51:00 | [WARNING] PubChem lookup failed for CID 2937336: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:51:29 | [WARNING] PubChem lookup failed for CID 677214: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:51:41 | [WARNING] PubChem lookup failed for CID 16806770: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:52:04 | [WARNING] PubChem lookup failed for CID 44669171: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:52:14 | [WARNING] PubChem lookup failed for CID 49730841: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:55:46 | [WARNING] PubChem lookup failed for CID 6917803: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:56:07 | [WARNING] PubChem lookup failed for CID 146078276: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:56:26 | [WARNING] PubChem lookup failed for CID 16887681: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:56:37 | [WARNING] PubChem lookup failed for CID 2129701: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:58:19 | [WARNING] PubChem lookup failed for CID 155974733: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:58:58 | [WARNING] PubChem lookup failed for CID 1547862: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 20:59:58 | [WARNING] PubChem lookup failed for CID 2231010: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:00:03 | [WARNING] PubChem lookup failed for CID 2231010: PubChem HTTP Error 502 Bad Gateway. Retry 1.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:00:46 | [WARNING] PubChem lookup failed for CID 4446749: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:01:52 | [WARNING] PubChem lookup failed for CID 71764: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:02:03 | [WARNING] PubChem lookup failed for CID 665483: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:02:45 | [WARNING] PubChem lookup failed for CID 7693182: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:09:44 | [WARNING] PubChem lookup failed for CID 4346346: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:10:16 | [WARNING] PubChem lookup failed for CID 121020412: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:10:47 | [WARNING] PubChem lookup failed for CID 600983: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:11:06 | [WARNING] PubChem lookup failed for CID 16734800: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:13:13 | [WARNING] PubChem lookup failed for CID 1911327: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:14:21 | [WARNING] PubChem lookup failed for CID 121022780: PubChem HTTP Error 502 Bad Gateway. Retry 0.
+pseudobulk_vcpi_0003.37962530.err:2026-06-19 21:16:06 | [WARNING] PubChem lookup failed for CID 659501: PubChem HTTP Error 502 Bad Gateway. Retry 0.

@@ -9,7 +9,7 @@ The current version of Chem-PerturBridge includes the scripts for processing and
 - [**OP3**](https://openreview.net/forum?id=WTI4RJYSVm)
 - [**DILImap**](https://www.nature.com/articles/s41467-025-65690-3)
 - [**Novartis**](https://www.nature.com/articles/s41467-018-06500-x)
-- [**VCPI-0001 / VCPI-0002**](https://thevirtualcell.com/)
+- [**VCPI-0001 / VCPI-0002 / VCPI-0003**](https://thevirtualcell.com/)
 - [**GDPx2**](https://www.biorxiv.org/content/10.1101/2025.06.03.657593v1.full)
 - [**CIGS**](https://www.nature.com/articles/s41592-025-02781-5)
 
@@ -39,7 +39,7 @@ Datasets referenced by the pipelines:
 - **L1000** - Contains data from GEO accessions [GSE92742](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE92742) and [GSE70138](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE70138). Upstream terms apply. See provenance + preprocessing notes. Datasets were additionally annotated by [Laminlabs](https://lamin.ai/laminlabs/pertdata/artifacts?filter%5Band%5D%5B0%5D%5Bor%5D%5B0%5D%5Bbranch.name%5D%5Beq%5D=main&filter%5Band%5D%5B1%5D%5Bor%5D%5B0%5D%5Bis_latest%5D%5Beq%5D=true&filter%5Band%5D%5B2%5D%5Bor%5D%5B0%5D%5Bprojects.name%5D%5Beq%5D=LINCS); small-molecule annotations from the [LINCS Data Portal](https://lincsportal.ccs.miami.edu/dcic-portal/#/terms) were used.
 - **OP3** - [Open Problems Perturbation Prediction dataset](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE279945)
 - **Novartis** - [Novartis DRUG-seq MoABox Dataset](https://zenodo.org/records/14291446)
-- **VCPI-0001 / VCPI-0002** - [The Virtual Cell Pharmacology Initiative](https://thevirtualcell.com/). Public VCPI releases are described as available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt) where specified by VCPI; users should verify the terms attached to the specific release used.
+- **VCPI-0001 / VCPI-0002 / VCPI-0003** - [The Virtual Cell Pharmacology Initiative](https://thevirtualcell.com/). Public VCPI releases are described as available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.txt) where specified by VCPI; users should verify the terms attached to the specific release used.
 
 Datasets and outputs not redistributed in Chem-PerturBridge public data releases due to upstream license or data-sharing limitations:
 
