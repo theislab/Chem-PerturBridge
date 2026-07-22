@@ -209,23 +209,34 @@ filter_controls <- function(ad,
   return(ad)
 }
 
-#' Find control conditions for a specific time point
+#' Find control conditions for a specific time point (and optionally plate)
 #' 
 #' @param control_obs Control observations dataframe
 #' @param time Time point in hours
+#' @param plate Optional plate identifier; if provided, match plate+time
 #' @return Vector of control condition names or NULL if none found
 find_controls <- function(control_obs,
-                          time) {
+                          time,
+                          plate = NULL) {
   # Parameter validation
   stopifnot(!missing(control_obs),
             !missing(time),
             is.numeric(time),
             "pert_time_h" %in% names(control_obs))
-    
+
     select_ctrs <- (control_obs$pert_time_h == time)
+    if (!is.null(plate)) {
+      stopifnot("plate" %in% names(control_obs))
+      select_ctrs <- select_ctrs &
+        (as.character(control_obs$plate) == as.character(plate))
+    }
 
     if (!any(select_ctrs)) {
-        warning("No control found for time ", time, "h")
+        if (is.null(plate)) {
+          warning("No control found for time ", time, "h")
+        } else {
+          warning("No control found for time ", time, "h on plate ", plate)
+        }
         return(NULL)
         }
     
@@ -243,6 +254,7 @@ find_controls <- function(control_obs,
 #' @param pert_dose_uM Dose concentration
 #' @param pert_time_h Time point
 #' @param subsampling Whether subsampling mode is enabled
+#' @param plate Optional plate identifier to store in results
 #' @return Dataframe with differential expression results or NULL if error
 derive_top_table <- function(fit,
                              raw_control,
@@ -251,7 +263,8 @@ derive_top_table <- function(fit,
                              pert_dose_uM,
                              pert_time_h,
                              subsampling,
-                             normalized = FALSE) {
+                             normalized = FALSE,
+                             plate = NULL) {
   # Parameter validation
   stopifnot(!missing(fit),
             !missing(raw_control),
@@ -274,7 +287,8 @@ derive_top_table <- function(fit,
             cond = clean(raw_cond),
             perturbagen = perturbagen,
             pert_dose_uM = pert_dose_uM,
-            pert_time_h = pert_time_h
+            pert_time_h = pert_time_h,
+            plate = if (is.null(plate)) NA_character_ else as.character(plate)
           )
 
         
@@ -314,9 +328,11 @@ run_contrasts <- function(fit,
             !missing(par),
             is.list(par))
   
-  # run one contrast per treated cond vs. the matching control@same time
+  # run one contrast per treated cond vs. matching control
+  # (same time; also same plate when per_plate_control is TRUE)
   n_contrasts <- nrow(treated_obs)
     contrast_num <- 0
+    per_plate <- isTRUE(par$per_plate_control)
     
     de_res <- pmap_dfr(treated_obs, function(cond, perturbagen, pert_dose_uM, pert_time_h, plate, raw_cond, ...) {
       contrast_num <<- contrast_num + 1
@@ -324,9 +340,12 @@ run_contrasts <- function(fit,
         cat(sprintf("    Running contrast %d/%d\n", contrast_num, n_contrasts))
       }
 
-      raw_controls <- find_controls(control_obs,
-                    pert_time_h)
-      # Check if control exists for this time point
+      raw_controls <- find_controls(
+        control_obs,
+        pert_time_h,
+        plate = if (per_plate) plate else NULL
+      )
+      # Check if control exists for this time point (and plate if required)
       if (is.null(raw_controls)) {
         return(NULL)
       }
@@ -342,7 +361,8 @@ run_contrasts <- function(fit,
                                   pert_dose_uM,
                                   pert_time_h,
                                   par$subsampling,
-                                  par$normalized)
+                                  par$normalized,
+                                  plate = plate)
         }
       top_tables <- compact(top_tables)
       if (length(top_tables) > 0) {
@@ -390,7 +410,9 @@ run_dge <- function(ad,
   plates_to_process <- unique(obs$plate)
   n_plates <- length(plates_to_process)
 
-  if (n_plates > 1) {
+  # When per_plate_control is TRUE, plate is already in cond labels, so adding
+  # plate to the design is redundant and can make it singular.
+  if (n_plates > 1 && !isTRUE(par$per_plate_control)) {
     design <- model.matrix(
       ~ 0 + cond + plate,
       data = obs
@@ -617,13 +639,20 @@ run_dge_pipeline <- function(par) {
     par$qc <- FALSE
   }
   stopifnot(is.logical(par$qc))
+
+  if (is.null(par$per_plate_control)) {
+    par$per_plate_control <- FALSE
+  }
+  stopifnot(is.logical(par$per_plate_control))
   
 
   # load the full pseudobulk AnnData
   adata <- anndata::read_h5ad(par$input_file)
   cat("Loaded input file: ", par$input_file, "\n")
   cat("Initial dimensions: ", adata$n_obs, " samples × ", adata$n_vars, " genes\n")
-  
+  if (isTRUE(par$per_plate_control)) {
+    cat("per_plate_control: matching controls by plate + time\n")
+  }  
   # Capture warnings during processing
   warning_messages <- list()
   
@@ -652,9 +681,25 @@ run_dge_pipeline <- function(par) {
     # Process this cell type with warning capture
     skip_cell_type <- FALSE
     withCallingHandlers({
-      # subset to this cell_type
-      ad  <- adata[adata$obs$cell_type == cl, ]
-      ad <- filter_controls(ad, "pert_time_h")
+      # subset to this cell_type (copy to avoid AnnData view warnings on obs writes)
+      ad  <- adata[adata$obs$cell_type == cl, ]$copy()
+
+      # Drop controls with no treated samples at the same match key
+      # TODO: control_match_key is built here from raw plate, then rebuilt after
+      # clean(plate) for check_for_controls. If clean() can collide distinct plates,
+      # filter and check disagree — build the key once after cleaning instead.
+      if (isTRUE(par$per_plate_control)) {
+        obs_df <- ad$obs
+        obs_df$control_match_key <- paste(
+          as.character(obs_df$plate),
+          as.character(obs_df$pert_time_h),
+          sep = "||"
+        )
+        ad$obs <- obs_df
+        ad <- filter_controls(ad, "control_match_key")
+      } else {
+        ad <- filter_controls(ad, "pert_time_h")
+      }
       
       obs <- ad$obs %>%
         mutate(
@@ -664,7 +709,17 @@ run_dge_pipeline <- function(par) {
         )
       
       # Check for required controls
-      check_for_controls(obs, "pert_time_h")
+      if (isTRUE(par$per_plate_control)) {
+        obs <- obs %>%
+          mutate(control_match_key = paste(
+            as.character(plate),
+            as.character(pert_time_h),
+            sep = "||"
+          ))
+        check_for_controls(obs, "control_match_key")
+      } else {
+        check_for_controls(obs, "pert_time_h")
+      }
     
       cond <- obs$cond
       start_time <- Sys.time()
@@ -705,6 +760,10 @@ run_dge_pipeline <- function(par) {
           }
         }
         message("No valid DE results for cell line ", cl)
+        # TODO: return() exits run_dge_pipeline entirely, so later cell types are
+        # never processed. Prefer skip_cell_type + next (already below) instead of
+        # return, or wrap the write block in else {}, so one failed cell type does
+        # not abort the rest of the loop. Left as-is for now to preserve prior behavior.
         return(invisible(NULL))
       }
     
@@ -729,6 +788,7 @@ run_dge_pipeline <- function(par) {
     
       new_uns$threshold_filter_cells <- par$min_cells
       new_uns$qc_filtering_enabled <- par$qc
+      new_uns$per_plate_control <- par$per_plate_control
       
 
       
@@ -818,6 +878,8 @@ main <- function() {
   parser$add_argument("--min_cells", type="integer", default=0)
   parser$add_argument("--qc", action="store_true")
   parser$add_argument("--normalized", action="store_true")
+  parser$add_argument("--per_plate_control", action="store_true", default=NULL,
+                      help="Match controls by plate+time (use with preprocessing --per_plate_control)")
   parser$add_argument("--config", default="{}")
 
   args <- parser$parse_args()

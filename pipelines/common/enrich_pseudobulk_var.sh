@@ -24,6 +24,7 @@ VALID_DATASETS=(
     "novartis"
     "vcpi_0001"
     "vcpi_0002"
+    "vcpi_0003"
     "gdpx2"
     "cigs_mce"
     "cigs_tcm"

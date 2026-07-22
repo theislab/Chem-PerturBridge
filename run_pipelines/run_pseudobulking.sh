@@ -16,6 +16,7 @@ VALID_CHOICES=(
         "novartis"
         "vcpi_0001"
         "vcpi_0002"
+        "vcpi_0003"
         "gdpx2"
         "cigs_mce"
         "cigs_tcm"
@@ -79,7 +80,7 @@ elif [[ "$DATASET" == "dilimap_train_val" ]]; then
                 2> ${LOGS_DIR}/${DATASET}/${SUBDIR}/pseudobulk_dilimap_train_val.err &
 		
 elif [[ "$DATASET" == "l1000_phase1" ]] || [[ "$DATASET" == "l1000_phase2" ]] || [[ "$DATASET" == "op3" ]] \
-	|| [[ "$DATASET" == "vcpi_0001" ]] || [[ "$DATASET" == "vcpi_0002" ]] \
+	|| [[ "$DATASET" == "vcpi_0001" ]] || [[ "$DATASET" == "vcpi_0002" ]] || [[ "$DATASET" == "vcpi_0003" ]] \
 	|| [[ "$DATASET" == "cigs_mce" ]] || [[ "$DATASET" == "cigs_tcm" ]]; then
 	mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}
     	./pipelines/${DATASET}/${DATASET}_pseudobulking.sh $ARG \

@@ -62,8 +62,14 @@ def load_vcpi_experiment(
     if not os.environ.get("TVC_TOKEN"):
         logger.warning("TVC_TOKEN is not set; vcpi.load_experiment may fail authentication")
 
-    logger.info("Downloading experiment via vcpi.load_experiment(%r)", experiment_id)
-    experiments = vcpi.load_experiment(experiment_id)
+    # The VCPI client resolves by opaque job id (tvc-...), not the human name
+    # (vcpi-000X); fall back to experiment_id if no job id was provided.
+    job_id = paths.get("job_id", experiment_id)
+    logger.info(
+        "Downloading experiment via vcpi.load_experiment(%r) [name=%r]",
+        job_id, experiment_id,
+    )
+    experiments = vcpi.load_experiment(job_id)
     with open(experiments_pkl, "wb") as f:
         pickle.dump(experiments, f)
     logger.info("Saved experiments pickle: %s", experiments_pkl)

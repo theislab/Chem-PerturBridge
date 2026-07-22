@@ -36,6 +36,7 @@ MODE_Q=False
 MODE_N=False
 MODE_G=False
 MODE_P=False
+MODE_C=False
 PAR=""
 FILT=""
 CONFIG=""
@@ -43,6 +44,7 @@ DATASET=""
 ARG_S=""
 ARG_F=""
 ARG_N=""
+ARG_C=""
 
 
 # Valid parameters
@@ -51,10 +53,10 @@ DEG_PARAMETERS=(
     "separate_replicates"
 )
 
-while getopts ":sjqp:f:c:d:nhgP" opt; do
+while getopts ":sjqp:f:c:d:nhgPC" opt; do
         case $opt in
                 h)
-                        echo "Run: $0 [-s] [-j] [-h] [-g] [-P] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
+                        echo "Run: $0 [-s] [-j] [-h] [-g] [-P] [-C] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
                         echo ""
                         echo "Required arguments:"
                         echo "  -d  Dataset name (sciplex, tahoe, l1000_phase1, l1000_phase2)"
@@ -67,6 +69,7 @@ while getopts ":sjqp:f:c:d:nhgP" opt; do
                         echo "  -j  Parallel mode - run array jobs per cell type (faster)"
                         echo "  -g  Use GPU QOS/partition (gpu_normal/gpu_p); default is CPU (cpu_normal/cpu_p)"
                         echo "  -P  Use cpu_preemptible QOS for DEG step only (100G mem, 48h, 10 CPUs); partition stays cpu_p"
+                        echo "  -C  Per-plate controls: pass --per_plate_control to preprocessing and R DEG"
                         echo "  -f  VALUE - Filter: minimum cells per sample (e.g., -f 50)"
                         echo "  -q  Quality control filter - remove samples that failed QC"
                         echo "  -n  Normalized dataset: pass --normalized to preprocessing (Ensembl: drop ambiguous"
@@ -103,6 +106,9 @@ while getopts ":sjqp:f:c:d:nhgP" opt; do
                         ;;
                 P)
                         MODE_P=True
+                        ;;
+                C)
+                        MODE_C=True
                         ;;
         esac
 done
@@ -185,6 +191,16 @@ else
         ARG_N=""
 fi
 
+# Set per-plate control flag
+if [ "$MODE_C" = "True" ]; then
+        echo "> Per-plate controls: matching treatments to controls by plate + time"
+        ARG_C="--per_plate_control"
+        PAR_FOLDER="${PAR}_per_plate_control"
+else
+        ARG_C=""
+        PAR_FOLDER="${PAR}"
+fi
+
 # ============================================================================
 # Initialize environment
 # ============================================================================
@@ -215,7 +231,7 @@ fi
 echo "> Using config: $CONFIG"
 
 # Create log base directory (needed for preprocessing logs)
-LOGS_BASE_DIR="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}"
+LOGS_BASE_DIR="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR_FOLDER}/${QC_FOLDER}/${FILTER_FOLDER}"
 mkdir -p "${LOGS_BASE_DIR}/preprocessing"
 
 # ============================================================================
@@ -242,11 +258,16 @@ SBATCH_PREAMBLE="export PATH=\${HOME}/miniforge3/bin:\${PATH} && export TMPDIR=\
 # STEP 1: PREPROCESS PSEUDOBULK
 # ============================================================================
 
-echo "> Preprocess pseudobulk with parameter: $PAR"
+echo "> Preprocess pseudobulk with parameter: $PAR (folders: $PAR_FOLDER)"
 
 if ! par_process=$(jq -e ".$PAR.par_process" "$CONFIG"); then
     echo "Error: Failed to extract par_process from $CONFIG" >&2
     exit 1
+fi
+
+# Keep per-plate outputs separate from default design folders
+if [ "$MODE_C" = "True" ]; then
+    par_process=$(echo "$par_process" | jq '.output_dir = (.output_dir + "_per_plate_control")')
 fi
 
 preprocess_config="${TMP_DIR_DEG}/preprocess_config.json"
@@ -265,7 +286,7 @@ sbatch -W -J deg_processing_pseudobulk \
     --output="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.out" \
     --error="${LOGS_BASE_DIR}/preprocessing/deg_processing_pseudobulk.%j.err" \
     --wrap="${SBATCH_PREAMBLE} && \
-            python3 -m src.deg.run_processing_pseudobulk ${ARG_J} ${ARG_N} \
+            python3 -m src.deg.run_processing_pseudobulk ${ARG_J} ${ARG_N} ${ARG_C} \
             --config ${preprocess_config}"
 
 echo "> Preprocessing completed"
@@ -274,11 +295,19 @@ echo "> Preprocessing completed"
 # STEP 2: DGE ANALYSIS
 # ============================================================================
 
-echo "> Starting DGE analysis with parameter: $PAR"
+echo "> Starting DGE analysis with parameter: $PAR (folders: $PAR_FOLDER)"
 
 if ! par_deg=$(jq -e ".$PAR.par_deg" "$CONFIG"); then
     echo "Error: Failed to extract par_deg from $CONFIG" >&2
     exit 1
+fi
+
+# Keep per-plate outputs separate from default design folders
+if [ "$MODE_C" = "True" ]; then
+    par_deg=$(echo "$par_deg" | jq '
+        .input_dir = (.input_dir + "_per_plate_control") |
+        .output_dir = (.output_dir + "_per_plate_control")
+    ')
 fi
 
 # Extract paths from config
@@ -415,7 +444,7 @@ run_deg() {
                     --input_file \"\$INPUT_FILE\" \
                     --output_dir \"\${OUTPUT_DIR}\" \
                     --config \"${deg_config}\" \
-                    ${ARG_F} ${ARG_S} ${ARG_Q} ${ARG_N}"
+                    ${ARG_F} ${ARG_S} ${ARG_Q} ${ARG_N} ${ARG_C}"
     
     echo "> DEG array job completed"
 }
