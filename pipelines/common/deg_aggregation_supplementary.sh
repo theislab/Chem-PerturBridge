@@ -39,6 +39,7 @@ MODE_Q=False
 MODE_N=False
 MODE_G=False
 MODE_F=False
+MODE_C=False
 PAR=""
 FILT=""
 CONFIG=""
@@ -49,10 +50,10 @@ DEG_PARAMETERS=(
     "separate_replicates"
 )
 
-while getopts ":sjqp:f:c:d:nhgF" opt; do
+while getopts ":sjqp:f:c:d:nhgFC" opt; do
     case $opt in
         h)
-            echo "Run: $0 [-s] [-j] [-h] [-g] [-F] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
+            echo "Run: $0 [-s] [-j] [-h] [-g] [-F] [-C] [-f] [-q] [-n] -p (parameters: ${DEG_PARAMETERS[*]}) -c CONFIG -d DATASET"
             echo ""
             echo "Resume DEG pipeline at the aggregation step (after per-cell-type"
             echo "array jobs completed but deg.sh was terminated before Step 3)."
@@ -69,6 +70,7 @@ while getopts ":sjqp:f:c:d:nhgF" opt; do
             echo "  -f  VALUE - Filter: minimum cells per sample"
             echo "  -q  Quality control filter"
             echo "  -n  Normalized dataset"
+            echo "  -C  Per-plate controls (must match original deg.sh -C)"
             echo "  -F  Force aggregation even if completion check fails"
             echo "  -h  Show this help message"
             exit 0
@@ -83,6 +85,7 @@ while getopts ":sjqp:f:c:d:nhgF" opt; do
         n) MODE_N=True ;;
         g) MODE_G=True ;;
         F) MODE_F=True ;;
+        C) MODE_C=True ;;
     esac
 done
 
@@ -138,6 +141,13 @@ if [ "$MODE_N" = "True" ]; then
     echo "> Dataset is normalized"
 fi
 
+if [ "$MODE_C" = "True" ]; then
+    echo "> Per-plate controls"
+    PAR_FOLDER="${PAR}_per_plate_control"
+else
+    PAR_FOLDER="${PAR}"
+fi
+
 # ============================================================================
 # Initialize environment
 # ============================================================================
@@ -163,12 +173,19 @@ echo "> Using config: $CONFIG"
 # Resolve paths (must match deg.sh)
 # ============================================================================
 
-LOGS_BASE_DIR="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}"
+LOGS_BASE_DIR="${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR_FOLDER}/${QC_FOLDER}/${FILTER_FOLDER}"
 DEG_LOG_DIR="${LOGS_BASE_DIR}/deg"
 
 if ! par_deg=$(jq -e ".$PAR.par_deg" "$CONFIG"); then
     echo "Error: Failed to extract par_deg from $CONFIG" >&2
     exit 1
+fi
+
+if [ "$MODE_C" = "True" ]; then
+    par_deg=$(echo "$par_deg" | jq '
+        .input_dir = (.input_dir + "_per_plate_control") |
+        .output_dir = (.output_dir + "_per_plate_control")
+    ')
 fi
 
 INPUT_DIR=$(echo "$par_deg" | jq -r '.input_dir')

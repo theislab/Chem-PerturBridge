@@ -32,6 +32,7 @@ def create_perturbation_label(is_control: bool,
                               well: str,
                               plate: str,
                               design_param: str,
+                              per_plate_control: bool = False,
                               ) -> str:
     '''
     Create a perturbation label based on design parameters.
@@ -52,6 +53,9 @@ def create_perturbation_label(is_control: bool,
         Plate identifier
     design_param : str
         Design parameter determining label format ('group_all_replicates' or 'separate_replicates')
+    per_plate_control : bool, default=False
+        If True, include plate in control labels (and in group_all_replicates
+        treatment labels) so contrasts are plate-specific.
         
     Returns:
     --------
@@ -59,15 +63,91 @@ def create_perturbation_label(is_control: bool,
         Formatted perturbation label
     '''
     
-    if is_control:
-        return f"{pert}_{time}h"
-    else:
-        if design_param == 'group_all_replicates':
-            return f"{pert}_{dose}uM_{time}h"
-        elif design_param == 'separate_replicates':
-            return f"{pert}_{dose}uM_{time}h_{well}_{plate}"
+    if per_plate_control:
+        if is_control:
+            return f"{pert}_{time}h_{plate}"
         else:
-            raise ValueError(f'Invalid design parameter: {design_param}')
+            if design_param == 'group_all_replicates':
+                return f"{pert}_{dose}uM_{time}h_{plate}"
+            elif design_param == 'separate_replicates':
+                return f"{pert}_{dose}uM_{time}h_{well}_{plate}"
+            else:
+                raise ValueError(f'Invalid design parameter: {design_param}')
+    else:
+        if is_control:
+            return f"{pert}_{time}h"
+        else:
+            if design_param == 'group_all_replicates':
+                return f"{pert}_{dose}uM_{time}h"
+            elif design_param == 'separate_replicates':
+                return f"{pert}_{dose}uM_{time}h_{well}_{plate}"
+            else:
+                raise ValueError(f'Invalid design parameter: {design_param}')
+
+
+def filter_treatments_without_plate_control(adata: ad.AnnData) -> ad.AnnData:
+    '''
+    Drop non-control observations that have no control on the same plate and time.
+
+    Used after labeling when per_plate_control is enabled. Matching key is
+    (plate, pert_time_h). Controls are kept even if they have no treatments.
+
+    Parameters:
+    -----------
+    adata : ad.AnnData
+        AnnData with is_control, plate, and pert_time_h in obs
+
+    Returns:
+    --------
+    ad.AnnData
+        Filtered AnnData (copy if any rows were removed)
+
+    Raises:
+    -------
+    ValueError
+        If required columns are missing
+    '''
+    required = ['is_control', 'plate', 'pert_time_h']
+    missing = [c for c in required if c not in adata.obs.columns]
+    if missing:
+        raise ValueError(
+            f'Cannot filter per-plate controls; missing obs columns: {missing}'
+        )
+
+    is_control = adata.obs['is_control'] == True
+    control_keys = set(
+        zip(
+            adata.obs.loc[is_control, 'plate'].astype(str),
+            adata.obs.loc[is_control, 'pert_time_h'].astype(str),
+        )
+    )
+    if len(control_keys) == 0:
+        logger.warning(
+            'per_plate_control filter: no controls found; dropping all treatments'
+        )
+
+    keep = is_control.copy()
+    treatment_idx = adata.obs.index[~is_control]
+    keep.loc[treatment_idx] = [
+        (str(plate), str(time)) in control_keys
+        for plate, time in zip(
+            adata.obs.loc[treatment_idx, 'plate'],
+            adata.obs.loc[treatment_idx, 'pert_time_h'],
+        )
+    ]
+
+    n_drop = int((~keep & ~is_control).sum())
+    if n_drop == 0:
+        logger.info('per_plate_control filter: all treatments have plate+time controls')
+        return adata
+
+    n_treat_before = int((~is_control).sum())
+    logger.warning(
+        f'per_plate_control filter: dropping {n_drop}/{n_treat_before} treatment '
+        f'obs without a control on the same plate and time '
+        f'({adata.n_obs} -> {int(keep.sum())} obs)'
+    )
+    return adata[keep].copy()
 
 
 def create_dir_if_not_exists(file_output: str) -> None:
@@ -896,6 +976,7 @@ def add_perturbation_label_to_padata(file_input: str,
                                      design_param: str,
                                      split_by_celltype: bool = False,
                                      is_normalized: bool = False,
+                                     per_plate_control: bool = False,
                                      ) -> None:
     '''
     Add perturbation labels to pseudobulk data and save processed files.
@@ -916,6 +997,9 @@ def add_perturbation_label_to_padata(file_input: str,
         Large cell types are automatically batched if matrix size exceeds limits.
     is_normalized : bool, default=False
         Passed to Ensembl mapping: ambiguous targets drop all source genes instead of summing.
+    per_plate_control : bool, default=False
+        If True, use plate-specific control labels and drop treatments without
+        a matching plate+time control.
 
     Returns:
     --------
@@ -931,6 +1015,7 @@ def add_perturbation_label_to_padata(file_input: str,
         split_by_celltype=split_by_celltype,
         use_pubchem_cid_in_label=False,
         is_normalized=is_normalized,
+        per_plate_control=per_plate_control,
     )
     processor.process()
 
@@ -1026,6 +1111,9 @@ class PseudobulkProcessor:
         Defaults to ["cell_type"]. For multiple fields (e.g. ["cell_type",
         "percent_volume_dmso"]), one subdirectory is created per unique
         combination, named by joining sanitized values with '_'.
+    per_plate_control : bool, default=False
+        If True, include plate in control (and group_all treatment) labels, then
+        drop treatments that have no control on the same plate and time.
     """
     
     def __init__(self,
@@ -1038,7 +1126,8 @@ class PseudobulkProcessor:
                  use_pubchem_cid_in_label: bool = False,
                  check_by_celltype_content: bool = True,
                  is_normalized: bool = False,
-                 groupby_fields: Optional[list] = None):
+                 groupby_fields: Optional[list] = None,
+                 per_plate_control: bool = False):
         self.file_input = file_input
         self.dir_output = dir_output
         self.design_param = design_param
@@ -1049,6 +1138,7 @@ class PseudobulkProcessor:
         self.check_by_celltype_content = check_by_celltype_content
         self.is_normalized = is_normalized
         self.groupby_fields = groupby_fields if groupby_fields is not None else ["cell_type"]
+        self.per_plate_control = per_plate_control
         self.padata = None
     
     def read_data(self) -> None:
@@ -1194,8 +1284,16 @@ class PseudobulkProcessor:
                 x.well,
                 x.plate,
                 self.design_param,
+                per_plate_control=self.per_plate_control,
             ), axis=1
         ).astype("category")
+
+    def filter_missing_plate_controls(self) -> None:
+        """Step 5b: Drop treatments without a plate+time-matched control."""
+        if not self.per_plate_control:
+            return
+        logger.info('Filter treatments without per-plate controls')
+        self.padata = filter_treatments_without_plate_control(self.padata)
     
     def save_data(self) -> None:
         """Step 6: Save processed data."""
@@ -1251,6 +1349,7 @@ class PseudobulkProcessor:
         if self.use_pubchem_cid_in_label:
             self.combine_perturbagen_pubchem_cid()
         self.add_perturbation_labels()
+        self.filter_missing_plate_controls()
         self.save_data()
         self.save_splitted_data()
         self._rename_tmps()
@@ -1277,6 +1376,10 @@ def main():
         Design parameter for perturbation labeling. Must be one of:
         - 'group_all_replicates': Groups all replicates together
         - 'separate_replicates': Keeps replicates separate with well/plate info
+    --per_plate_control : bool, optional
+        If set, include plate in control labels (and in group_all_replicates
+        treatment labels), then drop treatments with no control on the same
+        plate and time. Default: False
     --split_by_celltype : bool, optional
         If True, splits output by cell type and processes each separately.
         Default: False
@@ -1319,6 +1422,9 @@ def main():
     parser.add_argument('--output_dir', type=str)
     parser.add_argument('--design_param', choices=['group_all_replicates',
                                                    'separate_replicates'])
+    parser.add_argument('--per_plate_control', action='store_true', default=False,
+                        help='Plate-specific control labels; drop treatments '
+                             'without a matching plate+time control')
     parser.add_argument('--split_by_celltype', action='store_true', default=False)
     parser.add_argument('--normalized', action='store_true', default=False)
     parser.add_argument('--dataset', type=str, default=None)
@@ -1352,6 +1458,7 @@ def main():
         check_by_celltype_content=d_args.get('check_by_celltype_content', True),
         is_normalized=d_args.get('normalized', False),
         groupby_fields=d_args.get('groupby_fields'),
+        per_plate_control=d_args.get('per_plate_control', False),
     )
     processor.process()
 

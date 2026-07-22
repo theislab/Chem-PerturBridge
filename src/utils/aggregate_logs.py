@@ -28,9 +28,19 @@ LOG_EXTENSIONS = (OUT_EXTENSION, ERR_EXTENSION)  # Ordered: .out before .err
 PRIORITY_OUT_FILE = 0.0
 PRIORITY_ERR_FILE = 0.1
 
-# Valid pipeline parameters
+# Valid pipeline parameters (also accept *_per_plate_control folder names)
 VALID_PARAMS = {'group_all_replicates', 'separate_replicates'}
+PER_PLATE_SUFFIX = '_per_plate_control'
 FILTER_PREFIX = 'filter_min_cells_'
+
+
+def is_valid_param(param: str) -> bool:
+    """True for design params and their per_plate_control folder variants."""
+    if param in VALID_PARAMS:
+        return True
+    if param.endswith(PER_PLATE_SUFFIX):
+        return param[: -len(PER_PLATE_SUFFIX)] in VALID_PARAMS
+    return False
 
 
 @dataclass
@@ -361,8 +371,8 @@ def is_valid_deg_subdir(root: str, deg_root: str) -> bool:
     
     param, _, filter_dir = parts
     
-    # Validate parameter name
-    if param not in VALID_PARAMS:
+    # Validate parameter name (incl. group_all_replicates_per_plate_control, etc.)
+    if not is_valid_param(param):
         return False
     
     # Validate filter directory

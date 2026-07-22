@@ -10,12 +10,14 @@ MODE_Q=False
 MODE_N=False
 MODE_G=False
 MODE_P=False
+MODE_C=False
 ARG_S=""
 ARG_F=""
 ARG_J=""
 ARG_N=""
 ARG_G=""
 ARG_P=""
+ARG_C=""
 DATASET=""
 PAR=""
 FILT=""
@@ -43,14 +45,15 @@ DEG_PARAMETERS=(
 
 mkdir -p $LOGS_DIR
 
-while getopts ":sjd:p:f:qnhgP" opt; do
+while getopts ":sjd:p:f:qnhgPC" opt; do
   	case $opt in
 		h)
-			echo "Run: $0 [-s] [-j] [-h] [-g] [-P] [-f] [-q] [-n] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
+			echo "Run: $0 [-s] [-j] [-h] [-g] [-P] [-C] [-f] [-q] [-n] -d (dataset: ${VALID_CHOICES[*]}) -p (parameters: ${DEG_PARAMETERS[*]})"
                         echo "  -s Subsample of a dataset for debugging, default=false"
                         echo "  -j Parallel mode (array jobs per cell type), default=false"
                         echo "  -g Use GPU QOS/partition (gpu_normal/gpu_p), default=CPU"
                         echo "  -P Use cpu_preemptible QOS for DEG step (100G, 48h, 10 CPUs), default=false"
+                        echo "  -C Per-plate controls: pass --per_plate_control to preprocessing and R DEG"
                         echo "  -h Help option"
 			echo "  -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number"
 			echo "  -q Filter samples that did not pass quality control"
@@ -85,6 +88,9 @@ while getopts ":sjd:p:f:qnhgP" opt; do
 			;;
 		P)
 			MODE_P=True
+			;;
+		C)
+			MODE_C=True
 			;;
   	esac
 done
@@ -139,6 +145,14 @@ else
 	ARG_P=""
 fi
 
+if [[ "$MODE_C" == "True" ]]; then
+	ARG_C="-C"
+	PAR_FOLDER="${PAR}_per_plate_control"
+else
+	ARG_C=""
+	PAR_FOLDER="${PAR}"
+fi
+
 if [[ -z "$FILT" ]]; then
 	FILTER_FOLDER="filter_min_cells_0"
 else
@@ -153,9 +167,9 @@ else
 	ARG_Q=""
 fi
 
-mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}
-./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_Q $ARG_J $ARG_N $ARG_G $ARG_P \
+mkdir -p ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR_FOLDER}/${QC_FOLDER}/${FILTER_FOLDER}
+./pipelines/common/deg.sh $ARG_S -p $PAR $ARG_F $ARG_Q $ARG_J $ARG_N $ARG_G $ARG_P $ARG_C \
 	-c ./pipelines/${DATASET}/configs/deg/config.json \
 	-d ${DATASET} \
-		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.PID$$.out \
-		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.PID$$.err &
+		> ${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR_FOLDER}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.PID$$.out \
+		2>${LOGS_DIR}/${DATASET}/${SUBDIR}/${PIPELINE_NAME}/${PAR_FOLDER}/${QC_FOLDER}/${FILTER_FOLDER}/deg_${DATASET}.PID$$.err &

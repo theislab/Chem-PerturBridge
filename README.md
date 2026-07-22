@@ -200,6 +200,7 @@ You can execute it with following arguments:
 -j if this flag is included, then the script is executed in parallel mode (array jobs per cell type), default=false
 -g Use GPU QOS/partition (gpu_normal/gpu_p), default=CPU
 -P Use preemptible QOS for the DEG step only (cpu_preemptible by default; gpu_preemptible combined with with -g); 100G mem, 48h, 10 CPUs, default=false
+-C Per-plate controls: match each treatment to controls on the same plate and time (default=false)
 -h if this flag is included, then the help is printed, default=false
 -f (value <int>) Min number of cells in pseudobulk to filter samples with the lower number, default=0 (no filtering)
 -q if this flag is included, then samples that did not pass quality control are filtered out, default=false
@@ -208,6 +209,12 @@ You can execute it with following arguments:
 -p it is a required flag specifying the parameter for DEG pipeline: group_all_replicates | separate_replicates
 ```
 **NB!** The `-g` option distributes DEG calculations across GPU nodes. The `-P` option uses the preemptible queue for the DEG step: `cpu_preemptible` by default, or `gpu_preemptible` when combined with `-g`.
+
+**Per-plate controls (`-C`):** When set, preprocessing writes plate into control (and `group_all_replicates` treatment) labels, drops treatments with no control on the same plate+time, and DEG matches controls by plate+time (design is `~ 0 + cond` only). Outputs are kept separate via a `_per_plate_control` path suffix, e.g.:
+- data: `.../pseudobulk_processed/group_rep_per_plate_control`, `.../deg_data/group_rep_per_plate_control`
+- logs: `logs/<dataset>/<full|subsample>/deg/group_all_replicates_per_plate_control/...`
+
+Always enable this mode with **`-C`** (not only `"per_plate_control": true` in the config JSON), so behavior and folder suffixes stay aligned.
 
 For example, for the subsample of Sci-Plex dataset with group_all_replicates parameter in parallel mode on the CPU nodes you need to run:
 ```
@@ -225,6 +232,12 @@ For a **normalized dataset** (e.g. L1000) with separate_replicates parameter on 
 ```
 cd /Chem-PerturBridge
 ./run_pipelines/run_deg.sh -d l1000_phase1 -p separate_replicates -j -n -g
+```
+
+For **per-plate controls** (e.g. VCPI) with group_all_replicates in parallel mode:
+```
+cd /Chem-PerturBridge
+./run_pipelines/run_deg.sh -d vcpi_0002 -p group_all_replicates -j -C
 ```
 
 **3.3** **Enrich pseudobulk `.var` on DEG outputs (optional)**
@@ -279,6 +292,12 @@ DEG logs:
 ```
 cd /Chem-PerturBridge
 ./run_pipelines/run_combining_logs.sh -l logs/sciplex/full/deg/separate_replicates/qc_false/filter_min_cells_10 -t deg
+```
+
+DEG logs (per-plate controls, `-C`):
+```
+cd /Chem-PerturBridge
+./run_pipelines/run_combining_logs.sh -l logs/vcpi_0002/full/deg/group_all_replicates_per_plate_control/qc_false/filter_min_cells_0 -t deg
 ```
 
 Enrich (pseudobulk `.var`) logs:
@@ -351,7 +370,7 @@ The structure of the `data` folder:
 ```
 ├──dataset_i
 │   ├──deg_data
-│   │   └──group_rep (or sep_rep)
+│   │   └──group_rep (or sep_rep; with -C: group_rep_per_plate_control / sep_rep_per_plate_control)
 │   │       ├──full
 │   │       │   ├──qc_true
 │   │       │   │   ├──filter_min_cells_0
@@ -398,7 +417,7 @@ The structure of the `data` folder:
 │   │   └──subsample
 │   │       └──dataset_i_subsample.h5ad
 │   └──pseudobulk_processed
-│       ├──group_rep (or sep_rep)
+│       ├──group_rep (or sep_rep; with -C: group_rep_per_plate_control / sep_rep_per_plate_control)
 │       │   ├──dataset_i_processed.h5ad
 │       │   └──by_celltype
 │       │       ├──celltype1_processed.h5ad
